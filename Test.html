@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URUVOTO 2026</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-vibrante: #3b82f6;
+            --azul-claro-hover: #f0f7ff;
+            --azul-texto: #1a2a44;
+            --fondo: #f8fafc;
+            --borde-card: rgba(59, 130, 246, 0.15);
+            --card-bg: #ffffff;
+            --text-muted: #64748b;
+            --color-FA: #005595;
+            --color-PN: #60b8e0;
+            --color-PC: #c0392b;
+            --color-PI: #7030a0;
+            --color-CA: #e8a020;
+        }
+        [data-theme="dark"] {
+            --fondo: #0f172a;
+            --card-bg: #1e293b;
+            --azul-texto: #f1f5f9;
+            --azul-claro-hover: #1e293b;
+            --borde-card: rgba(255, 255, 255, 0.1);
+            --text-muted: #94a3b8;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--fondo); color: var(--azul-texto); margin: 0; padding: 0; transition: background 0.3s; }
+        header { background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde-card); padding: 0.8rem 2rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; gap: 15px; align-items: center; }
+        .header-right { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
+        .logo { font-weight: 700; font-size: 1.2rem; color: var(--azul-vibrante); cursor: pointer; text-decoration: none; }
+        .flag-center img { height: 32px; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .container { margin: 40px auto; padding: 0 20px; transition: max-width 0.4s ease; }
+        .container-test { max-width: 800px; }
+        .container-results { max-width: 1300px; }
+        .page { display: none; animation: fadeIn 0.4s ease; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .pregunta-card { background: var(--card-bg); border: 2px solid var(--borde-card); border-radius: 16px; padding: 24px; margin-bottom: 20px; transition: all 0.3s ease; position: relative; }
+        .categoria-tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; color: white; margin-bottom: 12px; display: inline-block; }
+        input[type=range] { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; -webkit-appearance: none; margin: 25px 0; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 22px; width: 22px; border-radius: 50%; background: var(--azul-vibrante); border: 4px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; }
+        .btn-primario { width: 100%; padding: 20px; background: var(--azul-vibrante); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-bottom: 50px; }
+        select, .btn-icon { background: var(--card-bg); color: var(--azul-texto); border: 1px solid var(--borde-card); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-family: 'Inter'; }
+
+        /* Layout resultados */
+        .resultados-header-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 50px; align-items: stretch; }
+        @media (max-width: 950px) { .resultados-header-grid { grid-template-columns: 1fr; } }
+
+        /* Ranking */
+        .ranking-card { background: var(--card-bg); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 20px; border: 1px solid var(--borde-card); margin-bottom: 15px; }
+        .partido-flag { width: 56px; height: 38px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; object-fit: cover; }
+        .ranking-info { flex-grow: 1; }
+        .barra-ext { background: #e2e8f0; height: 10px; border-radius: 10px; margin-top: 8px; width: 100%; overflow: hidden; }
+        .barra-int { height: 100%; border-radius: 10px; transition: width 1s ease; }
+
+        /* Brújula */
+        .brujula-container {
+            background: var(--card-bg);
+            border: 1px solid var(--borde-card);
+            border-radius: 20px;
+            padding: 24px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+        .brujula-wrap {
+            position: relative;
+            display: grid;
+            grid-template-columns: 24px 400px 24px;
+            grid-template-rows: 24px 400px 24px;
+            gap: 8px;
+            align-items: center;
+            justify-items: center;
+            margin: 0 auto;
+            flex: 1;
+        }
+        .brujula-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .brujula-label.vertical { writing-mode: vertical-lr; }
+        .brujula-label.vertical.left { transform: rotate(180deg); }
+        #compassCanvas { display: block; width: 100%; height: 100%; border-radius: 8px; }
+        .brujula-canvas-wrap { grid-column: 2; grid-row: 2; width: 400px; height: 400px; position: relative; }
+        .brujula-legend {
+            display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; margin-top: 18px;
+        }
+        .brujula-legend span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
+        .leg-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+        /* Grid comparativa */
+        .grid-comparativa { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 24px; margin-top: 30px; }
+        .grid-comparativa .pregunta-card { margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 20px; }
+        .comparativa-visual { position: relative; height: 8px; background: #e2e8f0; border-radius: 10px; margin: 30px 0 30px; display: flex; align-items: center; }
+        .punto-partido { position: absolute; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; cursor: pointer; transform: translate(-50%, -50%); top: 50%; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: all 0.2s ease; }
+        .punto-partido.coincide { top: -14px; }
+        .punto-partido:hover { z-index: 100; transform: translate(-50%, -50%) scale(1.3); }
+        .punto-usuario { position: absolute; width: 22px; height: 22px; border-radius: 50%; border: 3px solid #fff; background: var(--azul-vibrante); transform: translate(-50%, -50%); z-index: 25; top: 50%; box-shadow: 0 0 0 2px var(--azul-vibrante); }
+        .tooltip { visibility: hidden; position: absolute; bottom: 180%; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; padding: 14px; border-radius: 10px; width: max-content; max-width: 250px; font-size: 0.8rem; z-index: 500; opacity: 0; transition: all 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.4); pointer-events: none; }
+        .punto-partido:hover .tooltip { visibility: visible; opacity: 1; bottom: 200%; }
+        .tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #1a1a1a transparent transparent transparent; }
+        .tooltip-header { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.15); }
+        .tooltip-body { font-style: italic; color: #cbd5e1; line-height: 1.4; display: block; }
+    </style>
+</head>
+<body data-theme="light">
+<script>
+    (function() {
+        const t = localStorage.getItem('uruvoto-theme');
+        if (t) document.body.setAttribute('data-theme', t);
+    })();
+</script>
+
+<header>
+    <div class="header-left"><div class="logo" onclick="reiniciarTest()">URUVOTO</div></div>
+    <div class="flag-center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg" alt="Uruguay">
+    </div>
+    <div class="header-right">
+        <select id="lang-select" onchange="changeLanguage()">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+        </select>
+        <button class="btn-icon" onclick="toggleDarkMode()" id="dark-btn">🌙</button>
+    </div>
+</header>
+
+<div id="main-container" class="container container-test">
+    <div id="page-test" class="page active">
+        <h1 id="main-title">Analiza tu afinidad</h1>
+        <p id="main-desc" style="color: var(--text-muted); margin-bottom: 40px; line-height: 1.6;"></p>
+        <p id="main-metodo" style="color: var(--text-muted); margin-top: -30px; margin-bottom: 40px; font-size: 0.85rem;"></p>
+        <div id="quiz-container"></div>
+        <button class="btn-primario" id="btn-results" onclick="mostrarResultados()"></button>
+    </div>
+
+    <div id="page-results" class="page">
+        <button onclick="reiniciarTest()" id="btn-restart" style="background: none; border: none; color: var(--azul-vibrante); cursor: pointer; font-weight: 700; margin-bottom: 25px;"></button>
+
+        <div class="resultados-header-grid">
+            <div id="col-ranking">
+                <h1 id="res-title"></h1>
+                <div id="ranking-container"></div>
+            </div>
+
+            <div class="brujula-container">
+                <div class="brujula-wrap">
+                    <div style="grid-column:2; grid-row:1;"><span class="brujula-label" id="lbl-auto"></span></div>
+                    <div style="grid-column:1; grid-row:2; height:100%; display:flex; align-items:center; justify-content:center;"><span class="brujula-label vertical left" id="lbl-izq"></span></div>
+                    <div class="brujula-canvas-wrap">
+                        <canvas id="compassCanvas" role="img" aria-label="Brújula ideológica con partidos políticos y posición del usuario"></canvas>
+                    </div>
+                    <div style="grid-column:3; grid-row:2; height:100%; display:flex; align-items:center; justify-content:center;"><span class="brujula-label vertical" id="lbl-der"></span></div>
+                    <div style="grid-column:2; grid-row:3;"><span class="brujula-label" id="lbl-lib"></span></div>
+                </div>
+                <div class="brujula-legend" id="brujula-legend"></div>
+            </div>
+        </div>
+
+        <hr style="margin: 60px 0; border: 0; border-top: 1px solid var(--borde-card);">
+
+        <div style="text-align: center;">
+            <h2 id="comp-title"></h2>
+            <p id="comp-subtitle" style="color: var(--text-muted); margin-bottom: 30px;"></p>
+        </div>
+
+        <div id="detalle-container" class="grid-comparativa"></div>
+    </div>
+</div>
+
+<script>
+/* ──────────────────────────────────────────────
+   DATOS
+────────────────────────────────────────────── */
+const coloresPartidos = { FA:"#005595", PN:"#60b8e0", PC:"#c0392b", PI:"#7030a0", CA:"#e8a020" };
+
+const catColores = {
+    "Economía":"#e11d48","Economy":"#e11d48","Educación":"#2563eb","Education":"#2563eb",
+    "Seguridad":"#059669","Security":"#059669","Drogas":"#7c3aed","Drugs":"#7c3aed",
+    "Derechos":"#db2777","Rights":"#db2777","Social":"#d97706","Salud":"#0891b2",
+    "Health":"#0891b2","Ambiente":"#16a34a","Environment":"#16a34a","Estado":"#475569",
+    "State":"#475569","Internacional":"#4f46e5","International":"#4f46e5"
+};
+
+const i18n = {
+    es: {
+        title:"Analiza tu afinidad", desc:"Las posiciones de cada partido fueron elaboradas tomando como referencia sus programas de gobierno presentados ante la Corte Electoral en 2024. Por ello, pueden no reflejar de forma exhaustiva el posicionamiento ideológico de cada fuerza política.",
+        btnResults:"Ver Resultados Finales", btnRestart:"← Reiniciar Test",
+        resTitle:"Tu Afinidad Política", compTitle:"Comparativa Detallada",
+        compSubtitle:"Tus respuestas frente a los programas de gobierno.",
+        agree:"De acuerdo", disagree:"En desacuerdo", quote:"Postura oficial según el programa.",
+        brujulaTitle:"Brújula Ideológica", brujulaDesc:"Tu posición según tus respuestas vs. los partidos.",
+        lblAuto:"AUTORITARIO", lblLib:"LIBERAL", lblIzq:"IZQUIERDA", lblDer:"DERECHA",
+        lblTu:"Tú", metodoLink:"Ver metodología del eje ideológico"
+    },
+    en: {
+        title:"Analyze your affinity", desc:"Party positions were drawn from their government programs submitted to the Electoral Court in 2024. As such, they may not fully capture each party's complete ideological stance.",
+        btnResults:"View Final Results", btnRestart:"← Restart Test",
+        resTitle:"Your Political Affinity", compTitle:"Detailed Comparison",
+        compSubtitle:"Your answers vs government programs.",
+        agree:"Agree", disagree:"Disagree", quote:"Official stance according to program.",
+        brujulaTitle:"Political Compass", brujulaDesc:"Your position based on your answers vs. parties.",
+        lblAuto:"AUTHORITARIAN", lblLib:"LIBERTARIAN", lblIzq:"LEFT", lblDer:"RIGHT",
+        lblTu:"You", metodoLink:"View ideological axis methodology"
+    }
+};
+
+const partidosData = [
+    { id:'FA', nombre:'Frente Amplio',         flag:'img/bandera-fa.png' },
+    { id:'PN', nombre:'Partido Nacional',      flag:'img/bandera-pn.png' },
+    { id:'PC', nombre:'Partido Colorado',      flag:'img/bandera-pc.png' },
+    { id:'PI', nombre:'Partido Independiente', flag:'img/bandera-pi.png' },
+    { id:'CA', nombre:'Cabildo Abierto',       flag:'img/bandera-ca.png' }
+];
+
+/*
+ Posiciones fijas de los partidos en la brújula [-2, +2]
+ ex: eje horizontal  negativo=izquierda / positivo=derecha
+ ey: eje vertical    negativo=liberal   / positivo=autoritario
+ Calibradas según posturas programáticas reales.
+*/
+const posicionesPartidos = {
+    FA: { ex: -1.55, ey: -0.30 },
+    PN: { ex:  0.85, ey:  0.20 },
+    PC: { ex:  1.30, ey: -0.40 },
+    PI: { ex:  0.10, ey: -1.00 },
+    CA: { ex:  0.65, ey:  1.65 }
+};
+
+/*
+ Pesos ideológicos por pregunta
+ ex: cuánto y en qué dirección mueve al usuario en el eje izquierda-derecha
+ ey: cuánto y en qué dirección mueve al usuario en el eje autoritario-liberal
+ Escala: ±1 (suave) a ±2 (fuerte)
+ Lógica: respuesta 5 ("de acuerdo") suma peso; respuesta 1 ("en desacuerdo") resta peso.
+*/
+const preguntas = [
+    { cat:["Economía","Economy"],   t:["El Estado debe fortalecer y expandir las empresas públicas como motor del desarrollo nacional.","The State must strengthen and expand public companies as a driver of national development."],              p:{FA:5,PN:2,PC:2,PI:3,CA:3}, ex:-1.8, ey: 0.5 },
+    { cat:["Economía","Economy"],   t:["Uruguay debe bajar el gasto público y reducir el tamaño del Estado.","Uruguay must lower public spending and reduce the size of the State."],                                           p:{FA:1,PN:4,PC:5,PI:3,CA:4}, ex: 1.8, ey:-0.3 },
+    { cat:["Economía","Economy"],   t:["Los impuestos a las grandes fortunas y patrimonios deben aumentarse para reducir la desigualdad.","Taxes on large fortunes and wealth should be increased to reduce inequality."],   p:{FA:5,PN:1,PC:2,PI:3,CA:2}, ex:-1.5, ey: 0.2 },
+    { cat:["Economía","Economy"],   t:["Uruguay debe buscar acuerdos de libre comercio fuera del Mercosur sin esperar consenso regional.","Uruguay should seek free trade agreements outside Mercosur without waiting for regional consensus."], p:{FA:1,PN:5,PC:5,PI:5,CA:2}, ex: 1.6, ey:-0.4 },
+    { cat:["Economía","Economy"],   t:["El fomento del emprendedurismo y las pequeñas empresas es clave para el desarrollo económico.","Fostering entrepreneurship and small businesses is key to economic development."],             p:{FA:3,PN:4,PC:4,PI:5,CA:4}, ex: 0.8, ey:-0.2 },
+    { cat:["Educación","Education"],t:["La transformación educativa impulsada entre 2020 y 2025 fue positiva y debe profundizarse.","The educational transformation driven between 2020 and 2025 was positive and should be deepened."],   p:{FA:1,PN:5,PC:5,PI:4,CA:3}, ex: 1.2, ey: 0.3 },
+    { cat:["Educación","Education"],t:["La educación pública necesita más tiempo pedagógico y más centros de tiempo completo.","Public education needs more pedagogical time and more full-time centers."],                        p:{FA:4,PN:4,PC:4,PI:4,CA:3}, ex:-0.5, ey: 0.5 },
+    { cat:["Educación","Education"],t:["La currícula escolar debería incorporar más valores y formación cívica tradicional.","School curricula should incorporate more values and traditional civic training."],                  p:{FA:2,PN:3,PC:3,PI:2,CA:5}, ex: 0.5, ey: 1.5 },
+    { cat:["Seguridad","Security"], t:["Uruguay debe declarar una emergencia nacional en seguridad pública.","Uruguay should declare a national emergency in public security."],                                                p:{FA:1,PN:3,PC:3,PI:2,CA:5}, ex: 0.8, ey: 1.8 },
+    { cat:["Seguridad","Security"], t:["Combatir el crimen requiere tanto más policías y penas más severas como políticas sociales.","Fighting crime requires more police and more severe penalties as well as social policies."], p:{FA:3,PN:4,PC:4,PI:4,CA:3}, ex: 0.3, ey: 0.8 },
+    { cat:["Seguridad","Security"], t:["El sistema carcelario debe privilegiar la reinserción social sobre el castigo.","The prison system should prioritize social reintegration over punishment."],                              p:{FA:5,PN:3,PC:3,PI:4,CA:1}, ex:-1.0, ey:-1.5 },
+    { cat:["Seguridad","Security"], t:["El trabajo en prisión debe ser obligatorio para todos los reclusos.","Prison work should be mandatory for all inmates."],                                                               p:{FA:1,PN:3,PC:2,PI:2,CA:5}, ex: 0.5, ey: 1.8 },
+    { cat:["Drogas","Drugs"],       t:["La regulación del cannabis debe fortalecerse y hacerse más accesible para los usuarios.","Cannabis regulation should be strengthened and made more accessible to users."],              p:{FA:5,PN:2,PC:3,PI:5,CA:1}, ex:-1.2, ey:-1.8 },
+    { cat:["Drogas","Drugs"],       t:["Uruguay debe avanzar hacia la regulación de otras sustancias, alejándose del prohibicionismo.","Uruguay should move towards the regulation of other substances, moving away from prohibitionism."], p:{FA:4,PN:2,PC:2,PI:4,CA:1}, ex:-1.0, ey:-1.8 },
+    { cat:["Drogas","Drugs"],       t:["La prevención del consumo de drogas debe basarse en abstinencia y no en 'reducción de daños'.","Drug consumption prevention should be based on abstinence and not on 'harm reduction'."], p:{FA:1,PN:3,PC:2,PI:2,CA:5}, ex: 0.5, ey: 1.6 },
+    { cat:["Derechos","Rights"],    t:["Las políticas de igualdad de género deben ser transversales a todas las instituciones del Estado.","Gender equality policies should be transversal to all State institutions."],          p:{FA:5,PN:3,PC:4,PI:5,CA:1}, ex:-1.5, ey:-1.0 },
+    { cat:["Derechos","Rights"],    t:["Las cuotas o medidas de paridad para mujeres en cargos políticos son necesarias y justas.","Quotas or parity measures for women in political positions are necessary and fair."],       p:{FA:5,PN:2,PC:3,PI:4,CA:2}, ex:-1.3, ey:-0.5 },
+    { cat:["Derechos","Rights"],    t:["La 'perspectiva de género' en la educación y el Estado hace más daño que bien.","The 'gender perspective' in education and the State does more harm than good."],                       p:{FA:1,PN:2,PC:2,PI:1,CA:5}, ex: 1.3, ey: 1.2 },
+    { cat:["Social","Social"],      t:["Las transferencias monetarias a familias pobres son el mejor instrumento para reducir la pobreza.","Cash transfers to poor families are the best instrument to reduce poverty."],      p:{FA:4,PN:3,PC:3,PI:4,CA:3}, ex:-0.8, ey: 0.2 },
+    { cat:["Social","Social"],      t:["La familia tradicional debe ser el eje central de las políticas sociales del Estado.","The traditional family should be the central axis of the State's social policies."],            p:{FA:2,PN:3,PC:3,PI:2,CA:5}, ex: 0.5, ey: 1.5 },
+    { cat:["Social","Social"],      t:["El sistema de cuidados debe expandirse con corresponsabilidad entre Estado, mercado y familias.","The care system should be expanded with co-responsibility between the State, market, and families."], p:{FA:5,PN:3,PC:3,PI:4,CA:2}, ex:-1.0, ey:-0.3 },
+    { cat:["Social","Social"],      t:["La pobreza infantil es el principal problema social del Uruguay y debe ser prioridad absoluta.","Child poverty is the main social problem in Uruguay and should be an absolute priority."], p:{FA:4,PN:3,PC:3,PI:5,CA:4}, ex:-0.5, ey: 0.5 },
+    { cat:["Salud","Health"],       t:["La cobertura del Seguro Nacional de Salud debe universalizarse para todas las personas.","National Health Insurance coverage should be universalized for all people."],                  p:{FA:5,PN:3,PC:4,PI:5,CA:3}, ex:-1.2, ey: 0.3 },
+    { cat:["Salud","Health"],       t:["La atención de salud mental y adicciones necesita mucha más inversión pública.","Mental health and addiction care need much more public investment."],                                  p:{FA:4,PN:3,PC:3,PI:3,CA:4}, ex:-0.7, ey: 0.1 },
+    { cat:["Estado","State"],       t:["La reforma jubilatoria de 2023 fue correcta y debe profundizarse.","The 2023 pension reform was correct and should be deepened."],                                                     p:{FA:1,PN:5,PC:5,PI:4,CA:3}, ex: 1.4, ey: 0.3 },
+    { cat:["Ambiente","Environment"],t:["La transición ecológica debe ser una prioridad, incluso si implica cambios en el modelo agropecuario.","The ecological transition should be a priority, even if it implies changes in the agricultural model."], p:{FA:4,PN:2,PC:2,PI:3,CA:2}, ex:-1.2, ey:-0.5 },
+    { cat:["Estado","State"],       t:["El Estado uruguayo debe ser más transparente, con publicación obligatoria de más declaraciones juradas.","The Uruguayan State should be more transparent, with mandatory publication of more sworn statements."], p:{FA:3,PN:3,PC:3,PI:5,CA:4}, ex:-0.3, ey:-0.7 },
+    { cat:["Internacional","International"],t:["Uruguay debe fortalecer el Mercosur y la integración regional latinoamericana.","Uruguay should strengthen Mercosur and Latin American regional integration."],                 p:{FA:5,PN:2,PC:2,PI:3,CA:3}, ex:-1.3, ey: 0.2 }
+];
+
+/* ──────────────────────────────────────────────
+   ESTADO Y UTILS
+────────────────────────────────────────────── */
+let currentLang = 'es';
+
+function changeLanguage() {
+    currentLang = document.getElementById('lang-select').value;
+    localStorage.setItem('uruvoto-lang', currentLang);
+    const t = i18n[currentLang];
+    document.getElementById('main-title').innerText   = t.title;
+    document.getElementById('main-desc').innerText    = t.desc;
+    document.getElementById('main-metodo').innerHTML  = `<a href="#metodologia" onclick="mostrarMetodologia(event)" style="color:var(--azul-vibrante); text-decoration:none; font-weight:500;">↗ ${t.metodoLink}</a>`;
+    document.getElementById('btn-results').innerText  = t.btnResults;
+    document.getElementById('btn-restart').innerText  = t.btnRestart;
+    document.getElementById('res-title').innerText    = t.resTitle;
+    document.getElementById('comp-title').innerText   = t.compTitle;
+    document.getElementById('comp-subtitle').innerText= t.compSubtitle;
+    document.getElementById('lbl-auto').innerText = t.lblAuto;
+    document.getElementById('lbl-lib').innerText  = t.lblLib;
+    document.getElementById('lbl-izq').innerText  = t.lblIzq;
+    document.getElementById('lbl-der').innerText  = t.lblDer;
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    document.getElementById('dark-btn').innerText = isDark ? '☀️' : '🌙';
+    renderQuiz();
+}
+
+function toggleDarkMode() {
+    const body = document.body;
+    const dark = body.getAttribute('data-theme') !== 'dark';
+    body.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('uruvoto-theme', dark ? 'dark' : 'light');
+    document.getElementById('dark-btn').innerText = dark ? '☀️' : '🌙';
+    if (_lastUserX !== null) drawCompass(_lastUserX, _lastUserY);
+}
+
+/* ──────────────────────────────────────────────
+   QUIZ RENDER
+────────────────────────────────────────────── */
+function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    container.innerHTML = '';
+    preguntas.forEach((q, i) => {
+        const cat  = currentLang === 'es' ? q.cat[0] : q.cat[1];
+        const text = currentLang === 'es' ? q.t[0] : q.t[1];
+        container.innerHTML += `
+            <div class="pregunta-card">
+                <span class="categoria-tag" style="background:${catColores[cat]}">${cat}</span>
+                <div style="font-weight:600; line-height:1.5; font-size:1.1rem;">${text}</div>
+                <input type="range" min="1" max="5" value="3" id="q${i}">
+                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); font-weight:500;">
+                    <span>${i18n[currentLang].disagree}</span><span>${i18n[currentLang].agree}</span>
+                </div>
+            </div>`;
+    });
+}
+
+/* ──────────────────────────────────────────────
+   BRÚJULA IDEOLÓGICA — CANVAS
+────────────────────────────────────────────── */
+let _lastUserX = null, _lastUserY = null;
+let _compassObs = null;
+
+function initCompass(userX, userY) {
+    _lastUserX = userX;
+    _lastUserY = userY;
+    const wrap = document.querySelector('.brujula-canvas-wrap');
+    if (_compassObs) _compassObs.disconnect();
+    _compassObs = new ResizeObserver(() => drawCompass(_lastUserX, _lastUserY));
+    _compassObs.observe(wrap);
+    drawCompass(userX, userY);
+}
+
+function drawCompass(userX, userY) {
+    const canvas = document.getElementById('compassCanvas');
+    if (!canvas) return;
+    const wrap = canvas.parentElement;
+    const size = wrap.offsetWidth || 400;
+    canvas.width  = size;
+    canvas.height = size;
+    const ctx = canvas.getContext('2d');
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+
+    /* Fondo y cuadrantes */
+    ctx.fillStyle = isDark ? '#1e293b' : '#f8fafc';
+    ctx.fillRect(0, 0, size, size);
+    const quads = [
+        { x:0,      y:0,      color: isDark?'rgba(30,80,160,0.22)':'rgba(59,130,246,0.09)'  }, /* IZQ-AUTO */
+        { x:size/2, y:0,      color: isDark?'rgba(160,30,30,0.22)':'rgba(239,68,68,0.09)'   }, /* DER-AUTO */
+        { x:0,      y:size/2, color: isDark?'rgba(20,120,80,0.22)':'rgba(34,197,94,0.09)'   }, /* IZQ-LIB  */
+        { x:size/2, y:size/2, color: isDark?'rgba(160,100,0,0.22)':'rgba(251,146,60,0.09)'  }  /* DER-LIB  */
+    ];
+    quads.forEach(q => { ctx.fillStyle = q.color; ctx.fillRect(q.x, q.y, size/2, size/2); });
+
+    /* Grid sutil */
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
+    ctx.lineWidth = 1;
+    for (let i=1; i<4; i++) {
+        ctx.beginPath(); ctx.moveTo(0, size*i/4); ctx.lineTo(size, size*i/4); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(size*i/4, 0); ctx.lineTo(size*i/4, size); ctx.stroke();
+    }
+
+    /* Ejes */
+    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.15)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 4]);
+    ctx.beginPath(); ctx.moveTo(size/2, 0); ctx.lineTo(size/2, size); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, size/2); ctx.lineTo(size, size/2); ctx.stroke();
+    ctx.setLineDash([]);
+
+    /* Convierte valor [-2,+2] a pixel. Eje Y: positivo=autoritario=arriba → negar */
+    const pad = 16;
+    function toPixelX(v, max=2) { return size/2 + (v/max) * (size/2 - pad); }
+    function toPixelY(v, max=2) { return size/2 - (v/max) * (size/2 - pad); }
+
+    /* Dibuja punto con halo */
+    function drawDot(px, py, color, radius, label, isUser) {
+        ctx.beginPath();
+        ctx.arc(px, py, radius + 4, 0, Math.PI*2);
+        ctx.fillStyle = color + (isDark ? '40' : '28');
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(px, py, radius, 0, Math.PI*2);
+        ctx.fillStyle = color;
+        ctx.fill();
+        if (isUser) {
+            ctx.beginPath();
+            ctx.arc(px, py, radius, 0, Math.PI*2);
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+        if (label && !isUser) {
+            ctx.fillStyle = '#fff';
+            ctx.font = `600 ${Math.max(7, Math.round(radius * 0.75))}px Inter, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(label, px, py + 0.5);
+        }
+    }
+
+    /* Partidos */
+    partidosData.forEach(p => {
+        const pos = posicionesPartidos[p.id];
+        drawDot(toPixelX(pos.ex), toPixelY(pos.ey), coloresPartidos[p.id], 10, p.id, false);
+    });
+
+    /* Usuario */
+    if (userX !== null) {
+        drawDot(toPixelX(userX), toPixelY(userY), '#3b82f6', 11, '●', true);
+        /* Etiqueta "Tú" */
+        const ux = toPixelX(userX), uy = toPixelY(userY);
+        const lblText = i18n[currentLang].lblTu;
+        ctx.fillStyle = isDark ? '#f1f5f9' : '#1a2a44';
+        ctx.font = `600 11px Inter, sans-serif`;
+        ctx.textAlign = 'center';
+        const lblY = uy > size * 0.85 ? uy - 20 : uy + 22;
+        ctx.fillText(lblText, ux, lblY);
+    }
+}
+
+/* ──────────────────────────────────────────────
+   CÁLCULO DE POSICIÓN IDEOLÓGICA DEL USUARIO
+   Normaliza respuesta (1-5) a [-1, +1] y acumula
+   el efecto de los pesos ex/ey de cada pregunta.
+   Resultado se clampea a [-2, +2].
+────────────────────────────────────────────── */
+function calcularPosicionIdeologica(userAnswers) {
+    let sumX = 0, sumY = 0, wX = 0, wY = 0;
+    preguntas.forEach((q, i) => {
+        const normalized = (userAnswers[i] - 3) / 2; /* -1 a +1 */
+        sumX += normalized * q.ex;
+        sumY += normalized * q.ey;
+        wX   += Math.abs(q.ex);
+        wY   += Math.abs(q.ey);
+    });
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const x = clamp((sumX / wX) * 2, -2, 2);
+    const y = clamp((sumY / wY) * 2, -2, 2);
+    return { x, y };
+}
+
+/* ──────────────────────────────────────────────
+   MOSTRAR RESULTADOS
+────────────────────────────────────────────── */
+function mostrarResultados() {
+    const userAnswers = preguntas.map((_, i) => parseInt(document.getElementById(`q${i}`).value));
+
+    /* Afinidad con partidos */
+    let scores = { FA:0, PN:0, PC:0, PI:0, CA:0 };
+    preguntas.forEach((q, i) => {
+        partidosData.forEach(p => scores[p.id] += (1 - (Math.abs(userAnswers[i] - q.p[p.id]) / 4)));
+    });
+    const ranking = partidosData.map(p => ({
+        ...p, score: ((scores[p.id] / preguntas.length) * 100).toFixed(1)
+    })).sort((a, b) => b.score - a.score);
+
+    /* Posición ideológica */
+    const { x: userX, y: userY } = calcularPosicionIdeologica(userAnswers);
+
+    document.getElementById('main-container').className = 'container container-results';
+
+    /* Ranking */
+    const rankCont = document.getElementById('ranking-container');
+    rankCont.innerHTML = '';
+    ranking.forEach(r => {
+        rankCont.innerHTML += `
+            <div class="ranking-card">
+                <img class="partido-flag" src="${r.flag}" alt="${r.nombre}" onerror="this.style.background='${coloresPartidos[r.id]}';this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
+                <div class="ranking-info">
+                    <div style="display:flex; justify-content:space-between; font-weight:700;">
+                        <span>${r.nombre}</span><span>${r.score}%</span>
+                    </div>
+                    <div class="barra-ext">
+                        <div class="barra-int" style="width:${r.score}%; background:${coloresPartidos[r.id]}"></div>
+                    </div>
+                </div>
+            </div>`;
+    });
+
+    /* Leyenda brújula */
+    const legend = document.getElementById('brujula-legend');
+    legend.innerHTML = '';
+    partidosData.forEach(p => {
+        legend.innerHTML += `<span><span class="leg-dot" style="background:${coloresPartidos[p.id]}"></span>${p.nombre}</span>`;
+    });
+    legend.innerHTML += `<span><span class="leg-dot" style="background:#3b82f6; outline:2px solid #3b82f6; outline-offset:1px;"></span>${i18n[currentLang].lblTu}</span>`;
+
+    /* Comparativa detallada */
+    const detCont = document.getElementById('detalle-container');
+    detCont.innerHTML = '';
+    preguntas.forEach((q, i) => {
+        const userVal = userAnswers[i];
+        const qText   = currentLang === 'es' ? q.t[0] : q.t[1];
+        const cat     = currentLang === 'es' ? q.cat[0] : q.cat[1];
+        let visual = `<div class="comparativa-visual"><div class="punto-usuario" style="left:${((userVal-1)/4)*100}%;"></div>`;
+        const posGrp = {1:[],2:[],3:[],4:[],5:[]};
+        partidosData.forEach(p => posGrp[q.p[p.id]].push(p));
+        for (let v=1; v<=5; v++) {
+            posGrp[v].forEach((p, idx) => {
+                visual += `
+                    <div class="punto-partido ${v === userVal?'coincide':''}" style="left:calc(${((v-1)/4)*100}% + ${idx*10}px); background:${coloresPartidos[p.id]};">
+                        <div class="tooltip">
+                            <span class="tooltip-header" style="color:${coloresPartidos[p.id]}">${p.nombre}</span>
+                            <span class="tooltip-body">${i18n[currentLang].quote}</span>
+                        </div>
+                    </div>`;
+            });
+        }
+        visual += '</div>';
+        detCont.innerHTML += `
+            <div class="pregunta-card">
+                <div>
+                    <span class="categoria-tag" style="background:${catColores[cat]}; font-size:0.6rem;">${cat}</span>
+                    <div style="font-weight:600; line-height:1.4; font-size:0.95rem;">${qText}</div>
+                </div>
+                <div style="margin-top: 12px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-muted); margin-bottom: 8px;">
+                        <span>${i18n[currentLang].disagree}</span><span>${i18n[currentLang].agree}</span>
+                    </div>
+                    ${visual}
+                </div>
+            </div>`;
+    });
+
+    document.getElementById('page-test').classList.remove('active');
+    document.getElementById('page-results').classList.add('active');
+    window.scrollTo(0, 0);
+
+    /* Iniciar brújula tras render */
+    requestAnimationFrame(() => initCompass(userX, userY));
+}
+
+/* Metodología */
+function mostrarMetodologia(e) {
+    e.preventDefault();
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    const overlay = document.createElement('div');
+    overlay.id = 'metodo-overlay';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+    const box = document.createElement('div');
+    box.style.cssText = `background:${isDark?'#1e293b':'#ffffff'};color:${isDark?'#f1f5f9':'#1a2a44'};border-radius:20px;padding:36px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;position:relative;`;
+    box.innerHTML = `
+        <button onclick="document.getElementById('metodo-overlay').remove()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted);">×</button>
+        <h2 style="margin:0 0 16px;font-size:1.2rem;">Metodología: Brújula Ideológica</h2>
+        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">Cada pregunta del test tiene asignados dos pesos ideológicos:</p>
+        <ul style="line-height:1.8;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};padding-left:20px;">
+            <li><strong style="color:${isDark?'#f1f5f9':'#1a2a44'}">Eje X (Izquierda / Derecha):</strong> valores negativos desplazan hacia la izquierda, positivos hacia la derecha.</li>
+            <li><strong style="color:${isDark?'#f1f5f9':'#1a2a44'}">Eje Y (Liberal / Autoritario):</strong> valores negativos desplazan hacia el liberalismo, positivos hacia el autoritarismo.</li>
+        </ul>
+        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">La respuesta del usuario (escala 1–5) se normaliza al rango [−1, +1] según la fórmula <code style="background:${isDark?'#0f172a':'#f1f5f9'};padding:2px 6px;border-radius:4px;">(respuesta − 3) / 2</code>. Ese valor se multiplica por los pesos de cada pregunta y se acumula. El resultado final se pondera por la suma total de pesos absolutos y se clampea al rango [−2, +2], produciendo una coordenada en la brújula.</p>
+        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">Las posiciones fijas de los partidos fueron calibradas manualmente a partir del análisis de sus programas de gobierno presentados ante la Corte Electoral en 2024, considerando sus posturas en materia económica, social, de derechos civiles y de orden público.</p>
+        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">Esta herramienta tiene fines informativos y no pretende ser una representación exhaustiva ni definitiva del posicionamiento ideológico de ningún partido.</p>
+    `;
+    overlay.appendChild(box);
+    overlay.addEventListener('click', ev => { if(ev.target === overlay) overlay.remove(); });
+    document.body.appendChild(overlay);
+}
+
+/* Init */
+const savedLang = localStorage.getItem('uruvoto-lang');
+if (savedLang) {
+    currentLang = savedLang;
+    const sel = document.getElementById('lang-select');
+    if (sel) sel.value = savedLang;
+}
+changeLanguage();
+
+function reiniciarTest() {
+    _lastUserX = null; _lastUserY = null;
+    if (_compassObs) { _compassObs.disconnect(); _compassObs = null; }
+    document.getElementById('main-container').className = 'container container-test';
+    document.getElementById('page-results').classList.remove('active');
+    document.getElementById('page-test').classList.add('active');
+    renderQuiz();
+    window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
