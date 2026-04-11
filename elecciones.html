@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elecciones Nacionales — EleccionesUY</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --azul-vibrante: #3b82f6;
+            --fondo: #f8fafc;
+            --borde-card: rgba(59,130,246,0.15);
+            --card-bg: #ffffff;
+            --text-muted: #64748b;
+            --azul-texto: #1a2a44;
+        }
+        [data-theme="dark"] {
+            --fondo: #0f172a;
+            --card-bg: #1e293b;
+            --azul-texto: #f1f5f9;
+            --borde-card: rgba(255,255,255,0.1);
+            --text-muted: #94a3b8;
+        }
+
+        * { box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background: var(--fondo); color: var(--azul-texto); margin: 0; padding: 0; transition: background 0.3s; }
+
+        /* ── HEADER ── */
+        header { background: var(--card-bg); border-bottom: 1px solid var(--borde-card); padding: 0.8rem 2rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        .header-left { display: flex; gap: 15px; align-items: center; }
+        .header-right { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
+        .logo { font-weight: 700; font-size: 1.2rem; color: var(--azul-vibrante); cursor: pointer; text-decoration: none; }
+        .flag-center img { height: 32px; border-radius: 2px; }
+        select, .btn-icon { background: var(--card-bg); color: var(--azul-texto); border: 1px solid var(--borde-card); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-family: 'Inter'; }
+
+        /* ── LAYOUT ── */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 0;
+            min-height: calc(100vh - 60px);
+        }
+        @media (max-width: 1000px) {
+            .main-layout { grid-template-columns: 1fr; }
+        }
+
+        /* ── MAP PANEL ── */
+        .map-panel {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: var(--fondo);
+        }
+        .map-panel svg {
+            width: 100%;
+            max-width: 680px;
+            height: auto;
+            filter: drop-shadow(0 4px 20px rgba(0,0,0,0.08));
+        }
+        .map-panel svg path {
+            stroke: var(--card-bg);
+            stroke-width: 1.5;
+            transition: fill 0.4s ease, opacity 0.2s;
+            cursor: pointer;
+        }
+        .map-panel svg path:hover { opacity: 0.8; }
+
+        /* Tooltip mapa */
+        #map-tooltip {
+            position: fixed;
+            background: #1a1a2e;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+            max-width: 200px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        #map-tooltip strong { display: block; font-size: 0.9rem; margin-bottom: 3px; }
+
+        /* ── RIGHT PANEL ── */
+        .right-panel {
+            border-left: 1px solid var(--borde-card);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            background: var(--card-bg);
+        }
+
+        /* ── SELECTOR DE ELECCIÓN ── */
+        .eleccion-selector {
+            background: var(--fondo);
+            border: 1px solid var(--borde-card);
+            border-radius: 14px;
+            padding: 16px;
+        }
+        .eleccion-selector h3 { margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
+        .year-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .year-btn {
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1.5px solid var(--borde-card);
+            background: var(--card-bg);
+            color: var(--azul-texto);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .year-btn:hover { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
+        .year-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
+
+        /* ── TOGGLE VUELTA / PLEBISCITO ── */
+        .vuelta-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .vuelta-btn {
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: 1.5px solid var(--borde-card);
+            background: var(--card-bg);
+            color: var(--azul-texto);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s;
+        }
+        .vuelta-btn:hover { border-color: var(--azul-vibrante); }
+        .vuelta-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
+        .vuelta-btn.plebiscito.active { background: #7c3aed; border-color: #7c3aed; }
+
+        /* ── CANDIDATOS ── */
+        .candidatos-section h3 { margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
+
+        .cand-top { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
+        .cand-card {
+            background: var(--fondo);
+            border: 1.5px solid var(--borde-card);
+            border-radius: 14px;
+            padding: 14px 16px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 12px;
+            transition: border-color 0.2s;
+        }
+        .cand-card.ganador { border-color: #16a34a; }
+
+        .cand-color-strip { width: 5px; height: 100%; border-radius: 4px; align-self: stretch; min-height: 60px; }
+        .cand-info {}
+        .cand-nombre { font-weight: 700; font-size: 0.95rem; line-height: 1.3; }
+        .cand-vice { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .cand-partido { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+        .cand-votos { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+        .cand-pct-wrap { text-align: right; }
+        .cand-pct { font-size: 1.4rem; font-weight: 800; line-height: 1; }
+        .cand-pct-small { font-size: 0.75rem; color: var(--text-muted); }
+        .badge-ganador {
+            display: inline-block;
+            background: #16a34a;
+            color: white;
+            font-size: 0.62rem;
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 4px;
+        }
+        .barra-cand { height: 5px; background: #e2e8f0; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+        /* Candidatos menores */
+        .cand-minor-list { display: flex; flex-direction: column; gap: 7px; }
+        .cand-minor {
+            display: grid;
+            grid-template-columns: 10px 1fr auto;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: var(--fondo);
+            border: 1px solid var(--borde-card);
+            border-radius: 10px;
+            font-size: 0.82rem;
+        }
+        .cand-minor-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .cand-minor-nombre { font-weight: 600; }
+        .cand-minor-sub { font-size: 0.7rem; color: var(--text-muted); }
+        .cand-minor-pct { font-weight: 700; font-size: 0.85rem; }
+
+        /* Plebiscito */
+        .plebiscito-info { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; padding: 10px 14px; background: var(--fondo); border-radius: 10px; border: 1px solid var(--borde-card); }
+        .pleb-result { display: flex; flex-direction: column; gap: 8px; }
+        .pleb-opcion {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1.5px solid var(--borde-card);
+            background: var(--fondo);
+        }
+        .pleb-opcion.ganador-pleb { border-color: #16a34a; }
+        .pleb-opcion-nombre { font-weight: 600; font-size: 0.88rem; }
+        .pleb-opcion-sub { font-size: 0.72rem; color: var(--text-muted); }
+        .pleb-opcion-pct { font-size: 1.2rem; font-weight: 800; }
+        .pleb-barra { height: 5px; background: #e2e8f0; border-radius: 4px; margin-top: 6px; overflow: hidden; grid-column: 1 / -1; }
+        .pleb-barra-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+        /* Leyenda mapa */
+        .leyenda-mapa { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
+        .leyenda-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--text-muted); }
+        .leyenda-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.3s ease; }
+    </style>
+</head>
+<body data-theme="light">
+<script>(function(){ const t=localStorage.getItem('uruvoto-theme'); if(t) document.body.setAttribute('data-theme',t); })();</script>
+
+<header>
+    <div class="header-left">
+        <a class="logo" href="index.html">EleccionesUY</a>
+    </div>
+    <div class="flag-center">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg" alt="Uruguay">
+    </div>
+    <div class="header-right">
+        <select id="lang-select" onchange="changeLanguage()">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+        </select>
+        <button class="btn-icon" onclick="toggleDarkMode()" id="dark-btn">🌙</button>
+    </div>
+</header>
+
+<div id="map-tooltip"></div>
+
+<div class="main-layout">
+    <!-- MAPA -->
+    <div class="map-panel">
+        <svg id="uruguay-map" viewBox="0 0 500 580" xmlns="http://www.w3.org/2000/svg">
+            <!--
+                Departamentos de Uruguay — paths simplificados
+                Cada <path> tiene data-depto con el nombre del departamento
+            -->
+            <!-- Artigas -->
+            <path id="dep-Artigas"       data-depto="Artigas"       d="M95,20 L190,20 L200,45 L185,70 L160,80 L120,75 L90,55 Z"/>
+            <!-- Salto -->
+            <path id="dep-Salto"         data-depto="Salto"         d="M55,60 L120,75 L160,80 L155,130 L130,150 L80,145 L50,120 L45,85 Z"/>
+            <!-- Rivera -->
+            <path id="dep-Rivera"        data-depto="Rivera"        d="M190,20 L280,25 L285,60 L260,90 L220,100 L185,70 L200,45 Z"/>
+            <!-- Tacuarembó -->
+            <path id="dep-Tacuarembo"    data-depto="Tacuarembó"    d="M155,130 L220,100 L260,90 L270,140 L250,180 L200,190 L160,175 L130,150 Z"/>
+            <!-- Paysandú -->
+            <path id="dep-Paysandu"      data-depto="Paysandú"      d="M45,120 L80,145 L130,150 L125,200 L100,220 L60,210 L40,180 L38,145 Z"/>
+            <!-- Río Negro -->
+            <path id="dep-RioNegro"      data-depto="Río Negro"     d="M60,210 L100,220 L125,200 L130,150 L160,175 L165,215 L150,240 L100,245 L65,235 Z"/>
+            <!-- Cerro Largo -->
+            <path id="dep-CerroLargo"    data-depto="Cerro Largo"   d="M260,90 L320,85 L340,110 L335,155 L300,175 L270,140 Z"/>
+            <!-- Rivera continúa / Treinta y Tres no, arreglamos abajo -->
+            <!-- Durazno -->
+            <path id="dep-Durazno"       data-depto="Durazno"       d="M160,175 L200,190 L250,180 L270,140 L300,175 L295,220 L260,235 L215,230 L185,215 L165,215 Z"/>
+            <!-- Soriano -->
+            <path id="dep-Soriano"       data-depto="Soriano"       d="M65,235 L100,245 L150,240 L165,215 L185,215 L180,260 L155,280 L110,275 L70,265 Z"/>
+            <!-- Treinta y Tres -->
+            <path id="dep-TreintaTres"   data-depto="Treinta y Tres" d="M300,175 L335,155 L360,170 L365,210 L340,235 L295,220 Z"/>
+            <!-- Flores -->
+            <path id="dep-Flores"        data-depto="Flores"        d="M150,240 L165,215 L185,215 L215,230 L210,265 L180,275 L155,280 Z"/>
+            <!-- Florida -->
+            <path id="dep-Florida"       data-depto="Florida"       d="M215,230 L260,235 L295,220 L305,255 L290,285 L255,290 L215,270 Z"/>
+            <!-- Lavalleja -->
+            <path id="dep-Lavalleja"     data-depto="Lavalleja"     d="M295,220 L340,235 L365,210 L380,240 L370,275 L335,290 L305,255 Z"/>
+            <!-- Colonia -->
+            <path id="dep-Colonia"       data-depto="Colonia"       d="M70,265 L110,275 L155,280 L150,315 L120,335 L80,330 L60,305 L58,280 Z"/>
+            <!-- San José -->
+            <path id="dep-SanJose"       data-depto="San José"      d="M155,280 L180,275 L210,265 L215,270 L210,305 L185,320 L155,315 L150,315 Z"/>
+            <!-- Canelones -->
+            <path id="dep-Canelones"     data-depto="Canelones"     d="M210,265 L255,290 L270,310 L255,330 L225,340 L195,330 L185,320 L210,305 Z"/>
+            <!-- Rocha -->
+            <path id="dep-Rocha"         data-depto="Rocha"         d="M335,290 L370,275 L395,295 L405,335 L385,360 L350,365 L320,340 L305,310 L305,255 L335,290 Z"/>
+            <!-- Maldonado -->
+            <path id="dep-Maldonado"     data-depto="Maldonado"     d="M305,255 L305,310 L320,340 L295,355 L270,345 L255,330 L270,310 L255,290 L290,285 Z"/>
+            <!-- Montevideo -->
+            <path id="dep-Montevideo"    data-depto="Montevideo"    d="M210,305 L225,340 L215,350 L200,345 L190,335 L195,330 L185,320 Z"/>
+        </svg>
+        <div class="leyenda-mapa" id="leyenda-mapa"></div>
+    </div>
+
+    <!-- PANEL DERECHO -->
+    <div class="right-panel">
+        <!-- Selector de año -->
+        <div class="eleccion-selector">
+            <h3 id="lbl-elecciones">Elecciones</h3>
+            <div class="year-grid" id="year-grid"></div>
+        </div>
+
+        <!-- Toggle vuelta / plebiscitos -->
+        <div class="vuelta-bar" id="vuelta-bar"></div>
+
+        <!-- Candidatos / Plebiscito -->
+        <div class="candidatos-section fade-in" id="candidatos-section">
+            <h3 id="lbl-candidatos">Candidatos</h3>
+            <div id="cand-content"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   COLORES DE PARTIDOS
+   Para agregar un partido nuevo, agregalo aquí.
+════════════════════════════════════════════ */
+const COLORES = {
+    'PC':  '#e05c5c',   // Partido Colorado
+    'PN':  '#60b8e0',   // Partido Nacional
+    'FA':  '#005595',   // Frente Amplio
+    'NE':  '#2ecc71',   // Nuevo Espacio
+    'PI':  '#7030a0',   // Partido Independiente
+    'CA':  '#e8a020',   // Cabildo Abierto
+    'UP':  '#e67e22',   // Unión Popular / otros
+    'PGP': '#16a34a',   // Partido por el Gobierno del Pueblo (Sanguinetti 1984)
+    'FIDELyPATRIA': '#c0392b',
+    'SI':  '#27ae60',   // Sí (plebiscito)
+    'NO':  '#e74c3c',   // No (plebiscito)
+    'default': '#94a3b8'
+};
+
+/* ════════════════════════════════════════════
+   DATOS ELECTORALES
+   ─────────────────────────────────────────
+   CÓMO AGREGAR UNA ELECCIÓN NUEVA:
+   1. Creá un nuevo objeto en el array ELECCIONES
+   2. Completá: anio, vueltas (array), plebiscitos (array, puede estar vacío)
+   3. En cada vuelta: candidatos[] y mapa{}
+   4. candidatos[]: { nombre, vice, partido (ID del color), votos, ganador:true/false }
+      Los que NO son los 2 primeros van en "menores"
+   5. mapa{}: { "Departamento": "ID_PARTIDO" }
+      Podés omitir departamentos (quedarán grises)
+   6. plebiscitos[]: { nombre, descripcion, opciones[{nombre, votos, color}], mapa{} }
+════════════════════════════════════════════ */
+const ELECCIONES = [
+    {
+        anio: 1984,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'Julio María Sanguinetti', vice: 'Enrique Tarigo',        partido: 'PC',  votos: 770360, ganador: true  },
+                    { nombre: 'Wilson Ferreira Aldunate', vice: 'Carlos Julio Pereyra', partido: 'PN',  votos: 660018, ganador: false },
+                    { nombre: 'Juan José Crottogini',     vice: 'José Díaz',            partido: 'FA',  votos: 401104, ganador: false },
+                    { nombre: 'Juan Vicente Chiarino',    vice: 'Humberto Ciganda',     partido: 'UC',  votos: 82090,  ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'PN', 'Salto': 'PC', 'Rivera': 'PN', 'Tacuarembó': 'PN',
+                    'Paysandú': 'PC', 'Río Negro': 'PC', 'Cerro Largo': 'PN', 'Durazno': 'PN',
+                    'Soriano': 'PC', 'Treinta y Tres': 'PN', 'Flores': 'PC', 'Florida': 'PN',
+                    'Lavalleja': 'PN', 'Colonia': 'PC', 'San José': 'PC', 'Canelones': 'PC',
+                    'Rocha': 'PN', 'Maldonado': 'PN', 'Montevideo': 'PC'
+                }
+            }
+        ],
+        plebiscitos: []
+    },
+    {
+        anio: 1989,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'Luis Alberto Lacalle',    vice: 'Gonzalo Aguirre',      partido: 'PN',  votos: 630253, ganador: true  },
+                    { nombre: 'Jorge Batlle',            vice: 'Enrique Iglesias',     partido: 'PC',  votos: 556516, ganador: false },
+                    { nombre: 'Líber Seregni',           vice: 'Hugo Batalla',         partido: 'FA',  votos: 418535, ganador: false },
+                    { nombre: 'Hugo Batalla',            vice: 'Américo Ricaldoni',    partido: 'NE',  votos: 191255, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'PN', 'Salto': 'PN', 'Rivera': 'PN', 'Tacuarembó': 'PN',
+                    'Paysandú': 'PN', 'Río Negro': 'PN', 'Cerro Largo': 'PN', 'Durazno': 'PN',
+                    'Soriano': 'PN', 'Treinta y Tres': 'PN', 'Flores': 'PN', 'Florida': 'PN',
+                    'Lavalleja': 'PN', 'Colonia': 'PN', 'San José': 'PN', 'Canelones': 'PC',
+                    'Rocha': 'PN', 'Maldonado': 'PN', 'Montevideo': 'FA'
+                }
+            }
+        ],
+        plebiscitos: [
+            {
+                nombre: { es: 'Plebiscito Jubilaciones', en: 'Pension Plebiscite' },
+                descripcion: { es: 'Propuesta de vincular las jubilaciones al salario de los funcionarios públicos activos.', en: 'Proposal to link pensions to the salary of active public servants.' },
+                opciones: [
+                    { nombre: { es: 'Sí (aprobado)', en: 'Yes (approved)' }, votos: 999999, color: '#27ae60' },
+                    { nombre: { es: 'No',            en: 'No'             }, votos: 700000, color: '#e74c3c' }
+                ],
+                mapa: {}
+            }
+        ]
+    },
+    {
+        anio: 1994,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'Julio María Sanguinetti', vice: 'Hugo Batlle',          partido: 'PC',  votos: 620646, ganador: true  },
+                    { nombre: 'Alberto Volonté',         vice: 'Luis Brezzo',          partido: 'PN',  votos: 597885, ganador: false },
+                    { nombre: 'Tabaré Vázquez',          vice: 'Mariano Arana',        partido: 'FA',  votos: 600000, ganador: false },
+                    { nombre: 'Rafael Michelini',        vice: 'Dardo Ortiz',          partido: 'NE',  votos: 90000,  ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'PN', 'Salto': 'PC', 'Rivera': 'PN', 'Tacuarembó': 'PN',
+                    'Paysandú': 'PC', 'Río Negro': 'PC', 'Cerro Largo': 'PN', 'Durazno': 'PN',
+                    'Soriano': 'PC', 'Treinta y Tres': 'PN', 'Flores': 'PC', 'Florida': 'PN',
+                    'Lavalleja': 'PN', 'Colonia': 'PC', 'San José': 'PC', 'Canelones': 'FA',
+                    'Rocha': 'PN', 'Maldonado': 'PN', 'Montevideo': 'FA'
+                }
+            }
+        ],
+        plebiscitos: [
+            {
+                nombre: { es: 'Plebiscito Sistema Electoral', en: 'Electoral System Plebiscite' },
+                descripcion: { es: 'Reforma constitucional que introdujo el ballottage y las elecciones internas obligatorias.', en: 'Constitutional reform that introduced runoff elections and mandatory internal party elections.' },
+                opciones: [
+                    { nombre: { es: 'Sí (aprobado)', en: 'Yes (approved)' }, votos: 1230000, color: '#27ae60' },
+                    { nombre: { es: 'No',            en: 'No'             }, votos:  690000, color: '#e74c3c' }
+                ],
+                mapa: {}
+            }
+        ]
+    },
+    {
+        anio: 1999,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'Tabaré Vázquez',   vice: 'Rodolfo Nin Novoa',  partido: 'FA', votos: 972422, ganador: false },
+                    { nombre: 'Jorge Batlle',      vice: 'Luis Hierro López',  partido: 'PC', votos: 765254, ganador: false },
+                    { nombre: 'Luis Lacalle Pou',  vice: 'Jorge Larrañaga',   partido: 'PN', votos: 349800, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
+                    'Paysandú': 'PC', 'Río Negro': 'PC', 'Cerro Largo': 'PN', 'Durazno': 'PC',
+                    'Soriano': 'PC', 'Treinta y Tres': 'PN', 'Flores': 'PC', 'Florida': 'PN',
+                    'Lavalleja': 'PN', 'Colonia': 'PC', 'San José': 'PC', 'Canelones': 'FA',
+                    'Rocha': 'PN', 'Maldonado': 'PC', 'Montevideo': 'FA'
+                }
+            },
+            {
+                nombre: { es: '2ª Vuelta', en: '2nd Round' },
+                candidatos: [
+                    { nombre: 'Jorge Batlle',    vice: 'Luis Hierro López',  partido: 'PC', votos: 1143141, ganador: true  },
+                    { nombre: 'Tabaré Vázquez',  vice: 'Rodolfo Nin Novoa', partido: 'FA', votos: 1004241, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'PC', 'Rivera': 'PC', 'Tacuarembó': 'PC',
+                    'Paysandú': 'PC', 'Río Negro': 'PC', 'Cerro Largo': 'PC', 'Durazno': 'PC',
+                    'Soriano': 'PC', 'Treinta y Tres': 'PC', 'Flores': 'PC', 'Florida': 'PC',
+                    'Lavalleja': 'PC', 'Colonia': 'PC', 'San José': 'PC', 'Canelones': 'FA',
+                    'Rocha': 'PC', 'Maldonado': 'PC', 'Montevideo': 'FA'
+                }
+            }
+        ],
+        plebiscitos: []
+    },
+    {
+        anio: 2004,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'Tabaré Vázquez',    vice: 'Rodolfo Nin Novoa',  partido: 'FA', votos: 1124761, ganador: true  },
+                    { nombre: 'Jorge Larrañaga',   vice: 'Jorge Gandini',      partido: 'PN', votos:  764378, ganador: false },
+                    { nombre: 'Guillermo Stirling', vice: 'Ope Pasquet',       partido: 'PC', votos:  230309, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'FA', 'Tacuarembó': 'FA',
+                    'Paysandú': 'FA', 'Río Negro': 'FA', 'Cerro Largo': 'FA', 'Durazno': 'FA',
+                    'Soriano': 'FA', 'Treinta y Tres': 'FA', 'Flores': 'FA', 'Florida': 'FA',
+                    'Lavalleja': 'FA', 'Colonia': 'FA', 'San José': 'FA', 'Canelones': 'FA',
+                    'Rocha': 'FA', 'Maldonado': 'FA', 'Montevideo': 'FA'
+                }
+            }
+        ],
+        plebiscitos: [
+            {
+                nombre: { es: 'Plebiscito Agua', en: 'Water Plebiscite' },
+                descripcion: { es: 'Reforma constitucional para declarar el agua como derecho humano fundamental y prohibir su privatización.', en: 'Constitutional reform to declare water a fundamental human right and prohibit its privatization.' },
+                opciones: [
+                    { nombre: { es: 'Sí (aprobado)', en: 'Yes (approved)' }, votos: 1410000, color: '#27ae60' },
+                    { nombre: { es: 'No',            en: 'No'             }, votos:  590000, color: '#e74c3c' }
+                ],
+                mapa: {}
+            }
+        ]
+    },
+    {
+        anio: 2009,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'José Mujica',        vice: 'Danilo Astori',        partido: 'FA', votos: 1105262, ganador: false },
+                    { nombre: 'Luis Lacalle Pou',   vice: 'Jorge Larrañaga',     partido: 'PN', votos:  664031, ganador: false },
+                    { nombre: 'Pedro Bordaberry',   vice: 'Germán Cardoso',      partido: 'PC', votos:  384710, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'FA', 'Tacuarembó': 'FA',
+                    'Paysandú': 'FA', 'Río Negro': 'FA', 'Cerro Largo': 'FA', 'Durazno': 'FA',
+                    'Soriano': 'FA', 'Treinta y Tres': 'FA', 'Flores': 'FA', 'Florida': 'FA',
+                    'Lavalleja': 'FA', 'Colonia': 'FA', 'San José': 'FA', 'Canelones': 'FA',
+                    'Rocha': 'FA', 'Maldonado': 'FA', 'Montevideo': 'FA'
+                }
+            },
+            {
+                nombre: { es: '2ª Vuelta', en: '2nd Round' },
+                candidatos: [
+                    { nombre: 'José Mujica',      vice: 'Danilo Astori',    partido: 'FA', votos: 1196115, ganador: true  },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos:  998410, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
+                    'Paysandú': 'FA', 'Río Negro': 'PN', 'Cerro Largo': 'FA', 'Durazno': 'FA',
+                    'Soriano': 'PN', 'Treinta y Tres': 'FA', 'Flores': 'PN', 'Florida': 'FA',
+                    'Lavalleja': 'PN', 'Colonia': 'PN', 'San José': 'FA', 'Canelones': 'FA',
+                    'Rocha': 'FA', 'Maldonado': 'PN', 'Montevideo': 'FA'
+                }
+            }
+        ],
+        plebiscitos: [
+            {
+                nombre: { es: 'Plebiscito Ley de Caducidad', en: 'Impunity Law Plebiscite' },
+                descripcion: { es: 'Propuesta de anulación de la Ley de Caducidad de la Pretensión Punitiva del Estado (amnistía a militares y policías por crímenes de la dictadura).', en: 'Proposal to annul the Law of Expiry of the Punitive Claims of the State (amnesty for military and police for crimes during the dictatorship).' },
+                opciones: [
+                    { nombre: { es: 'Sí — anular ley', en: 'Yes — annul law' }, votos: 1025000, color: '#27ae60' },
+                    { nombre: { es: 'No — mantener',   en: 'No — keep'       }, votos: 1080000, color: '#e74c3c' }
+                ],
+                mapa: {}
+            },
+            {
+                nombre: { es: 'Plebiscito Voto en el Exterior', en: 'Overseas Voting Plebiscite' },
+                descripcion: { es: 'Propuesta para permitir el voto de uruguayos residentes en el exterior.', en: 'Proposal to allow Uruguayans living abroad to vote.' },
+                opciones: [
+                    { nombre: { es: 'Sí (aprobado)', en: 'Yes (approved)' }, votos: 1150000, color: '#27ae60' },
+                    { nombre: { es: 'No',            en: 'No'             }, votos:  900000, color: '#e74c3c' }
+                ],
+                mapa: {}
+            }
+        ]
+    },
+    {
+        anio: 2014,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'Tabaré Vázquez',   vice: 'Raúl Sendic',      partido: 'FA', votos: 1044006, ganador: false },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos:  522965, ganador: false },
+                    { nombre: 'Pedro Bordaberry', vice: 'Germán Cardoso',  partido: 'PC', votos:  456730, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'FA', 'Tacuarembó': 'FA',
+                    'Paysandú': 'FA', 'Río Negro': 'FA', 'Cerro Largo': 'FA', 'Durazno': 'FA',
+                    'Soriano': 'FA', 'Treinta y Tres': 'FA', 'Flores': 'FA', 'Florida': 'FA',
+                    'Lavalleja': 'FA', 'Colonia': 'FA', 'San José': 'FA', 'Canelones': 'FA',
+                    'Rocha': 'FA', 'Maldonado': 'FA', 'Montevideo': 'FA'
+                }
+            },
+            {
+                nombre: { es: '2ª Vuelta', en: '2nd Round' },
+                candidatos: [
+                    { nombre: 'Tabaré Vázquez',   vice: 'Raúl Sendic',      partido: 'FA', votos: 1196778, ganador: true  },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos:  993764, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
+                    'Paysandú': 'FA', 'Río Negro': 'PN', 'Cerro Largo': 'PN', 'Durazno': 'PN',
+                    'Soriano': 'PN', 'Treinta y Tres': 'FA', 'Flores': 'PN', 'Florida': 'PN',
+                    'Lavalleja': 'PN', 'Colonia': 'PN', 'San José': 'FA', 'Canelones': 'FA',
+                    'Rocha': 'FA', 'Maldonado': 'PN', 'Montevideo': 'FA'
+                }
+            }
+        ],
+        plebiscitos: [
+            {
+                nombre: { es: 'Plebiscito Baja de Imputabilidad', en: 'Age of Criminal Responsibility Plebiscite' },
+                descripcion: { es: 'Propuesta de bajar la edad de imputabilidad penal de 18 a 16 años y crear un régimen penal especial para adolescentes.', en: 'Proposal to lower the age of criminal responsibility from 18 to 16 and create a special penal regime for adolescents.' },
+                opciones: [
+                    { nombre: { es: 'Sí', en: 'Yes' }, votos: 1073238, color: '#e74c3c' },
+                    { nombre: { es: 'No (rechazado)', en: 'No (rejected)' }, votos: 1134000, color: '#27ae60' }
+                ],
+                mapa: {}
+            }
+        ]
+    },
+    {
+        anio: 2019,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'Daniel Martínez',  vice: 'Graciela Villar',   partido: 'FA', votos: 777002, ganador: false },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Beatriz Argimón',  partido: 'PN', votos: 756990, ganador: false },
+                    { nombre: 'Ernesto Talvi',    vice: 'Zoe Rauschert',    partido: 'PC', votos: 316183, ganador: false },
+                    { nombre: 'Guido Manini Ríos',vice: 'Guillermo Domenech',partido:'CA', votos: 271091, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
+                    'Paysandú': 'FA', 'Río Negro': 'PN', 'Cerro Largo': 'PN', 'Durazno': 'PN',
+                    'Soriano': 'FA', 'Treinta y Tres': 'PN', 'Flores': 'PN', 'Florida': 'PN',
+                    'Lavalleja': 'PN', 'Colonia': 'PN', 'San José': 'PN', 'Canelones': 'FA',
+                    'Rocha': 'PN', 'Maldonado': 'PN', 'Montevideo': 'FA'
+                }
+            },
+            {
+                nombre: { es: '2ª Vuelta', en: '2nd Round' },
+                candidatos: [
+                    { nombre: 'Luis Lacalle Pou', vice: 'Beatriz Argimón', partido: 'PN', votos: 1168019, ganador: true  },
+                    { nombre: 'Daniel Martínez',  vice: 'Graciela Villar', partido: 'FA', votos: 1014518, ganador: false }
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
+                    'Paysandú': 'PN', 'Río Negro': 'PN', 'Cerro Largo': 'PN', 'Durazno': 'PN',
+                    'Soriano': 'PN', 'Treinta y Tres': 'PN', 'Flores': 'PN', 'Florida': 'PN',
+                    'Lavalleja': 'PN', 'Colonia': 'PN', 'San José': 'PN', 'Canelones': 'FA',
+                    'Rocha': 'PN', 'Maldonado': 'PN', 'Montevideo': 'FA'
+                }
+            }
+        ],
+        plebiscitos: [
+            {
+                nombre: { es: 'Plebiscito Seguridad', en: 'Security Plebiscite' },
+                descripcion: { es: 'Reforma constitucional que proponía militarizar la seguridad pública, crear una Guardia Nacional y permitir allanamientos nocturnos.', en: 'Constitutional reform proposing to militarize public security, create a National Guard, and allow nocturnal searches.' },
+                opciones: [
+                    { nombre: { es: 'Sí', en: 'Yes' }, votos: 948000, color: '#e74c3c' },
+                    { nombre: { es: 'No (rechazado)', en: 'No (rejected)' }, votos: 1256000, color: '#27ae60' }
+                ],
+                mapa: {}
+            }
+        ]
+    }
+    /*
+    ── PLANTILLA PARA AGREGAR NUEVA ELECCIÓN ──────────────────────
+    ,{
+        anio: 2024,
+        vueltas: [
+            {
+                nombre: { es: '1ª Vuelta', en: '1st Round' },
+                candidatos: [
+                    { nombre: 'Nombre Candidato', vice: 'Nombre Vice', partido: 'FA', votos: 0, ganador: false },
+                    // más candidatos...
+                ],
+                mapa: {
+                    'Artigas': 'FA', 'Salto': 'FA', ... // todos los 19 departamentos
+                }
+            },
+            // segunda vuelta (opcional, solo si hubo):
+            {
+                nombre: { es: '2ª Vuelta', en: '2nd Round' },
+                candidatos: [ ... ],
+                mapa: { ... }
+            }
+        ],
+        plebiscitos: [
+            // opcional:
+            {
+                nombre: { es: 'Nombre del Plebiscito', en: 'Plebiscite Name' },
+                descripcion: { es: 'Descripción...', en: 'Description...' },
+                opciones: [
+                    { nombre: { es: 'Sí', en: 'Yes' }, votos: 0, color: '#27ae60' },
+                    { nombre: { es: 'No', en: 'No'  }, votos: 0, color: '#e74c3c' }
+                ],
+                mapa: {} // podés dejarlo vacío si no hay datos por departamento
+            }
+        ]
+    }
+    ───────────────────────────────────────────────────────────────
+    */
+];
+
+/* ════════════════════════════════════════════
+   ESTADO
+════════════════════════════════════════════ */
+let currentLang   = localStorage.getItem('uruvoto-lang') || 'es';
+let selectedAnio  = ELECCIONES[ELECCIONES.length - 1].anio;
+let selectedVuelta = 0;   // índice en vueltas[] o 'pleb-N'
+let selectedPleb  = null; // índice en plebiscitos[] o null
+
+// Aplicar idioma al selector
+document.getElementById('lang-select').value = currentLang;
+
+/* ════════════════════════════════════════════
+   UTILS
+════════════════════════════════════════════ */
+function fmtVotos(n) {
+    return n.toLocaleString('es-UY');
+}
+function pctOf(v, total) {
+    return total > 0 ? ((v / total) * 100).toFixed(1) : '0.0';
+}
+function txt(obj) {
+    return (obj && obj[currentLang]) ? obj[currentLang] : (obj && obj.es) ? obj.es : '';
+}
+function color(partidoId) {
+    return COLORES[partidoId] || COLORES['default'];
+}
+
+/* ════════════════════════════════════════════
+   RENDER YEAR BUTTONS
+════════════════════════════════════════════ */
+function renderYears() {
+    const grid = document.getElementById('year-grid');
+    grid.innerHTML = '';
+    ELECCIONES.forEach(e => {
+        const btn = document.createElement('button');
+        btn.className = 'year-btn' + (e.anio === selectedAnio ? ' active' : '');
+        btn.textContent = e.anio;
+        btn.onclick = () => { selectedAnio = e.anio; selectedVuelta = 0; selectedPleb = null; renderAll(); };
+        grid.appendChild(btn);
+    });
+}
+
+/* ════════════════════════════════════════════
+   RENDER VUELTA / PLEBISCITO BAR
+════════════════════════════════════════════ */
+function renderVueltaBar() {
+    const bar = document.getElementById('vuelta-bar');
+    bar.innerHTML = '';
+    const elec = ELECCIONES.find(e => e.anio === selectedAnio);
+    if (!elec) return;
+
+    elec.vueltas.forEach((v, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'vuelta-btn' + (selectedPleb === null && selectedVuelta === i ? ' active' : '');
+        btn.textContent = txt(v.nombre);
+        btn.onclick = () => { selectedVuelta = i; selectedPleb = null; renderCandidatos(); renderMapa(); };
+        bar.appendChild(btn);
+    });
+
+    elec.plebiscitos.forEach((p, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'vuelta-btn plebiscito' + (selectedPleb === i ? ' active' : '');
+        btn.textContent = txt(p.nombre);
+        btn.onclick = () => { selectedPleb = i; renderCandidatos(); renderMapa(); };
+        bar.appendChild(btn);
+    });
+}
+
+/* ════════════════════════════════════════════
+   RENDER MAPA
+════════════════════════════════════════════ */
+function renderMapa() {
+    const elec = ELECCIONES.find(e => e.anio === selectedAnio);
+    if (!elec) return;
+
+    let mapaData = {};
+    if (selectedPleb !== null) {
+        mapaData = elec.plebiscitos[selectedPleb].mapa || {};
+    } else {
+        mapaData = elec.vueltas[selectedVuelta]?.mapa || {};
+    }
+
+    const svg = document.getElementById('uruguay-map');
+    svg.querySelectorAll('path').forEach(path => {
+        const depto = path.getAttribute('data-depto');
+        const partidoId = mapaData[depto];
+        path.style.fill = partidoId ? color(partidoId) : (document.body.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1');
+    });
+
+    // Leyenda
+    const partidos = [...new Set(Object.values(mapaData))];
+    const leyenda = document.getElementById('leyenda-mapa');
+    leyenda.innerHTML = '';
+    const nombres = { FA:'Frente Amplio', PN:'Partido Nacional', PC:'Partido Colorado', CA:'Cabildo Abierto', PI:'Partido Independiente', NE:'Nuevo Espacio', UP:'Unión Popular' };
+    partidos.forEach(p => {
+        leyenda.innerHTML += `<div class="leyenda-item"><div class="leyenda-dot" style="background:${color(p)}"></div><span>${nombres[p] || p}</span></div>`;
+    });
+}
+
+/* ════════════════════════════════════════════
+   RENDER CANDIDATOS / PLEBISCITO
+════════════════════════════════════════════ */
+function renderCandidatos() {
+    const elec = ELECCIONES.find(e => e.anio === selectedAnio);
+    const sec = document.getElementById('candidatos-section');
+    sec.classList.remove('fade-in');
+    void sec.offsetWidth;
+    sec.classList.add('fade-in');
+    const content = document.getElementById('cand-content');
+    const lbl = document.getElementById('lbl-candidatos');
+    content.innerHTML = '';
+
+    if (selectedPleb !== null) {
+        // ── PLEBISCITO ──
+        lbl.textContent = currentLang === 'es' ? 'Plebiscito' : 'Plebiscite';
+        const pleb = elec.plebiscitos[selectedPleb];
+        const total = pleb.opciones.reduce((s, o) => s + o.votos, 0);
+
+        content.innerHTML += `<p class="plebiscito-info">${txt(pleb.descripcion)}</p>`;
+
+        let html = '<div class="pleb-result">';
+        const maxVotos = Math.max(...pleb.opciones.map(o => o.votos));
+        pleb.opciones.forEach(op => {
+            const pct = pctOf(op.votos, total);
+            const isWinner = op.votos === maxVotos;
+            html += `
+                <div class="pleb-opcion ${isWinner ? 'ganador-pleb' : ''}">
+                    <div>
+                        <div class="pleb-opcion-nombre">${txt(op.nombre)}</div>
+                        <div class="pleb-opcion-sub">${fmtVotos(op.votos)} votos</div>
+                    </div>
+                    <div class="pleb-opcion-pct" style="color:${op.color}">${pct}%</div>
+                    <div class="pleb-barra">
+                        <div class="pleb-barra-fill" style="width:${pct}%; background:${op.color}"></div>
+                    </div>
+                </div>`;
+        });
+        html += '</div>';
+        content.innerHTML += html;
+        return;
+    }
+
+    // ── CANDIDATOS ──
+    lbl.textContent = currentLang === 'es' ? 'Candidatos' : 'Candidates';
+    const vuelta = elec.vueltas[selectedVuelta];
+    if (!vuelta) return;
+
+    const cands = [...vuelta.candidatos].sort((a,b) => b.votos - a.votos);
+    const total = cands.reduce((s, c) => s + c.votos, 0);
+    const top2  = cands.slice(0, 2);
+    const rest  = cands.slice(2);
+
+    // Top 2
+    let topHtml = '<div class="cand-top">';
+    top2.forEach(c => {
+        const pct = pctOf(c.votos, total);
+        topHtml += `
+            <div class="cand-card ${c.ganador ? 'ganador' : ''}">
+                <div class="cand-color-strip" style="background:${color(c.partido)}"></div>
+                <div class="cand-info">
+                    <div class="cand-nombre">${c.nombre}</div>
+                    ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
+                    <div class="cand-partido" style="color:${color(c.partido)}">${c.partido}</div>
+                    <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
+                    ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}
+                    <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(c.partido)}"></div></div>
+                </div>
+                <div class="cand-pct-wrap">
+                    <div class="cand-pct" style="color:${color(c.partido)}">${pct}%</div>
+                </div>
+            </div>`;
+    });
+    topHtml += '</div>';
+    content.innerHTML += topHtml;
+
+    // Resto
+    if (rest.length > 0) {
+        let minorHtml = '<div class="cand-minor-list">';
+        rest.forEach(c => {
+            const pct = pctOf(c.votos, total);
+            minorHtml += `
+                <div class="cand-minor">
+                    <div class="cand-minor-dot" style="background:${color(c.partido)}"></div>
+                    <div>
+                        <div class="cand-minor-nombre">${c.nombre}</div>
+                        <div class="cand-minor-sub">${c.partido} · ${fmtVotos(c.votos)} votos</div>
+                    </div>
+                    <div class="cand-minor-pct" style="color:${color(c.partido)}">${pct}%</div>
+                </div>`;
+        });
+        minorHtml += '</div>';
+        content.innerHTML += minorHtml;
+    }
+}
+
+/* ════════════════════════════════════════════
+   TOOLTIP MAPA
+════════════════════════════════════════════ */
+const tooltip = document.getElementById('map-tooltip');
+document.getElementById('uruguay-map').querySelectorAll('path').forEach(path => {
+    path.addEventListener('mousemove', e => {
+        const depto = path.getAttribute('data-depto');
+        const elec = ELECCIONES.find(el => el.anio === selectedAnio);
+        let mapaData = {};
+        if (selectedPleb !== null && elec) {
+            mapaData = elec.plebiscitos[selectedPleb].mapa || {};
+        } else if (elec) {
+            mapaData = elec.vueltas[selectedVuelta]?.mapa || {};
+        }
+        const partidoId = mapaData[depto];
+        const nombres = { FA:'Frente Amplio', PN:'Partido Nacional', PC:'Partido Colorado', CA:'Cabildo Abierto', PI:'Partido Independiente', NE:'Nuevo Espacio' };
+        tooltip.style.display = 'block';
+        tooltip.style.left = (e.clientX + 14) + 'px';
+        tooltip.style.top  = (e.clientY - 10) + 'px';
+        tooltip.innerHTML = `<strong>${depto}</strong>${partidoId ? `<span style="color:${color(partidoId)}">${nombres[partidoId] || partidoId}</span>` : '<span style="color:#94a3b8">Sin datos</span>'}`;
+    });
+    path.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+});
+
+/* ════════════════════════════════════════════
+   RENDER ALL
+════════════════════════════════════════════ */
+function renderAll() {
+    renderYears();
+    renderVueltaBar();
+    renderMapa();
+    renderCandidatos();
+}
+
+/* ════════════════════════════════════════════
+   IDIOMA / TEMA
+════════════════════════════════════════════ */
+function changeLanguage() {
+    currentLang = document.getElementById('lang-select').value;
+    localStorage.setItem('uruvoto-lang', currentLang);
+    const isDark = document.body.getAttribute('data-theme') === 'dark';
+    document.getElementById('dark-btn').innerText = isDark ? '☀️' : '🌙';
+    renderAll();
+}
+function toggleDarkMode() {
+    const dark = document.body.getAttribute('data-theme') !== 'dark';
+    document.body.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('uruvoto-theme', dark ? 'dark' : 'light');
+    document.getElementById('dark-btn').innerText = dark ? '☀️' : '🌙';
+    renderMapa();
+}
+
+/* ── INIT ── */
+const isDarkInit = document.body.getAttribute('data-theme') === 'dark';
+document.getElementById('dark-btn').innerText = isDarkInit ? '☀️' : '🌙';
+renderAll();
+</script>
+</body>
+</html>
