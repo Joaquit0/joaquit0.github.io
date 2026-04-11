@@ -100,6 +100,18 @@
         .brujula-legend span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
         .leg-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
+        /* Homepage */
+        .page-home { display: none; animation: fadeIn 0.4s ease; }
+        .hero-img { width: 100%; height: 260px; object-fit: cover; object-position: center 30%; border-radius: 16px; display: block; }
+        .hero-section { max-width: 900px; margin: 32px auto 0; padding: 0 20px; text-align: center; }
+        .hero-title { font-size: 2.6rem; font-weight: 700; letter-spacing: -1px; margin: 32px 0 16px; color: var(--azul-texto); }
+        .hero-title span { color: var(--azul-vibrante); }
+        .hero-desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; max-width: 620px; margin: 0 auto 40px; }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
+        .btn-hero { padding: 16px 28px; background: var(--azul-vibrante); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s; }
+        .btn-hero:hover { opacity: 0.88; }
+        .btn-hero.disabled { opacity: 0.5; cursor: not-allowed; }
+
         /* Grid comparativa */
         .grid-comparativa { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 24px; margin-top: 30px; }
         .grid-comparativa .pregunta-card { margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 20px; }
@@ -124,7 +136,7 @@
 </script>
 
 <header>
-    <div class="header-left"><div class="logo" onclick="reiniciarTest()">URUVOTO</div></div>
+    <div class="header-left"><div class="logo" onclick="irHome()">URUVOTO</div></div>
     <div class="flag-center">
         <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg" alt="Uruguay">
     </div>
@@ -137,8 +149,24 @@
     </div>
 </header>
 
-<div id="main-container" class="container container-test">
-    <div id="page-test" class="page active">
+<!-- HOME -->
+<div id="page-home" class="page-home active">
+    <div style="max-width:1300px; margin:32px auto 0; padding:0 20px;">
+        <img src="img/hero.jpg" alt="Bandera de Uruguay" class="hero-img" onerror="this.style.display='none'">
+    </div>
+    <div class="hero-section">
+        <h1 class="hero-title" id="home-title">Elecciones del <span>Uruguay</span></h1>
+        <p class="hero-desc" id="home-desc"></p>
+        <div class="hero-buttons">
+            <button class="btn-hero disabled" id="btn-nacionales" onclick="proximamente(this)"></button>
+            <button class="btn-hero" id="btn-test" onclick="irTest()"></button>
+            <button class="btn-hero disabled" id="btn-montevideo" onclick="proximamente(this)"></button>
+        </div>
+    </div>
+</div>
+
+<div id="main-container" class="container container-test" style="display:none;">
+    <div id="page-test" class="page">
         <h1 id="main-title">Analiza tu afinidad</h1>
         <p id="main-desc" style="color: var(--text-muted); margin-bottom: 40px; line-height: 1.6;"></p>
         <p id="main-metodo" style="color: var(--text-muted); margin-top: -30px; margin-bottom: 40px; font-size: 0.85rem;"></p>
@@ -197,23 +225,35 @@ const catColores = {
 const i18n = {
     es: {
         title:"Analiza tu afinidad", desc:"Las posiciones de cada partido fueron elaboradas tomando como referencia sus programas de gobierno presentados ante la Corte Electoral en 2024. Por ello, pueden no reflejar de forma exhaustiva el posicionamiento ideológico de cada fuerza política.",
-        btnResults:"Ver Resultados Finales", btnRestart:"← Reiniciar Test",
+        btnResults:"Ver Resultados Finales", btnRestart:"← Volver al inicio",
         resTitle:"Tu Afinidad Política", compTitle:"Comparativa Detallada",
         compSubtitle:"Tus respuestas frente a los programas de gobierno.",
         agree:"De acuerdo", disagree:"En desacuerdo", quote:"Postura oficial según el programa.",
         brujulaTitle:"Brújula Ideológica", brujulaDesc:"Tu posición según tus respuestas vs. los partidos.",
         lblAuto:"AUTORITARIO", lblLib:"LIBERAL", lblIzq:"IZQUIERDA", lblDer:"DERECHA",
-        lblTu:"Tú", metodoLink:"Ver metodología del eje ideológico"
+        lblTu:"Tú", metodoLink:"Ver metodología del eje ideológico",
+        homeTitle:"Elecciones del Uruguay",
+        homeDesc:"Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o comparar tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.",
+        btnNacionales:"Elecciones Nacionales",
+        btnTestHome:"Test Ideológico",
+        btnMontevideo:"Elecciones Montevideo",
+        proximamente:"Próximamente"
     },
     en: {
         title:"Analyze your affinity", desc:"Party positions were drawn from their government programs submitted to the Electoral Court in 2024. As such, they may not fully capture each party's complete ideological stance.",
-        btnResults:"View Final Results", btnRestart:"← Restart Test",
+        btnResults:"View Final Results", btnRestart:"← Back to home",
         resTitle:"Your Political Affinity", compTitle:"Detailed Comparison",
         compSubtitle:"Your answers vs government programs.",
         agree:"Agree", disagree:"Disagree", quote:"Official stance according to program.",
         brujulaTitle:"Political Compass", brujulaDesc:"Your position based on your answers vs. parties.",
         lblAuto:"AUTHORITARIAN", lblLib:"LIBERTARIAN", lblIzq:"LEFT", lblDer:"RIGHT",
-        lblTu:"You", metodoLink:"View ideological axis methodology"
+        lblTu:"You", metodoLink:"View ideological axis methodology",
+        homeTitle:"Elections of Uruguay",
+        homeDesc:"Explore the different elections that took place throughout Uruguay's history, or compare your ideas with those of the country's main political parties to find out who you align with most.",
+        btnNacionales:"National Elections",
+        btnTestHome:"Ideological Test",
+        btnMontevideo:"Montevideo Elections",
+        proximamente:"Coming soon"
     }
 };
 
@@ -300,6 +340,11 @@ function changeLanguage() {
     document.getElementById('lbl-der').innerText  = t.lblDer;
     const isDark = document.body.getAttribute('data-theme') === 'dark';
     document.getElementById('dark-btn').innerText = isDark ? '☀️' : '🌙';
+    document.getElementById('home-title').innerHTML = t.homeTitle.replace('Uruguay', '<span style="color:var(--azul-vibrante)">Uruguay</span>');
+    document.getElementById('home-desc').innerText   = t.homeDesc;
+    document.getElementById('btn-nacionales').innerText = t.btnNacionales;
+    document.getElementById('btn-test').innerText       = t.btnTestHome;
+    document.getElementById('btn-montevideo').innerText = t.btnMontevideo;
     renderQuiz();
 }
 
@@ -584,14 +629,33 @@ if (savedLang) {
 }
 changeLanguage();
 
-function reiniciarTest() {
-    _lastUserX = null; _lastUserY = null;
-    if (_compassObs) { _compassObs.disconnect(); _compassObs = null; }
+function irHome() {
+    document.getElementById('page-home').classList.add('active');
+    document.getElementById('main-container').style.display = 'none';
+    window.scrollTo(0, 0);
+}
+
+function irTest() {
+    document.getElementById('page-home').classList.remove('active');
+    document.getElementById('main-container').style.display = 'block';
     document.getElementById('main-container').className = 'container container-test';
     document.getElementById('page-results').classList.remove('active');
     document.getElementById('page-test').classList.add('active');
     renderQuiz();
     window.scrollTo(0, 0);
+}
+
+function reiniciarTest() {
+    _lastUserX = null; _lastUserY = null;
+    if (_compassObs) { _compassObs.disconnect(); _compassObs = null; }
+    irHome();
+}
+
+function proximamente(btn) {
+    const t = i18n[currentLang];
+    const orig = btn.innerText;
+    btn.innerText = t.proximamente;
+    setTimeout(() => { btn.innerText = orig; }, 1800);
 }
 </script>
 </body>
