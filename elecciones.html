@@ -25,28 +25,35 @@
         }
 
         * { box-sizing: border-box; }
-        body { font-family: 'Inter', sans-serif; background: var(--fondo); color: var(--azul-texto); margin: 0; padding: 0; transition: background 0.3s; }
+        
+        /* Ocultar el scroll del body en escritorio para usar el scroll del right-panel */
+        body { 
+            font-family: 'Inter', sans-serif; background: var(--fondo); 
+            color: var(--azul-texto); margin: 0; padding: 0; 
+            transition: background 0.3s; overflow: hidden;
+        }
 
         /* ── HEADER ── */
-        header { background: var(--card-bg); border-bottom: 1px solid var(--borde-card); padding: 0.8rem 2rem; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; position: sticky; top: 0; z-index: 1000; }
+        header { 
+            background: var(--card-bg); border-bottom: 1px solid var(--borde-card); 
+            padding: 0.8rem 2rem; display: grid; grid-template-columns: 1fr auto 1fr; 
+            align-items: center; position: relative; z-index: 1000; height: 60px;
+        }
         .header-left { display: flex; gap: 15px; align-items: center; }
         .header-right { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
         .logo { font-weight: 700; font-size: 1.2rem; color: var(--azul-vibrante); cursor: pointer; text-decoration: none; }
         .flag-center img { height: 32px; border-radius: 2px; }
         select, .btn-icon { background: var(--card-bg); color: var(--azul-texto); border: 1px solid var(--borde-card); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-family: 'Inter'; }
 
-        /* ── LAYOUT ── */
+        /* ── LAYOUT Y SCROLL INDEPENDIENTE ── */
         .main-layout {
             display: grid;
             grid-template-columns: 50fr 50fr;
             gap: 0;
-            min-height: calc(100vh - 60px);
-        }
-        @media (max-width: 1100px) {
-            .main-layout { grid-template-columns: 1fr; }
+            height: calc(100vh - 60px);
         }
 
-        /* ── MAP PANEL ── */
+        /* MAPA FIJO A LA IZQUIERDA */
         .map-panel {
             padding: 24px;
             display: flex;
@@ -55,6 +62,7 @@
             justify-content: center;
             background: var(--fondo);
             position: relative;
+            height: 100%;
             overflow: hidden;
         }
         .map-controls {
@@ -66,242 +74,161 @@
             z-index: 10;
         }
         .map-mode-btn {
-            background: var(--card-bg);
-            color: var(--azul-texto);
-            border: 1.5px solid var(--borde-card);
-            padding: 8px 14px;
-            border-radius: 8px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            font-family: 'Inter';
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            background: var(--card-bg); color: var(--azul-texto); border: 1.5px solid var(--borde-card);
+            padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; font-family: 'Inter';
+            cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         .map-mode-btn:hover { border-color: var(--azul-vibrante); }
         .map-mode-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
 
-        #map-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 400px;
-            margin-top: 20px;
-        }
-        #map-container svg {
-            width: 100%;
-            max-width: 800px;
-            height: auto;
-            filter: drop-shadow(0 4px 20px rgba(0,0,0,0.08));
-        }
-        #map-container path {
-            stroke: var(--card-bg);
-            stroke-width: 1.5;
-            transition: fill 0.4s ease, fill-opacity 0.4s ease, opacity 0.2s;
-            cursor: pointer;
-        }
+        #map-container { width: 100%; display: flex; justify-content: center; align-items: center; height: 100%; }
+        #map-container svg { width: 100%; max-width: 800px; height: auto; filter: drop-shadow(0 4px 20px rgba(0,0,0,0.08)); }
+        #map-container path { stroke: var(--card-bg); stroke-width: 1.5; transition: fill 0.4s ease, fill-opacity 0.4s ease, opacity 0.2s; cursor: pointer; }
         #map-container path:hover { opacity: 0.8; }
         #map-container #label_points { display: none; }
 
         #map-tooltip {
-            position: fixed;
-            background: #1a1a2e;
-            color: white;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.85rem;
-            pointer-events: none;
-            z-index: 9999;
-            display: none;
-            min-width: 160px;
+            position: fixed; background: #1a1a2e; color: white; padding: 12px 16px; border-radius: 10px;
+            font-size: 0.85rem; pointer-events: none; z-index: 9999; display: none; min-width: 160px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.3);
         }
         #map-tooltip strong { display: block; font-size: 1rem; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px;}
         .tooltip-row { display: flex; justify-content: space-between; gap: 20px; font-size: 0.85rem; margin-top: 4px; }
 
-        /* ── RIGHT PANEL ── */
+        /* SCROLL PANEL A LA DERECHA */
         .right-panel {
             border-left: 1px solid var(--borde-card);
             padding: 24px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            overflow-y: auto;
             background: var(--card-bg);
-        }
-
-        /* GRID PARA LOS CONTROLES SUPERIORES (Elección y Vistas al lado) */
-        .top-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            margin-bottom: 8px;
-        }
-
-        .eleccion-selector, .vista-selector {
-            background: var(--fondo);
-            border: 1px solid var(--borde-card);
-            border-radius: 14px;
-            padding: 16px;
+            height: 100%;
+            overflow-y: auto; /* PERMITE SCROLL AQUÍ */
+            scroll-behavior: smooth;
             display: flex;
             flex-direction: column;
+        }
+
+        .top-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; }
+        .eleccion-selector, .vista-selector {
+            background: var(--fondo); border: 1px solid var(--borde-card); border-radius: 14px;
+            padding: 16px; display: flex; flex-direction: column;
         }
         .eleccion-selector h3, .vista-selector h3 { 
             margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; 
             letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; 
         }
-
         .year-grid { display: flex; flex-wrap: wrap; gap: 8px; }
         .year-btn {
-            padding: 7px 14px;
-            border-radius: 8px;
-            border: 1.5px solid var(--borde-card);
-            background: var(--card-bg);
-            color: var(--azul-texto);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.18s;
+            padding: 7px 14px; border-radius: 8px; border: 1.5px solid var(--borde-card); background: var(--card-bg);
+            color: var(--azul-texto); font-family: 'Inter', sans-serif; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
         }
         .year-btn:hover { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
         .year-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
 
-        /* TABS (Vistas) */
-        .tabs-container {
-            display: flex; flex-direction: column; gap: 6px; justify-content: center; flex-grow: 1;
-        }
+        /* TABS (Vistas/Anclas) */
+        .tabs-container { display: flex; flex-direction: column; gap: 6px; justify-content: center; flex-grow: 1; }
         .tab-btn {
-            background: var(--card-bg); border: 1.5px solid var(--borde-card); 
-            font-family: 'Inter'; font-weight: 600; color: var(--azul-texto); 
-            font-size: 0.85rem; cursor: pointer; padding: 8px 12px; 
+            background: var(--card-bg); border: 1.5px solid var(--borde-card); font-family: 'Inter'; font-weight: 600; 
+            color: var(--azul-texto); font-size: 0.85rem; cursor: pointer; padding: 8px 12px; 
             transition: all 0.2s; border-radius: 8px; text-align: left;
         }
         .tab-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
         .tab-btn:hover:not(.active) { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
 
-        .vuelta-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;}
+        .vuelta-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: 36px; align-items: center; }
         .vuelta-btn {
-            padding: 7px 14px;
-            border-radius: 8px;
-            border: 1.5px solid var(--borde-card);
-            background: var(--card-bg);
-            color: var(--azul-texto);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.18s;
+            padding: 7px 14px; border-radius: 8px; border: 1.5px solid var(--borde-card); background: var(--card-bg);
+            color: var(--azul-texto); font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
         }
         .vuelta-btn:hover { border-color: var(--azul-vibrante); }
         .vuelta-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
         .vuelta-btn.plebiscito.active { background: #7c3aed; border-color: #7c3aed; }
 
-        .candidatos-section h3 { margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
+        /* SECCIONES SCROLLEABLES */
+        .content-section {
+            padding-top: 24px;
+            margin-bottom: 40px;
+            border-top: 1px solid var(--borde-card);
+        }
+        .content-section:first-child { border-top: none; padding-top: 0; }
+        .content-section h3 { margin: 0 0 16px; font-size: 1rem; color: var(--azul-texto); font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px; }
 
-        /* TOP 3 CANDIDATOS (Lista vertical) */
+        /* TOP 3 CANDIDATOS */
         .cand-top { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
         .cand-card {
             background: var(--fondo); border-radius: 12px; display: flex; flex-direction: row;
-            overflow: hidden; border-width: 2px; border-style: solid; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            transition: transform 0.2s; height: 150px;
+            overflow: hidden; border-width: 2px; border-style: solid; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: transform 0.2s; height: 150px;
         }
         .cand-card:hover { transform: translateY(-2px); }
-
-        .cand-photo-wrap {
-            width: 120px; height: 100%; flex-shrink: 0;
-            border-right: 1px solid rgba(0,0,0,0.05); background: #fff;
-        }
+        .cand-photo-wrap { width: 120px; height: 100%; flex-shrink: 0; border-right: 1px solid rgba(0,0,0,0.05); background: #fff; }
         .cand-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
-
         .cand-info-wrap { padding: 14px 20px; display: flex; flex-direction: column; justify-content: center; flex-grow: 1; }
-        .cand-info { text-align: left; }
-        .cand-nombre { 
-            font-weight: 800; font-size: 1.15rem; line-height: 1.2; margin-bottom: 4px; 
-            display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
-        }
+        .cand-nombre { font-weight: 800; font-size: 1.15rem; line-height: 1.2; margin-bottom: 4px; display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
         .cand-vice { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
         .cand-partido { font-size: 0.85rem; font-weight: 700; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
         .cand-votos { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
-        
         .cand-bottom-stats { margin-top: 10px; display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
         .cand-pct { font-size: 1.6rem; font-weight: 900; line-height: 1; margin-bottom: 6px;}
         .barra-cand { width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
         .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-
-        .badge-ganador {
-            display: inline-block; background: #16a34a; color: white;
-            font-size: 0.65rem; font-weight: 800; padding: 4px 8px;
-            border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em;
-        }
+        .badge-ganador { display: inline-block; background: #16a34a; color: white; font-size: 0.65rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
 
         /* Candidatos menores */
         .cand-minor-list { display: flex; flex-direction: column; gap: 8px; }
-        .cand-minor {
-            display: grid; grid-template-columns: 44px 1fr auto; align-items: center;
-            gap: 12px; padding: 10px 14px; background: var(--fondo); border: 1px solid var(--borde-card);
-            border-radius: 12px; font-size: 0.85rem;
-        }
+        .cand-minor { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 12px; padding: 10px 14px; background: var(--fondo); border: 1px solid var(--borde-card); border-radius: 12px; font-size: 0.85rem; }
 
         /* DEPARTAMENTALES GRID */
-        .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-top: 12px; }
-        .dept-card {
-            border-radius: 12px; overflow: hidden; background: var(--fondo); position: relative; border-width: 2px; border-style: solid; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            display: flex; flex-direction: row; cursor: pointer; height: 100px;
-        }
-        .dept-photo { width: 40%; height: 100%; object-fit: cover; object-position: center 15%; display: block; border-right: 1px solid rgba(0,0,0,0.05);}
+        .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+        .dept-card { border-radius: 12px; overflow: hidden; background: var(--fondo); position: relative; border-width: 2px; border-style: solid; box-shadow: 0 4px 10px rgba(0,0,0,0.03); display: flex; flex-direction: row; cursor: default; height: 100px; }
+        .dept-photo { width: 40%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; font-size: 2rem; border-right: 1px solid rgba(0,0,0,0.05); }
         .dept-info { padding: 10px; text-align: left; display: flex; flex-direction: column; justify-content: center; width: 60%; }
         .dept-info-name { font-weight: 800; font-size: 0.95rem; line-height: 1.1; margin-bottom: 4px;}
-        .dept-hover {
-            position: absolute; inset: 0; background: rgba(15,23,42,0.92); color: white; padding: 16px; 
-            opacity: 0; transition: opacity 0.2s; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; z-index: 10;
-        }
+        .dept-hover { position: absolute; inset: 0; background: rgba(15,23,42,0.95); color: white; padding: 16px; opacity: 0; transition: opacity 0.2s; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; z-index: 10; cursor: pointer;}
         .dept-card:hover .dept-hover { opacity: 1; }
         .dept-hover-title { font-weight: 800; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px; margin-bottom: 8px;}
         .dept-hover-row { display: flex; justify-content: space-between; font-size: 0.8rem; }
 
         /* PARLAMENTO (Senado/Diputados) */
-        .legislativo-container { display: flex; flex-direction: column; gap: 70px; margin-top: 10px; margin-bottom: 40px; }
+        .legislativo-container { display: flex; flex-direction: column; gap: 90px; padding-top: 10px; margin-bottom: 20px; }
         .parliament-wrapper { text-align: center; }
-        .parliament-wrapper h4 { margin: 0 0 20px 0; font-size: 1.15rem; font-weight: 800; color: var(--azul-texto); }
+        .parliament-wrapper h4 { margin: 0 0 40px 0; font-size: 1.15rem; font-weight: 800; color: var(--azul-texto); background: var(--fondo); display: inline-block; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--borde-card);}
         
-        .parliament-container {
-            position: relative; width: 100%; max-width: 480px; margin: 0 auto; aspect-ratio: 2 / 1; 
-            display: block; overflow: visible;
-        }
-        .parliament-dot {
-            position: absolute; border-radius: 50%; cursor: pointer; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-        }
+        .parliament-container { position: relative; width: 100%; max-width: 480px; margin: 0 auto; aspect-ratio: 2 / 1; display: block; overflow: visible; }
+        .parliament-dot { position: absolute; border-radius: 50%; cursor: pointer; transition: transform 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.25); }
         .parliament-dot:hover { transform: scale(1.4); z-index: 50; }
         .parliament-tooltip {
-            visibility: hidden; position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); 
-            background: #1a1a1a; color: white; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
-            white-space: nowrap; z-index: 100; opacity: 0; transition: opacity 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.4); pointer-events: none; text-align: center;
+            visibility: hidden; position: absolute; bottom: calc(100% + 14px); left: 50%; transform: translateX(-50%); 
+            background: #1a1a1a; color: white; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+            white-space: nowrap; z-index: 100; opacity: 0; transition: opacity 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.4); pointer-events: none; text-align: center; line-height: 1.4;
         }
-        .parliament-tooltip::after {
-            content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #1a1a1a transparent transparent transparent;
-        }
+        .parliament-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #1a1a1a transparent transparent transparent; }
         .parliament-dot:hover .parliament-tooltip { visibility: visible; opacity: 1; }
         
-        /* Aumento del margin-top para dar más espacio entre el hemiciclo y la leyenda */
-        .parliament-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; justify-content: center; margin-top: 50px; }
-        .p-leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; }
-        .p-leg-dot { width: 16px; height: 16px; border-radius: 50%; }
+        .parliament-legend { display: flex; flex-wrap: wrap; gap: 14px 24px; justify-content: center; margin-top: 60px; }
+        .p-leg-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--azul-texto); }
+        .p-leg-dot { width: 18px; height: 18px; border-radius: 50%; box-shadow: inset 0 1px 2px rgba(0,0,0,0.2); }
 
         /* Plebiscito */
-        .plebiscito-info { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; padding: 12px 16px; background: var(--fondo); border-radius: 10px; border: 1px solid var(--borde-card); }
-        .pleb-result { display: flex; flex-direction: column; gap: 8px; }
-        .pleb-opcion { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 10px; border: 1.5px solid var(--borde-card); background: var(--fondo); }
-        .pleb-opcion.ganador-pleb { border-color: #16a34a; }
-        .pleb-opcion-nombre { font-weight: 600; font-size: 0.88rem; }
-        .pleb-opcion-sub { font-size: 0.72rem; color: var(--text-muted); }
-        .pleb-opcion-pct { font-size: 1.2rem; font-weight: 800; }
-        .pleb-barra { height: 5px; background: #e2e8f0; border-radius: 4px; margin-top: 6px; overflow: hidden; grid-column: 1 / -1; }
+        #pleb-content { margin-top: 10px; }
+        .plebiscito-info { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; padding: 16px 20px; background: var(--fondo); border-radius: 10px; border: 1px solid var(--borde-card); }
+        .pleb-result { display: flex; flex-direction: column; gap: 10px; }
+        .pleb-opcion { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 12px; border: 1.5px solid var(--borde-card); background: var(--fondo); }
+        .pleb-opcion.ganador-pleb { border-color: #16a34a; border-width: 2px; }
+        .pleb-opcion-nombre { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+        .pleb-opcion-sub { font-size: 0.75rem; color: var(--text-muted); }
+        .pleb-opcion-pct { font-size: 1.4rem; font-weight: 900; }
+        .pleb-barra { height: 6px; background: #e2e8f0; border-radius: 4px; margin-top: 8px; overflow: hidden; grid-column: 1 / -1; }
         .pleb-barra-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.3s ease; }
+
+        /* Responsive Fix: En móvil la pantalla sí debe scrollear normalmente */
+        @media (max-width: 1100px) {
+            body { overflow: auto; }
+            .main-layout { height: auto; grid-template-columns: 1fr; }
+            .map-panel { height: auto; position: static; padding: 16px; border-bottom: 1px solid var(--borde-card); }
+            .right-panel { height: auto; overflow-y: visible; border-left: none; }
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -335,9 +262,8 @@
         </div>
     </div>
 
-    <div class="right-panel">
+    <div class="right-panel" id="right-panel">
         
-        <!-- CONTROLES SUPERIORES SEPARADOS LADO A LADO -->
         <div class="top-controls">
             <div class="eleccion-selector">
                 <h3 id="lbl-elecciones">Elecciones</h3>
@@ -345,56 +271,65 @@
             </div>
             
             <div class="vista-selector">
-                <h3 id="lbl-vistas">Vistas</h3>
+                <h3 id="lbl-vistas">Secciones</h3>
                 <div class="tabs-container" id="tabs-container">
-                    <button class="tab-btn active" onclick="setTab('presidenciales')">Presidenciales</button>
-                    <button class="tab-btn" onclick="setTab('departamentales')">Departamentales</button>
-                    <button class="tab-btn" onclick="setTab('legislativo')">Legislativo</button>
+                    <button class="tab-btn active" id="tab-btn-presidenciales" onclick="scrollToSec('presidenciales')">Presidenciales</button>
+                    <button class="tab-btn" id="tab-btn-departamentales" onclick="scrollToSec('departamentales')">Departamentales</button>
+                    <button class="tab-btn" id="tab-btn-legislativo" onclick="scrollToSec('legislativo')">Legislativo</button>
                 </div>
             </div>
         </div>
 
         <div class="vuelta-bar" id="vuelta-bar"></div>
-        <div class="candidatos-section fade-in" id="candidatos-section">
-            <h3 id="lbl-candidatos">Candidatos</h3>
-            <div id="cand-content"></div>
+
+        <div id="all-content" class="fade-in">
+            <div id="sec-presidenciales" class="content-section">
+                <h3>Resultados Nacionales</h3>
+                <div id="content-presidenciales"></div>
+            </div>
+            
+            <div id="sec-departamentales" class="content-section">
+                <h3>Intendentes Electos por Departamento</h3>
+                <div id="content-departamentales"></div>
+            </div>
+            
+            <div id="sec-legislativo" class="content-section">
+                <h3>Composición del Parlamento</h3>
+                <div id="content-legislativo"></div>
+            </div>
         </div>
+
+        <div id="pleb-content" class="fade-in" style="display:none;"></div>
+
     </div>
 </div>
 
 <script>
 /* ════════════════════════════════════════════
-   COLORES DE PARTIDOS
+   COLORES Y DICCIONARIOS
 ════════════════════════════════════════════ */
 const COLORES = {
-    'PC':  '#e05c5c',
-    'PN':  '#60b8e0',
-    'FA':  '#005595',
-    'NE':  '#2ecc71',
-    'PI':  '#7030a0',
-    'CA':  '#e8a020',
-    'UP':  '#e67e22',
-    'UC':  '#16a085',
-    'PGP': '#8e44ad',
-    'default': '#94a3b8'
+    'PC':  '#e05c5c', 'PN':  '#60b8e0', 'FA':  '#005595', 'NE':  '#2ecc71',
+    'PI':  '#7030a0', 'CA':  '#e8a020', 'UP':  '#e67e22', 'UC':  '#16a085',
+    'PGP': '#8e44ad', 'default': '#94a3b8'
 };
 
 const PARTIDO_NOMBRES = {
-    FA:'Frente Amplio', PN:'Partido Nacional', PC:'Partido Colorado',
-    CA:'Cabildo Abierto', PI:'Partido Independiente', NE:'Nuevo Espacio', 
-    UP:'Unión Popular', UC:'Unión Cívica', PGP:'Por el Gob. del Pueblo'
+    FA:'Frente Amplio', PN:'Partido Nacional', PC:'Partido Colorado', CA:'Cabildo Abierto', 
+    PI:'Partido Independiente', NE:'Nuevo Espacio', UP:'Unión Popular', UC:'Unión Cívica', PGP:'Por el Gob. del Pueblo'
 };
 
 const DEPTO_ID = {
-    'Paysandú': 'UYPA', 'Artigas': 'UYAR', 'Salto': 'UYSA',
-    'Rivera': 'UYRV', 'Rocha': 'UYRO', 'Treinta y Tres':'UYTT',
-    'Cerro Largo': 'UYCL', 'Maldonado': 'UYMA', 'Canelones': 'UYCA',
-    'Montevideo': 'UYMO', 'San José': 'UYSJ', 'Colonia': 'UYCO',
-    'Soriano': 'UYSO', 'Río Negro': 'UYRN', 'Tacuarembó': 'UYTA',
-    'Durazno': 'UYDU', 'Flores': 'UYFS', 'Florida': 'UYFD',
-    'Lavalleja': 'UYLA'
+    'Paysandú': 'UYPA', 'Artigas': 'UYAR', 'Salto': 'UYSA', 'Rivera': 'UYRV', 'Rocha': 'UYRO', 
+    'Treinta y Tres':'UYTT', 'Cerro Largo': 'UYCL', 'Maldonado': 'UYMA', 'Canelones': 'UYCA',
+    'Montevideo': 'UYMO', 'San José': 'UYSJ', 'Colonia': 'UYCO', 'Soriano': 'UYSO', 
+    'Río Negro': 'UYRN', 'Tacuarembó': 'UYTA', 'Durazno': 'UYDU', 'Flores': 'UYFS', 
+    'Florida': 'UYFD', 'Lavalleja': 'UYLA'
 };
 
+/* ════════════════════════════════════════════
+   VARIABLES GLOBALES
+════════════════════════════════════════════ */
 let ELECCIONES = []; 
 let currentLang = localStorage.getItem('uruvoto-lang') || 'es';
 let selectedAnio = null; 
@@ -402,28 +337,29 @@ let selectedVuelta = 0;
 let selectedPleb = null;
 let currentTab = 'presidenciales'; 
 let mapMode = 'normal';
+let scrollObserver = null;
 
 document.getElementById('lang-select').value = currentLang;
 
+/* ════════════════════════════════════════════
+   UTILIDADES
+════════════════════════════════════════════ */
 function fmtVotos(n) { return n ? n.toLocaleString('es-UY') : '0'; }
 function pctOf(v, total) { return total > 0 ? ((v / total) * 100).toFixed(1) : '0.0'; }
 function txt(obj) { return (obj && obj[currentLang]) ? obj[currentLang] : (obj && obj.es) ? obj.es : ''; }
 function color(p) { return COLORES[p] || COLORES['default']; }
-
-function getInitials(nombre) {
-    if (!nombre) return '';
-    return nombre.split(' ').filter(w => w.length > 2).slice(0,2).map(w => w[0]).join('').toUpperCase();
-}
+function getInitials(nombre) { return nombre ? nombre.split(' ').filter(w => w.length > 2).slice(0,2).map(w => w[0]).join('').toUpperCase() : ''; }
 
 function photoHTML(c, className) {
-    if (c && c.foto) {
-        return `<img src="${c.foto}" alt="${c.nombre}" class="${className}">`;
-    }
+    if (c && c.foto) return `<img src="${c.foto}" alt="${c.nombre}" class="${className}">`;
     const initials = c ? getInitials(c.nombre || c.partido) : '';
     const bg = c ? color(c.partido) : color('default');
     return `<div class="${className}" style="background:${bg};display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:1.5rem;">${initials}</div>`;
 }
 
+/* ════════════════════════════════════════════
+   RENDER DE CONTROLES
+════════════════════════════════════════════ */
 function renderYears() {
     const grid = document.getElementById('year-grid');
     grid.innerHTML = '';
@@ -432,11 +368,8 @@ function renderYears() {
         btn.className = 'year-btn' + (e.anio === selectedAnio ? ' active' : '');
         btn.textContent = e.anio;
         btn.onclick = () => { 
-            selectedAnio = e.anio; 
-            selectedVuelta = 0; 
-            selectedPleb = null; 
-            currentTab = 'presidenciales';
-            updateTabUI();
+            selectedAnio = e.anio; selectedVuelta = 0; selectedPleb = null; 
+            scrollToSec('presidenciales');
             renderAll(); 
         };
         grid.appendChild(btn);
@@ -449,30 +382,23 @@ function renderVueltaBar() {
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
     if (!elec) return;
 
-    // Solo mostramos las vueltas (1ra, 2da) si estamos en la pestaña Presidenciales
+    // Solo mostrar las vueltas presidenciales si la sección actual en pantalla es presidenciales
     if (currentTab === 'presidenciales') {
         elec.vueltas.forEach((v, i) => {
             const btn = document.createElement('button');
             btn.className = 'vuelta-btn' + (selectedPleb === null && selectedVuelta === i ? ' active' : '');
             btn.textContent = txt(v.nombre);
-            btn.onclick = () => { 
-                selectedVuelta = i; 
-                selectedPleb = null; 
-                renderAll(); 
-            };
+            btn.onclick = () => { selectedVuelta = i; selectedPleb = null; renderAll(); };
             bar.appendChild(btn);
         });
     }
 
-    // Los plebiscitos siempre se muestran
+    // Plebiscitos siempre visibles
     elec.plebiscitos.forEach((p, i) => {
         const btn = document.createElement('button');
         btn.className = 'vuelta-btn plebiscito' + (selectedPleb === i ? ' active' : '');
         btn.textContent = txt(p.nombre);
-        btn.onclick = () => { 
-            selectedPleb = i; 
-            renderAll(); 
-        };
+        btn.onclick = () => { selectedPleb = i; renderAll(); };
         bar.appendChild(btn);
     });
 }
@@ -485,24 +411,68 @@ function toggleMapMode() {
     renderMapa();
 }
 
-function setTab(tab) {
-    currentTab = tab;
+function scrollToSec(sec) {
     selectedPleb = null;
-    renderVueltaBar();
+    const el = document.getElementById('sec-' + sec);
+    if (el) {
+        // En desktop el contenedor scrolleable es .right-panel
+        const panel = document.getElementById('right-panel');
+        if(window.innerWidth > 1100) {
+            panel.scrollTo({ top: el.offsetTop - 20, behavior: 'smooth' });
+        } else {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+    // Forzamos actualización visual al hacer clic por si el scroll tarda
+    currentTab = sec;
     updateTabUI();
-    renderRightPanelContent();
+    renderVueltaBar();
     renderMapa();
+    
+    // Si pasamos a "Todas las secciones", nos aseguramos de que el div esté visible
+    document.getElementById('all-content').style.display = 'block';
+    document.getElementById('pleb-content').style.display = 'none';
 }
 
 function updateTabUI() {
     document.querySelectorAll('.tab-btn').forEach(btn => {
         btn.classList.remove('active');
-        if(btn.textContent.toLowerCase() === currentTab) btn.classList.add('active');
+        if(btn.id === 'tab-btn-' + currentTab) btn.classList.add('active');
     });
 }
 
-const DEFAULT_FILL = () => document.body.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1';
+/* ════════════════════════════════════════════
+   SCROLL OBSERVER
+════════════════════════════════════════════ */
+function initScrollObserver() {
+    if (scrollObserver) scrollObserver.disconnect();
+    
+    const panel = window.innerWidth > 1100 ? document.getElementById('right-panel') : null;
+    const sections = document.querySelectorAll('.content-section');
+    
+    // rootMargin offset para considerar "activa" la sección que está en el tercio superior de la pantalla
+    scrollObserver = new IntersectionObserver((entries) => {
+        if (selectedPleb !== null) return; // Si hay un plebiscito, ignoramos el scroll observer
+        
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const secName = entry.target.id.replace('sec-', '');
+                if (currentTab !== secName) {
+                    currentTab = secName;
+                    updateTabUI();
+                    renderVueltaBar(); 
+                    renderMapa(); 
+                }
+            }
+        });
+    }, { root: panel, rootMargin: "-10% 0px -60% 0px", threshold: 0 });
 
+    sections.forEach(s => scrollObserver.observe(s));
+}
+
+/* ════════════════════════════════════════════
+   RENDER DEL MAPA
+════════════════════════════════════════════ */
 function renderMapa() {
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
     if (!elec) return;
@@ -525,13 +495,12 @@ function renderMapa() {
         if (!svgId) return;
         
         let partidoId = typeof info === 'string' ? info : info.ganador;
-        const c = color(partidoId);
         const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
         if (!path) return;
         
-        path.style.fill = c;
+        path.style.fill = color(partidoId);
 
-        // Apply Margin of Victory opacities
+        // Modo Margen de Victoria
         if (mapMode === 'margin' && typeof info === 'object' && info.votos) {
             const votesArray = Object.values(info.votos).sort((a,b) => b - a);
             if (votesArray.length >= 2) {
@@ -542,15 +511,13 @@ function renderMapa() {
                 if (margin > 10) opacity = 1;
                 else if (margin >= 5) opacity = 0.8;
                 else if (margin > 1) opacity = 0.6;
-                else opacity = 0.35; // Diferencia <= 1%, color notablemente más clarito
+                else opacity = 0.35; // Victoria sumamente ajustada: Conserva color real pero mucho más claro/transparente
                 
                 path.style.fillOpacity = opacity;
             }
         }
     });
 }
-
-const tooltip = document.getElementById('map-tooltip');
 
 function setupTooltips() {
     document.querySelectorAll('#uruguay-map #features path').forEach(el => {
@@ -569,14 +536,11 @@ function setupTooltips() {
                 tooltipHtml += partidoId ? `<span style="color:${color(partidoId)}">${PARTIDO_NOMBRES[partidoId] || partidoId}</span>` : '<span style="color:#94a3b8">Sin datos</span>';
             } 
             else if (currentTab === 'legislativo') {
-                const vueltaData = elec.vueltas[indexToUse];
-                const dipData = vueltaData?.diputados;
-                
+                const dipData = elec.vueltas[indexToUse]?.diputados;
                 tooltipHtml = `<strong>Resumen de Bancas - ${name}</strong>`;
                 if(dipData && dipData[name]) {
                     let total = 0;
-                    const sorted = Object.entries(dipData[name]).sort((a,b)=>b[1]-a[1]);
-                    sorted.forEach(([p, cant]) => {
+                    Object.entries(dipData[name]).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
                         tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)};font-weight:bold;">${PARTIDO_NOMBRES[p]||p}</span><span>${cant} bancas</span></div>`;
                         total += cant;
                     });
@@ -594,11 +558,9 @@ function setupTooltips() {
                 if (typeof deptoInfo === 'object' && deptoInfo.votos) {
                     let totalDepto = 0;
                     for (let p in deptoInfo.votos) totalDepto += deptoInfo.votos[p];
-                    let sortedPartidos = Object.keys(deptoInfo.votos).sort((a,b) => deptoInfo.votos[b] - deptoInfo.votos[a]);
-                    sortedPartidos.forEach(p => {
+                    Object.keys(deptoInfo.votos).sort((a,b) => deptoInfo.votos[b] - deptoInfo.votos[a]).forEach(p => {
                         let v = deptoInfo.votos[p];
-                        let pct = pctOf(v, totalDepto);
-                        tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)}; font-weight:bold;">${PARTIDO_NOMBRES[p] || p}</span><span>${fmtVotos(v)} (${pct}%)</span></div>`;
+                        tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)}; font-weight:bold;">${PARTIDO_NOMBRES[p] || p}</span><span>${fmtVotos(v)} (${pctOf(v, totalDepto)}%)</span></div>`;
                     });
                 } else {
                     const partidoId = typeof deptoInfo === 'string' ? deptoInfo : (deptoInfo?.ganador || null);
@@ -615,14 +577,15 @@ function setupTooltips() {
     });
 }
 
+/* ════════════════════════════════════════════
+   HEMICICLOS PERFECTOS (ALGORITMO MEJORADO)
+════════════════════════════════════════════ */
 function distributeSeatsMock(candidatos, totalSeats) {
     let totalVotes = candidatos.reduce((s, c) => s + c.votos, 0);
     let seats = candidatos.map(c => ({ partido: c.partido, seats: Math.floor((c.votos / totalVotes) * totalSeats), remainder: ((c.votos / totalVotes) * totalSeats) % 1 }));
     let assigned = seats.reduce((s, c) => s + c.seats, 0);
     seats.sort((a, b) => b.remainder - a.remainder);
-    for(let i=0; i < totalSeats - assigned; i++) {
-        if(seats[i]) seats[i].seats++;
-    }
+    for(let i=0; i < totalSeats - assigned; i++) if(seats[i]) seats[i].seats++;
     let res = {};
     seats.forEach(s => { if(s.seats>0) res[s.partido] = s.seats; });
     return res;
@@ -637,39 +600,39 @@ function renderParliament(dotsArray, containerId, targetSeats) {
     const cx = w / 2;
     const cy = h; 
 
+    // Filas precisas que suman la cantidad exacta de bancas
     let rowConfigs = [];
-    if (targetSeats === 30) rowConfigs = [7, 10, 13]; // 3 filas senado
-    else if (targetSeats === 99) rowConfigs = [14, 18, 20, 22, 25]; // 5 filas diputados
+    if (targetSeats === 30) rowConfigs = [6, 10, 14]; // 3 filas
+    else if (targetSeats === 99) rowConfigs = [11, 16, 20, 24, 28]; // 5 filas
     else rowConfigs = [targetSeats];
 
     const numRows = rowConfigs.length;
-    // El radio máximo será un poco menos que el ancho/2 para que los puntos entren
-    const dotSize = targetSeats <= 30 ? 28 : 12; // Círculos bastante grandes para senadores
-    const r_outer = (w / 2) - (dotSize / 2);
-    const r_inner = w * 0.15;
-    const r_step = numRows > 1 ? (r_outer - r_inner) / (numRows - 1) : 0;
+    const dotSize = targetSeats <= 30 ? 26 : 12; // Círculo de senadores es MUCHO más grande
+    const padding = dotSize / 2;
+    const maxR = (w / 2) - padding;
+    const minR = maxR * 0.4;
+    const rowThickness = numRows > 1 ? (maxR - minR) / (numRows - 1) : 0;
     
     let positions = [];
     rowConfigs.forEach((numDots, rIndex) => {
-        const radius = r_inner + r_step * rIndex;
+        const radius = minR + rowThickness * rIndex;
         for (let i = 0; i < numDots; i++) {
             // Distribución equitativa a lo largo del arco (de PI a 0)
-            const angle = Math.PI - (i / Math.max(1, numDots - 1)) * Math.PI;
+            let angle = numDots === 1 ? Math.PI / 2 : Math.PI - (i / (numDots - 1)) * Math.PI;
             positions.push({ angle: angle, x: cx + radius * Math.cos(angle), y: cy - radius * Math.sin(angle) });
         }
     });
 
-    // Ordenar posiciones por ángulo para llenarlas secuencialmente de izquierda a derecha
+    // Llenar estrictamente de izquierda a derecha (ángulo de mayor a menor)
     positions.sort((a, b) => b.angle - a.angle);
 
-    // Ordenamiento político (aproximado) de los partidos de izquierda a derecha
+    // Ordenar partidos en un espectro político aproximado
     const order = ['UP', 'FA', 'PGP', 'NE', 'PI', 'PN', 'PC', 'CA', 'UC'];
     dotsArray.sort((a, b) => order.indexOf(a.partido) - order.indexOf(b.partido));
 
     dotsArray.forEach((d, i) => {
         if (i >= positions.length) return;
         const pos = positions[i];
-        
         const dotEl = document.createElement('div');
         dotEl.className = 'parliament-dot';
         dotEl.style.width = `${dotSize}px`;
@@ -682,210 +645,191 @@ function renderParliament(dotsArray, containerId, targetSeats) {
     });
 }
 
+/* ════════════════════════════════════════════
+   RENDER DEL CONTENIDO (PANEL DERECHO)
+════════════════════════════════════════════ */
 function renderRightPanelContent() {
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
-    const sec = document.getElementById('candidatos-section');
-    sec.classList.remove('fade-in');
-    void sec.offsetWidth;
-    sec.classList.add('fade-in');
-    
-    const content = document.getElementById('cand-content');
-    const lbl = document.getElementById('lbl-candidatos');
-    content.innerHTML = '';
+    const plebDiv = document.getElementById('pleb-content');
+    const allDiv = document.getElementById('all-content');
 
+    // 1. MANEJO DE PLEBISCITOS
     if (selectedPleb !== null) {
-        lbl.textContent = currentLang === 'es' ? 'Plebiscito' : 'Plebiscite';
+        allDiv.style.display = 'none';
+        plebDiv.style.display = 'block';
+        
         const pleb = elec.plebiscitos[selectedPleb];
         const total = pleb.opciones.reduce((s, o) => s + o.votos, 0);
-        content.innerHTML += `<p class="plebiscito-info">${txt(pleb.descripcion)}</p>`;
-        let html = '<div class="pleb-result">';
+        
+        let html = `<h3 style="margin: 0 0 16px; font-size: 1rem; color: var(--azul-texto); font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px;">Resultados del Plebiscito</h3>`;
+        html += `<p class="plebiscito-info">${txt(pleb.descripcion)}</p><div class="pleb-result">`;
         const maxVotos = Math.max(...pleb.opciones.map(o => o.votos));
+        
         pleb.opciones.forEach(op => {
             const pct = pctOf(op.votos, total);
             const isWinner = op.votos === maxVotos;
-            html += `<div class="pleb-opcion ${isWinner ? 'ganador-pleb' : ''}">
-                <div><div class="pleb-opcion-nombre">${txt(op.nombre)}</div>
-                <div class="pleb-opcion-sub">${fmtVotos(op.votos)} votos</div></div>
+            html += `
+            <div class="pleb-opcion ${isWinner ? 'ganador-pleb' : ''}">
+                <div>
+                    <div class="pleb-opcion-nombre">${txt(op.nombre)}</div>
+                    <div class="pleb-opcion-sub">${fmtVotos(op.votos)} votos</div>
+                </div>
                 <div class="pleb-opcion-pct" style="color:${op.color}">${pct}%</div>
                 <div class="pleb-barra"><div class="pleb-barra-fill" style="width:${pct}%; background:${op.color}"></div></div>
             </div>`;
         });
         html += '</div>';
-        content.innerHTML += html;
+        plebDiv.innerHTML = html;
         return;
     }
 
-    const indexToUse = (currentTab === 'presidenciales') ? selectedVuelta : 0;
+    // 2. MANEJO DE SECCIONES GENERALES
+    allDiv.style.display = 'block';
+    plebDiv.style.display = 'none';
+    const indexToUse = selectedVuelta; 
     const vuelta = elec.vueltas[indexToUse];
     if (!vuelta) return;
 
-    if (currentTab === 'presidenciales') {
-        lbl.textContent = 'Candidatos Presidenciales';
-        const cands = [...vuelta.candidatos].sort((a,b) => b.votos - a.votos);
-        const total = cands.reduce((s, c) => s + c.votos, 0);
-        
-        // Mostrar los top 3 en la lista destacada
-        const top3 = cands.slice(0, 3);
-        const rest = cands.slice(3);
+    // --- A. PRESIDENCIALES ---
+    const cands = [...vuelta.candidatos].sort((a,b) => b.votos - a.votos);
+    const total = cands.reduce((s, c) => s + c.votos, 0);
+    const top3 = cands.slice(0, 3);
+    const rest = cands.slice(3);
 
-        let topHtml = '<div class="cand-top">';
-        top3.forEach(c => {
-            const pct = pctOf(c.votos, total);
-            topHtml += `
-            <div class="cand-card" style="border-color:${color(c.partido)};">
-                <div class="cand-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
-                <div class="cand-info-wrap">
-                    <div class="cand-info">
-                        <div class="cand-nombre">
-                            ${c.nombre}
-                            ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}
-                        </div>
-                        ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
-                        <div class="cand-partido" style="color:${color(c.partido)}">${PARTIDO_NOMBRES[c.partido] || c.partido}</div>
-                        <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
-                    </div>
-                    <div class="cand-bottom-stats">
-                        <div class="cand-pct" style="color:${color(c.partido)}">${pct}%</div>
-                        <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(c.partido)}"></div></div>
-                    </div>
+    let presHtml = '<div class="cand-top">';
+    top3.forEach(c => {
+        const pct = pctOf(c.votos, total);
+        presHtml += `
+        <div class="cand-card" style="border-color:${color(c.partido)};">
+            <div class="cand-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
+            <div class="cand-info-wrap">
+                <div class="cand-info">
+                    <div class="cand-nombre">${c.nombre} ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
+                    ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
+                    <div class="cand-partido" style="color:${color(c.partido)}">${PARTIDO_NOMBRES[c.partido] || c.partido}</div>
+                    <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
                 </div>
-            </div>`;
-        });
-        topHtml += '</div>';
-        content.innerHTML += topHtml;
-
-        if (rest.length > 0) {
-            let minorHtml = '<div class="cand-minor-list">';
-            rest.forEach(c => {
-                const pct = pctOf(c.votos, total);
-                minorHtml += `
-                <div class="cand-minor">
-                    <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
-                    <div>
-                        <div class="cand-nombre" style="font-size:0.95rem;">
-                            ${c.nombre}
-                            ${c.ganador ? '<span class="badge-ganador" style="font-size:0.5rem;padding:2px 4px;">Ganador</span>' : ''}
-                        </div>
-                        <div class="cand-votos">${PARTIDO_NOMBRES[c.partido] || c.partido} · ${fmtVotos(c.votos)} votos</div>
-                    </div>
-                    <div class="cand-pct" style="font-size:1.1rem; color:${color(c.partido)}">${pct}%</div>
-                </div>`;
-            });
-            minorHtml += '</div>';
-            content.innerHTML += minorHtml;
-        }
-    } 
-    else if (currentTab === 'departamentales') {
-        lbl.textContent = 'Intendentes por Departamento';
-        const mapaData = vuelta.mapa || {};
-        let html = '<div class="dept-grid">';
-        
-        Object.keys(DEPTO_ID).forEach(depto => {
-            const info = mapaData[depto];
-            if(!info) return;
-            
-            const winnerPartyId = typeof info === 'string' ? info : info.ganador;
-            
-            let hoverContent = `<div class="dept-hover-title">${depto}</div>`;
-            if (typeof info === 'object' && info.votos) {
-                let totalDepto = 0;
-                for (let p in info.votos) totalDepto += info.votos[p];
-                Object.keys(info.votos).sort((a,b)=>info.votos[b]-info.votos[a]).forEach(p => {
-                    let v = info.votos[p];
-                    hoverContent += `<div class="dept-hover-row"><span style="color:${color(p)}; font-weight:bold;">${p}</span><span>${pctOf(v, totalDepto)}%</span></div>`;
-                });
-            } else {
-                hoverContent += `<div>Ganador: ${PARTIDO_NOMBRES[winnerPartyId] || winnerPartyId}</div>`;
-            }
-
-            html += `
-            <div class="dept-card" style="border-color:${color(winnerPartyId)}">
-                <div class="dept-photo" style="background:${color(winnerPartyId)};display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:2rem;">
-                    ${winnerPartyId}
-                </div>
-                <div class="dept-info">
-                    <div class="dept-info-name">Intendente</div>
-                    <div style="color:${color(winnerPartyId)}; font-size:0.75rem; font-weight:800;">${PARTIDO_NOMBRES[winnerPartyId] || winnerPartyId}</div>
-                </div>
-                <div class="dept-hover">${hoverContent}</div>
-            </div>`;
-        });
-        html += '</div>';
-        content.innerHTML += html;
-    }
-    else if (currentTab === 'legislativo') {
-        lbl.textContent = 'Composición del Parlamento';
-        
-        content.innerHTML += `
-            <div class="legislativo-container">
-                <div class="parliament-wrapper">
-                    <h4>Cámara de Senadores (30 bancas)</h4>
-                    <div id="parlamento-render-senado" class="parliament-container" style="aspect-ratio: 2 / 1.05;"></div>
-                    <div id="legend-senado" class="parliament-legend"></div>
-                </div>
-                <div class="parliament-wrapper">
-                    <h4>Cámara de Representantes (99 bancas)</h4>
-                    <div id="parlamento-render-diputados" class="parliament-container" style="aspect-ratio: 2 / 1.05;"></div>
-                    <div id="legend-diputados" class="parliament-legend"></div>
+                <div class="cand-bottom-stats">
+                    <div class="cand-pct" style="color:${color(c.partido)}">${pct}%</div>
+                    <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(c.partido)}"></div></div>
                 </div>
             </div>
-        `;
+        </div>`;
+    });
+    presHtml += '</div>';
 
-        // Lógica de Senado
-        let senadoData = vuelta.senado || distributeSeatsMock(vuelta.candidatos, 30);
-        let dotsSen = [];
-        let legSen = {};
-        Object.entries(senadoData).forEach(([p, cant]) => {
-            legSen[p] = cant;
-            for(let i=0; i<cant; i++) dotsSen.push({ partido: p, tooltipText: `<div style="font-size:1.1em;margin-bottom:4px;">Senador de la República</div><div style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</div>` });
+    if (rest.length > 0) {
+        presHtml += '<div class="cand-minor-list">';
+        rest.forEach(c => {
+            const pct = pctOf(c.votos, total);
+            presHtml += `
+            <div class="cand-minor">
+                <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
+                <div>
+                    <div class="cand-nombre" style="font-size:0.95rem;">${c.nombre} ${c.ganador ? '<span class="badge-ganador" style="font-size:0.5rem;padding:2px 4px;">Ganador</span>' : ''}</div>
+                    <div class="cand-votos">${PARTIDO_NOMBRES[c.partido] || c.partido} · ${fmtVotos(c.votos)} votos</div>
+                </div>
+                <div class="cand-pct" style="font-size:1.1rem; color:${color(c.partido)}">${pct}%</div>
+            </div>`;
         });
-        let legHtmlSen = '';
-        Object.entries(legSen).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
-            legHtmlSen += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${PARTIDO_NOMBRES[p]||p}: ${cant}</div>`;
-        });
-        document.getElementById('legend-senado').innerHTML = legHtmlSen;
-        setTimeout(() => renderParliament(dotsSen, 'parlamento-render-senado', 30), 50);
+        presHtml += '</div>';
+    }
+    document.getElementById('content-presidenciales').innerHTML = presHtml;
 
-        // Lógica de Diputados (Con asignación de nombres si existen)
-        let dipData = vuelta.diputados;
-        let deptoNombres = vuelta.diputadosNombres || {};
-        let dotsDip = [];
-        let legDip = {};
-
-        if (dipData && typeof Object.values(dipData)[0] === 'number') {
-            Object.entries(dipData).forEach(([p, cant]) => {
-                legDip[p] = cant;
-                for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional<br><span style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</span>` });
-            });
-        } else if (dipData) {
-            Object.entries(dipData).forEach(([depto, partidos]) => {
-                let nameCounters = {};
-                Object.entries(partidos).forEach(([p, cant]) => {
-                    legDip[p] = (legDip[p] || 0) + cant;
-                    for(let i=0; i<cant; i++) {
-                        nameCounters[p] = nameCounters[p] || 0;
-                        let specNameObj = (deptoNombres[depto] || []).filter(d=>d.partido===p)[nameCounters[p]];
-                        nameCounters[p]++;
-                        let nameLabel = specNameObj ? `<div style="font-size:1.1em;margin-bottom:4px;">${specNameObj.nombre}</div>` : `<div style="font-size:1.1em;margin-bottom:4px;">Diputado/a</div>`;
-                        dotsDip.push({ partido: p, tooltipText: `${nameLabel}<div style="font-weight:normal;">Representante por ${depto}</div><div style="color:${color(p)};margin-top:2px;">${PARTIDO_NOMBRES[p]||p}</div>` });
-                    }
-                });
+    // --- B. DEPARTAMENTALES ---
+    const mapaData = elec.vueltas[0].mapa || {}; // Las departamentales suelen coincidir con datos de 1ra vuelta en la historia analizada
+    let deptHtml = '<div class="dept-grid">';
+    Object.keys(DEPTO_ID).forEach(depto => {
+        const info = mapaData[depto];
+        if(!info) return;
+        const winnerPartyId = typeof info === 'string' ? info : info.ganador;
+        
+        let hoverContent = `<div class="dept-hover-title">${depto}</div>`;
+        if (typeof info === 'object' && info.votos) {
+            let totalDepto = 0;
+            for (let p in info.votos) totalDepto += info.votos[p];
+            Object.keys(info.votos).sort((a,b)=>info.votos[b]-info.votos[a]).forEach(p => {
+                hoverContent += `<div class="dept-hover-row"><span style="color:${color(p)}; font-weight:bold;">${p}</span><span>${pctOf(info.votos[p], totalDepto)}%</span></div>`;
             });
         } else {
-            let n = distributeSeatsMock(vuelta.candidatos, 99);
-            Object.entries(n).forEach(([p, cant]) => {
-                legDip[p] = cant;
-                for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional<br><span style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</span>` });
-            });
+            hoverContent += `<div>Ganador: ${PARTIDO_NOMBRES[winnerPartyId] || winnerPartyId}</div>`;
         }
 
-        let legHtmlDip = '';
-        Object.entries(legDip).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
-            legHtmlDip += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${p}: ${cant}</div>`;
+        deptHtml += `
+        <div class="dept-card" style="border-color:${color(winnerPartyId)}">
+            <div class="dept-photo" style="background:${color(winnerPartyId)};">${winnerPartyId}</div>
+            <div class="dept-info">
+                <div class="dept-info-name">Intendente</div>
+                <div style="color:${color(winnerPartyId)}; font-size:0.75rem; font-weight:800;">${PARTIDO_NOMBRES[winnerPartyId] || winnerPartyId}</div>
+            </div>
+            <div class="dept-hover">${hoverContent}</div>
+        </div>`;
+    });
+    deptHtml += '</div>';
+    document.getElementById('content-departamentales').innerHTML = deptHtml;
+
+    // --- C. LEGISLATIVO ---
+    const legHtml = `
+        <div class="legislativo-container">
+            <div class="parliament-wrapper">
+                <h4>Cámara de Senadores (30 bancas)</h4>
+                <div id="parlamento-render-senado" class="parliament-container"></div>
+                <div id="legend-senado" class="parliament-legend"></div>
+            </div>
+            <div class="parliament-wrapper">
+                <h4>Cámara de Representantes (99 bancas)</h4>
+                <div id="parlamento-render-diputados" class="parliament-container"></div>
+                <div id="legend-diputados" class="parliament-legend"></div>
+            </div>
+        </div>
+    `;
+    document.getElementById('content-legislativo').innerHTML = legHtml;
+
+    // Calcular Arrays para Hemiciclos
+    // SENADO
+    const senData = elec.vueltas[0].senado || distributeSeatsMock(elec.vueltas[0].candidatos, 30);
+    let dotsSen = []; let legSen = {};
+    Object.entries(senData).forEach(([p, cant]) => {
+        legSen[p] = cant;
+        for(let i=0; i<cant; i++) dotsSen.push({ partido: p, tooltipText: `<div style="font-size:1.1em;margin-bottom:4px;">Senador de la República</div><div style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</div>` });
+    });
+    let sLegend = '';
+    Object.entries(legSen).sort((a,b)=>b[1]-a[1]).forEach(([p, c]) => sLegend += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${PARTIDO_NOMBRES[p]||p}: ${c}</div>`);
+    
+    // DIPUTADOS
+    const dipData = elec.vueltas[0].diputados;
+    const deptoNombres = elec.vueltas[0].diputadosNombres || {};
+    let dotsDip = []; let legDip = {};
+    if (dipData && typeof Object.values(dipData)[0] === 'number') {
+        Object.entries(dipData).forEach(([p, cant]) => { legDip[p] = cant; for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `<div style="font-size:1.1em;margin-bottom:4px;">Diputado Nacional</div><div style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</div>` }); });
+    } else if (dipData) {
+        Object.entries(dipData).forEach(([depto, partidos]) => {
+            let nameCounters = {};
+            Object.entries(partidos).forEach(([p, cant]) => {
+                legDip[p] = (legDip[p] || 0) + cant;
+                for(let i=0; i<cant; i++) {
+                    nameCounters[p] = nameCounters[p] || 0;
+                    let specObj = (deptoNombres[depto] || []).filter(d=>d.partido===p)[nameCounters[p]];
+                    nameCounters[p]++;
+                    let nLabel = specObj ? `<div style="font-size:1.1em;margin-bottom:4px;">${specObj.nombre}</div>` : `<div style="font-size:1.1em;margin-bottom:4px;">Diputado/a</div>`;
+                    dotsDip.push({ partido: p, tooltipText: `${nLabel}<div style="font-weight:normal;color:#e2e8f0;">Representante por ${depto}</div><div style="color:${color(p)};margin-top:3px;">${PARTIDO_NOMBRES[p]||p}</div>` });
+                }
+            });
         });
-        document.getElementById('legend-diputados').innerHTML = legHtmlDip;
-        setTimeout(() => renderParliament(dotsDip, 'parlamento-render-diputados', 99), 50);
+    } else {
+        let n = distributeSeatsMock(elec.vueltas[0].candidatos, 99);
+        Object.entries(n).forEach(([p, cant]) => { legDip[p] = cant; for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional<br><span style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</span>` }); });
     }
+    let dLegend = '';
+    Object.entries(legDip).sort((a,b)=>b[1]-a[1]).forEach(([p, c]) => dLegend += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${p}: ${c}</div>`);
+
+    // Render diferido de parlamentos para asegurar que los divs existen
+    setTimeout(() => {
+        document.getElementById('legend-senado').innerHTML = sLegend;
+        document.getElementById('legend-diputados').innerHTML = dLegend;
+        renderParliament(dotsSen, 'parlamento-render-senado', 30);
+        renderParliament(dotsDip, 'parlamento-render-diputados', 99);
+    }, 50);
 }
 
 function renderAll() {
@@ -898,21 +842,21 @@ function renderAll() {
 async function initApp() {
     try {
         const svgRes = await fetch('mapa.svg');
-        if (!svgRes.ok) throw new Error('Error al cargar el mapa');
-        const svgText = await svgRes.text();
-        document.getElementById('map-container').innerHTML = svgText;
+        if (!svgRes.ok) throw new Error('Error mapa');
+        document.getElementById('map-container').innerHTML = await svgRes.text();
 
         const jsonRes = await fetch('datos.json');
-        if (!jsonRes.ok) throw new Error('Error al cargar los datos');
+        if (!jsonRes.ok) throw new Error('Error datos');
         ELECCIONES = await jsonRes.json();
 
         selectedAnio = ELECCIONES[ELECCIONES.length - 1].anio;
         
         renderAll();
         setupTooltips();
+        initScrollObserver(); // Inicializa el detector de scroll
     } catch (error) {
         console.error(error);
-        document.getElementById('map-container').innerHTML = '<p style="color: #e05c5c; text-align: center; padding: 20px;">Error cargando los recursos externos (datos.json o mapa.svg).<br>Recuerda que para que los fetch locales funcionen, debes subir los 3 archivos a la misma carpeta de tu servidor o GitHub Pages.</p>';
+        document.getElementById('map-container').innerHTML = '<p style="color: #e05c5c; text-align: center; padding: 20px;">Error cargando datos.json o mapa.svg.<br>Súbelos a la misma carpeta de tu servidor/GitHub para que funcione correctamente.</p>';
     }
 }
 
