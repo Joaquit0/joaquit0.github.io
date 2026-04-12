@@ -291,13 +291,13 @@
     "vueltas": [
       {
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
-        "votosBlancos": 22433,
-        "votosAnulados": 22240,
         "candidatos": [
           { "nombre": "Tabaré Vázquez", "vice": "Rodolfo Nin Novoa", "partido": "FA", "votos": 861202, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-99.png" },
           { "nombre": "Jorge Batlle", "vice": "Luis Hierro López", "partido": "PC", "votos": 703915, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/batlle-99.png" },
-          { "nombre": "Luis Lacalle Pou", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 478980, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/herrera-99.png" },
-          { "nombre": "Rafael Michelini", "vice": "Pablo Mieres", "partido": "NE", "votos": 97943, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/michelini-99.png" }
+          { "nombre": "Luis Alberto Lacalle", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 478980, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/herrera-99.png" },
+          { "nombre": "Rafael Michelini", "vice": "Pablo Mieres", "partido": "NE", "votos": 97943, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/michelini-99.png" },
+          { "nombre": "Votos en Blanco", "vice": "", "partido": "BLANCO", "votos": 22433, "ganador": false, "foto": "" },
+          { "nombre": "Votos Anulados", "vice": "", "partido": "ANULADO", "votos": 22240, "ganador": false, "foto": "" }
         ],
         "mapa": {
           "Montevideo": { "ganador": "FA", "votos": { "FA": 484441, "PC": 278684, "PN": 118569, "NE": 51071 } },
@@ -345,11 +345,11 @@
       },
       {
         "nombre": { "es": "2ª Vuelta", "en": "2nd Round" },
-        "votosBlancos": 21469,
-        "votosAnulados": 42574,
         "candidatos": [
           { "nombre": "Jorge Batlle", "vice": "Luis Hierro López", "partido": "PC", "votos": 1158708, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/batlle-99.png" },
-          { "nombre": "Tabaré Vázquez", "vice": "Rodolfo Nin Novoa", "partido": "FA", "votos": 981778, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-99.png" }
+          { "nombre": "Tabaré Vázquez", "vice": "Rodolfo Nin Novoa", "partido": "FA", "votos": 981778, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-99.png" },
+          { "nombre": "Votos en Blanco", "vice": "", "partido": "BLANCO", "votos": 21469, "ganador": false, "foto": "" },
+          { "nombre": "Votos Anulados", "vice": "", "partido": "ANULADO", "votos": 42574, "ganador": false, "foto": "" }
         ],
         "mapa": {
           "Montevideo": { "ganador": "FA", "votos": { "FA": 525496, "PC": 410992 } },
@@ -383,16 +383,56 @@
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
         "candidatos": [
           { "nombre": "Tabaré Vázquez", "vice": "Rodolfo Nin Novoa", "partido": "FA", "votos": 1124761, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-04.png" },
-          { "nombre": "Jorge Larrañaga", "vice": "Jorge Gandini", "partido": "PN", "votos": 764378, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/larra%C3%B1aga-04.png" },
-          { "nombre": "Guillermo Stirling", "vice": "Ope Pasquet", "partido": "PC", "votos": 230309, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/stirling-04.png" },
-          { "nombre": "Pablo Mieres", "vice": "Iván Posada", "partido": "PI", "votos": 40000, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mieres-04.png" }
+          { "nombre": "Jorge Larrañaga", "vice": "Jorge Gandini", "partido": "PN", "votos": 764739, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/larra%C3%B1aga-04.png" },
+          { "nombre": "Guillermo Stirling", "vice": "Ope Pasquet", "partido": "PC", "votos": 231036, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/stirling-04.png" },
+          { "nombre": "Pablo Mieres", "vice": "Iván Posada", "partido": "PI", "votos": 41011, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mieres-04.png" },
+          { "nombre": "Aldo Lamorte", "vice": "Eduardo Casanova", "partido": "UC", "votos": 4859, "ganador": false, "foto": "" },
+          { "nombre": "Víctor Lissidini", "vice": "Pablo Cúneo", "partido": "P.INT", "votos": 8572, "ganador": false, "foto": "" },
+          { "nombre": "Votos en Blanco", "vice": "", "partido": "BLANCO", "votos": 31031, "ganador": false, "foto": "" },
+          { "nombre": "Votos Anulados", "vice": "", "partido": "ANULADO", "votos": 21383, "ganador": false, "foto": "" }
         ],
         "mapa": {
-          "Artigas": "FA", "Salto": "FA", "Rivera": "FA", "Tacuarembó": "FA",
-          "Paysandú": "FA", "Río Negro": "FA", "Cerro Largo": "FA", "Durazno": "FA",
-          "Soriano": "FA", "Treinta y Tres": "FA", "Flores": "FA", "Florida": "FA",
-          "Lavalleja": "FA", "Colonia": "FA", "San José": "FA", "Canelones": "FA",
-          "Rocha": "FA", "Maldonado": "FA", "Montevideo": "FA"
+          "Montevideo": { "ganador": "FA", "votos": { "FA": 565974, "PN": 226552, "PC": 76099, "PI": 24933 } },
+          "Canelones": { "ganador": "FA", "votos": { "FA": 161879, "PN": 98844, "PC": 28044, "PI": 5176 } },
+          "Maldonado": { "ganador": "FA", "votos": { "FA": 46945, "PN": 36218, "PC": 9278, "PI": 2620 } },
+          "Rocha": { "ganador": "FA", "votos": { "FA": 22879, "PN": 20196, "PC": 6534, "PI": 553 } },
+          "Treinta y Tres": { "ganador": "PN", "votos": { "PN": 16386, "FA": 13047, "PC": 3907, "PI": 391 } },
+          "Cerro Largo": { "ganador": "PN", "votos": { "PN": 29129, "FA": 23111, "PC": 6700, "PI": 291 } },
+          "Rivera": { "ganador": "PN", "votos": { "PN": 32006, "FA": 21300, "PC": 15419, "PI": 347 } },
+          "Artigas": { "ganador": "PN", "votos": { "PN": 24517, "FA": 16220, "PC": 8563, "PI": 153 } },
+          "Salto": { "ganador": "FA", "votos": { "FA": 35359, "PN": 31823, "PC": 11610, "PI": 479 } },
+          "Paysandú": { "ganador": "PN", "votos": { "PN": 35357, "FA": 35053, "PC": 4720, "PI": 472 } },
+          "Río Negro": { "ganador": "PN", "votos": { "PN": 15558, "FA": 14240, "PC": 4926, "PI": 235 } },
+          "Soriano": { "ganador": "FA", "votos": { "FA": 26332, "PN": 25617, "PC": 7015, "PI": 574 } },
+          "Colonia": { "ganador": "PN", "votos": { "PN": 37302, "FA": 36677, "PC": 10136, "PI": 1527 } },
+          "San José": { "ganador": "PN", "votos": { "PN": 29663, "FA": 29277, "PC": 6683, "PI": 799 } },
+          "Flores": { "ganador": "PN", "votos": { "PN": 9567, "FA": 6049, "PC": 2796, "PI": 183 } },
+          "Florida": { "ganador": "FA", "votos": { "FA": 21042, "PN": 20495, "PC": 7413, "PI": 678 } },
+          "Durazno": { "ganador": "PN", "votos": { "PN": 19456, "FA": 13524, "PC": 6117, "PI": 466 } },
+          "Lavalleja": { "ganador": "PN", "votos": { "PN": 22122, "FA": 14612, "PC": 7189, "PI": 761 } },
+          "Tacuarembó": { "ganador": "PN", "votos": { "PN": 33931, "FA": 21241, "PC": 7887, "PI": 373 } }
+        },
+        "senado": { "FA": 16, "PN": 11, "PC": 3 },
+        "diputados": {
+          "Montevideo": { "FA": 27, "PN": 11, "PC": 3, "PI": 1 },
+          "Canelones": { "FA": 7, "PN": 5, "PC": 2 },
+          "Maldonado": { "FA": 2, "PN": 2 },
+          "Rocha": { "FA": 1, "PN": 1 },
+          "Treinta y Tres": { "FA": 1, "PN": 1 },
+          "Cerro Largo": { "FA": 1, "PN": 1 },
+          "Rivera": { "FA": 1, "PN": 1, "PC": 1 },
+          "Artigas": { "FA": 1, "PN": 1 },
+          "Salto": { "FA": 2, "PN": 1 },
+          "Paysandú": { "FA": 1, "PN": 2 },
+          "Río Negro": { "FA": 1, "PN": 1 },
+          "Soriano": { "FA": 1, "PN": 1 },
+          "Colonia": { "PN": 2, "FA": 1, "PC": 1 },
+          "San José": { "FA": 1, "PN": 1, "PC": 1 },
+          "Flores": { "PN": 1, "FA": 1 },
+          "Florida": { "FA": 1, "PN": 1 },
+          "Durazno": { "PN": 1, "FA": 1 },
+          "Lavalleja": { "PN": 1, "FA": 1 },
+          "Tacuarembó": { "PN": 2, "FA": 1 }
         }
       }
     ],
@@ -405,30 +445,85 @@
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
         "candidatos": [
           { "nombre": "José Mujica", "vice": "Danilo Astori", "partido": "FA", "votos": 1105262, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mujica-09.png" },
-          { "nombre": "Luis Lacalle Pou", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 664031, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/herrera-09.png" },
-          { "nombre": "Pedro Bordaberry", "vice": "Germán Cardoso", "partido": "PC", "votos": 384710, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/bordaberry-09.png" },
-          { "nombre": "Pablo Mieres", "vice": "Iván Posada", "partido": "PI", "votos": 57000, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mieres-09.png" }
+          { "nombre": "Luis Alberto Lacalle", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 669942, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/herrera-09.png" },
+          { "nombre": "Pedro Bordaberry", "vice": "Hugo de León", "partido": "PC", "votos": 392307, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/bordaberry-09.png" },
+          { "nombre": "Pablo Mieres", "vice": "Iván Posada", "partido": "PI", "votos": 57360, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mieres-09.png" },
+          { "nombre": "Raúl Rodríguez", "vice": "Delia Villalba", "partido": "AP", "votos": 15428, "ganador": false, "foto": "" },
+          { "nombre": "Votos en Blanco", "vice": "", "partido": "BLANCO", "votos": 22828, "ganador": false, "foto": "" },
+          { "nombre": "Votos Anulados", "vice": "", "partido": "ANULADO", "votos": 26950, "ganador": false, "foto": "" }
         ],
         "mapa": {
-          "Artigas": "FA", "Salto": "FA", "Rivera": "FA", "Tacuarembó": "FA",
-          "Paysandú": "FA", "Río Negro": "FA", "Cerro Largo": "FA", "Durazno": "FA",
-          "Soriano": "FA", "Treinta y Tres": "FA", "Flores": "FA", "Florida": "FA",
-          "Lavalleja": "FA", "Colonia": "FA", "San José": "FA", "Canelones": "FA",
-          "Rocha": "FA", "Maldonado": "FA", "Montevideo": "FA"
+          "Montevideo": { "ganador": "FA", "votos": { "FA": 522205, "PN": 202210, "PC": 138987, "PI": 31238 } },
+          "Canelones": { "ganador": "FA", "votos": { "FA": 166185, "PN": 91412, "PC": 46580, "PI": 7888 } },
+          "Maldonado": { "ganador": "PN", "votos": { "PN": 44580, "FA": 34409, "PC": 23231, "PI": 3145 } },
+          "Rocha": { "ganador": "FA", "votos": { "FA": 22123, "PN": 18067, "PC": 10305, "PI": 879 } },
+          "Treinta y Tres": { "ganador": "PN", "votos": { "PN": 16009, "FA": 14111, "PC": 5353, "PI": 469 } },
+          "Cerro Largo": { "ganador": "PN", "votos": { "PN": 26508, "FA": 24968, "PC": 8489, "PI": 609 } },
+          "Rivera": { "ganador": "PN", "votos": { "PN": 25976, "FA": 24974, "PC": 20002, "PI": 724 } },
+          "Artigas": { "ganador": "PN", "votos": { "PN": 21464, "FA": 19362, "PC": 9801, "PI": 422 } },
+          "Salto": { "ganador": "FA", "votos": { "FA": 39982, "PN": 23344, "PC": 19445, "PI": 1243 } },
+          "Paysandú": { "ganador": "FA", "votos": { "FA": 37056, "PN": 28451, "PC": 11677, "PI": 1456 } },
+          "Río Negro": { "ganador": "FA", "votos": { "FA": 15480, "PN": 11604, "PC": 9447, "PI": 612 } },
+          "Soriano": { "ganador": "FA", "votos": { "FA": 27595, "PN": 19098, "PC": 13530, "PI": 893 } },
+          "Colonia": { "ganador": "PN", "votos": { "PN": 35369, "FA": 32720, "PC": 19221, "PI": 2134 } },
+          "San José": { "ganador": "PN", "votos": { "PN": 30783, "FA": 25305, "PC": 11860, "PI": 1378 } },
+          "Flores": { "ganador": "PN", "votos": { "PN": 8815, "FA": 6146, "PC": 4162, "PI": 243 } },
+          "Florida": { "ganador": "PN", "votos": { "PN": 19750, "FA": 18604, "PC": 10459, "PI": 1147 } },
+          "Durazno": { "ganador": "PN", "votos": { "PN": 17819, "FA": 14870, "PC": 8019, "PI": 876 } },
+          "Lavalleja": { "ganador": "PN", "votos": { "PN": 19522, "FA": 14411, "PC": 10488, "PI": 1040 } },
+          "Tacuarembó": { "ganador": "PN", "votos": { "PN": 28605, "FA": 25312, "PC": 11251, "PI": 964 } }
+        },
+        "senado": { "FA": 16, "PN": 9, "PC": 5 },
+        "diputados": {
+          "Montevideo": { "FA": 24, "PN": 9, "PC": 7, "PI": 1 },
+          "Canelones": { "FA": 8, "PN": 4, "PC": 2 },
+          "Maldonado": { "FA": 2, "PN": 1, "PC": 1 },
+          "Rocha": { "FA": 1, "PN": 1 },
+          "Treinta y Tres": { "FA": 1, "PN": 1 },
+          "Cerro Largo": { "FA": 1, "PN": 1 },
+          "Rivera": { "FA": 1, "PN": 1, "PC": 1 },
+          "Artigas": { "FA": 1, "PN": 1 },
+          "Salto": { "PC": 2, "FA": 1, "PN": 1 },
+          "Paysandú": { "FA": 1, "PN": 1, "PC": 1 },
+          "Río Negro": { "FA": 1, "PN": 1 },
+          "Soriano": { "FA": 1, "PN": 1 },
+          "Colonia": { "FA": 1, "PN": 1, "PC": 1, "PI": 1 },
+          "San José": { "FA": 1, "PN": 1, "PC": 1 },
+          "Flores": { "FA": 1, "PN": 1 },
+          "Florida": { "FA": 1, "PN": 1 },
+          "Durazno": { "FA": 1, "PN": 1 },
+          "Lavalleja": { "FA": 1, "PN": 1 },
+          "Tacuarembó": { "FA": 1, "PN": 1, "PC": 1 }
         }
       },
       {
         "nombre": { "es": "2ª Vuelta", "en": "2nd Round" },
         "candidatos": [
-          { "nombre": "José Mujica", "vice": "Danilo Astori", "partido": "FA", "votos": 1196115, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mujica-09.png" },
-          { "nombre": "Luis Lacalle Pou", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 998410, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/herrera-09.png" }
+          { "nombre": "José Mujica", "vice": "Danilo Astori", "partido": "FA", "votos": 1197638, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mujica-09.png" },
+          { "nombre": "Luis Alberto Lacalle", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 994510, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/herrera-09.png" },
+          { "nombre": "Votos en Blanco", "vice": "", "partido": "BLANCO", "votos": 53100, "ganador": false, "foto": "" },
+          { "nombre": "Votos Anulados", "vice": "", "partido": "ANULADO", "votos": 40103, "ganador": false, "foto": "" }
         ],
         "mapa": {
-          "Artigas": "FA", "Salto": "FA", "Rivera": "PN", "Tacuarembó": "PN",
-          "Paysandú": "FA", "Río Negro": "PN", "Cerro Largo": "FA", "Durazno": "FA",
-          "Soriano": "PN", "Treinta y Tres": "FA", "Flores": "PN", "Florida": "FA",
-          "Lavalleja": "PN", "Colonia": "PN", "San José": "FA", "Canelones": "FA",
-          "Rocha": "FA", "Maldonado": "PN", "Montevideo": "FA"
+          "Montevideo": { "ganador": "FA", "votos": { "FA": 552578, "PN": 332232 } },
+          "Canelones": { "ganador": "FA", "votos": { "FA": 180138, "PN": 130099 } },
+          "Maldonado": { "ganador": "PN", "votos": { "PN": 53110, "FA": 50314 } },
+          "Rocha": { "ganador": "PN", "votos": { "PN": 26252, "FA": 24107 } },
+          "Treinta y Tres": { "ganador": "PN", "votos": { "PN": 19875, "FA": 15434 } },
+          "Cerro Largo": { "ganador": "PN", "votos": { "PN": 31147, "FA": 28190 } },
+          "Rivera": { "ganador": "PN", "votos": { "PN": 39930, "FA": 29677 } },
+          "Artigas": { "ganador": "PN", "votos": { "PN": 28133, "FA": 21823 } },
+          "Salto": { "ganador": "FA", "votos": { "FA": 44375, "PN": 37944 } },
+          "Paysandú": { "ganador": "FA", "votos": { "FA": 39123, "PN": 37865 } },
+          "Río Negro": { "ganador": "PN", "votos": { "PN": 18899, "FA": 17263 } },
+          "Soriano": { "ganador": "FA", "votos": { "FA": 30521, "PN": 29164 } },
+          "Colonia": { "ganador": "PN", "votos": { "PN": 47993, "FA": 39763 } },
+          "San José": { "ganador": "PN", "votos": { "PN": 34866, "FA": 33644 } },
+          "Flores": { "ganador": "PN", "votos": { "PN": 11253, "FA": 7477 } },
+          "Florida": { "ganador": "PN", "votos": { "PN": 26612, "FA": 22196 } },
+          "Durazno": { "ganador": "PN", "votos": { "PN": 23581, "FA": 17160 } },
+          "Lavalleja": { "ganador": "PN", "votos": { "PN": 27928, "FA": 16664 } },
+          "Tacuarembó": { "ganador": "PN", "votos": { "PN": 37627, "FA": 27191 } }
         }
       }
     ],
