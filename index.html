@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URUVOTO 2026</title>
+    <title>EUy</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
     <style>
         :root {
             --azul-vibrante: #3b82f6;
@@ -39,9 +39,15 @@
         .container { margin: 40px auto; padding: 0 20px; transition: max-width 0.4s ease; }
         .container-test { max-width: 800px; }
         .container-results { max-width: 1300px; }
+
+        /* ── PAGE VISIBILITY ── */
         .page { display: none; animation: fadeIn 0.4s ease; }
-        .active { display: block; }
+        .page.active { display: block; }
+        .page-home { display: none; animation: fadeIn 0.4s ease; }
+        .page-home.active { display: block; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .pregunta-card { background: var(--card-bg); border: 2px solid var(--borde-card); border-radius: 16px; padding: 24px; margin-bottom: 20px; transition: all 0.3s ease; position: relative; }
         .categoria-tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; color: white; margin-bottom: 12px; display: inline-block; }
         input[type=range] { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; -webkit-appearance: none; margin: 25px 0; }
@@ -100,17 +106,50 @@
         .brujula-legend span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
         .leg-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
-        /* Homepage */
-        .page-home { display: none; animation: fadeIn 0.4s ease; }
+        /* ── HOMEPAGE ── */
         .hero-img { width: 100%; height: 260px; object-fit: cover; object-position: center 30%; border-radius: 16px; display: block; }
-        .hero-section { max-width: 900px; margin: 32px auto 0; padding: 0 20px; text-align: center; }
-        .hero-title { font-size: 2.6rem; font-weight: 700; letter-spacing: -1px; margin: 32px 0 16px; color: var(--azul-texto); }
+        .hero-section { max-width: 900px; margin: 0 auto; padding: 48px 20px 0; text-align: center; }
+        .hero-title {
+            font-size: clamp(2.2rem, 5vw, 3.4rem);
+            font-weight: 900;
+            font-style: normal;
+            letter-spacing: -1.5px;
+            margin: 0 0 20px;
+            color: var(--azul-texto);
+            line-height: 1.08;
+        }
         .hero-title span { color: var(--azul-vibrante); }
-        .hero-desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; max-width: 620px; margin: 0 auto 40px; }
-        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 60px; }
-        .btn-hero { padding: 16px 28px; background: var(--azul-vibrante); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s; }
-        .btn-hero:hover { opacity: 0.88; }
-        .btn-hero.disabled { opacity: 0.5; cursor: not-allowed; }
+        .hero-desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.75;
+            max-width: 580px;
+            margin: 0 auto 48px;
+            font-weight: 400;
+        }
+        .hero-buttons { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin-bottom: 80px; }
+        .btn-hero {
+            padding: 16px 28px;
+            background: var(--azul-vibrante);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.2s, transform 0.15s;
+            box-shadow: 0 4px 14px rgba(59,130,246,0.3);
+        }
+        .btn-hero:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-hero:active { transform: translateY(0); }
+        .btn-hero.disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+            background: var(--text-muted);
+            box-shadow: none;
+        }
+        .btn-hero.disabled:hover { transform: none; opacity: 0.45; }
 
         /* Grid comparativa */
         .grid-comparativa { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 24px; margin-top: 30px; }
@@ -136,7 +175,7 @@
 </script>
 
 <header>
-    <div class="header-left"><div class="logo" onclick="irHome()">URUVOTO</div></div>
+    <div class="header-left"><div class="logo" onclick="irHome()">EleccionesUY</div></div>
     <div class="flag-center">
         <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg" alt="Uruguay">
     </div>
@@ -156,11 +195,11 @@
     </div>
     <div class="hero-section">
         <h1 class="hero-title" id="home-title">Elecciones del <span>Uruguay</span></h1>
-        <p class="hero-desc" id="home-desc"></p>
+        <p class="hero-desc" id="home-desc">Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o comparar tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.</p>
         <div class="hero-buttons">
-            <button class="btn-hero" id="btn-nacionales" onclick="window.location.href='elecciones.html'"></button>
-            <button class="btn-hero" id="btn-test" onclick="irTest()"></button>
-            <button class="btn-hero disabled" id="btn-montevideo" onclick="proximamente(this)"></button>
+            <button class="btn-hero" id="btn-nacionales" onclick="window.location.href='elecciones.html'">Elecciones Nacionales</button>
+            <button class="btn-hero" id="btn-test" onclick="irTest()">Test Ideológico</button>
+            <button class="btn-hero disabled" id="btn-montevideo" onclick="proximamente(this)">Elecciones Montevideo</button>
         </div>
     </div>
 </div>
@@ -171,27 +210,27 @@
         <p id="main-desc" style="color: var(--text-muted); margin-bottom: 40px; line-height: 1.6;"></p>
         <p id="main-metodo" style="color: var(--text-muted); margin-top: -30px; margin-bottom: 40px; font-size: 0.85rem;"></p>
         <div id="quiz-container"></div>
-        <button class="btn-primario" id="btn-results" onclick="mostrarResultados()"></button>
+        <button class="btn-primario" id="btn-results" onclick="mostrarResultados()">Ver Resultados Finales</button>
     </div>
 
     <div id="page-results" class="page">
-        <button onclick="reiniciarTest()" id="btn-restart" style="background: none; border: none; color: var(--azul-vibrante); cursor: pointer; font-weight: 700; margin-bottom: 25px;"></button>
+        <button onclick="reiniciarTest()" id="btn-restart" style="background: none; border: none; color: var(--azul-vibrante); cursor: pointer; font-weight: 700; margin-bottom: 25px;">← Volver al inicio</button>
 
         <div class="resultados-header-grid">
             <div id="col-ranking">
-                <h1 id="res-title"></h1>
+                <h1 id="res-title">Tu Afinidad Política</h1>
                 <div id="ranking-container"></div>
             </div>
 
             <div class="brujula-container">
                 <div class="brujula-wrap">
-                    <div style="grid-column:2; grid-row:1;"><span class="brujula-label" id="lbl-auto"></span></div>
-                    <div style="grid-column:1; grid-row:2; height:100%; display:flex; align-items:center; justify-content:center;"><span class="brujula-label vertical left" id="lbl-izq"></span></div>
+                    <div style="grid-column:2; grid-row:1;"><span class="brujula-label" id="lbl-auto">AUTORITARIO</span></div>
+                    <div style="grid-column:1; grid-row:2; height:100%; display:flex; align-items:center; justify-content:center;"><span class="brujula-label vertical left" id="lbl-izq">IZQUIERDA</span></div>
                     <div class="brujula-canvas-wrap">
                         <canvas id="compassCanvas" role="img" aria-label="Brújula ideológica con partidos políticos y posición del usuario"></canvas>
                     </div>
-                    <div style="grid-column:3; grid-row:2; height:100%; display:flex; align-items:center; justify-content:center;"><span class="brujula-label vertical" id="lbl-der"></span></div>
-                    <div style="grid-column:2; grid-row:3;"><span class="brujula-label" id="lbl-lib"></span></div>
+                    <div style="grid-column:3; grid-row:2; height:100%; display:flex; align-items:center; justify-content:center;"><span class="brujula-label vertical" id="lbl-der">DERECHA</span></div>
+                    <div style="grid-column:2; grid-row:3;"><span class="brujula-label" id="lbl-lib">LIBERAL</span></div>
                 </div>
                 <div class="brujula-legend" id="brujula-legend"></div>
             </div>
@@ -200,8 +239,8 @@
         <hr style="margin: 60px 0; border: 0; border-top: 1px solid var(--borde-card);">
 
         <div style="text-align: center;">
-            <h2 id="comp-title"></h2>
-            <p id="comp-subtitle" style="color: var(--text-muted); margin-bottom: 30px;"></p>
+            <h2 id="comp-title">Comparativa Detallada</h2>
+            <p id="comp-subtitle" style="color: var(--text-muted); margin-bottom: 30px;">Tus respuestas frente a los programas de gobierno.</p>
         </div>
 
         <div id="detalle-container" class="grid-comparativa"></div>
@@ -265,12 +304,6 @@ const partidosData = [
     { id:'CA', nombre:'Cabildo Abierto',       flag:'img/bandera-ca.png' }
 ];
 
-/*
- Posiciones fijas de los partidos en la brújula [-2, +2]
- ex: eje horizontal  negativo=izquierda / positivo=derecha
- ey: eje vertical    negativo=liberal   / positivo=autoritario
- Calibradas según posturas programáticas reales.
-*/
 const posicionesPartidos = {
     FA: { ex: -1.55, ey: -0.30 },
     PN: { ex:  0.85, ey:  0.20 },
@@ -279,13 +312,6 @@ const posicionesPartidos = {
     CA: { ex:  0.65, ey:  1.65 }
 };
 
-/*
- Pesos ideológicos por pregunta
- ex: cuánto y en qué dirección mueve al usuario en el eje izquierda-derecha
- ey: cuánto y en qué dirección mueve al usuario en el eje autoritario-liberal
- Escala: ±1 (suave) a ±2 (fuerte)
- Lógica: respuesta 5 ("de acuerdo") suma peso; respuesta 1 ("en desacuerdo") resta peso.
-*/
 const preguntas = [
     { cat:["Economía","Economy"],   t:["El Estado debe fortalecer y expandir las empresas públicas como motor del desarrollo nacional.","The State must strengthen and expand public companies as a driver of national development."],              p:{FA:5,PN:2,PC:2,PI:3,CA:3}, ex:-1.8, ey: 0.5 },
     { cat:["Economía","Economy"],   t:["Uruguay debe bajar el gasto público y reducir el tamaño del Estado.","Uruguay must lower public spending and reduce the size of the State."],                                           p:{FA:1,PN:4,PC:5,PI:3,CA:4}, ex: 1.8, ey:-0.3 },
@@ -404,18 +430,16 @@ function drawCompass(userX, userY) {
     const ctx = canvas.getContext('2d');
     const isDark = document.body.getAttribute('data-theme') === 'dark';
 
-    /* Fondo y cuadrantes */
     ctx.fillStyle = isDark ? '#1e293b' : '#f8fafc';
     ctx.fillRect(0, 0, size, size);
     const quads = [
-        { x:0,      y:0,      color: isDark?'rgba(30,80,160,0.22)':'rgba(59,130,246,0.09)'  }, /* IZQ-AUTO */
-        { x:size/2, y:0,      color: isDark?'rgba(160,30,30,0.22)':'rgba(239,68,68,0.09)'   }, /* DER-AUTO */
-        { x:0,      y:size/2, color: isDark?'rgba(20,120,80,0.22)':'rgba(34,197,94,0.09)'   }, /* IZQ-LIB  */
-        { x:size/2, y:size/2, color: isDark?'rgba(160,100,0,0.22)':'rgba(251,146,60,0.09)'  }  /* DER-LIB  */
+        { x:0,      y:0,      color: isDark?'rgba(30,80,160,0.22)':'rgba(59,130,246,0.09)'  },
+        { x:size/2, y:0,      color: isDark?'rgba(160,30,30,0.22)':'rgba(239,68,68,0.09)'   },
+        { x:0,      y:size/2, color: isDark?'rgba(20,120,80,0.22)':'rgba(34,197,94,0.09)'   },
+        { x:size/2, y:size/2, color: isDark?'rgba(160,100,0,0.22)':'rgba(251,146,60,0.09)'  }
     ];
     quads.forEach(q => { ctx.fillStyle = q.color; ctx.fillRect(q.x, q.y, size/2, size/2); });
 
-    /* Grid sutil */
     ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
     ctx.lineWidth = 1;
     for (let i=1; i<4; i++) {
@@ -423,7 +447,6 @@ function drawCompass(userX, userY) {
         ctx.beginPath(); ctx.moveTo(size*i/4, 0); ctx.lineTo(size*i/4, size); ctx.stroke();
     }
 
-    /* Ejes */
     ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.15)';
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 4]);
@@ -431,12 +454,10 @@ function drawCompass(userX, userY) {
     ctx.beginPath(); ctx.moveTo(0, size/2); ctx.lineTo(size, size/2); ctx.stroke();
     ctx.setLineDash([]);
 
-    /* Convierte valor [-2,+2] a pixel. Eje Y: positivo=autoritario=arriba → negar */
     const pad = 16;
     function toPixelX(v, max=2) { return size/2 + (v/max) * (size/2 - pad); }
     function toPixelY(v, max=2) { return size/2 - (v/max) * (size/2 - pad); }
 
-    /* Dibuja punto con halo */
     function drawDot(px, py, color, radius, label, isUser) {
         ctx.beginPath();
         ctx.arc(px, py, radius + 4, 0, Math.PI*2);
@@ -462,16 +483,13 @@ function drawCompass(userX, userY) {
         }
     }
 
-    /* Partidos */
     partidosData.forEach(p => {
         const pos = posicionesPartidos[p.id];
         drawDot(toPixelX(pos.ex), toPixelY(pos.ey), coloresPartidos[p.id], 10, p.id, false);
     });
 
-    /* Usuario */
     if (userX !== null) {
         drawDot(toPixelX(userX), toPixelY(userY), '#3b82f6', 11, '●', true);
-        /* Etiqueta "Tú" */
         const ux = toPixelX(userX), uy = toPixelY(userY);
         const lblText = i18n[currentLang].lblTu;
         ctx.fillStyle = isDark ? '#f1f5f9' : '#1a2a44';
@@ -482,34 +500,21 @@ function drawCompass(userX, userY) {
     }
 }
 
-/* ──────────────────────────────────────────────
-   CÁLCULO DE POSICIÓN IDEOLÓGICA DEL USUARIO
-   Normaliza respuesta (1-5) a [-1, +1] y acumula
-   el efecto de los pesos ex/ey de cada pregunta.
-   Resultado se clampea a [-2, +2].
-────────────────────────────────────────────── */
 function calcularPosicionIdeologica(userAnswers) {
     let sumX = 0, sumY = 0, wX = 0, wY = 0;
     preguntas.forEach((q, i) => {
-        const normalized = (userAnswers[i] - 3) / 2; /* -1 a +1 */
+        const normalized = (userAnswers[i] - 3) / 2;
         sumX += normalized * q.ex;
         sumY += normalized * q.ey;
         wX   += Math.abs(q.ex);
         wY   += Math.abs(q.ey);
     });
     const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-    const x = clamp((sumX / wX) * 2, -2, 2);
-    const y = clamp((sumY / wY) * 2, -2, 2);
-    return { x, y };
+    return { x: clamp((sumX/wX)*2,-2,2), y: clamp((sumY/wY)*2,-2,2) };
 }
 
-/* ──────────────────────────────────────────────
-   MOSTRAR RESULTADOS
-────────────────────────────────────────────── */
 function mostrarResultados() {
     const userAnswers = preguntas.map((_, i) => parseInt(document.getElementById(`q${i}`).value));
-
-    /* Afinidad con partidos */
     let scores = { FA:0, PN:0, PC:0, PI:0, CA:0 };
     preguntas.forEach((q, i) => {
         partidosData.forEach(p => scores[p.id] += (1 - (Math.abs(userAnswers[i] - q.p[p.id]) / 4)));
@@ -517,13 +522,9 @@ function mostrarResultados() {
     const ranking = partidosData.map(p => ({
         ...p, score: ((scores[p.id] / preguntas.length) * 100).toFixed(1)
     })).sort((a, b) => b.score - a.score);
-
-    /* Posición ideológica */
     const { x: userX, y: userY } = calcularPosicionIdeologica(userAnswers);
-
     document.getElementById('main-container').className = 'container container-results';
 
-    /* Ranking */
     const rankCont = document.getElementById('ranking-container');
     rankCont.innerHTML = '';
     ranking.forEach(r => {
@@ -534,14 +535,11 @@ function mostrarResultados() {
                     <div style="display:flex; justify-content:space-between; font-weight:700;">
                         <span>${r.nombre}</span><span>${r.score}%</span>
                     </div>
-                    <div class="barra-ext">
-                        <div class="barra-int" style="width:${r.score}%; background:${coloresPartidos[r.id]}"></div>
-                    </div>
+                    <div class="barra-ext"><div class="barra-int" style="width:${r.score}%; background:${coloresPartidos[r.id]}"></div></div>
                 </div>
             </div>`;
     });
 
-    /* Leyenda brújula */
     const legend = document.getElementById('brujula-legend');
     legend.innerHTML = '';
     partidosData.forEach(p => {
@@ -549,7 +547,6 @@ function mostrarResultados() {
     });
     legend.innerHTML += `<span><span class="leg-dot" style="background:#3b82f6; outline:2px solid #3b82f6; outline-offset:1px;"></span>${i18n[currentLang].lblTu}</span>`;
 
-    /* Comparativa detallada */
     const detCont = document.getElementById('detalle-container');
     detCont.innerHTML = '';
     preguntas.forEach((q, i) => {
@@ -561,13 +558,7 @@ function mostrarResultados() {
         partidosData.forEach(p => posGrp[q.p[p.id]].push(p));
         for (let v=1; v<=5; v++) {
             posGrp[v].forEach((p, idx) => {
-                visual += `
-                    <div class="punto-partido ${v === userVal?'coincide':''}" style="left:calc(${((v-1)/4)*100}% + ${idx*10}px); background:${coloresPartidos[p.id]};">
-                        <div class="tooltip">
-                            <span class="tooltip-header" style="color:${coloresPartidos[p.id]}">${p.nombre}</span>
-                            <span class="tooltip-body">${i18n[currentLang].quote}</span>
-                        </div>
-                    </div>`;
+                visual += `<div class="punto-partido ${v===userVal?'coincide':''}" style="left:calc(${((v-1)/4)*100}% + ${idx*10}px); background:${coloresPartidos[p.id]};"><div class="tooltip"><span class="tooltip-header" style="color:${coloresPartidos[p.id]}">${p.nombre}</span><span class="tooltip-body">${i18n[currentLang].quote}</span></div></div>`;
             });
         }
         visual += '</div>';
@@ -577,8 +568,8 @@ function mostrarResultados() {
                     <span class="categoria-tag" style="background:${catColores[cat]}; font-size:0.6rem;">${cat}</span>
                     <div style="font-weight:600; line-height:1.4; font-size:0.95rem;">${qText}</div>
                 </div>
-                <div style="margin-top: 12px;">
-                    <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-muted); margin-bottom: 8px;">
+                <div style="margin-top:12px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-muted); margin-bottom:8px;">
                         <span>${i18n[currentLang].disagree}</span><span>${i18n[currentLang].agree}</span>
                     </div>
                     ${visual}
@@ -589,12 +580,9 @@ function mostrarResultados() {
     document.getElementById('page-test').classList.remove('active');
     document.getElementById('page-results').classList.add('active');
     window.scrollTo(0, 0);
-
-    /* Iniciar brújula tras render */
     requestAnimationFrame(() => initCompass(userX, userY));
 }
 
-/* Metodología */
 function mostrarMetodologia(e) {
     e.preventDefault();
     const isDark = document.body.getAttribute('data-theme') === 'dark';
@@ -604,7 +592,7 @@ function mostrarMetodologia(e) {
     const box = document.createElement('div');
     box.style.cssText = `background:${isDark?'#1e293b':'#ffffff'};color:${isDark?'#f1f5f9':'#1a2a44'};border-radius:20px;padding:36px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;position:relative;`;
     box.innerHTML = `
-        <button onclick="document.getElementById('metodo-overlay').remove()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text-muted);">×</button>
+        <button onclick="document.getElementById('metodo-overlay').remove()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;">×</button>
         <h2 style="margin:0 0 16px;font-size:1.2rem;">Metodología: Brújula Ideológica</h2>
         <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">Cada pregunta del test tiene asignados dos pesos ideológicos:</p>
         <ul style="line-height:1.8;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};padding-left:20px;">
@@ -612,15 +600,15 @@ function mostrarMetodologia(e) {
             <li><strong style="color:${isDark?'#f1f5f9':'#1a2a44'}">Eje Y (Liberal / Autoritario):</strong> valores negativos desplazan hacia el liberalismo, positivos hacia el autoritarismo.</li>
         </ul>
         <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">La respuesta del usuario (escala 1–5) se normaliza al rango [−1, +1] según la fórmula <code style="background:${isDark?'#0f172a':'#f1f5f9'};padding:2px 6px;border-radius:4px;">(respuesta − 3) / 2</code>. Ese valor se multiplica por los pesos de cada pregunta y se acumula. El resultado final se pondera por la suma total de pesos absolutos y se clampea al rango [−2, +2], produciendo una coordenada en la brújula.</p>
-        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">Las posiciones fijas de los partidos fueron calibradas manualmente a partir del análisis de sus programas de gobierno presentados ante la Corte Electoral en 2024, considerando sus posturas en materia económica, social, de derechos civiles y de orden público.</p>
+        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">Las posiciones fijas de los partidos fueron calibradas manualmente a partir del análisis de sus programas de gobierno presentados ante la Corte Electoral en 2024.</p>
         <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#94a3b8':'#64748b'};">Esta herramienta tiene fines informativos y no pretende ser una representación exhaustiva ni definitiva del posicionamiento ideológico de ningún partido.</p>
     `;
     overlay.appendChild(box);
-    overlay.addEventListener('click', ev => { if(ev.target === overlay) overlay.remove(); });
+    overlay.addEventListener('click', ev => { if(ev.target===overlay) overlay.remove(); });
     document.body.appendChild(overlay);
 }
 
-/* Init */
+/* ── INIT ── */
 const savedLang = localStorage.getItem('uruvoto-lang');
 if (savedLang) {
     currentLang = savedLang;
