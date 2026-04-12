@@ -38,7 +38,7 @@
         /* ── LAYOUT ── */
         .main-layout {
             display: grid;
-            grid-template-columns: 1fr 520px;
+            grid-template-columns: 55fr 45fr;
             gap: 0;
             min-height: calc(100vh - 60px);
         }
@@ -57,7 +57,7 @@
         }
         .map-panel svg {
             width: 100%;
-            max-width: 560px;
+            max-width: 800px;
             height: auto;
             filter: drop-shadow(0 4px 20px rgba(0,0,0,0.08));
         }
@@ -70,32 +70,24 @@
             cursor: pointer;
         }
         #uruguay-map path:hover { opacity: 0.8; }
-        /* Circles (small depts) are label points — hide the points group, style label circles */
-        #uruguay-map #points { display: none; }
-        #uruguay-map #label_points circle {
-            r: 14;
-            stroke: var(--card-bg);
-            stroke-width: 2;
-            transition: fill 0.4s ease;
-            cursor: pointer;
-        }
-        #uruguay-map #label_points circle:hover { opacity: 0.8; }
+        #uruguay-map #label_points { display: none; }
 
         /* Tooltip mapa */
         #map-tooltip {
             position: fixed;
             background: #1a1a2e;
             color: white;
-            padding: 10px 14px;
+            padding: 12px 16px;
             border-radius: 10px;
-            font-size: 0.82rem;
+            font-size: 0.85rem;
             pointer-events: none;
             z-index: 9999;
             display: none;
-            max-width: 200px;
+            min-width: 160px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.3);
         }
-        #map-tooltip strong { display: block; font-size: 0.9rem; margin-bottom: 3px; }
+        #map-tooltip strong { display: block; font-size: 1rem; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px;}
+        .tooltip-row { display: flex; justify-content: space-between; gap: 20px; font-size: 0.85rem; margin-top: 4px; }
 
         /* ── RIGHT PANEL ── */
         .right-panel {
@@ -153,82 +145,73 @@
         /* ── CANDIDATOS ── */
         .candidatos-section h3 { margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
 
-        /* TOP 2 — side by side */
+        /* TOP 2 */
         .cand-top {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 16px;
         }
         .cand-card {
             background: var(--fondo);
             border: 1.5px solid var(--borde-card);
             border-radius: 14px;
-            padding: 14px;
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            flex-direction: row;
+            align-items: stretch;
+            padding: 0;
+            overflow: hidden;
             transition: border-color 0.2s;
         }
         .cand-card.ganador { border-color: #16a34a; }
 
-        /* Photo */
         .cand-photo-wrap {
+            width: 120px;
+            flex-shrink: 0;
             display: flex;
-            justify-content: center;
         }
         .cand-photo {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--borde-card);
-            background: var(--card-bg);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .cand-photo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .cand-photo-initials {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: white;
-            flex-shrink: 0;
-            border: 3px solid rgba(255,255,255,0.3);
-        }
 
-        .cand-info { text-align: center; }
-        .cand-nombre { font-weight: 700; font-size: 0.88rem; line-height: 1.3; }
-        .cand-vice { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
-        .cand-partido { font-size: 0.72rem; font-weight: 600; margin-top: 4px; }
-        .cand-votos { font-size: 0.68rem; color: var(--text-muted); margin-top: 2px; }
-        .cand-pct { font-size: 1.5rem; font-weight: 800; line-height: 1; text-align: center; }
+        .cand-info-wrap {
+            padding: 16px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .cand-info { text-align: left; }
+        .cand-nombre { font-weight: 800; font-size: 1.1rem; line-height: 1.2; }
+        .cand-vice { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+        .cand-partido { font-size: 0.85rem; font-weight: 700; margin-top: 6px; }
+        .cand-votos { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+        
+        .cand-bottom-stats {
+            margin-top: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+        .cand-pct { font-size: 1.5rem; font-weight: 800; line-height: 1; text-align: left; margin-bottom: 8px;}
         .badge-ganador {
             display: inline-block;
             background: #16a34a;
             color: white;
-            font-size: 0.6rem;
+            font-size: 0.65rem;
             font-weight: 700;
-            padding: 2px 7px;
-            border-radius: 5px;
+            padding: 4px 8px;
+            border-radius: 6px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-top: 4px;
+            margin-top: 8px;
         }
-        .barra-cand { height: 5px; background: #e2e8f0; border-radius: 4px; margin-top: 8px; overflow: hidden; }
+        .barra-cand { height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
         .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+        /* Leyenda mapa */
+        .leyenda-mapa { display: none; }
 
         /* Candidatos menores */
         .cand-minor-list { display: flex; flex-direction: column; gap: 7px; }
@@ -243,31 +226,9 @@
             border-radius: 10px;
             font-size: 0.82rem;
         }
-        .cand-minor-photo {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            object-fit: cover;
-            flex-shrink: 0;
-        }
-        .cand-minor-photo-initials {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: white;
-            flex-shrink: 0;
-        }
-        .cand-minor-nombre { font-weight: 600; }
-        .cand-minor-sub { font-size: 0.7rem; color: var(--text-muted); }
-        .cand-minor-pct { font-weight: 700; font-size: 0.85rem; }
 
         /* Plebiscito */
-        .plebiscito-info { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; padding: 10px 14px; background: var(--fondo); border-radius: 10px; border: 1px solid var(--borde-card); }
+        .plebiscito-info { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; padding: 12px 16px; background: var(--fondo); border-radius: 10px; border: 1px solid var(--borde-card); }
         .pleb-result { display: flex; flex-direction: column; gap: 8px; }
         .pleb-opcion {
             display: grid;
@@ -285,11 +246,6 @@
         .pleb-opcion-pct { font-size: 1.2rem; font-weight: 800; }
         .pleb-barra { height: 5px; background: #e2e8f0; border-radius: 4px; margin-top: 6px; overflow: hidden; grid-column: 1 / -1; }
         .pleb-barra-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
-
-        /* Leyenda mapa */
-        .leyenda-mapa { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
-        .leyenda-item { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--text-muted); }
-        .leyenda-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.3s ease; }
@@ -317,9 +273,7 @@
 <div id="map-tooltip"></div>
 
 <div class="main-layout">
-    <!-- MAPA -->
     <div class="map-panel">
-        <!-- SVG from simplemaps.com — Free for Commercial Use -->
         <svg id="uruguay-map" baseprofile="tiny" stroke-linecap="round" stroke-linejoin="round" stroke-width=".5" version="1.2" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
          <g id="features">
           <path d="M144.4 303.6l0.5-0.2 2.6-1.3 2.3-0.7 2.5 0.3 2.7 0.7 1.8 0 0.8-0.2 0.2-0.1 0-0.1 0.2-1.8 0.1-0.9 0.5-0.7 0.8-0.5 5.8-1.5 1.2 0 1.6 0.3 4.2 1.6 10.4 5.9 1.3 1.2 0.6 0.7 0.4 0.8 2 6.4 0.4 0.9 0.4 0.8 0.6 0.7 0.7 0.6 0.8 0.4 1.2 0.5 23.1 5 11.2 5.8 5.3 3.8 1.7 1 3.7 1.4 3.8 0.6 4.5 0.1 2.8 0.7 1.7 0.7 0.7 0.7 3.5 5.4 1.1 1.3 2.1 1.7 3.6 1.8 12.5 3.6 1.7 0.9 5.8 4.5 1.8 0.5 13.3 1.6 2 0.6 1.4 0 1.5-0.2 2.2-0.8 1.2-0.7 0.9-0.7 0.7-0.5 1-0.4 1.2 0 6.9 2.6 3.2 0.8 1.8 0 13.6-3 1.9 0 2.7 0.4 1.5 0.4 1.1 0.6 3.1 2.1 0.9 0.3 1.1 0.2 6.6 0.1 1.7 0.2 1.3 0.4 7.9 5.1 2 0.6 1.1 0.2 8.1 0.3 11.2 3.4 1 0.1 1.7 0 2.6-0.5 2-0.7 0.9-0.7 0.8-0.8 0.7-1.6 0.4-0.8 0.4-2.1 1-1.4 4.8-5.1 1.4-1.9 0.8-1.6 0.3-1 2.4-1.8 8.3-2.2 5.1 6.2 0.8 1.6 0.6 1.9 0.1 1.2-0.3 4 0.2 4.3 0.4 1.5 0.4 1.1 3.8 4.7 0.6 1.1 0.3 1.2-0.1 1.3-0.4 1-0.5 0.5-0.7 0.2-1.4 0.3-1.6 0.6-0.8 0.4-0.7 0.6-0.5 1.3-0.4 1.9 0.1 7.9-0.1 1.2 0 0.1-0.7 7.8-1.1 3.9-0.8 1.9-1.8 3.2-0.7 2.2-4.5 20.7-1.2 3.2-4.7 5.6-5.3 4.9-5.8 4.3-4.7 4.3-2.6 4.1-8.4 25.3-5-2.7-2.1-1.4-8.7-7.3-1.6-1-8.6-2.7-2.8-0.4-1.1 0.1-1.9 0.5-1.5 0.1-2.1-0.2-6.1-1.1-1.7-0.2-3.9 1-3.4 0.2-3.5-0.2-3.8-1-5-3-8.6-4-2.3-0.6-1.7-0.1-0.8 0.3-1.6 0.8-3 2.3-1.6 0.9-0.8 0.3-2.1 0.4-9.9 0.1-1.5 0.4-1.7 0.8-10.3 7.5-1.1 0.5-1.6 0.4-2.8 0.5-1.6-0.2-1.4-0.4-3.4-1.6-1.4-0.1-1.1 0.2-2.4 1.4-2.7 1-4.1 0.7-1.5-0.1-5.6-1-2.1-0.1-1.6 0.2-0.8 0.4-1.4 1.1-1.2 1.3-0.5 0.7-1.5 1.4-0.7 0.4-3.7 1.2-0.9 0.4-0.7 0.5-0.6 0.7-0.8 1.5-0.1 0.4-0.1 0.1-1 2.7-0.5 0.9-1.1 1.5-0.6 0.6-1.6 1.1-27.3 4.1-0.7 0.6-0.5 0.8-0.4 0.9-0.2 1.1-0.6 3.8-0.7 1-1.2 1-2.3 1.1-1.4 0.2-1.2-0.3-0.8-0.5-13.8-1.4-1.9-0.4-1.6-1.1-3.2-0.9-3.8-0.4-1.9-0.5-1.2-0.5-0.4-0.6-0.2-0.4-1-3.2-0.8-1.6-0.6-0.8-0.6-0.6-3.5-1.9-0.7-0.5-0.7-0.6-4.3-5.1-0.5-0.6-0.7-0.6-1-0.7-1.8-0.7-1.3-0.3-8 0.5-4.6 0.9-0.1 0-0.9-4.1-0.4-4.2 0-0.1 0-0.4 1.6-2 3.9-8.3 10-14.5 0.8-5.7-1.7-5.4-10.7-14.4-1.8-3.9 0.9-3.8 3.5-5.8 1.6-7.1 0.5-8.4-0.6-7.9-1.5-5.8-5-5.6-1.9-3.8 1-3.8 4.3-4.9 2.5-1.8 3.5-1.5 7.4-1.5 3.8-1.6 1.6-2.6 9.5-28.5 1.4-8.1-1.1-8.3-4.2-5.2-4-3.2z" id="UYPA" name="Paysandú"/>
@@ -367,7 +321,6 @@
         <div class="leyenda-mapa" id="leyenda-mapa"></div>
     </div>
 
-    <!-- PANEL DERECHO -->
     <div class="right-panel">
         <div class="eleccion-selector">
             <h3 id="lbl-elecciones">Elecciones</h3>
@@ -382,9 +335,6 @@
 </div>
 
 <script>
-/* ════════════════════════════════════════════
-   COLORES DE PARTIDOS
-════════════════════════════════════════════ */
 const COLORES = {
     'PC':  '#e05c5c',
     'PN':  '#60b8e0',
@@ -393,29 +343,10 @@ const COLORES = {
     'PI':  '#7030a0',
     'CA':  '#e8a020',
     'UP':  '#e67e22',
+    'UC':  '#16a085',
     'default': '#94a3b8'
 };
 
-/* ════════════════════════════════════════════
-   DATOS ELECTORALES
-   ─────────────────────────────────────────
-   CÓMO AGREGAR UNA ELECCIÓN NUEVA:
-   1. Creá un nuevo objeto en el array ELECCIONES
-   2. Completá: anio, vueltas (array), plebiscitos (array, puede estar vacío)
-   3. En cada vuelta: candidatos[] y mapa{}
-   4. candidatos[]: {
-        nombre, vice, partido (ID del color),
-        votos, ganador: true/false,
-        foto: 'URL de la imagen' (opcional — si no se pone, muestra iniciales)
-      }
-   5. mapa{}: { "Nombre departamento": "ID_PARTIDO" }
-      IDs válidos: UYPA(Paysandú) UYAR(Artigas) UYSA(Salto) UYRV(Rivera)
-                   UYRO(Rocha) UYTT(Treinta y Tres) UYCL(Cerro Largo) UYMA(Maldonado)
-                   UYCA(Canelones) UYMO(Montevideo) UYSJ(San José) UYCO(Colonia)
-                   UYSO(Soriano) UYRN(Río Negro) UYTA(Tacuarembó) UYDU(Durazno)
-                   UYFS(Flores) UYFD(Florida) UYLA(Lavalleja)
-   6. plebiscitos[]: { nombre, descripcion, opciones[{nombre, votos, color}], mapa{} }
-════════════════════════════════════════════ */
 const ELECCIONES = [
     {
         anio: 1984,
@@ -423,17 +354,31 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'Julio María Sanguinetti', vice: 'Enrique Tarigo',        partido: 'PC',  votos: 777701, ganador: true,  foto: 'https://file.garden/aYAawg4_plkXr2uQ/saguinetti-84.png' },
-                    { nombre: 'Alberto Zumarán', vice: 'Gonzalo Aguirre Ramírez', partido: 'PN',  votos: 660773, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/zumar%C3%A1n-84.png' },
-                    { nombre: 'Juan José Crottogini',     vice: 'José D Elía',            partido: 'FA',  votos: 401104, ganador: false, foto: '' },
-                    { nombre: 'Juan Vicente Chiarino',    vice: 'Humberto Ciganda',     partido: 'UC',  votos: 45841,  ganador: false, foto: '' }
+                    { nombre: 'Julio María Sanguinetti', vice: 'Enrique Tarigo', partido: 'PC', votos: 777701, ganador: true, foto: 'https://file.garden/aYAawg4_plkXr2uQ/saguinetti-84.png' },
+                    { nombre: 'Alberto Zumarán', vice: 'Gonzalo Aguirre Ramírez', partido: 'PN', votos: 660773, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/zumar%C3%A1n-84.png' },
+                    { nombre: 'Juan José Crottogini', vice: 'José D Elía', partido: 'FA', votos: 401104, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/crottogini-84.png' },
+                    { nombre: 'Juan Vicente Chiarino', vice: 'Humberto Ciganda', partido: 'UC', votos: 45841, ganador: false, foto: '' }
                 ],
                 mapa: {
-                    'Artigas': 'PC', 'Salto': 'PC', 'Rivera': 'PC', 'Tacuarembó': 'PN',
-                    'Paysandú': 'PN', 'Río Negro': 'PC', 'Cerro Largo': 'PN', 'Durazno': 'PN',
-                    'Soriano': 'PC', 'Treinta y Tres': 'PN', 'Flores': 'PN', 'Florida': 'PC',
-                    'Lavalleja': 'PC', 'Colonia': 'PN', 'San José': 'PN', 'Canelones': 'PC',
-                    'Rocha': 'PC', 'Maldonado': 'PC', 'Montevideo': 'PC'
+                    'Montevideo': { ganador: 'PC', votos: { 'PC': 318588, 'PN': 239080, 'FA': 297490, 'UC': 27953 } },
+                    'Canelones': { ganador: 'PC', votos: { 'PC': 89223, 'PN': 72222, 'FA': 30978, 'UC': 4086 } },
+                    'Maldonado': { ganador: 'PC', votos: { 'PC': 27622, 'PN': 23011, 'FA': 6683, 'UC': 1693 } },
+                    'Rocha': { ganador: 'PC', votos: { 'PC': 22157, 'PN': 17076, 'FA': 2809, 'UC': 508 } },
+                    'Treinta y Tres': { ganador: 'PN', votos: { 'PC': 13100, 'PN': 14457, 'FA': 1643, 'UC': 155 } },
+                    'Cerro Largo': { ganador: 'PN', votos: { 'PC': 19994, 'PN': 25769, 'FA': 3126, 'UC': 386 } },
+                    'Rivera': { ganador: 'PC', votos: { 'PC': 27629, 'PN': 23345, 'FA': 3540, 'UC': 377 } },
+                    'Artigas': { ganador: 'PC', votos: { 'PC': 20675, 'PN': 14391, 'FA': 2291, 'UC': 194 } },
+                    'Salto': { ganador: 'PC', votos: { 'PC': 33295, 'PN': 24699, 'FA': 6725, 'UC': 887 } },
+                    'Paysandú': { ganador: 'PN', votos: { 'PC': 25939, 'PN': 26257, 'FA': 9073, 'UC': 1164 } },
+                    'Río Negro': { ganador: 'PC', votos: { 'PC': 15681, 'PN': 10382, 'FA': 2764, 'UC': 141 } },
+                    'Soriano': { ganador: 'PC', votos: { 'PC': 24102, 'PN': 23396, 'FA': 5672, 'UC': 1042 } },
+                    'Colonia': { ganador: 'PN', votos: { 'PC': 33388, 'PN': 33397, 'FA': 9312, 'UC': 1055 } },
+                    'San José': { ganador: 'PN', votos: { 'PC': 20374, 'PN': 24535, 'FA': 5880, 'UC': 3181 } },
+                    'Flores': { ganador: 'PN', votos: { 'PC': 6928, 'PN': 8415, 'FA': 811, 'UC': 396 } },
+                    'Florida': { ganador: 'PC', votos: { 'PC': 20500, 'PN': 18384, 'FA': 3977, 'UC': 647 } },
+                    'Durazno': { ganador: 'PN', votos: { 'PC': 14238, 'PN': 17715, 'FA': 1843, 'UC': 512 } },
+                    'Lavalleja': { ganador: 'PC', votos: { 'PC': 21039, 'PN': 19861, 'FA': 2251, 'UC': 678 } },
+                    'Tacuarembó': { ganador: 'PN', votos: { 'PC': 23229, 'PN': 24381, 'FA': 4236, 'UC': 786 } }
                 }
             }
         ],
@@ -445,10 +390,10 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'Luis Alberto Lacalle',    vice: 'Gonzalo Aguirre',      partido: 'PN',  votos: 630253, ganador: true,  foto: '' },
-                    { nombre: 'Jorge Batlle',            vice: 'Enrique Iglesias',     partido: 'PC',  votos: 556516, ganador: false, foto: '' },
-                    { nombre: 'Líber Seregni',           vice: 'Hugo Batalla',         partido: 'FA',  votos: 418535, ganador: false, foto: '' },
-                    { nombre: 'Hugo Batalla',            vice: 'Américo Ricaldoni',    partido: 'NE',  votos: 191255, ganador: false, foto: '' }
+                    { nombre: 'Luis Alberto Lacalle', vice: 'Gonzalo Aguirre', partido: 'PN', votos: 630253, ganador: true, foto: 'https://file.garden/aYAawg4_plkXr2uQ/herrera-89.png' },
+                    { nombre: 'Jorge Batlle', vice: 'Enrique Iglesias', partido: 'PC', votos: 556516, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/batlle-89.png' },
+                    { nombre: 'Líber Seregni', vice: 'Hugo Batalla', partido: 'FA', votos: 418535, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/seregni-89.png' },
+                    { nombre: 'Hugo Batalla', vice: 'Américo Ricaldoni', partido: 'NE', votos: 191255, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/batalla-89.png' }
                 ],
                 mapa: {
                     'Artigas': 'PN', 'Salto': 'PN', 'Rivera': 'PN', 'Tacuarembó': 'PN',
@@ -465,7 +410,7 @@ const ELECCIONES = [
                 descripcion: { es: 'Propuesta de vincular las jubilaciones al salario de los funcionarios públicos activos.', en: 'Proposal to link pensions to the salary of active public servants.' },
                 opciones: [
                     { nombre: { es: 'Sí (aprobado)', en: 'Yes (approved)' }, votos: 999999, color: '#27ae60' },
-                    { nombre: { es: 'No',            en: 'No'             }, votos: 700000, color: '#e74c3c' }
+                    { nombre: { es: 'No', en: 'No' }, votos: 700000, color: '#e74c3c' }
                 ],
                 mapa: {}
             }
@@ -477,10 +422,10 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'Julio María Sanguinetti', vice: 'Hugo Batlle',          partido: 'PC',  votos: 620646, ganador: true,  foto: '' },
-                    { nombre: 'Alberto Volonté',         vice: 'Luis Brezzo',          partido: 'PN',  votos: 597885, ganador: false, foto: '' },
-                    { nombre: 'Tabaré Vázquez',          vice: 'Mariano Arana',        partido: 'FA',  votos: 600000, ganador: false, foto: '' },
-                    { nombre: 'Rafael Michelini',        vice: 'Dardo Ortiz',          partido: 'NE',  votos: 90000,  ganador: false, foto: '' }
+                    { nombre: 'Julio María Sanguinetti', vice: 'Hugo Batlle', partido: 'PC', votos: 620646, ganador: true, foto: 'https://file.garden/aYAawg4_plkXr2uQ/sanguinetti-94.png' },
+                    { nombre: 'Alberto Volonté', vice: 'Luis Brezzo', partido: 'PN', votos: 597885, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/volont%C3%A9-94.png' },
+                    { nombre: 'Tabaré Vázquez', vice: 'Mariano Arana', partido: 'FA', votos: 600000, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-94.png' },
+                    { nombre: 'Rafael Michelini', vice: 'Dardo Ortiz', partido: 'NE', votos: 90000, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/michelini-94.png' }
                 ],
                 mapa: {
                     'Artigas': 'PN', 'Salto': 'PC', 'Rivera': 'PN', 'Tacuarembó': 'PN',
@@ -497,7 +442,7 @@ const ELECCIONES = [
                 descripcion: { es: 'Reforma constitucional que introdujo el ballottage y las elecciones internas obligatorias.', en: 'Constitutional reform that introduced runoff elections and mandatory internal party elections.' },
                 opciones: [
                     { nombre: { es: 'Sí (aprobado)', en: 'Yes (approved)' }, votos: 1230000, color: '#27ae60' },
-                    { nombre: { es: 'No',            en: 'No'             }, votos:  690000, color: '#e74c3c' }
+                    { nombre: { es: 'No', en: 'No' }, votos: 690000, color: '#e74c3c' }
                 ],
                 mapa: {}
             }
@@ -509,9 +454,10 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'Tabaré Vázquez',   vice: 'Rodolfo Nin Novoa',  partido: 'FA', votos: 972422, ganador: false, foto: '' },
-                    { nombre: 'Jorge Batlle',      vice: 'Luis Hierro López',  partido: 'PC', votos: 765254, ganador: false, foto: '' },
-                    { nombre: 'Luis Lacalle Pou',  vice: 'Jorge Larrañaga',   partido: 'PN', votos: 349800, ganador: false, foto: '' }
+                    { nombre: 'Tabaré Vázquez', vice: 'Rodolfo Nin Novoa', partido: 'FA', votos: 972422, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-99.png' },
+                    { nombre: 'Jorge Batlle', vice: 'Luis Hierro López', partido: 'PC', votos: 765254, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/batlle-99.png' },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos: 349800, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/herrera-99.png' },
+                    { nombre: 'Rafael Michelini', vice: 'Pablo Mieres', partido: 'NE', votos: 98000, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/michelini-99.png'}
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
@@ -524,8 +470,8 @@ const ELECCIONES = [
             {
                 nombre: { es: '2ª Vuelta', en: '2nd Round' },
                 candidatos: [
-                    { nombre: 'Jorge Batlle',    vice: 'Luis Hierro López',  partido: 'PC', votos: 1143141, ganador: true,  foto: '' },
-                    { nombre: 'Tabaré Vázquez',  vice: 'Rodolfo Nin Novoa', partido: 'FA', votos: 1004241, ganador: false, foto: '' }
+                    { nombre: 'Jorge Batlle', vice: 'Luis Hierro López', partido: 'PC', votos: 1143141, ganador: true, foto: 'https://file.garden/aYAawg4_plkXr2uQ/batlle-99.png' },
+                    { nombre: 'Tabaré Vázquez', vice: 'Rodolfo Nin Novoa', partido: 'FA', votos: 1004241, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-99.png' }
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'PC', 'Rivera': 'PC', 'Tacuarembó': 'PC',
@@ -544,9 +490,10 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'Tabaré Vázquez',    vice: 'Rodolfo Nin Novoa',  partido: 'FA', votos: 1124761, ganador: true,  foto: '' },
-                    { nombre: 'Jorge Larrañaga',   vice: 'Jorge Gandini',      partido: 'PN', votos:  764378, ganador: false, foto: '' },
-                    { nombre: 'Guillermo Stirling', vice: 'Ope Pasquet',       partido: 'PC', votos:  230309, ganador: false, foto: '' }
+                    { nombre: 'Tabaré Vázquez', vice: 'Rodolfo Nin Novoa', partido: 'FA', votos: 1124761, ganador: true, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-04.png' },
+                    { nombre: 'Jorge Larrañaga', vice: 'Jorge Gandini', partido: 'PN', votos: 764378, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/larra%C3%B1aga-04.png' },
+                    { nombre: 'Guillermo Stirling', vice: 'Ope Pasquet', partido: 'PC', votos: 230309, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/stirling-04.png' },
+                    { nombre: 'Pablo Mieres', vice: 'Iván Posada', partido: 'PI', votos: 40000, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/mieres-04.png'}
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'FA', 'Tacuarembó': 'FA',
@@ -563,7 +510,7 @@ const ELECCIONES = [
                 descripcion: { es: 'Reforma constitucional para declarar el agua como derecho humano fundamental y prohibir su privatización.', en: 'Constitutional reform to declare water a fundamental human right and prohibit its privatization.' },
                 opciones: [
                     { nombre: { es: 'Sí (aprobado)', en: 'Yes (approved)' }, votos: 1410000, color: '#27ae60' },
-                    { nombre: { es: 'No',            en: 'No'             }, votos:  590000, color: '#e74c3c' }
+                    { nombre: { es: 'No', en: 'No' }, votos: 590000, color: '#e74c3c' }
                 ],
                 mapa: {}
             }
@@ -575,9 +522,10 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'José Mujica',        vice: 'Danilo Astori',        partido: 'FA', votos: 1105262, ganador: false, foto: '' },
-                    { nombre: 'Luis Lacalle Pou',   vice: 'Jorge Larrañaga',     partido: 'PN', votos:  664031, ganador: false, foto: '' },
-                    { nombre: 'Pedro Bordaberry',   vice: 'Germán Cardoso',      partido: 'PC', votos:  384710, ganador: false, foto: '' }
+                    { nombre: 'José Mujica', vice: 'Danilo Astori', partido: 'FA', votos: 1105262, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/mujica-09.png' },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos: 664031, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/herrera-09.png' },
+                    { nombre: 'Pedro Bordaberry', vice: 'Germán Cardoso', partido: 'PC', votos: 384710, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/bordaberry-09.png' },
+                    { nombre: 'Pablo Mieres', vice: 'Iván Posada', partido: 'PI', votos: 57000, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/mieres-09.png'}
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'FA', 'Tacuarembó': 'FA',
@@ -590,8 +538,8 @@ const ELECCIONES = [
             {
                 nombre: { es: '2ª Vuelta', en: '2nd Round' },
                 candidatos: [
-                    { nombre: 'José Mujica',      vice: 'Danilo Astori',    partido: 'FA', votos: 1196115, ganador: true,  foto: '' },
-                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos:  998410, ganador: false, foto: '' }
+                    { nombre: 'José Mujica', vice: 'Danilo Astori', partido: 'FA', votos: 1196115, ganador: true, foto: 'https://file.garden/aYAawg4_plkXr2uQ/mujica-09.png' },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos: 998410, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/herrera-09.png' }
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
@@ -608,7 +556,7 @@ const ELECCIONES = [
                 descripcion: { es: 'Propuesta de anulación de la Ley de Caducidad de la Pretensión Punitiva del Estado (amnistía a militares y policías por crímenes de la dictadura).', en: 'Proposal to annul the Law of Expiry of the Punitive Claims of the State.' },
                 opciones: [
                     { nombre: { es: 'Sí — anular ley', en: 'Yes — annul law' }, votos: 1025000, color: '#27ae60' },
-                    { nombre: { es: 'No — mantener',   en: 'No — keep'       }, votos: 1080000, color: '#e74c3c' }
+                    { nombre: { es: 'No — mantener', en: 'No — keep' }, votos: 1080000, color: '#e74c3c' }
                 ],
                 mapa: {}
             },
@@ -617,7 +565,7 @@ const ELECCIONES = [
                 descripcion: { es: 'Propuesta para permitir el voto de uruguayos residentes en el exterior.', en: 'Proposal to allow Uruguayans living abroad to vote.' },
                 opciones: [
                     { nombre: { es: 'Sí (aprobado)', en: 'Yes (approved)' }, votos: 1150000, color: '#27ae60' },
-                    { nombre: { es: 'No',            en: 'No'             }, votos:  900000, color: '#e74c3c' }
+                    { nombre: { es: 'No', en: 'No' }, votos: 900000, color: '#e74c3c' }
                 ],
                 mapa: {}
             }
@@ -629,9 +577,10 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'Tabaré Vázquez',   vice: 'Raúl Sendic',      partido: 'FA', votos: 1044006, ganador: false, foto: '' },
-                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos:  522965, ganador: false, foto: '' },
-                    { nombre: 'Pedro Bordaberry', vice: 'Germán Cardoso',  partido: 'PC', votos:  456730, ganador: false, foto: '' }
+                    { nombre: 'Tabaré Vázquez', vice: 'Raúl Sendic', partido: 'FA', votos: 1044006, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-14.png' },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos: 522965, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-14.png' },
+                    { nombre: 'Pedro Bordaberry', vice: 'Germán Cardoso', partido: 'PC', votos: 456730, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/bordaberry-14.png' },
+                    { nombre: 'Pablo Mieres', vice: 'Conrado Ramos', partido: 'PI', votos: 73379, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/mieres-14.png'}
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'FA', 'Tacuarembó': 'FA',
@@ -644,8 +593,8 @@ const ELECCIONES = [
             {
                 nombre: { es: '2ª Vuelta', en: '2nd Round' },
                 candidatos: [
-                    { nombre: 'Tabaré Vázquez',   vice: 'Raúl Sendic',      partido: 'FA', votos: 1196778, ganador: true,  foto: '' },
-                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos:  993764, ganador: false, foto: '' }
+                    { nombre: 'Tabaré Vázquez', vice: 'Raúl Sendic', partido: 'FA', votos: 1196778, ganador: true, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-14.png' },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos: 993764, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-14.png' }
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
@@ -674,10 +623,10 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'Daniel Martínez',  vice: 'Graciela Villar',     partido: 'FA', votos: 777002, ganador: false, foto: '' },
-                    { nombre: 'Luis Lacalle Pou', vice: 'Beatriz Argimón',    partido: 'PN', votos: 756990, ganador: false, foto: '' },
-                    { nombre: 'Ernesto Talvi',    vice: 'Zoe Rauschert',      partido: 'PC', votos: 316183, ganador: false, foto: '' },
-                    { nombre: 'Guido Manini Ríos',vice: 'Guillermo Domenech', partido: 'CA', votos: 271091, ganador: false, foto: '' }
+                    { nombre: 'Daniel Martínez', vice: 'Graciela Villar', partido: 'FA', votos: 777002, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/mart%C3%ADnez-19.png' },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Beatriz Argimón', partido: 'PN', votos: 756990, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-19.png' },
+                    { nombre: 'Ernesto Talvi', vice: 'Robert Silva', partido: 'PC', votos: 316183, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/talvi-19.png' },
+                    { nombre: 'Pablo Mieres', vice: 'Mónica Bottero', partido: 'PI', votos: 23580, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/mieres-19.png'}
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
@@ -690,8 +639,8 @@ const ELECCIONES = [
             {
                 nombre: { es: '2ª Vuelta', en: '2nd Round' },
                 candidatos: [
-                    { nombre: 'Luis Lacalle Pou', vice: 'Beatriz Argimón', partido: 'PN', votos: 1168019, ganador: true,  foto: '' },
-                    { nombre: 'Daniel Martínez',  vice: 'Graciela Villar', partido: 'FA', votos: 1014518, ganador: false, foto: '' }
+                    { nombre: 'Luis Lacalle Pou', vice: 'Beatriz Argimón', partido: 'PN', votos: 1168019, ganador: true, foto: 'https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-19.png' },
+                    { nombre: 'Daniel Martínez', vice: 'Graciela Villar', partido: 'FA', votos: 1014518, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/mart%C3%ADnez-19.png' }
                 ],
                 mapa: {
                     'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
@@ -714,63 +663,30 @@ const ELECCIONES = [
             }
         ]
     }
-    /*
-    ── PLANTILLA PARA AGREGAR NUEVA ELECCIÓN ──────────────────────
-    ,{
-        anio: 2024,
-        vueltas: [
-            {
-                nombre: { es: '1ª Vuelta', en: '1st Round' },
-                candidatos: [
-                    {
-                        nombre: 'Nombre Candidato',
-                        vice: 'Nombre Vice',
-                        partido: 'FA',
-                        votos: 0,
-                        ganador: false,
-                        foto: 'https://url-de-la-foto.jpg'   ← opcional
-                    },
-                ],
-                mapa: { 'Artigas': 'FA', ... }
-            }
-        ],
-        plebiscitos: []
-    }
-    ───────────────────────────────────────────────────────────────
-    */
 ];
 
-/* ════════════════════════════════════════════
-   MAPEO: Nombre departamento → ID SVG
-════════════════════════════════════════════ */
 const DEPTO_ID = {
-    'Paysandú':      'UYPA', 'Artigas':      'UYAR', 'Salto':        'UYSA',
-    'Rivera':        'UYRV', 'Rocha':        'UYRO', 'Treinta y Tres':'UYTT',
-    'Cerro Largo':   'UYCL', 'Maldonado':    'UYMA', 'Canelones':    'UYCA',
-    'Montevideo':    'UYMO', 'San José':     'UYSJ', 'Colonia':      'UYCO',
-    'Soriano':       'UYSO', 'Río Negro':    'UYRN', 'Tacuarembó':   'UYTA',
-    'Durazno':       'UYDU', 'Flores':       'UYFS', 'Florida':      'UYFD',
-    'Lavalleja':     'UYLA'
+    'Paysandú': 'UYPA', 'Artigas': 'UYAR', 'Salto': 'UYSA',
+    'Rivera': 'UYRV', 'Rocha': 'UYRO', 'Treinta y Tres':'UYTT',
+    'Cerro Largo': 'UYCL', 'Maldonado': 'UYMA', 'Canelones': 'UYCA',
+    'Montevideo': 'UYMO', 'San José': 'UYSJ', 'Colonia': 'UYCO',
+    'Soriano': 'UYSO', 'Río Negro': 'UYRN', 'Tacuarembó': 'UYTA',
+    'Durazno': 'UYDU', 'Flores': 'UYFS', 'Florida': 'UYFD',
+    'Lavalleja': 'UYLA'
 };
 
 const PARTIDO_NOMBRES = {
     FA:'Frente Amplio', PN:'Partido Nacional', PC:'Partido Colorado',
-    CA:'Cabildo Abierto', PI:'Partido Independiente', NE:'Nuevo Espacio', UP:'Unión Popular'
+    CA:'Cabildo Abierto', PI:'Partido Independiente', NE:'Nuevo Espacio', UP:'Unión Popular', UC:'Unión Cívica'
 };
 
-/* ════════════════════════════════════════════
-   ESTADO
-════════════════════════════════════════════ */
-let currentLang    = localStorage.getItem('uruvoto-lang') || 'es';
-let selectedAnio   = ELECCIONES[ELECCIONES.length - 1].anio;
+let currentLang = localStorage.getItem('uruvoto-lang') || 'es';
+let selectedAnio = ELECCIONES[ELECCIONES.length - 1].anio;
 let selectedVuelta = 0;
-let selectedPleb   = null;
+let selectedPleb = null;
 
 document.getElementById('lang-select').value = currentLang;
 
-/* ════════════════════════════════════════════
-   UTILS
-════════════════════════════════════════════ */
 function fmtVotos(n) { return n.toLocaleString('es-UY'); }
 function pctOf(v, total) { return total > 0 ? ((v / total) * 100).toFixed(1) : '0.0'; }
 function txt(obj) { return (obj && obj[currentLang]) ? obj[currentLang] : (obj && obj.es) ? obj.es : ''; }
@@ -780,16 +696,13 @@ function getInitials(nombre) {
     return nombre.split(' ').filter(w => w.length > 2).slice(0,2).map(w => w[0]).join('').toUpperCase();
 }
 
-function photoHTML(c, size = 72) {
+function photoHTML(c, isRect = false) {
     if (c.foto) {
-        return `<img src="${c.foto}" alt="${c.nombre}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;border:3px solid ${color(c.partido)}33;" onerror="this.parentNode.innerHTML=initialsCircle('${getInitials(c.nombre)}','${color(c.partido)}',${size})">`;
+        return `<img src="${c.foto}" alt="${c.nombre}" class="${isRect ? '' : 'cand-minor-photo'}" style="${isRect ? 'width:100%;height:100%;object-fit:cover;' : 'width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;'}">`;
     }
-    return `<div style="width:${size}px;height:${size}px;border-radius:50%;background:${color(c.partido)};display:flex;align-items:center;justify-content:center;font-size:${size === 72 ? '1.1' : '0.75'}rem;font-weight:700;color:white;border:3px solid ${color(c.partido)}55;">${getInitials(c.nombre)}</div>`;
+    return `<div style="${isRect ? 'width:100%;height:100%;' : 'width:36px;height:36px;border-radius:50%;'}background:${color(c.partido)};display:flex;align-items:center;justify-content:center;font-size:${isRect ? '1.5rem' : '0.7rem'};font-weight:700;color:white;flex-shrink:0;">${getInitials(c.nombre)}</div>`;
 }
 
-/* ════════════════════════════════════════════
-   RENDER YEARS
-════════════════════════════════════════════ */
 function renderYears() {
     const grid = document.getElementById('year-grid');
     grid.innerHTML = '';
@@ -802,9 +715,6 @@ function renderYears() {
     });
 }
 
-/* ════════════════════════════════════════════
-   RENDER VUELTA BAR
-════════════════════════════════════════════ */
 function renderVueltaBar() {
     const bar = document.getElementById('vuelta-bar');
     bar.innerHTML = '';
@@ -826,9 +736,6 @@ function renderVueltaBar() {
     });
 }
 
-/* ════════════════════════════════════════════
-   RENDER MAPA
-════════════════════════════════════════════ */
 const DEFAULT_FILL = () => document.body.getAttribute('data-theme') === 'dark' ? '#334155' : '#cbd5e1';
 
 function renderMapa() {
@@ -842,40 +749,24 @@ function renderMapa() {
         mapaData = elec.vueltas[selectedVuelta]?.mapa || {};
     }
 
-    // Reset all elements to default
     document.querySelectorAll('#uruguay-map #features path, #uruguay-map #label_points circle').forEach(el => {
         el.style.fill = DEFAULT_FILL();
     });
 
-    // Color by partido
-    Object.entries(mapaData).forEach(([depto, partidoId]) => {
+    Object.entries(mapaData).forEach(([depto, info]) => {
         const svgId = DEPTO_ID[depto];
         if (!svgId) return;
+        const partidoId = typeof info === 'string' ? info : info.ganador;
         const c = color(partidoId);
-        // features path
         const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
         if (path) path.style.fill = c;
-        // label circle
-        const circle = document.querySelector(`#uruguay-map #label_points circle#${svgId}`);
-        if (circle) circle.style.fill = c;
-    });
-
-    // Leyenda
-    const partidos = [...new Set(Object.values(mapaData))];
-    const leyenda = document.getElementById('leyenda-mapa');
-    leyenda.innerHTML = '';
-    partidos.forEach(p => {
-        leyenda.innerHTML += `<div class="leyenda-item"><div class="leyenda-dot" style="background:${color(p)}"></div><span>${PARTIDO_NOMBRES[p] || p}</span></div>`;
     });
 }
 
-/* ════════════════════════════════════════════
-   TOOLTIP MAPA
-════════════════════════════════════════════ */
 const tooltip = document.getElementById('map-tooltip');
 
 function setupTooltips() {
-    document.querySelectorAll('#uruguay-map #features path, #uruguay-map #label_points circle').forEach(el => {
+    document.querySelectorAll('#uruguay-map #features path').forEach(el => {
         el.addEventListener('mousemove', e => {
             const name = el.getAttribute('name');
             const elec = ELECCIONES.find(ev => ev.anio === selectedAnio);
@@ -885,19 +776,39 @@ function setupTooltips() {
             } else if (elec) {
                 mapaData = elec.vueltas[selectedVuelta]?.mapa || {};
             }
-            const partidoId = mapaData[name];
+            
+            const deptoInfo = mapaData[name];
             tooltip.style.display = 'block';
             tooltip.style.left = (e.clientX + 14) + 'px';
             tooltip.style.top  = (e.clientY - 10) + 'px';
-            tooltip.innerHTML = `<strong>${name}</strong>${partidoId ? `<span style="color:${color(partidoId)}">${PARTIDO_NOMBRES[partidoId] || partidoId}</span>` : '<span style="color:#94a3b8">Sin datos</span>'}`;
+            
+            let tooltipHtml = `<strong>${name}</strong>`;
+            
+            if (typeof deptoInfo === 'object' && deptoInfo.votos) {
+                let totalDepto = 0;
+                for (let p in deptoInfo.votos) totalDepto += deptoInfo.votos[p];
+                
+                let sortedPartidos = Object.keys(deptoInfo.votos).sort((a,b) => deptoInfo.votos[b] - deptoInfo.votos[a]);
+                sortedPartidos.forEach(p => {
+                    let v = deptoInfo.votos[p];
+                    let pct = pctOf(v, totalDepto);
+                    tooltipHtml += `
+                    <div class="tooltip-row">
+                        <span style="color:${color(p)}; font-weight:bold;">${PARTIDO_NOMBRES[p] || p}</span>
+                        <span>${fmtVotos(v)} (${pct}%)</span>
+                    </div>`;
+                });
+            } else {
+                const partidoId = typeof deptoInfo === 'string' ? deptoInfo : (deptoInfo?.ganador || null);
+                tooltipHtml += partidoId ? `<span style="color:${color(partidoId)}">${PARTIDO_NOMBRES[partidoId] || partidoId}</span>` : '<span style="color:#94a3b8">Sin datos</span>';
+            }
+            
+            tooltip.innerHTML = tooltipHtml;
         });
         el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
     });
 }
 
-/* ════════════════════════════════════════════
-   RENDER CANDIDATOS / PLEBISCITO
-════════════════════════════════════════════ */
 function renderCandidatos() {
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
     const sec = document.getElementById('candidatos-section');
@@ -939,38 +850,40 @@ function renderCandidatos() {
     const top2 = cands.slice(0, 2);
     const rest = cands.slice(2);
 
-    // TOP 2 — side by side
     let topHtml = '<div class="cand-top">';
     top2.forEach(c => {
         const pct = pctOf(c.votos, total);
         topHtml += `
-        <div class="cand-card ${c.ganador ? 'ganador' : ''}" style="border-top: 4px solid ${color(c.partido)}">
-            <div class="cand-photo-wrap">${photoHTML(c, 72)}</div>
-            <div class="cand-info">
-                <div class="cand-nombre">${c.nombre}</div>
-                ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
-                <div class="cand-partido" style="color:${color(c.partido)}">${c.partido}</div>
-                <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
-                ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}
+        <div class="cand-card ${c.ganador ? 'ganador' : ''}" style="border-left: 6px solid ${color(c.partido)}; border-top: 1.5px solid var(--borde-card);">
+            <div class="cand-photo-wrap">${photoHTML(c, true)}</div>
+            <div class="cand-info-wrap">
+                <div class="cand-info">
+                    <div class="cand-nombre">${c.nombre}</div>
+                    ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
+                    <div class="cand-partido" style="color:${color(c.partido)}">${PARTIDO_NOMBRES[c.partido] || c.partido}</div>
+                    <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
+                    ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}
+                </div>
+                <div class="cand-bottom-stats">
+                    <div class="cand-pct" style="color:${color(c.partido)}">${pct}%</div>
+                    <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(c.partido)}"></div></div>
+                </div>
             </div>
-            <div class="cand-pct" style="color:${color(c.partido)}">${pct}%</div>
-            <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(c.partido)}"></div></div>
         </div>`;
     });
     topHtml += '</div>';
     content.innerHTML += topHtml;
 
-    // Resto
     if (rest.length > 0) {
         let minorHtml = '<div class="cand-minor-list">';
         rest.forEach(c => {
             const pct = pctOf(c.votos, total);
             minorHtml += `
             <div class="cand-minor">
-                ${photoHTML(c, 36)}
+                ${photoHTML(c, false)}
                 <div>
                     <div class="cand-minor-nombre">${c.nombre}</div>
-                    <div class="cand-minor-sub">${c.partido} · ${fmtVotos(c.votos)} votos</div>
+                    <div class="cand-minor-sub">${PARTIDO_NOMBRES[c.partido] || c.partido} · ${fmtVotos(c.votos)} votos</div>
                 </div>
                 <div class="cand-minor-pct" style="color:${color(c.partido)}">${pct}%</div>
             </div>`;
@@ -980,9 +893,6 @@ function renderCandidatos() {
     }
 }
 
-/* ════════════════════════════════════════════
-   RENDER ALL
-════════════════════════════════════════════ */
 function renderAll() {
     renderYears();
     renderVueltaBar();
@@ -990,14 +900,12 @@ function renderAll() {
     renderCandidatos();
 }
 
-/* ════════════════════════════════════════════
-   IDIOMA / TEMA
-════════════════════════════════════════════ */
 function changeLanguage() {
     currentLang = document.getElementById('lang-select').value;
     localStorage.setItem('uruvoto-lang', currentLang);
     renderAll();
 }
+
 function toggleDarkMode() {
     const dark = document.body.getAttribute('data-theme') !== 'dark';
     document.body.setAttribute('data-theme', dark ? 'dark' : 'light');
@@ -1006,7 +914,6 @@ function toggleDarkMode() {
     renderMapa();
 }
 
-/* ── INIT ── */
 const isDarkInit = document.body.getAttribute('data-theme') === 'dark';
 document.getElementById('dark-btn').innerText = isDarkInit ? '☀️' : '🌙';
 renderAll();
