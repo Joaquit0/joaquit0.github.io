@@ -107,7 +107,7 @@
             padding: 24px;
             background: var(--card-bg);
             height: 100%;
-            overflow-y: auto; /* PERMITE SCROLL AQUÍ */
+            overflow-y: auto;
             scroll-behavior: smooth;
             display: flex;
             flex-direction: column;
@@ -378,7 +378,6 @@ function renderYears() {
             selectedAnio = e.anio; 
             selectedVuelta = 0; 
             selectedPleb = null; 
-            // Ya no forzamos el scroll al cambiar de año, mantenemos la pestaña actual
             renderAll(); 
         };
         grid.appendChild(btn);
@@ -424,12 +423,8 @@ function scrollToSec(sec) {
     selectedPleb = null;
     const el = document.getElementById('sec-' + sec);
     if (el) {
-        const panel = document.getElementById('right-panel');
-        if(window.innerWidth > 1100) {
-            panel.scrollTo({ top: el.offsetTop - 20, behavior: 'smooth' });
-        } else {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        // Solucionado para scrollear correctamente hacia el div sin importar los pixeles
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     currentTab = sec;
     updateTabUI();
@@ -456,6 +451,7 @@ function initScrollObserver() {
     const panel = window.innerWidth > 1100 ? document.getElementById('right-panel') : null;
     const sections = document.querySelectorAll('.content-section');
     
+    // Ajustado el rootMargin para que detecte mejor la sección activa al scrollear
     scrollObserver = new IntersectionObserver((entries) => {
         if (selectedPleb !== null) return; 
         
@@ -470,7 +466,7 @@ function initScrollObserver() {
                 }
             }
         });
-    }, { root: panel, rootMargin: "-10% 0px -60% 0px", threshold: 0 });
+    }, { root: panel, rootMargin: "-30% 0px -50% 0px", threshold: 0 });
 
     sections.forEach(s => scrollObserver.observe(s));
 }
@@ -491,7 +487,8 @@ function renderMapa() {
     }
 
     document.querySelectorAll('#uruguay-map #features path').forEach(el => {
-        el.style.fill = DEFAULT_FILL();
+        // Corregido: ya no llama a DEFAULT_FILL(), usa la función color() global
+        el.style.fill = color('default');
         el.style.fillOpacity = 1;
     });
 
@@ -516,7 +513,7 @@ function renderMapa() {
                 if (margin > 10) opacity = 1;
                 else if (margin >= 5) opacity = 0.8;
                 else if (margin > 1) opacity = 0.6;
-                else opacity = 0.35; // Victoria sumamente ajustada: Conserva color real pero mucho más claro/transparente
+                else opacity = 0.35; 
                 
                 path.style.fillOpacity = opacity;
             }
@@ -525,6 +522,9 @@ function renderMapa() {
 }
 
 function setupTooltips() {
+    // Corregido: Se declara la variable del tooltip para que no dé error
+    const tooltip = document.getElementById('map-tooltip');
+
     document.querySelectorAll('#uruguay-map #features path').forEach(el => {
         el.addEventListener('mousemove', e => {
             const name = el.getAttribute('name');
