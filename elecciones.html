@@ -98,7 +98,7 @@
         #map-container path {
             stroke: var(--card-bg);
             stroke-width: 1.5;
-            transition: fill 0.4s ease, fill-opacity 0.4s ease, filter 0.4s ease, opacity 0.2s;
+            transition: fill 0.4s ease, fill-opacity 0.4s ease, opacity 0.2s;
             cursor: pointer;
         }
         #map-container path:hover { opacity: 0.8; }
@@ -131,14 +131,28 @@
             background: var(--card-bg);
         }
 
-        .eleccion-selector {
+        /* GRID PARA LOS CONTROLES SUPERIORES (Elección y Vistas al lado) */
+        .top-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .eleccion-selector, .vista-selector {
             background: var(--fondo);
             border: 1px solid var(--borde-card);
             border-radius: 14px;
             padding: 16px;
+            display: flex;
+            flex-direction: column;
         }
-        .eleccion-selector h3 { margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
-        .year-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;}
+        .eleccion-selector h3, .vista-selector h3 { 
+            margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; 
+            letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; 
+        }
+
+        .year-grid { display: flex; flex-wrap: wrap; gap: 8px; }
         .year-btn {
             padding: 7px 14px;
             border-radius: 8px;
@@ -154,17 +168,20 @@
         .year-btn:hover { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
         .year-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
 
-        /* TABS */
+        /* TABS (Vistas) */
         .tabs-container {
-            display: flex; gap: 6px; border-bottom: 2px solid var(--borde-card); padding-bottom: 8px; overflow-x: auto; margin-top: 4px;
+            display: flex; flex-direction: column; gap: 6px; justify-content: center; flex-grow: 1;
         }
         .tab-btn {
-            background: none; border: none; font-family: 'Inter'; font-weight: 700; color: var(--text-muted); font-size: 0.85rem; cursor: pointer; padding: 8px 12px; transition: color 0.2s, background 0.2s; border-radius: 8px; white-space: nowrap;
+            background: var(--card-bg); border: 1.5px solid var(--borde-card); 
+            font-family: 'Inter'; font-weight: 600; color: var(--azul-texto); 
+            font-size: 0.85rem; cursor: pointer; padding: 8px 12px; 
+            transition: all 0.2s; border-radius: 8px; text-align: left;
         }
-        .tab-btn.active { background: var(--borde-card); color: var(--azul-vibrante); }
-        .tab-btn:hover:not(.active) { color: var(--azul-texto); background: rgba(0,0,0,0.03); }
+        .tab-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
+        .tab-btn:hover:not(.active) { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
 
-        .vuelta-bar { display: flex; flex-wrap: wrap; gap: 8px; }
+        .vuelta-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;}
         .vuelta-btn {
             padding: 7px 14px;
             border-radius: 8px;
@@ -184,47 +201,21 @@
         .candidatos-section h3 { margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
 
         /* TOP 3 CANDIDATOS (Lista vertical) */
-        .cand-top {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
+        .cand-top { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
         .cand-card {
-            background: var(--fondo);
-            border-radius: 12px;
-            display: flex;
-            flex-direction: row;
-            overflow: hidden;
-            border-width: 2px;
-            border-style: solid;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            transition: transform 0.2s;
-            height: 150px;
+            background: var(--fondo); border-radius: 12px; display: flex; flex-direction: row;
+            overflow: hidden; border-width: 2px; border-style: solid; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            transition: transform 0.2s; height: 150px;
         }
         .cand-card:hover { transform: translateY(-2px); }
 
         .cand-photo-wrap {
-            width: 120px;
-            height: 100%;
-            flex-shrink: 0;
-            border-right: 1px solid rgba(0,0,0,0.05);
-            background: #fff;
+            width: 120px; height: 100%; flex-shrink: 0;
+            border-right: 1px solid rgba(0,0,0,0.05); background: #fff;
         }
-        .cand-photo {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center top;
-        }
+        .cand-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
 
-        .cand-info-wrap {
-            padding: 14px 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            flex-grow: 1;
-        }
+        .cand-info-wrap { padding: 14px 20px; display: flex; flex-direction: column; justify-content: center; flex-grow: 1; }
         .cand-info { text-align: left; }
         .cand-nombre { 
             font-weight: 800; font-size: 1.15rem; line-height: 1.2; margin-bottom: 4px; 
@@ -234,41 +225,23 @@
         .cand-partido { font-size: 0.85rem; font-weight: 700; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
         .cand-votos { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
         
-        .cand-bottom-stats {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 100%;
-        }
+        .cand-bottom-stats { margin-top: 10px; display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
         .cand-pct { font-size: 1.6rem; font-weight: 900; line-height: 1; margin-bottom: 6px;}
         .barra-cand { width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
         .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
 
         .badge-ganador {
-            display: inline-block;
-            background: #16a34a;
-            color: white;
-            font-size: 0.65rem;
-            font-weight: 800;
-            padding: 4px 8px;
-            border-radius: 6px;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+            display: inline-block; background: #16a34a; color: white;
+            font-size: 0.65rem; font-weight: 800; padding: 4px 8px;
+            border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em;
         }
 
         /* Candidatos menores */
         .cand-minor-list { display: flex; flex-direction: column; gap: 8px; }
         .cand-minor {
-            display: grid;
-            grid-template-columns: 44px 1fr auto;
-            align-items: center;
-            gap: 12px;
-            padding: 10px 14px;
-            background: var(--fondo);
-            border: 1px solid var(--borde-card);
-            border-radius: 12px;
-            font-size: 0.85rem;
+            display: grid; grid-template-columns: 44px 1fr auto; align-items: center;
+            gap: 12px; padding: 10px 14px; background: var(--fondo); border: 1px solid var(--borde-card);
+            border-radius: 12px; font-size: 0.85rem;
         }
 
         /* DEPARTAMENTALES GRID */
@@ -289,18 +262,13 @@
         .dept-hover-row { display: flex; justify-content: space-between; font-size: 0.8rem; }
 
         /* PARLAMENTO (Senado/Diputados) */
-        .legislativo-container {
-            display: flex;
-            flex-direction: column;
-            gap: 50px;
-            margin-top: 10px;
-        }
+        .legislativo-container { display: flex; flex-direction: column; gap: 70px; margin-top: 10px; margin-bottom: 40px; }
         .parliament-wrapper { text-align: center; }
-        .parliament-wrapper h4 { margin: 0 0 10px 0; font-size: 1.05rem; font-weight: 800; color: var(--azul-texto); }
+        .parliament-wrapper h4 { margin: 0 0 20px 0; font-size: 1.15rem; font-weight: 800; color: var(--azul-texto); }
         
         .parliament-container {
             position: relative; width: 100%; max-width: 480px; margin: 0 auto; aspect-ratio: 2 / 1; 
-            display: flex; align-items: flex-end; justify-content: center; overflow: visible;
+            display: block; overflow: visible;
         }
         .parliament-dot {
             position: absolute; border-radius: 50%; cursor: pointer; transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
@@ -308,17 +276,18 @@
         .parliament-dot:hover { transform: scale(1.4); z-index: 50; }
         .parliament-tooltip {
             visibility: hidden; position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); 
-            background: #1a1a1a; color: white; padding: 8px 14px; border-radius: 8px; font-size: 0.8rem; font-weight: 600;
-            white-space: nowrap; z-index: 100; opacity: 0; transition: opacity 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3); pointer-events: none;
+            background: #1a1a1a; color: white; padding: 8px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
+            white-space: nowrap; z-index: 100; opacity: 0; transition: opacity 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.4); pointer-events: none; text-align: center;
         }
         .parliament-tooltip::after {
-            content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #1a1a1a transparent transparent transparent;
+            content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #1a1a1a transparent transparent transparent;
         }
         .parliament-dot:hover .parliament-tooltip { visibility: visible; opacity: 1; }
         
-        .parliament-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; justify-content: center; margin-top: 30px; }
-        .p-leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; font-weight: 600; }
-        .p-leg-dot { width: 14px; height: 14px; border-radius: 50%; }
+        /* Aumento del margin-top para dar más espacio entre el hemiciclo y la leyenda */
+        .parliament-legend { display: flex; flex-wrap: wrap; gap: 12px 20px; justify-content: center; margin-top: 50px; }
+        .p-leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.9rem; font-weight: 600; }
+        .p-leg-dot { width: 16px; height: 16px; border-radius: 50%; }
 
         /* Plebiscito */
         .plebiscito-info { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 12px; padding: 12px 16px; background: var(--fondo); border-radius: 10px; border: 1px solid var(--borde-card); }
@@ -367,14 +336,21 @@
     </div>
 
     <div class="right-panel">
-        <div class="eleccion-selector">
-            <h3 id="lbl-elecciones">Elecciones</h3>
-            <div class="year-grid" id="year-grid"></div>
+        
+        <!-- CONTROLES SUPERIORES SEPARADOS LADO A LADO -->
+        <div class="top-controls">
+            <div class="eleccion-selector">
+                <h3 id="lbl-elecciones">Elecciones</h3>
+                <div class="year-grid" id="year-grid"></div>
+            </div>
             
-            <div class="tabs-container" id="tabs-container">
-                <button class="tab-btn active" onclick="setTab('presidenciales')">Presidenciales</button>
-                <button class="tab-btn" onclick="setTab('departamentales')">Departamentales</button>
-                <button class="tab-btn" onclick="setTab('legislativo')">Legislativo</button>
+            <div class="vista-selector">
+                <h3 id="lbl-vistas">Vistas</h3>
+                <div class="tabs-container" id="tabs-container">
+                    <button class="tab-btn active" onclick="setTab('presidenciales')">Presidenciales</button>
+                    <button class="tab-btn" onclick="setTab('departamentales')">Departamentales</button>
+                    <button class="tab-btn" onclick="setTab('legislativo')">Legislativo</button>
+                </div>
             </div>
         </div>
 
@@ -419,7 +395,7 @@ const DEPTO_ID = {
     'Lavalleja': 'UYLA'
 };
 
-let ELECCIONES = []; // Se cargará desde datos.json
+let ELECCIONES = []; 
 let currentLang = localStorage.getItem('uruvoto-lang') || 'es';
 let selectedAnio = null; 
 let selectedVuelta = 0;
@@ -473,6 +449,7 @@ function renderVueltaBar() {
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
     if (!elec) return;
 
+    // Solo mostramos las vueltas (1ra, 2da) si estamos en la pestaña Presidenciales
     if (currentTab === 'presidenciales') {
         elec.vueltas.forEach((v, i) => {
             const btn = document.createElement('button');
@@ -481,23 +458,20 @@ function renderVueltaBar() {
             btn.onclick = () => { 
                 selectedVuelta = i; 
                 selectedPleb = null; 
-                renderVueltaBar(); // re-render para actualizar el estilo active
-                renderRightPanelContent();
-                renderMapa(); 
+                renderAll(); 
             };
             bar.appendChild(btn);
         });
     }
 
+    // Los plebiscitos siempre se muestran
     elec.plebiscitos.forEach((p, i) => {
         const btn = document.createElement('button');
         btn.className = 'vuelta-btn plebiscito' + (selectedPleb === i ? ' active' : '');
         btn.textContent = txt(p.nombre);
         btn.onclick = () => { 
             selectedPleb = i; 
-            renderVueltaBar();
-            renderRightPanelContent();
-            renderMapa(); 
+            renderAll(); 
         };
         bar.appendChild(btn);
     });
@@ -544,7 +518,6 @@ function renderMapa() {
     document.querySelectorAll('#uruguay-map #features path').forEach(el => {
         el.style.fill = DEFAULT_FILL();
         el.style.fillOpacity = 1;
-        el.style.filter = 'none';
     });
 
     Object.entries(mapaData).forEach(([depto, info]) => {
@@ -558,31 +531,20 @@ function renderMapa() {
         
         path.style.fill = c;
 
-        // Apply Margin of Victory opacities/filters si está habilitado
+        // Apply Margin of Victory opacities
         if (mapMode === 'margin' && typeof info === 'object' && info.votos) {
             const votesArray = Object.values(info.votos).sort((a,b) => b - a);
             if (votesArray.length >= 2) {
                 const total = votesArray.reduce((sum, v) => sum + v, 0);
                 const margin = ((votesArray[0] - votesArray[1]) / total) * 100;
                 let opacity = 1;
-                let filter = 'none';
                 
-                if (margin > 10) {
-                    opacity = 1; 
-                } else if (margin >= 5) {
-                    opacity = 0.8;
-                    filter = 'saturate(0.7)';
-                } else if (margin > 1) {
-                    opacity = 0.6;
-                    filter = 'saturate(0.4)';
-                } else {
-                    opacity = 1; 
-                    // Diferencia mínima: color bastante más oscuro y desaturado
-                    filter = 'saturate(0.15) brightness(0.45)';
-                }
+                if (margin > 10) opacity = 1;
+                else if (margin >= 5) opacity = 0.8;
+                else if (margin > 1) opacity = 0.6;
+                else opacity = 0.35; // Diferencia <= 1%, color notablemente más clarito
                 
                 path.style.fillOpacity = opacity;
-                path.style.filter = filter;
             }
         }
     });
@@ -609,30 +571,18 @@ function setupTooltips() {
             else if (currentTab === 'legislativo') {
                 const vueltaData = elec.vueltas[indexToUse];
                 const dipData = vueltaData?.diputados;
-                const deptoNombres = vueltaData?.diputadosNombres?.[name] || [];
                 
-                tooltipHtml = `<strong>Diputados por ${name}</strong>`;
+                tooltipHtml = `<strong>Resumen de Bancas - ${name}</strong>`;
                 if(dipData && dipData[name]) {
                     let total = 0;
-                    let nameCounters = {};
-                    
                     const sorted = Object.entries(dipData[name]).sort((a,b)=>b[1]-a[1]);
                     sorted.forEach(([p, cant]) => {
                         tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)};font-weight:bold;">${PARTIDO_NOMBRES[p]||p}</span><span>${cant} bancas</span></div>`;
-                        
-                        for(let i=0; i<cant; i++) {
-                            nameCounters[p] = nameCounters[p] || 0;
-                            let specNameObj = deptoNombres.filter(d=>d.partido===p)[nameCounters[p]];
-                            nameCounters[p]++;
-                            if(specNameObj) {
-                                tooltipHtml += `<div style="font-size:0.75rem; padding-left:10px; color:#cbd5e1;">- ${specNameObj.nombre}</div>`;
-                            }
-                        }
                         total += cant;
                     });
                     tooltipHtml += `<div style="margin-top:6px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.2); font-weight:bold;">Total bancas: ${total}</div>`;
                 } else if (dipData && typeof Object.values(dipData)[0] === 'number') {
-                    tooltipHtml += `<span>Distribución departamental no disponible (Representación Nacional)</span>`;
+                    tooltipHtml += `<span>Distribución departamental no disponible</span>`;
                 } else {
                     tooltipHtml += `<span>Distribución no disponible</span>`;
                 }
@@ -683,9 +633,9 @@ function renderParliament(dotsArray, containerId, targetSeats) {
     if(!container) return;
     container.innerHTML = '';
     const w = container.offsetWidth || 480; 
-    const h = w * 0.55; 
+    const h = w / 2; 
     const cx = w / 2;
-    const cy = h - 10;
+    const cy = h; 
 
     let rowConfigs = [];
     if (targetSeats === 30) rowConfigs = [7, 10, 13]; // 3 filas senado
@@ -693,26 +643,28 @@ function renderParliament(dotsArray, containerId, targetSeats) {
     else rowConfigs = [targetSeats];
 
     const numRows = rowConfigs.length;
-    const r_outer = w * 0.45;
-    const r_inner = w * 0.20;
+    // El radio máximo será un poco menos que el ancho/2 para que los puntos entren
+    const dotSize = targetSeats <= 30 ? 28 : 12; // Círculos bastante grandes para senadores
+    const r_outer = (w / 2) - (dotSize / 2);
+    const r_inner = w * 0.15;
     const r_step = numRows > 1 ? (r_outer - r_inner) / (numRows - 1) : 0;
     
     let positions = [];
     rowConfigs.forEach((numDots, rIndex) => {
         const radius = r_inner + r_step * rIndex;
         for (let i = 0; i < numDots; i++) {
-            // Ángulo perfectamente distribuido
+            // Distribución equitativa a lo largo del arco (de PI a 0)
             const angle = Math.PI - (i / Math.max(1, numDots - 1)) * Math.PI;
             positions.push({ angle: angle, x: cx + radius * Math.cos(angle), y: cy - radius * Math.sin(angle) });
         }
     });
 
+    // Ordenar posiciones por ángulo para llenarlas secuencialmente de izquierda a derecha
     positions.sort((a, b) => b.angle - a.angle);
 
+    // Ordenamiento político (aproximado) de los partidos de izquierda a derecha
     const order = ['UP', 'FA', 'PGP', 'NE', 'PI', 'PN', 'PC', 'CA', 'UC'];
     dotsArray.sort((a, b) => order.indexOf(a.partido) - order.indexOf(b.partido));
-
-    const dotSize = targetSeats <= 30 ? 24 : 12; // Círculos más grandes para senadores
 
     dotsArray.forEach((d, i) => {
         if (i >= positions.length) return;
@@ -722,8 +674,8 @@ function renderParliament(dotsArray, containerId, targetSeats) {
         dotEl.className = 'parliament-dot';
         dotEl.style.width = `${dotSize}px`;
         dotEl.style.height = `${dotSize}px`;
-        dotEl.style.left = `calc(${pos.x}px - ${dotSize/2}px)`;
-        dotEl.style.top = `calc(${pos.y}px - ${dotSize/2}px)`;
+        dotEl.style.left = `${pos.x - dotSize/2}px`;
+        dotEl.style.top = `${pos.y - dotSize/2}px`;
         dotEl.style.backgroundColor = color(d.partido);
         dotEl.innerHTML = `<div class="parliament-tooltip">${d.tooltipText}</div>`;
         container.appendChild(dotEl);
@@ -772,7 +724,7 @@ function renderRightPanelContent() {
         const cands = [...vuelta.candidatos].sort((a,b) => b.votos - a.votos);
         const total = cands.reduce((s, c) => s + c.votos, 0);
         
-        // TOP 3 Layout 
+        // Mostrar los top 3 en la lista destacada
         const top3 = cands.slice(0, 3);
         const rest = cands.slice(3);
 
@@ -868,24 +820,24 @@ function renderRightPanelContent() {
             <div class="legislativo-container">
                 <div class="parliament-wrapper">
                     <h4>Cámara de Senadores (30 bancas)</h4>
-                    <div id="parlamento-render-senado" class="parliament-container"></div>
+                    <div id="parlamento-render-senado" class="parliament-container" style="aspect-ratio: 2 / 1.05;"></div>
                     <div id="legend-senado" class="parliament-legend"></div>
                 </div>
                 <div class="parliament-wrapper">
                     <h4>Cámara de Representantes (99 bancas)</h4>
-                    <div id="parlamento-render-diputados" class="parliament-container"></div>
+                    <div id="parlamento-render-diputados" class="parliament-container" style="aspect-ratio: 2 / 1.05;"></div>
                     <div id="legend-diputados" class="parliament-legend"></div>
                 </div>
             </div>
         `;
 
-        // SENADO LOGIC
+        // Lógica de Senado
         let senadoData = vuelta.senado || distributeSeatsMock(vuelta.candidatos, 30);
         let dotsSen = [];
         let legSen = {};
         Object.entries(senadoData).forEach(([p, cant]) => {
             legSen[p] = cant;
-            for(let i=0; i<cant; i++) dotsSen.push({ partido: p, tooltipText: `Senador - ${PARTIDO_NOMBRES[p]||p}` });
+            for(let i=0; i<cant; i++) dotsSen.push({ partido: p, tooltipText: `<div style="font-size:1.1em;margin-bottom:4px;">Senador de la República</div><div style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</div>` });
         });
         let legHtmlSen = '';
         Object.entries(legSen).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
@@ -894,20 +846,18 @@ function renderRightPanelContent() {
         document.getElementById('legend-senado').innerHTML = legHtmlSen;
         setTimeout(() => renderParliament(dotsSen, 'parlamento-render-senado', 30), 50);
 
-        // DIPUTADOS LOGIC
+        // Lógica de Diputados (Con asignación de nombres si existen)
         let dipData = vuelta.diputados;
         let deptoNombres = vuelta.diputadosNombres || {};
         let dotsDip = [];
         let legDip = {};
 
         if (dipData && typeof Object.values(dipData)[0] === 'number') {
-            // Simple flat mapping
             Object.entries(dipData).forEach(([p, cant]) => {
                 legDip[p] = cant;
-                for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional - ${PARTIDO_NOMBRES[p]||p}` });
+                for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional<br><span style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</span>` });
             });
         } else if (dipData) {
-            // Nested por Departamento
             Object.entries(dipData).forEach(([depto, partidos]) => {
                 let nameCounters = {};
                 Object.entries(partidos).forEach(([p, cant]) => {
@@ -916,8 +866,8 @@ function renderRightPanelContent() {
                         nameCounters[p] = nameCounters[p] || 0;
                         let specNameObj = (deptoNombres[depto] || []).filter(d=>d.partido===p)[nameCounters[p]];
                         nameCounters[p]++;
-                        let nameLabel = specNameObj ? specNameObj.nombre : `${PARTIDO_NOMBRES[p]||p}`;
-                        dotsDip.push({ partido: p, tooltipText: `Diputado por ${depto} - ${nameLabel}` });
+                        let nameLabel = specNameObj ? `<div style="font-size:1.1em;margin-bottom:4px;">${specNameObj.nombre}</div>` : `<div style="font-size:1.1em;margin-bottom:4px;">Diputado/a</div>`;
+                        dotsDip.push({ partido: p, tooltipText: `${nameLabel}<div style="font-weight:normal;">Representante por ${depto}</div><div style="color:${color(p)};margin-top:2px;">${PARTIDO_NOMBRES[p]||p}</div>` });
                     }
                 });
             });
@@ -925,7 +875,7 @@ function renderRightPanelContent() {
             let n = distributeSeatsMock(vuelta.candidatos, 99);
             Object.entries(n).forEach(([p, cant]) => {
                 legDip[p] = cant;
-                for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional - ${PARTIDO_NOMBRES[p]||p}` });
+                for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional<br><span style="color:${color(p)};">${PARTIDO_NOMBRES[p]||p}</span>` });
             });
         }
 
@@ -945,50 +895,24 @@ function renderAll() {
     renderMapa();
 }
 
-function changeLanguage() {
-    currentLang = document.getElementById('lang-select').value;
-    localStorage.setItem('uruvoto-lang', currentLang);
-    renderAll();
-}
-
-function toggleDarkMode() {
-    const dark = document.body.getAttribute('data-theme') !== 'dark';
-    document.body.setAttribute('data-theme', dark ? 'dark' : 'light');
-    localStorage.setItem('uruvoto-theme', dark ? 'dark' : 'light');
-    document.getElementById('dark-btn').innerText = dark ? '☀️' : '🌙';
-    renderMapa();
-}
-
-const isDarkInit = document.body.getAttribute('data-theme') === 'dark';
-document.getElementById('dark-btn').innerText = isDarkInit ? '☀️' : '🌙';
-
-window.addEventListener('resize', () => {
-    if(currentTab === 'legislativo') {
-        renderRightPanelContent();
-    }
-});
-
 async function initApp() {
     try {
-        // 1. Cargar el mapa SVG
         const svgRes = await fetch('mapa.svg');
         if (!svgRes.ok) throw new Error('Error al cargar el mapa');
         const svgText = await svgRes.text();
         document.getElementById('map-container').innerHTML = svgText;
 
-        // 2. Cargar los datos JSON
         const jsonRes = await fetch('datos.json');
         if (!jsonRes.ok) throw new Error('Error al cargar los datos');
         ELECCIONES = await jsonRes.json();
 
-        // 3. Inicializar estado
         selectedAnio = ELECCIONES[ELECCIONES.length - 1].anio;
         
         renderAll();
         setupTooltips();
     } catch (error) {
         console.error(error);
-        document.getElementById('map-container').innerHTML = '<p style="color: #e05c5c; text-align: center; padding: 20px;">Error cargando los recursos externos (datos.json o mapa.svg).<br>Asegúrate de subirlos a tu repositorio de GitHub en la misma carpeta.</p>';
+        document.getElementById('map-container').innerHTML = '<p style="color: #e05c5c; text-align: center; padding: 20px;">Error cargando los recursos externos (datos.json o mapa.svg).<br>Recuerda que para que los fetch locales funcionen, debes subir los 3 archivos a la misma carpeta de tu servidor o GitHub Pages.</p>';
     }
 }
 
