@@ -527,7 +527,66 @@
         }
       }
     ],
-    "plebiscitos": []
+    "plebiscitos": [
+      {
+        "nombre": { "es": "Plebiscito Ley de Caducidad", "en": "Ley de Caducidad Plebiscite" },
+        "descripcion": { "es": "Propuesta para anular la Ley de Caducidad de la Pretensión Punitiva del Estado.", "en": "Proposal to annul the Expiry Law." },
+        "opciones": [
+          { "nombre": { "es": "Sí", "en": "Yes" }, "votos": 1105768, "color": "#27ae60" },
+          { "nombre": { "es": "No", "en": "No" }, "votos": 1198918, "color": "#e74c3c" }
+        ],
+        "mapa": {
+          "Montevideo": { "ganador": "Sí", "votos": { "Sí": 543729, "No": 385595 } },
+          "Canelones": { "ganador": "Sí", "votos": { "Sí": 165622, "No": 159948 } },
+          "Maldonado": { "ganador": "No", "votos": { "Sí": 45050, "No": 63986 } },
+          "Rocha": { "ganador": "No", "votos": { "Sí": 20161, "No": 33313 } },
+          "Treinta y Tres": { "ganador": "No", "votos": { "Sí": 12494, "No": 24498 } },
+          "Cerro Largo": { "ganador": "No", "votos": { "Sí": 23004, "No": 39222 } },
+          "Rivera": { "ganador": "No", "votos": { "Sí": 21423, "No": 52270 } },
+          "Artigas": { "ganador": "No", "votos": { "Sí": 16662, "No": 35766 } },
+          "Salto": { "ganador": "No", "votos": { "Sí": 35544, "No": 50888 } },
+          "Paysandú": { "ganador": "No", "votos": { "Sí": 36036, "No": 45189 } },
+          "Río Negro": { "ganador": "No", "votos": { "Sí": 14945, "No": 23236 } },
+          "Soriano": { "ganador": "No", "votos": { "Sí": 26629, "No": 36488 } },
+          "Colonia": { "ganador": "No", "votos": { "Sí": 36323, "No": 55755 } },
+          "San José": { "ganador": "No", "votos": { "Sí": 30161, "No": 41793 } },
+          "Flores": { "ganador": "No", "votos": { "Sí": 6126, "No": 13752 } },
+          "Florida": { "ganador": "No", "votos": { "Sí": 19828, "No": 31584 } },
+          "Durazno": { "ganador": "No", "votos": { "Sí": 14087, "No": 28749 } },
+          "Lavalleja": { "ganador": "No", "votos": { "Sí": 13915, "No": 32949 } },
+          "Tacuarembó": { "ganador": "No", "votos": { "Sí": 24029, "No": 43937 } }
+        }
+      },
+      {
+        "nombre": { "es": "Plebiscito Voto Epistolar", "en": "Postal Voting Plebiscite" },
+        "descripcion": { "es": "Propuesta para habilitar el voto por correspondencia desde el exterior.", "en": "Proposal to enable postal voting from abroad." },
+        "opciones": [
+          { "nombre": { "es": "No", "en": "No" }, "votos": 1442232, "color": "#e74c3c" },
+          { "nombre": { "es": "Sí", "en": "Yes" }, "votos": 862454, "color": "#27ae60" }
+        ],
+        "mapa": {
+          "Montevideo": { "ganador": "No", "votos": { "Sí": 413281, "No": 516043 } },
+          "Canelones": { "ganador": "No", "votos": { "Sí": 129424, "No": 196146 } },
+          "Maldonado": { "ganador": "No", "votos": { "Sí": 35303, "No": 73733 } },
+          "Rocha": { "ganador": "No", "votos": { "Sí": 16616, "No": 36858 } },
+          "Treinta y Tres": { "ganador": "No", "votos": { "Sí": 10351, "No": 26641 } },
+          "Cerro Largo": { "ganador": "No", "votos": { "Sí": 19540, "No": 42686 } },
+          "Rivera": { "ganador": "No", "votos": { "Sí": 18884, "No": 54809 } },
+          "Artigas": { "ganador": "No", "votos": { "Sí": 15088, "No": 37340 } },
+          "Salto": { "ganador": "No", "votos": { "Sí": 30786, "No": 55646 } },
+          "Paysandú": { "ganador": "No", "votos": { "Sí": 28990, "No": 52235 } },
+          "Río Negro": { "ganador": "No", "votos": { "Sí": 11855, "No": 26326 } },
+          "Soriano": { "ganador": "No", "votos": { "Sí": 20636, "No": 42481 } },
+          "Colonia": { "ganador": "No", "votos": { "Sí": 27739, "No": 64339 } },
+          "San José": { "ganador": "No", "votos": { "Sí": 23019, "No": 48935 } },
+          "Flores": { "ganador": "No", "votos": { "Sí": 4601, "No": 15277 } },
+          "Florida": { "ganador": "No", "votos": { "Sí": 15128, "No": 36284 } },
+          "Durazno": { "ganador": "No", "votos": { "Sí": 11004, "No": 31832 } },
+          "Lavalleja": { "ganador": "No", "votos": { "Sí": 10638, "No": 36226 } },
+          "Tacuarembó": { "ganador": "No", "votos": { "Sí": 19571, "No": 48395 } }
+        }
+      }
+    ]
   },
   {
     "anio": 2014,
@@ -535,35 +594,74 @@
       {
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
         "candidatos": [
-          { "nombre": "Tabaré Vázquez", "vice": "Raúl Sendic", "partido": "FA", "votos": 1044006, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-14.png" },
-          { "nombre": "Luis Lacalle Pou", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 522965, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-14.png" },
-          { "nombre": "Pedro Bordaberry", "vice": "Germán Cardoso", "partido": "PC", "votos": 456730, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/bordaberry-14.png" },
-          { "nombre": "Pablo Mieres", "vice": "Conrado Ramos", "partido": "PI", "votos": 73379, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mieres-14.png" }
+          { "nombre": "Tabaré Vázquez", "vice": "Raúl Sendic", "partido": "FA", "votos": 1134187, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-14.png" },
+          { "nombre": "Luis Lacalle Pou", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 732601, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-14.png" },
+          { "nombre": "Pedro Bordaberry", "vice": "Germán Cardoso", "partido": "PC", "votos": 305699, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/bordaberry-14.png" },
+          { "nombre": "Pablo Mieres", "vice": "Conrado Ramos", "partido": "PI", "votos": 73379, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mieres-14.png" },
+          { "nombre": "Gonzalo Abella", "vice": "Gustavo López", "partido": "UP", "votos": 26869, "ganador": false, "foto": "" },
+          { "nombre": "César Vega", "vice": "Richard Read", "partido": "PERI", "votos": 17835, "ganador": false, "foto": "" },
+          { "nombre": "Rafael Fernández", "vice": "Andrea Revuelta", "partido": "PT", "votos": 3218, "ganador": false, "foto": "" },
+          { "nombre": "Votos en Blanco", "vice": "", "partido": "BLANCO", "votos": 44688, "ganador": false, "foto": "" },
+          { "nombre": "Votos Anulados", "vice": "", "partido": "ANULADO", "votos": 33680, "ganador": false, "foto": "" }
         ],
         "mapa": {
-          "Artigas": "FA", "Salto": "FA", "Rivera": "FA", "Tacuarembó": "FA",
-          "Paysandú": "FA", "Río Negro": "FA", "Cerro Largo": "FA", "Durazno": "FA",
-          "Soriano": "FA", "Treinta y Tres": "FA", "Flores": "FA", "Florida": "FA",
-          "Lavalleja": "FA", "Colonia": "FA", "San José": "FA", "Canelones": "FA",
+          "Artigas": "FA", "Salto": "FA", "Rivera": "PN", "Tacuarembó": "PN",
+          "Paysandú": "FA", "Río Negro": "FA", "Cerro Largo": "FA", "Durazno": "PN",
+          "Soriano": "FA", "Treinta y Tres": "PN", "Flores": "PN", "Florida": "FA",
+          "Lavalleja": "PN", "Colonia": "FA", "San José": "FA", "Canelones": "FA",
           "Rocha": "FA", "Maldonado": "FA", "Montevideo": "FA"
+        },
+        "senado": { "FA": 15, "PN": 10, "PC": 4, "PI": 1 },
+        "diputados": {
+          "Montevideo": { "FA": 24, "PN": 8, "PC": 5, "PI": 2, "UP": 1 },
+          "Canelones": { "FA": 8, "PN": 4, "PC": 2, "PI": 1 },
+          "Maldonado": { "FA": 2, "PN": 2, "PC": 1 },
+          "Rocha": { "FA": 1, "PN": 1 },
+          "Treinta y Tres": { "PN": 1, "FA": 1 },
+          "Cerro Largo": { "PN": 1, "FA": 1 },
+          "Rivera": { "PN": 1, "PC": 1, "FA": 1 },
+          "Artigas": { "FA": 1, "PN": 1 },
+          "Salto": { "FA": 2, "PC": 1 },
+          "Paysandú": { "FA": 2, "PN": 1 },
+          "Río Negro": { "FA": 1, "PN": 1 },
+          "Soriano": { "FA": 1, "PN": 1 },
+          "Colonia": { "FA": 2, "PN": 1, "PC": 1 },
+          "San José": { "FA": 2, "PN": 1 },
+          "Flores": { "PN": 1, "FA": 1 },
+          "Florida": { "FA": 1, "PN": 1 },
+          "Durazno": { "PN": 1, "FA": 1 },
+          "Lavalleja": { "PN": 1, "FA": 1 },
+          "Tacuarembó": { "PN": 2, "FA": 1 }
         }
       },
       {
         "nombre": { "es": "2ª Vuelta", "en": "2nd Round" },
         "candidatos": [
-          { "nombre": "Tabaré Vázquez", "vice": "Raúl Sendic", "partido": "FA", "votos": 1196778, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-14.png" },
-          { "nombre": "Luis Lacalle Pou", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 993764, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-14.png" }
+          { "nombre": "Tabaré Vázquez", "vice": "Raúl Sendic", "partido": "FA", "votos": 1226105, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-14.png" },
+          { "nombre": "Luis Lacalle Pou", "vice": "Jorge Larrañaga", "partido": "PN", "votos": 939074, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-14.png" },
+          { "nombre": "Votos en Blanco", "vice": "", "partido": "BLANCO", "votos": 62155, "ganador": false, "foto": "" },
+          { "nombre": "Votos Anulados", "vice": "", "partido": "ANULADO", "votos": 62394, "ganador": false, "foto": "" }
         ],
         "mapa": {
           "Artigas": "FA", "Salto": "FA", "Rivera": "PN", "Tacuarembó": "PN",
-          "Paysandú": "FA", "Río Negro": "PN", "Cerro Largo": "PN", "Durazno": "PN",
-          "Soriano": "PN", "Treinta y Tres": "FA", "Flores": "PN", "Florida": "PN",
+          "Paysandú": "FA", "Río Negro": "FA", "Cerro Largo": "FA", "Durazno": "PN",
+          "Soriano": "FA", "Treinta y Tres": "PN", "Flores": "PN", "Florida": "PN",
           "Lavalleja": "PN", "Colonia": "PN", "San José": "FA", "Canelones": "FA",
           "Rocha": "FA", "Maldonado": "PN", "Montevideo": "FA"
         }
       }
     ],
-    "plebiscitos": []
+    "plebiscitos": [
+      {
+        "nombre": { "es": "Plebiscito Baja Edad Imputabilidad", "en": "Lowering Age of Criminal Responsibility" },
+        "descripcion": { "es": "Propuesta para bajar la edad de imputabilidad penal de 18 a 16 años.", "en": "Proposal to lower the age of criminal responsibility from 18 to 16." },
+        "opciones": [
+          { "nombre": { "es": "No", "en": "No" }, "votos": 1261834, "color": "#e74c3c" },
+          { "nombre": { "es": "Sí", "en": "Yes" }, "votos": 1110283, "color": "#27ae60" }
+        ],
+        "mapa": {}
+      }
+    ]
   },
   {
     "anio": 2019,
