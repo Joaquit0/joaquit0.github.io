@@ -55,6 +55,7 @@
             justify-content: center;
             background: var(--fondo);
             position: relative;
+            overflow: hidden;
         }
         .map-controls {
             position: absolute;
@@ -90,7 +91,7 @@
         #uruguay-map path {
             stroke: var(--card-bg);
             stroke-width: 1.5;
-            transition: fill 0.4s ease, fill-opacity 0.4s ease, opacity 0.2s;
+            transition: fill 0.4s ease, fill-opacity 0.4s ease, filter 0.4s ease, opacity 0.2s;
             cursor: pointer;
         }
         #uruguay-map path:hover { opacity: 0.8; }
@@ -146,7 +147,7 @@
         .year-btn:hover { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
         .year-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
 
-        /* TABS (Presidenciales, Departamentales, etc) */
+        /* TABS (Presidenciales, Departamentales, Legislativo) */
         .tabs-container {
             display: flex; gap: 6px; border-bottom: 2px solid var(--borde-card); padding-bottom: 8px; overflow-x: auto; margin-top: 4px;
         }
@@ -175,10 +176,10 @@
 
         .candidatos-section h3 { margin: 0 0 12px; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; }
 
-        /* TOP 2 CANDIDATOS (NUEVO LAYOUT: Uno al lado del otro, foto izquierda, datos derecha) */
+        /* TOP 3 CANDIDATOS (Lista vertical, rectangulo alto, datos a la derecha) */
         .cand-top {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
+            display: flex;
+            flex-direction: column;
             gap: 16px;
             margin-bottom: 20px;
         }
@@ -197,7 +198,7 @@
         .cand-card:hover { transform: translateY(-2px); }
 
         .cand-photo-wrap {
-            width: 35%;
+            width: 120px;
             height: 100%;
             flex-shrink: 0;
             border-right: 1px solid rgba(0,0,0,0.05);
@@ -211,27 +212,42 @@
         }
 
         .cand-info-wrap {
-            width: 65%;
-            padding: 10px 14px;
+            padding: 12px 18px;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            flex-grow: 1;
         }
         .cand-info { text-align: left; }
-        .cand-nombre { font-weight: 800; font-size: 1rem; line-height: 1.1; margin-bottom: 4px;}
-        .cand-vice { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-        .cand-partido { font-size: 0.8rem; font-weight: 700; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
-        .cand-votos { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+        .cand-nombre { 
+            font-weight: 800; font-size: 1.15rem; line-height: 1.2; margin-bottom: 4px; 
+            display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+        }
+        .cand-vice { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+        .cand-partido { font-size: 0.85rem; font-weight: 700; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .cand-votos { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
         
         .cand-bottom-stats {
-            margin-top: 8px;
+            margin-top: 10px;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
         }
-        .cand-pct { font-size: 1.4rem; font-weight: 900; line-height: 1; margin-bottom: 6px;}
-        .barra-cand { width: 100%; height: 5px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+        .cand-pct { font-size: 1.6rem; font-weight: 900; line-height: 1; margin-bottom: 6px;}
+        .barra-cand { width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
         .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+
+        .badge-ganador {
+            display: inline-block;
+            background: #16a34a;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
         /* Candidatos menores */
         .cand-minor-list { display: flex; flex-direction: column; gap: 8px; }
@@ -265,8 +281,17 @@
         .dept-hover-row { display: flex; justify-content: space-between; font-size: 0.8rem; }
 
         /* PARLAMENTO (Senado/Diputados) */
+        .legislativo-container {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-top: 10px;
+        }
+        .parliament-wrapper { text-align: center; }
+        .parliament-wrapper h4 { margin: 0 0 10px 0; font-size: 1.05rem; font-weight: 800; color: var(--azul-texto); }
+        
         .parliament-container {
-            position: relative; width: 100%; max-width: 480px; margin: 20px auto 40px; aspect-ratio: 2 / 1.1; 
+            position: relative; width: 100%; max-width: 480px; margin: 0 auto; aspect-ratio: 2 / 1.1; 
             display: flex; align-items: flex-end; justify-content: center;
         }
         .parliament-dot {
@@ -361,8 +386,7 @@
             <div class="tabs-container" id="tabs-container">
                 <button class="tab-btn active" onclick="setTab('presidenciales')">Presidenciales</button>
                 <button class="tab-btn" onclick="setTab('departamentales')">Departamentales</button>
-                <button class="tab-btn" onclick="setTab('senado')">Senado</button>
-                <button class="tab-btn" onclick="setTab('diputados')">Diputados</button>
+                <button class="tab-btn" onclick="setTab('legislativo')">Legislativo</button>
             </div>
         </div>
 
@@ -395,6 +419,32 @@ const PARTIDO_NOMBRES = {
     FA:'Frente Amplio', PN:'Partido Nacional', PC:'Partido Colorado',
     CA:'Cabildo Abierto', PI:'Partido Independiente', NE:'Nuevo Espacio', 
     UP:'Unión Popular', UC:'Unión Cívica', PGP:'Por el Gob. del Pueblo'
+};
+
+const DIPUTADOS_1984_NOMBRES = {
+    'Montevideo': [
+        {nombre: 'Antonio Marchesano', partido: 'PC'},
+        {nombre: 'Julio Aguiar Carrasco', partido: 'PC'},
+        {nombre: 'Victor Vaillant', partido: 'PC'},
+        {nombre: 'Nelson R. Alonso López', partido: 'FA'},
+        {nombre: 'Guillermo Alvarez', partido: 'FA'},
+        {nombre: 'Gilberto Ríos Ferreira', partido: 'FA'},
+        {nombre: 'Yamandú Sica Blanco', partido: 'FA'},
+        {nombre: 'Andrés Toriani', partido: 'FA'},
+        {nombre: 'Héctor Lorenzo Rios Demalde', partido: 'PN'},
+        {nombre: 'Héctor Martín Sturla', partido: 'PN'},
+        {nombre: 'Heber Rossi Pasina', partido: 'UC'}
+    ],
+    'Durazno': [{nombre: 'Numa Aguirre Corte', partido: 'PN'}],
+    'Tacuarembó': [{nombre: 'Juan José Alejandro', partido: 'PC'}],
+    'Florida': [{nombre: 'Juan Justo Amaro Corrado', partido: 'PC'}],
+    'Canelones': [
+        {nombre: 'Carlos Rossi', partido: 'PN'},
+        {nombre: 'Walter R. Santoro', partido: 'PN'}
+    ],
+    'Cerro Largo': [{nombre: 'Jorge Eladio Silveira Zavala', partido: 'PN'}],
+    'Soriano': [{nombre: 'Carlos Norberto Soto Bermúdez', partido: 'PC'}],
+    'Río Negro': [{nombre: 'Guillermo Stirling', partido: 'PC'}]
 };
 
 /* ════════════════════════════════════════════
@@ -454,7 +504,8 @@ const ELECCIONES = [
                     'Durazno': { 'PN': 1, 'PC': 1 },
                     'Lavalleja': { 'PN': 1, 'PC': 1 },
                     'Tacuarembó': { 'PN': 1, 'PC': 1 }
-                }
+                },
+                diputadosNombres: DIPUTADOS_1984_NOMBRES
             }
         ],
         plebiscitos: []
@@ -555,18 +606,20 @@ const ELECCIONES = [
             {
                 nombre: { es: '1ª Vuelta', en: '1st Round' },
                 candidatos: [
-                    { nombre: 'Tabaré Vázquez', vice: 'Rodolfo Nin Novoa', partido: 'FA', votos: 972422, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-99.png' },
-                    { nombre: 'Jorge Batlle', vice: 'Luis Hierro López', partido: 'PC', votos: 765254, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/batlle-99.png' },
-                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos: 349800, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/herrera-99.png' },
-                    { nombre: 'Rafael Michelini', vice: 'Pablo Mieres', partido: 'NE', votos: 98000, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/michelini-99.png'}
+                    { nombre: 'Tabaré Vázquez', vice: 'Rodolfo Nin Novoa', partido: 'FA', votos: 861202, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-99.png' },
+                    { nombre: 'Jorge Batlle', vice: 'Luis Hierro López', partido: 'PC', votos: 725103, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/batlle-99.png' },
+                    { nombre: 'Luis Lacalle Pou', vice: 'Jorge Larrañaga', partido: 'PN', votos: 478980, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/herrera-99.png' },
+                    { nombre: 'Rafael Michelini', vice: 'Pablo Mieres', partido: 'NE', votos: 97315, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/michelini-99.png'}
                 ],
                 mapa: {
-                    'Artigas': 'FA', 'Salto': 'FA', 'Rivera': 'PN', 'Tacuarembó': 'PN',
-                    'Paysandú': 'PC', 'Río Negro': 'PC', 'Cerro Largo': 'PN', 'Durazno': 'PC',
-                    'Soriano': 'PC', 'Treinta y Tres': 'PN', 'Flores': 'PC', 'Florida': 'PN',
-                    'Lavalleja': 'PN', 'Colonia': 'PC', 'San José': 'PC', 'Canelones': 'FA',
-                    'Rocha': 'PN', 'Maldonado': 'PC', 'Montevideo': 'FA'
-                }
+                    'Artigas': 'PC', 'Salto': 'PC', 'Rivera': 'PC', 'Tacuarembó': 'PN',
+                    'Paysandú': 'FA', 'Río Negro': 'PC', 'Cerro Largo': 'PN', 'Durazno': 'PN',
+                    'Soriano': 'PC', 'Treinta y Tres': 'PN', 'Flores': 'PN', 'Florida': 'PC',
+                    'Lavalleja': 'PN', 'Colonia': 'PC', 'San José': 'FA', 'Canelones': 'FA',
+                    'Rocha': 'PC', 'Maldonado': 'PC', 'Montevideo': 'FA'
+                },
+                senado: { 'FA': 12, 'PC': 10, 'PN': 7, 'NE': 1 },
+                diputados: { 'FA': 40, 'PC': 33, 'PN': 22, 'NE': 4 } // General layout
             },
             {
                 nombre: { es: '2ª Vuelta', en: '2nd Round' },
@@ -575,12 +628,18 @@ const ELECCIONES = [
                     { nombre: 'Tabaré Vázquez', vice: 'Rodolfo Nin Novoa', partido: 'FA', votos: 1004241, ganador: false, foto: 'https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-99.png' }
                 ],
                 mapa: {
-                    'Artigas': 'FA', 'Salto': 'PC', 'Rivera': 'PC', 'Tacuarembó': 'PC',
-                    'Paysandú': 'PC', 'Río Negro': 'PC', 'Cerro Largo': 'PC', 'Durazno': 'PC',
-                    'Soriano': 'PC', 'Treinta y Tres': 'PC', 'Flores': 'PC', 'Florida': 'PC',
-                    'Lavalleja': 'PC', 'Colonia': 'PC', 'San José': 'PC', 'Canelones': 'FA',
-                    'Rocha': 'PC', 'Maldonado': 'PC', 'Montevideo': 'FA'
-                }
+                    'Montevideo': { ganador: 'FA', votos: {'FA': 525496, 'PC': 410992} },
+                    'Canelones': { ganador: 'PC', votos: {'PC': 147912, 'FA': 123663} },
+                    'Maldonado': { ganador: 'PC', votos: {'PC': 50761, 'FA': 34532} },
+                    'Rocha': { ganador: 'PC', votos: {'PC': 29759, 'FA': 19255} },
+                    'Treinta y Tres': { ganador: 'PC', votos: {'PC': 22611, 'FA': 10028} },
+                    'Cerro Largo': { ganador: 'PC', votos: {'PC': 36759, 'FA': 19561} },
+                    'Artigas': 'PC', 'Salto': 'PC', 'Rivera': 'PC', 'Tacuarembó': 'PC',
+                    'Paysandú': 'PC', 'Río Negro': 'PC', 'Durazno': 'PC', 'Soriano': 'PC',
+                    'Flores': 'PC', 'Florida': 'PC', 'Lavalleja': 'PC', 'Colonia': 'PC', 'San José': 'PC'
+                },
+                senado: { 'FA': 12, 'PC': 10, 'PN': 7, 'NE': 1 },
+                diputados: { 'FA': 40, 'PC': 33, 'PN': 22, 'NE': 4 }
             }
         ],
         plebiscitos: []
@@ -846,7 +905,8 @@ function renderMapa() {
 
     document.querySelectorAll('#uruguay-map #features path').forEach(el => {
         el.style.fill = DEFAULT_FILL();
-        el.style.fillOpacity = 1; // Reset opacity
+        el.style.fillOpacity = 1;
+        el.style.filter = 'none';
     });
 
     Object.entries(mapaData).forEach(([depto, info]) => {
@@ -860,20 +920,30 @@ function renderMapa() {
         
         path.style.fill = c;
 
-        // Apply Margin of Victory opacities if enabled
+        // Apply Margin of Victory opacities/filters if enabled
         if (mapMode === 'margin' && typeof info === 'object' && info.votos) {
             const votesArray = Object.values(info.votos).sort((a,b) => b - a);
             if (votesArray.length >= 2) {
                 const total = votesArray.reduce((sum, v) => sum + v, 0);
                 const margin = ((votesArray[0] - votesArray[1]) / total) * 100;
                 let opacity = 1;
+                let filter = 'none';
                 
-                if (margin > 10) opacity = 1;
-                else if (margin >= 5) opacity = 0.7;
-                else if (margin >= 1) opacity = 0.45;
-                else opacity = 0.2;
+                if (margin > 10) {
+                    opacity = 1; 
+                } else if (margin >= 5) {
+                    opacity = 0.8;
+                    filter = 'saturate(0.7)';
+                } else if (margin > 1) {
+                    opacity = 0.6;
+                    filter = 'saturate(0.4)';
+                } else {
+                    opacity = 1; // Extremely close call: significantly darker and desaturated
+                    filter = 'saturate(0.15) brightness(0.45)';
+                }
                 
                 path.style.fillOpacity = opacity;
+                path.style.filter = filter;
             }
         }
     });
@@ -897,17 +967,34 @@ function setupTooltips() {
                 const partidoId = typeof deptoInfo === 'string' ? deptoInfo : (deptoInfo?.ganador || null);
                 tooltipHtml += partidoId ? `<span style="color:${color(partidoId)}">${PARTIDO_NOMBRES[partidoId] || partidoId}</span>` : '<span style="color:#94a3b8">Sin datos</span>';
             } 
-            else if (currentTab === 'diputados') {
-                const dipData = elec.vueltas[indexToUse]?.diputados;
+            else if (currentTab === 'legislativo') {
+                const vueltaData = elec.vueltas[indexToUse];
+                const dipData = vueltaData?.diputados;
+                const deptoNombres = vueltaData?.diputadosNombres?.[name] || [];
+                
                 tooltipHtml = `<strong>Diputados por ${name}</strong>`;
                 if(dipData && dipData[name]) {
                     let total = 0;
+                    let nameCounters = {};
+                    
                     const sorted = Object.entries(dipData[name]).sort((a,b)=>b[1]-a[1]);
-                    sorted.forEach(([p, c]) => {
-                        tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)};font-weight:bold;">${PARTIDO_NOMBRES[p]||p}</span><span>${c}</span></div>`;
-                        total += c;
+                    sorted.forEach(([p, cant]) => {
+                        tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)};font-weight:bold;">${PARTIDO_NOMBRES[p]||p}</span><span>${cant} bancas</span></div>`;
+                        
+                        // List individual names if available
+                        for(let i=0; i<cant; i++) {
+                            nameCounters[p] = nameCounters[p] || 0;
+                            let specNameObj = deptoNombres.filter(d=>d.partido===p)[nameCounters[p]];
+                            nameCounters[p]++;
+                            if(specNameObj) {
+                                tooltipHtml += `<div style="font-size:0.75rem; padding-left:10px; color:#cbd5e1;">- ${specNameObj.nombre}</div>`;
+                            }
+                        }
+                        total += cant;
                     });
                     tooltipHtml += `<div style="margin-top:6px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.2); font-weight:bold;">Total bancas: ${total}</div>`;
+                } else if (dipData && typeof Object.values(dipData)[0] === 'number') {
+                    tooltipHtml += `<span>Distribución departamental no disponible (Representación Nacional)</span>`;
                 } else {
                     tooltipHtml += `<span>Distribución no disponible</span>`;
                 }
@@ -963,38 +1050,31 @@ function renderParliament(dotsArray, containerId, targetSeats) {
     const cy = h - 10;
 
     let rowConfigs = [];
-    if (targetSeats === 30) rowConfigs = [7, 10, 13];
-    else if (targetSeats === 99) rowConfigs = [14, 18, 20, 22, 25];
+    if (targetSeats === 30) rowConfigs = [7, 10, 13]; // 3 rows
+    else if (targetSeats === 99) rowConfigs = [14, 18, 20, 22, 25]; // 5 rows
     else rowConfigs = [targetSeats];
 
     const numRows = rowConfigs.length;
-    const r_outer = w * 0.42;
-    const r_inner = w * 0.18;
+    const r_outer = w * 0.45;
+    const r_inner = w * 0.20;
     const r_step = numRows > 1 ? (r_outer - r_inner) / (numRows - 1) : 0;
     
-    // Compute perfectly spaced polar positions
     let positions = [];
     rowConfigs.forEach((numDots, rIndex) => {
         const radius = r_inner + r_step * rIndex;
         for (let i = 0; i < numDots; i++) {
-            // Angle from PI to 0
+            // Perfectly distributed angles from PI to 0
             const angle = Math.PI - (i / Math.max(1, numDots - 1)) * Math.PI;
-            positions.push({
-                angle: angle,
-                x: cx + radius * Math.cos(angle),
-                y: cy - radius * Math.sin(angle)
-            });
+            positions.push({ angle: angle, x: cx + radius * Math.cos(angle), y: cy - radius * Math.sin(angle) });
         }
     });
 
-    // Sort positions by angle strictly (left to right)
     positions.sort((a, b) => b.angle - a.angle);
 
-    // Sort dots by political order (approximate left to right spectrum matching)
     const order = ['UP', 'FA', 'PGP', 'NE', 'PI', 'PN', 'PC', 'CA', 'UC'];
     dotsArray.sort((a, b) => order.indexOf(a.partido) - order.indexOf(b.partido));
 
-    const dotSize = targetSeats <= 30 ? 16 : 10;
+    const dotSize = targetSeats <= 30 ? 20 : 10; // Extra large for Senado, normal for Dip
 
     dotsArray.forEach((d, i) => {
         if (i >= positions.length) return;
@@ -1053,18 +1133,23 @@ function renderRightPanelContent() {
         lbl.textContent = 'Candidatos Presidenciales';
         const cands = [...vuelta.candidatos].sort((a,b) => b.votos - a.votos);
         const total = cands.reduce((s, c) => s + c.votos, 0);
-        const top2 = cands.slice(0, 2);
-        const rest = cands.slice(2);
+        
+        // Show top 3 in the large format list
+        const top3 = cands.slice(0, 3);
+        const rest = cands.slice(3);
 
         let topHtml = '<div class="cand-top">';
-        top2.forEach(c => {
+        top3.forEach(c => {
             const pct = pctOf(c.votos, total);
             topHtml += `
             <div class="cand-card" style="border-color:${color(c.partido)};">
                 <div class="cand-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
                 <div class="cand-info-wrap">
                     <div class="cand-info">
-                        <div class="cand-nombre">${c.nombre}</div>
+                        <div class="cand-nombre">
+                            ${c.nombre}
+                            ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}
+                        </div>
                         ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
                         <div class="cand-partido" style="color:${color(c.partido)}">${PARTIDO_NOMBRES[c.partido] || c.partido}</div>
                         <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
@@ -1087,7 +1172,10 @@ function renderRightPanelContent() {
                 <div class="cand-minor">
                     <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
                     <div>
-                        <div class="cand-nombre" style="font-size:0.95rem;">${c.nombre}</div>
+                        <div class="cand-nombre" style="font-size:0.95rem;">
+                            ${c.nombre}
+                            ${c.ganador ? '<span class="badge-ganador" style="font-size:0.5rem;padding:2px 4px;">Ganador</span>' : ''}
+                        </div>
                         <div class="cand-votos">${PARTIDO_NOMBRES[c.partido] || c.partido} · ${fmtVotos(c.votos)} votos</div>
                     </div>
                     <div class="cand-pct" style="font-size:1.1rem; color:${color(c.partido)}">${pct}%</div>
@@ -1135,60 +1223,80 @@ function renderRightPanelContent() {
         html += '</div>';
         content.innerHTML += html;
     }
-    else if (currentTab === 'senado') {
-        lbl.textContent = 'Composición del Senado (30 bancas)';
-        let senadoData = vuelta.senado || distributeSeatsMock(vuelta.candidatos, 30);
-        let dots = [];
-        let leg = {};
-        Object.entries(senadoData).forEach(([p, cant]) => {
-            leg[p] = cant;
-            for(let i=0; i<cant; i++){
-                dots.push({ partido: p, tooltipText: `Senador - ${PARTIDO_NOMBRES[p]||p}` });
-            }
-        });
+    else if (currentTab === 'legislativo') {
+        lbl.textContent = 'Composición del Parlamento';
         
-        content.innerHTML += `<div id="parlamento-render" class="parliament-container"></div>`;
-        
-        let legHtml = '<div class="parliament-legend">';
-        Object.entries(leg).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
-            legHtml += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${PARTIDO_NOMBRES[p]||p}: ${cant}</div>`;
-        });
-        legHtml += '</div>';
-        content.innerHTML += legHtml;
-        
-        setTimeout(() => renderParliament(dots, 'parlamento-render', 30), 50);
-    }
-    else if (currentTab === 'diputados') {
-        lbl.textContent = 'Cámara de Representantes (99 bancas)';
-        let dipData = vuelta.diputados;
-        let dots = [];
-        let leg = {};
+        content.innerHTML += `
+            <div class="legislativo-container">
+                <div class="parliament-wrapper">
+                    <h4>Cámara de Senadores (30 bancas)</h4>
+                    <div id="parlamento-render-senado" class="parliament-container"></div>
+                    <div id="legend-senado" class="parliament-legend"></div>
+                </div>
+                <div class="parliament-wrapper">
+                    <h4>Cámara de Representantes (99 bancas)</h4>
+                    <div id="parlamento-render-diputados" class="parliament-container"></div>
+                    <div id="legend-diputados" class="parliament-legend"></div>
+                </div>
+            </div>
+        `;
 
-        if (dipData) {
+        // SENADO LOGIC
+        let senadoData = vuelta.senado || distributeSeatsMock(vuelta.candidatos, 30);
+        let dotsSen = [];
+        let legSen = {};
+        Object.entries(senadoData).forEach(([p, cant]) => {
+            legSen[p] = cant;
+            for(let i=0; i<cant; i++) dotsSen.push({ partido: p, tooltipText: `Senador - ${PARTIDO_NOMBRES[p]||p}` });
+        });
+        let legHtmlSen = '';
+        Object.entries(legSen).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
+            legHtmlSen += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${PARTIDO_NOMBRES[p]||p}: ${cant}</div>`;
+        });
+        document.getElementById('legend-senado').innerHTML = legHtmlSen;
+        setTimeout(() => renderParliament(dotsSen, 'parlamento-render-senado', 30), 50);
+
+        // DIPUTADOS LOGIC
+        let dipData = vuelta.diputados;
+        let deptoNombres = vuelta.diputadosNombres || {};
+        let dotsDip = [];
+        let legDip = {};
+
+        if (dipData && typeof Object.values(dipData)[0] === 'number') {
+            // Flat Object
+            Object.entries(dipData).forEach(([p, cant]) => {
+                legDip[p] = cant;
+                for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional - ${PARTIDO_NOMBRES[p]||p}` });
+            });
+        } else if (dipData) {
+            // Nested Object By Depto
             Object.entries(dipData).forEach(([depto, partidos]) => {
+                let nameCounters = {};
                 Object.entries(partidos).forEach(([p, cant]) => {
-                    leg[p] = (leg[p] || 0) + cant;
-                    for(let i=0; i<cant; i++) dots.push({ partido: p, tooltipText: `Diputado por ${depto} - ${PARTIDO_NOMBRES[p]||p}` });
+                    legDip[p] = (legDip[p] || 0) + cant;
+                    for(let i=0; i<cant; i++) {
+                        nameCounters[p] = nameCounters[p] || 0;
+                        let specNameObj = (deptoNombres[depto] || []).filter(d=>d.partido===p)[nameCounters[p]];
+                        nameCounters[p]++;
+                        let nameLabel = specNameObj ? specNameObj.nombre : `${PARTIDO_NOMBRES[p]||p}`;
+                        dotsDip.push({ partido: p, tooltipText: `Diputado por ${depto} - ${nameLabel}` });
+                    }
                 });
             });
         } else {
             let n = distributeSeatsMock(vuelta.candidatos, 99);
             Object.entries(n).forEach(([p, cant]) => {
-                leg[p] = cant;
-                for(let i=0; i<cant; i++) dots.push({ partido: p, tooltipText: `Diputado Nacional - ${PARTIDO_NOMBRES[p]||p}` });
+                legDip[p] = cant;
+                for(let i=0; i<cant; i++) dotsDip.push({ partido: p, tooltipText: `Diputado Nacional - ${PARTIDO_NOMBRES[p]||p}` });
             });
         }
 
-        content.innerHTML += `<div id="parlamento-render" class="parliament-container"></div>`;
-        
-        let legHtml = '<div class="parliament-legend">';
-        Object.entries(leg).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
-            legHtml += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${p}: ${cant}</div>`;
+        let legHtmlDip = '';
+        Object.entries(legDip).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
+            legHtmlDip += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${p}: ${cant}</div>`;
         });
-        legHtml += '</div>';
-        content.innerHTML += legHtml;
-
-        setTimeout(() => renderParliament(dots, 'parlamento-render', 99), 50);
+        document.getElementById('legend-diputados').innerHTML = legHtmlDip;
+        setTimeout(() => renderParliament(dotsDip, 'parlamento-render-diputados', 99), 50);
     }
 }
 
@@ -1217,7 +1325,7 @@ const isDarkInit = document.body.getAttribute('data-theme') === 'dark';
 document.getElementById('dark-btn').innerText = isDarkInit ? '☀️' : '🌙';
 
 window.addEventListener('resize', () => {
-    if(currentTab === 'senado' || currentTab === 'diputados') {
+    if(currentTab === 'legislativo') {
         renderRightPanelContent();
     }
 });
