@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EUy</title>
+    <title>Elecciones Uruguay</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
@@ -33,13 +33,12 @@
         }
         body { font-family: 'Inter', sans-serif; background-color: var(--fondo); color: var(--azul-texto); margin: 0; padding: 0; transition: background 0.3s; display: flex; flex-direction: column; min-height: 100vh; }
         
-        /* Header con elementos más juntos */
+        /* Header con elementos más juntos (sin bandera) */
         header { background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde-card); padding: 0.8rem 2rem; position: sticky; top: 0; z-index: 1000; }
         .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; width: 100%; }
         .header-left { display: flex; gap: 15px; align-items: center; }
         .header-right { display: flex; gap: 15px; align-items: center; }
         .logo { font-weight: 700; font-size: 1.2rem; color: var(--azul-vibrante); cursor: pointer; text-decoration: none; }
-        .flag-center img { height: 32px; border-radius: 2px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         
         /* Selector de idiomas estilo caja */
         .lang-toggle { display: flex; background: var(--fondo); border: 1px solid var(--borde-card); border-radius: 8px; overflow: hidden; }
@@ -90,7 +89,7 @@
         .brujula-legend span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
         .leg-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
-        /* ── HOMEPAGE HERO (Texto a la izquierda, imagen cuadrada a la derecha) ── */
+        /* ── HOMEPAGE HERO ── */
         .hero-container {
             display: flex;
             align-items: center;
@@ -107,7 +106,7 @@
             max-width: 420px; 
             aspect-ratio: 1 / 1; 
             object-fit: cover; 
-            border-radius: 24px; 
+            border-radius: 8px; /* Menos redondeada */
             box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
         }
         .hero-title { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 900; letter-spacing: -1.5px; margin: 0 0 20px; color: var(--azul-texto); line-height: 1.08; }
@@ -142,11 +141,38 @@
         .tooltip-header { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.15); }
         .tooltip-body { font-style: italic; color: #cbd5e1; line-height: 1.4; display: block; }
 
-        /* Footer y Cuenta Regresiva */
-        .site-footer { background: var(--card-bg); border-top: 1px solid var(--borde-card); padding: 40px 20px; text-align: center; margin-top: auto; }
-        .countdown-title { color: var(--azul-texto); font-size: 1.1rem; margin: 0 0 10px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;}
-        .countdown-timer { font-size: 2rem; font-weight: 800; color: var(--azul-vibrante); margin-bottom: 24px; font-variant-numeric: tabular-nums; }
-        .footer-disclaimer { font-size: 0.85rem; color: var(--text-muted); max-width: 650px; margin: 0 auto; line-height: 1.6; }
+        /* Footer y Cuenta Regresiva (Píldora pequeña) */
+        .site-footer { padding: 20px 10px; text-align: center; margin-top: auto; }
+        .footer-pill { 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 15px; 
+            background: var(--card-bg); 
+            border: 1px solid var(--borde-card); 
+            border-radius: 50px; 
+            padding: 8px 24px; 
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03); 
+            flex-wrap: wrap; 
+        }
+        .footer-info { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
+        .countdown-title { color: var(--text-muted); font-size: 0.65rem; margin: 0 0 2px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
+        .countdown-timer { font-size: 1.05rem; font-weight: 800; color: var(--azul-vibrante); font-variant-numeric: tabular-nums; }
+        .footer-disclaimer { 
+            font-size: 0.7rem; 
+            color: var(--text-muted); 
+            max-width: 450px; 
+            line-height: 1.3; 
+            text-align: left; 
+            border-left: 1px solid var(--borde-card); 
+            padding-left: 15px; 
+        }
+        
+        @media (max-width: 650px) {
+            .footer-pill { flex-direction: column; border-radius: 20px; text-align: center; gap: 8px; padding: 15px; }
+            .footer-info { align-items: center; text-align: center; }
+            .footer-disclaimer { border-left: none; border-top: 1px solid var(--borde-card); padding-left: 0; padding-top: 10px; text-align: center; }
+        }
     </style>
 </head>
 <body data-theme="light">
@@ -161,9 +187,6 @@
     <div class="header-content">
         <div class="header-left">
             <div class="logo" onclick="irHome()">EleccionesUY</div>
-        </div>
-        <div class="flag-center">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg" alt="Uruguay">
         </div>
         <div class="header-right">
             <div class="lang-toggle">
@@ -180,7 +203,7 @@
 <div id="page-home" class="page-home active">
     <div class="hero-container">
         <div class="hero-text">
-            <h1 class="hero-title" id="home-title">Elecciones del <span>Uruguay</span></h1>
+            <h1 class="hero-title" id="home-title">Elecciones de <span>Uruguay</span></h1>
             <p class="hero-desc" id="home-desc">Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o comparar tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.</p>
             <div class="hero-buttons">
                 <button class="btn-hero" id="btn-nacionales" onclick="window.location.href='elecciones.html'">Elecciones Nacionales</button>
@@ -238,9 +261,13 @@
 </div>
 
 <footer class="site-footer">
-    <h3 class="countdown-title" id="txt-countdown-title">Elecciones Departamentales</h3>
-    <div id="countdown" class="countdown-timer">--d --h --m --s</div>
-    <p class="footer-disclaimer" id="txt-disclaimer">Este es un proyecto elaborado por diversión y no está patrocinado ni llevado a cabo con intereses políticos de ningún partido u organización.</p>
+    <div class="footer-pill">
+        <div class="footer-info">
+            <span class="countdown-title" id="txt-countdown-title">Elecciones Internas</span>
+            <span id="countdown" class="countdown-timer">--d --h --m --s</span>
+        </div>
+        <div class="footer-disclaimer" id="txt-disclaimer">Este es un proyecto elaborado por diversión y no está patrocinado ni llevado a cabo con intereses políticos de ningún partido u organización.</div>
+    </div>
 </footer>
 
 <script>
@@ -267,13 +294,13 @@ const i18n = {
         brujulaTitle:"Brújula Ideológica", brujulaDesc:"Tu posición según tus respuestas vs. los partidos.",
         lblAuto:"AUTORITARIO", lblLib:"LIBERAL", lblIzq:"IZQUIERDA", lblDer:"DERECHA",
         lblTu:"Tú", metodoLink:"Ver metodología del eje ideológico",
-        homeTitle:"Elecciones del Uruguay",
+        homeTitle:"Elecciones de Uruguay",
         homeDesc:"Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o comparar tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.",
         btnNacionales:"Elecciones Nacionales",
         btnTestHome:"Test Ideológico",
         btnGaleria:"Galería",
         proximamente:"Próximamente",
-        countdownTitle:"Elecciones Departamentales",
+        countdownTitle:"Elecciones Internas",
         disclaimer:"Este es un proyecto elaborado por diversión y no está patrocinado ni llevado a cabo con intereses políticos de ningún partido u organización."
     },
     en: {
@@ -291,7 +318,7 @@ const i18n = {
         btnTestHome:"Ideological Test",
         btnGaleria:"Gallery",
         proximamente:"Coming soon",
-        countdownTitle:"Departmental Elections",
+        countdownTitle:"Internal Elections",
         disclaimer:"This is a project made for fun and is not sponsored or carried out with political interests of any party or organization."
     }
 };
@@ -359,7 +386,6 @@ function setLang(lang) {
 function updateThemeIcon() {
     const isDark = document.body.getAttribute('data-theme') === 'dark';
     const darkImg = document.getElementById('dark-img');
-    // Sustituye estos enlaces por los raw de tu repositorio en GitHub si prefieres otras imágenes
     darkImg.src = isDark 
         ? "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/sun.svg"
         : "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/moon.svg";
@@ -469,7 +495,6 @@ function drawCompass(userX, userY) {
     const ctx = canvas.getContext('2d');
     const isDark = document.body.getAttribute('data-theme') === 'dark';
 
-    // Ajustado para coincidir con el nuevo tono neutro del dark mode
     ctx.fillStyle = isDark ? '#1e1e1e' : '#f8fafc';
     ctx.fillRect(0, 0, size, size);
     const quads = [
