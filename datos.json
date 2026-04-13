@@ -9,6 +9,9 @@
           { "nombre": "Alberto Zumarán", "vice": "Gonzalo Aguirre Ramírez", "partido": "PN", "votos": 660773, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/zumar%C3%A1n-84.png" },
           { "nombre": "Juan José Crottogini", "vice": "José D Elía", "partido": "FA", "votos": 401104, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/crottogini-84.png" },
           { "nombre": "Juan Vicente Chiarino", "vice": "Humberto Ciganda", "partido": "UC", "votos": 45841, "ganador": false, "foto": "" }
+          { "nombre": "Juan Vital Andrada", "vice": "Alicia Santa María", "partido": "PT", "votos": 488, "ganador": false, "foto": "" }
+          { "nombre": "Néstor Bolentini", "vice": "Nelly Pérez de Lima", "partido": "UnP", "votos": 302, "ganador": false, "foto": "" }
+          { "nombre": "Carlos Ceriotti", "vice": "Atilio Presa", "partido": "CS", "votos": 153, "ganador": false, "foto": "" }
         ],
         "mapa": {
           "Montevideo": { "ganador": "PC", "votos": { "PC": 318588, "PN": 239080, "FA": 297490, "UC": 27953 } },
