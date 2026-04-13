@@ -5,7 +5,7 @@
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
         "candidatos": [
           { "nombre": "Luis Alberto Lacalle", "vice": "Gonzalo Aguirre", "partido": "PN", "votos": 765990, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/herrera-89.png" },
-          { "nombre": "Jorge Batlle", "vice": "Jorge Sanguinetti", "partido": "PC", "votos": 596964, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/batlle-89.png" },
+          { "nombre": "Jorge Batlle", "vice": "Jorge Sanguinetti", "partido": "PC", "votos": 596964, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/batlle-99.png" },
           { "nombre": "Líber Seregni", "vice": "Danilo Astori", "partido": "FA", "votos": 418403, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/seregni-89.png" },
           { "nombre": "Hugo Batalla", "vice": "Quijano", "partido": "PGP", "votos": 177453, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/batalla-89.png" },
           { "nombre": "Rodolfo Tálice", "vice": "Juan Carlos Portillo", "partido": "PVEE", "votos": 10835, "ganador": false, "foto": "" }
