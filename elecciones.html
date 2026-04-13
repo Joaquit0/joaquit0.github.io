@@ -27,9 +27,16 @@
         * { box-sizing: border-box; }
         
         body { 
-            font-family: 'Inter', sans-serif; background: var(--fondo); 
-            color: var(--azul-texto); margin: 0; padding: 0; 
-            transition: background 0.3s; overflow: hidden;
+            font-family: 'Inter', sans-serif; 
+            background: var(--fondo); 
+            color: var(--azul-texto); 
+            margin: 0; 
+            padding: 0; 
+            transition: background 0.3s; 
+            overflow: hidden; /* Mantenemos esto si tu layout de mapa ocupa toda la pantalla */
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh;
         }
 
         /* ── ERROR BANNER ── */
@@ -39,19 +46,35 @@
             z-index: 9999; font-size: 0.9rem; font-weight: 600;
         }
 
-        /* ── HEADER ── */
-        header { background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde-card); padding: 0.8rem 2rem; position: sticky; top: 0; z-index: 1000; }
+        /* ── HEADER IDENTICO AL SEGUNDO CÓDIGO ── */
+        header { 
+            background-color: var(--card-bg); 
+            backdrop-filter: blur(10px); 
+            border-bottom: 1px solid var(--borde-card); 
+            padding: 0.8rem 2rem; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
+        }
         .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; width: 100%; }
         .header-left { display: flex; gap: 15px; align-items: center; }
         .header-right { display: flex; gap: 15px; align-items: center; }
         .logo { font-weight: 700; font-size: 1.2rem; color: var(--azul-vibrante); cursor: pointer; text-decoration: none; }
+        
+        .lang-toggle { display: flex; background: var(--fondo); border: 1px solid var(--borde-card); border-radius: 8px; overflow: hidden; }
+        .lang-btn { background: transparent; border: none; padding: 6px 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
+        .lang-btn.active { background: var(--azul-vibrante); color: white; }
+        
+        .btn-icon { background: transparent; border: none; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .btn-icon img { width: 22px; height: 22px; object-fit: contain; }
 
-        /* ── LAYOUT Y SCROLL INDEPENDIENTE ── */
+        /* ── LAYOUT Y SCROLL INDEPENDIENTE (Tu layout nuevo) ── */
         .main-layout {
             display: grid;
             grid-template-columns: 50fr 50fr;
             gap: 0;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 60px); /* 60px es aprox la altura del header */
+            width: 100%;
         }
 
         /* MAPA FIJO A LA IZQUIERDA */
