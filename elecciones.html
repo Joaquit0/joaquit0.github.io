@@ -857,26 +857,57 @@ window.addEventListener('resize', () => {
     }
 });
 
+const YEARS_TO_FETCH = [1984, 1989, 1994, 1999, 2004, 2009, 2014, 2019, 2024, 2029];
+
 async function initApp() {
     try {
+        // 1. Cargar el mapa SVG
         const svgRes = await fetch('mapa.svg');
         if (!svgRes.ok) throw new Error('Error mapa');
         document.getElementById('map-container').innerHTML = await svgRes.text();
 
-        const jsonRes = await fetch('datos.json');
-        if (!jsonRes.ok) throw new Error('Error datos');
-        ELECCIONES = await jsonRes.json();
+        // 2. Cargar todos los archivos JSON en paralelo desde la carpeta 'data'
+        // Esto asume que tienes archivos como data/1984.json, data/1989.json...
+        const fetchPromises = YEARS_TO_FETCH.map(year => 
+            // Ponemos el .json en minúscula, ya que los servidores a veces son sensibles a mayúsculas/minúsculas
+            fetch(`data/${year}.json`)
+                .then(res => {
+                    // Si el archivo de ese año no existe (ej. un error 404), devolvemos null
+                    if (!res.ok) return null; 
+                    return res.json();
+                })
+                // Si hay un error de red, también devolvemos null para no romper todo el sitio
+                .catch(() => null)
+        );
 
+        // Esperamos a que terminen todas las peticiones al mismo tiempo
+        const resultados = await Promise.all(fetchPromises);
+
+        // 3. Limpiar y estructurar la información
+        // Filtramos los nulls (archivos que no estaban) y usamos .flat() por si guardaste 
+        // cada año adentro de un array [{anio: 1984...}] en vez de un objeto directo {anio: 1984...}
+        ELECCIONES = resultados.filter(data => data !== null).flat();
+
+        if (ELECCIONES.length === 0) {
+            throw new Error('No se encontraron datos en la carpeta data/');
+        }
+
+        // Ordenamos por año para garantizar que la línea de tiempo se vea correcta
+        ELECCIONES.sort((a, b) => a.anio - b.anio);
+
+        // Seleccionamos el último año cargado por defecto
         selectedAnio = ELECCIONES[ELECCIONES.length - 1].anio;
         
+        // Renderizar la UI
         renderAll();
         setupTooltips();
         initScrollObserver();
+
     } catch (error) {
         console.error(error);
         const errBanner = document.getElementById('error-banner');
         errBanner.style.display = 'block';
-        errBanner.innerHTML = '⚠️ Error cargando <strong>datos.json</strong> o <strong>mapa.svg</strong>. Si estás abriendo el archivo localmente, sube la carpeta a GitHub o usa un servidor web local para evitar bloqueos del navegador.';
+        errBanner.innerHTML = '⚠️ Error cargando los archivos desde la carpeta <strong>data/</strong> o el <strong>mapa.svg</strong>. Asegúrate de estar corriendo el sitio en un servidor local y no abriendo el index.html directamente.';
         document.getElementById('map-container').innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">Esperando recursos externos...</p>';
     }
 }
