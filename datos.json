@@ -266,8 +266,7 @@
         "nombre": { "es": "Plebiscito Jubilaciones", "en": "Pension Plebiscite" },
         "descripcion": { "es": "Propuesta de vincular las jubilaciones al salario de los funcionarios públicos activos.", "en": "Proposal to link pensions to the salary of active public servants." },
         "opciones": [
-          { "nombre": { "es": "Sí (aprobado)", "en": "Yes (approved)" }, "votos": 1421060, "color": "#27ae60" },
-          { "nombre": { "es": "No", "en": "No" }, "votos": 635295, "color": "#e74c3c" }
+          { "nombre": { "es": "Sí (aprobado)", "en": "Yes (approved)" }, "votos": 1490857, "color": "#27ae60" },
         ],
         "mapa": {}
       }
