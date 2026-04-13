@@ -4,7 +4,7 @@
       {
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
         "candidatos": [
-          { "nombre": "Julio María Sanguinetti", "vice": "Enrique Tarigo", "partido": "PC", "votos": 777701, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/saguinetti-84.png" },
+          { "nombre": "Julio María Sanguinetti", "vice": "Enrique Tarigo", "partido": "PC", "votos": 777701, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/sanguinetti-94.png" },
           { "nombre": "Alberto Zumarán", "vice": "Gonzalo Aguirre Ramírez", "partido": "PN", "votos": 660773, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/zumar%C3%A1n-84.png" },
           { "nombre": "Juan José Crottogini", "vice": "José D Elía", "partido": "FA", "votos": 401104, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/crottogini-84.png" },
           { "nombre": "Juan Vicente Chiarino", "vice": "Humberto Ciganda", "partido": "UC", "votos": 45841, "ganador": false, "foto": "" }
