@@ -37,8 +37,8 @@
       {
         "nombre": { "es": "2ª Vuelta", "en": "2nd Round" },
         "candidatos": [
-          { "nombre": "Luis Lacalle Pou", "vice": "Beatriz Argimón", "partido": "PN", "votos": 1168019, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-19.png" },
-          { "nombre": "Daniel Martínez", "vice": "Graciela Villar", "partido": "FA", "votos": 1014518, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mart%C3%ADnez-19.png" }
+          { "nombre": "Luis Lacalle Pou", "vice": "Beatriz Argimón", "partido": "PN", "votos": 1189313, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/lacalle%20pou-19.png" },
+          { "nombre": "Daniel Martínez", "vice": "Graciela Villar", "partido": "FA", "votos": 1152271, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mart%C3%ADnez-19.png" }
         ],
         "mapa": {
           "Montevideo": { "ganador": "FA", "votos": { "PN": 383991, "FA": 507346 } },
