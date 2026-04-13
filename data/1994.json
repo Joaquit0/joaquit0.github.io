@@ -1,0 +1,58 @@
+{
+    "anio": 1994,
+    "vueltas": [
+      {
+        "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
+        "candidatos": [
+          { "nombre": "Julio María Sanguinetti", "vice": "Hugo Batalla", "partido": "PC", "votos": 656428, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/sanguinetti-94.png" },
+          { "nombre": "Tabaré Vázquez", "vice": "Mariano Arana", "partido": "FA", "votos": 621226, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-94.png" },
+          { "nombre": "Alberto Volonté", "vice": "Luis Brezzo", "partido": "PN", "votos": 633384, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/volont%C3%A9-94.png" },
+          { "nombre": "Rafael Michelini", "vice": "Rafael Pérez del Castillo", "partido": "NE", "votos": 104773, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/michelini-94.png" }
+        ],
+        "mapa": {
+          "Montevideo": { "ganador": "FA", "votos": { "PC": 243921, "PN": 193566, "FA": 405111, "NE": 66696 } },
+          "Canelones": { "ganador": "PC", "votos": { "PC": 82831, "PN": 73668, "FA": 66448, "NE": 13865 } },
+          "Maldonado": { "ganador": "PN", "votos": { "PC": 25113, "PN": 30033, "FA": 13725, "NE": 3695 } },
+          "Rocha": { "ganador": "PC", "votos": { "PC": 20376, "PN": 18017, "FA": 6267, "NE": 1496 } },
+          "Treinta y Tres": { "ganador": "PN", "votos": { "PC": 12093, "PN": 14501, "FA": 3842, "NE": 1069 } },
+          "Cerro Largo": { "ganador": "PN", "votos": { "PC": 17747, "PN": 28053, "FA": 7736, "NE": 673 } },
+          "Rivera": { "ganador": "PC", "votos": { "PC": 31611, "PN": 24706, "FA": 5872, "NE": 567 } },
+          "Artigas": { "ganador": "PC", "votos": { "PC": 19723, "PN": 19150, "FA": 6148, "NE": 415 } },
+          "Salto": { "ganador": "PC", "votos": { "PC": 29311, "PN": 24518, "FA": 14637, "NE": 1274 } },
+          "Paysandú": { "ganador": "PC", "votos": { "PC": 21127, "PN": 24553, "FA": 17804, "NE": 1566 } },
+          "Río Negro": { "ganador": "PC", "votos": { "PC": 13335, "PN": 11510, "FA": 5636, "NE": 715 } },
+          "Soriano": { "ganador": "PN", "votos": { "PC": 20088, "PN": 20734, "FA": 11818, "NE": 1430 } },
+          "Colonia": { "ganador": "PN", "votos": { "PC": 29762, "PN": 30918, "FA": 16174, "NE": 2830 } },
+          "San José": { "ganador": "PN", "votos": { "PC": 18018, "PN": 25955, "FA": 12014, "NE": 2667 } },
+          "Flores": { "ganador": "PN", "votos": { "PC": 5783, "PN": 8490, "FA": 2384, "NE": 468 } },
+          "Florida": { "ganador": "PC", "votos": { "PC": 17788, "PN": 17609, "FA": 8533, "NE": 1826 } },
+          "Durazno": { "ganador": "PN", "votos": { "PC": 11837, "PN": 18477, "FA": 4330, "NE": 1022 } },
+          "Lavalleja": { "ganador": "PN", "votos": { "PC": 16645, "PN": 19903, "FA": 5047, "NE": 1222 } },
+          "Tacuarembó": { "ganador": "PN", "votos": { "PC": 19319, "PN": 29023, "FA": 7700, "NE": 1277 } }
+        },
+        "senado": { "PC": 10, "PN": 10, "FA": 9, "NE": 1 },
+        "diputados": {
+          "Montevideo": { "PC": 11, "PN": 10, "FA": 20, "NE": 4 },
+          "Canelones": { "PC": 4, "PN": 4, "FA": 4, "NE": 1 },
+          "Maldonado": { "PC": 1, "PN": 1, "FA": 1 },
+          "Rocha": { "PC": 1, "PN": 1 },
+          "Treinta y Tres": { "PC": 1, "PN": 1 },
+          "Cerro Largo": { "PC": 1, "PN": 1 },
+          "Rivera": { "PC": 1, "PN": 1 },
+          "Artigas": { "PC": 1, "PN": 1 },
+          "Salto": { "PC": 1, "PN": 1, "FA": 1 },
+          "Paysandú": { "PC": 1, "PN": 1, "FA": 1 },
+          "Río Negro": { "PC": 1, "PN": 1 },
+          "Soriano": { "PC": 1, "PN": 1, "FA": 1 },
+          "Colonia": { "PC": 1, "PN": 1, "FA": 1 },
+          "San José": { "PC": 1, "PN": 1, "FA": 1 },
+          "Flores": { "PC": 1, "PN": 1 },
+          "Florida": { "PC": 1, "PN": 1, "FA": 1 },
+          "Durazno": { "PC": 1, "PN": 1 },
+          "Lavalleja": { "PC": 1, "PN": 1 },
+          "Tacuarembó": { "PC": 1, "PN": 1 }
+        }
+      }
+    ],
+    "plebiscitos": []
+}
