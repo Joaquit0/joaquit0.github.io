@@ -5,33 +5,47 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Editor de Elecciones — EleccionesUY</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #0d0d14;
-  --surface:   #13131f;
-  --surface2:  #1a1a2e;
-  --border:    rgba(255,255,255,0.07);
-  --border2:   rgba(255,255,255,0.13);
-  --text:      #e8e8f0;
-  --muted:     #6b6b85;
-  --accent:    #7c6ef5;
-  --accent2:   #a89cf7;
-  --success:   #22c55e;
+  --bg:        #f8fafc;
+  --surface:   #ffffff;
+  --surface2:  #f0f7ff;
+  --border:    rgba(59,130,246,0.15);
+  --border2:   rgba(59,130,246,0.25);
+  --text:      #1a2a44;
+  --muted:     #64748b;
+  --accent:    #3b82f6;
+  --accent2:   #1d4ed8;
+  --success:   #16a34a;
   --danger:    #ef4444;
+  --map-empty: #cbd5e1;
+}
+[data-theme="dark"] {
+  --bg:        #121212;
+  --surface:   #1e1e1e;
+  --surface2:  #2c2c2c;
+  --border:    rgba(255,255,255,0.08);
+  --border2:   rgba(255,255,255,0.15);
+  --text:      #f1f5f9;
+  --muted:     #a3a3a3;
+  --accent:    #3b82f6;
+  --accent2:   #60a5fa;
   --map-empty: #2a2a3e;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text);
   height: 100vh;
   overflow: hidden;
   display: grid;
   grid-template-rows: 52px 1fr;
+  transition: background 0.3s;
 }
 
 /* ── HEADER ── */
@@ -43,15 +57,16 @@ header {
   z-index: 200;
 }
 .logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800; font-size: 1.1rem;
-  color: var(--accent2);
-  letter-spacing: -0.02em;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; font-size: 1.2rem;
+  color: var(--accent);
+  letter-spacing: normal;
+  text-decoration: none; cursor: pointer;
 }
-.logo span { color: var(--muted); font-weight: 400; }
-.header-actions { display: flex; gap: 10px; }
+.logo span { color: var(--muted); font-weight: 400; font-size: 1rem; }
+.header-actions { display: flex; gap: 10px; align-items: center; }
 .btn {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   border: 1px solid var(--border2);
   background: var(--surface2);
   color: var(--text);
@@ -63,9 +78,14 @@ header {
   transition: all 0.18s;
   display: flex; align-items: center; gap: 6px;
 }
-.btn:hover { border-color: var(--accent); color: var(--accent2); }
+.btn:hover { border-color: var(--accent); color: var(--accent); }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent2); color: #fff; }
+.btn-primary:hover { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.btn-icon-round {
+  background: transparent; border: none; padding: 6px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.btn-icon-round img { width: 22px; height: 22px; object-fit: contain; }
 
 /* ── LAYOUT ── */
 .workspace {
@@ -88,7 +108,7 @@ header {
   display: flex; align-items: center; justify-content: space-between;
 }
 .panel-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -130,7 +150,7 @@ header {
 }
 .cand-body { padding: 10px 12px; flex: 1; min-width: 0; }
 .cand-name {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 700; font-size: 0.88rem;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   line-height: 1.2;
@@ -138,7 +158,7 @@ header {
 .cand-vice { font-size: 0.72rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cand-party { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 5px; }
 .cand-stats { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; }
-.cand-pct { font-size: 1.2rem; font-weight: 800; font-family: 'Syne', sans-serif; }
+.cand-pct { font-size: 1.2rem; font-weight: 800; font-family: 'Inter', sans-serif; }
 .cand-votes { font-size: 0.7rem; color: var(--muted); }
 .cand-bar-wrap { height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; margin-top: 5px; overflow: hidden; }
 .cand-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
@@ -170,7 +190,7 @@ header {
   border-radius: 10px;
   background: transparent;
   color: var(--muted);
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.83rem;
   font-weight: 600;
   cursor: pointer;
@@ -199,7 +219,7 @@ header {
 #map-container { width: 100%; max-width: 600px; padding: 20px; }
 #map-container svg { width: 100%; height: auto; filter: drop-shadow(0 8px 32px rgba(0,0,0,0.5)); }
 #map-container path {
-  stroke: #0d0d14; stroke-width: 1.5;
+  stroke: var(--bg); stroke-width: 1.5;
   transition: fill 0.4s ease, fill-opacity 0.4s ease, opacity 0.2s;
   cursor: pointer;
   fill: var(--map-empty);
@@ -248,7 +268,7 @@ header {
   border-radius: 8px;
   color: var(--text);
   padding: 9px 12px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.88rem;
   transition: border-color 0.18s;
   width: 100%;
@@ -268,7 +288,7 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
 /* SLIDERS */
 .dept-editor { display: flex; flex-direction: column; gap: 14px; }
 .dept-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 800; font-size: 1.1rem;
   border-bottom: 1px solid var(--border);
   padding-bottom: 10px;
@@ -340,7 +360,7 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
 }
 .modal-overlay.open .modal { transform: translateY(0) scale(1); }
 .modal-title {
-  font-family: 'Syne', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 800; font-size: 1.15rem;
   margin-bottom: 20px;
 }
@@ -365,7 +385,7 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
 .right-tabs { display: flex; border-bottom: 1px solid var(--border); }
 .right-tab {
   flex: 1; padding: 11px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 0.78rem; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.07em;
   color: var(--muted);
@@ -379,15 +399,19 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
 .fade-up { animation: fadeUp 0.25s ease forwards; }
 </style>
 </head>
-<body>
+<body data-theme="light">
+<script>(function(){ const t=localStorage.getItem('uruvoto-theme'); if(t) document.body.setAttribute('data-theme',t); })();</script>
 
 <div id="map-tooltip"></div>
 
 <header>
-  <div class="logo">EleccionesUY <span>/ Editor</span></div>
+  <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">EleccionesUY <span>/ Editor</span></div>
   <div class="header-actions">
     <button class="btn" onclick="exportJSON()">⬇ Exportar JSON</button>
     <button class="btn btn-primary" onclick="resetAll()">↺ Nueva Elección</button>
+    <button class="btn-icon-round" onclick="toggleDarkMode()">
+      <img id="dark-img" src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/moon.svg" alt="Tema">
+    </button>
   </div>
 </header>
 
@@ -1001,6 +1025,23 @@ function renderAll() {
 document.getElementById('modal-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeModal();
 });
+
+function updateThemeIcon() {
+  const isDark = document.body.getAttribute('data-theme') === 'dark';
+  document.getElementById('dark-img').src = isDark
+    ? 'https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/sun.svg'
+    : 'https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/moon.svg';
+}
+
+function toggleDarkMode() {
+  const dark = document.body.getAttribute('data-theme') !== 'dark';
+  document.body.setAttribute('data-theme', dark ? 'dark' : 'light');
+  localStorage.setItem('uruvoto-theme', dark ? 'dark' : 'light');
+  updateThemeIcon();
+}
+
+// Sync icon on load
+updateThemeIcon();
 
 init();
 </script>
