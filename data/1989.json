@@ -8,28 +8,31 @@
           { "nombre": "Jorge Batlle", "vice": "Jorge Sanguinetti", "partido": "PC", "votos": 596964, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/batlle-99.png" },
           { "nombre": "Líber Seregni", "vice": "Danilo Astori", "partido": "FA", "votos": 418403, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/seregni-89.png" },
           { "nombre": "Hugo Batalla", "vice": "Quijano", "partido": "PGP", "votos": 177453, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/batalla-89.png" },
-          { "nombre": "Rodolfo Tálice", "vice": "Juan Carlos Portillo", "partido": "PVEE", "votos": 10835, "ganador": false, "foto": "" }
+          { "nombre": "Rodolfo Tálice", "vice": "Juan Carlos Portillo", "partido": "PVEE", "votos": 10835, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/t%C3%A1lice-89.png" },
+          { "nombre": "Bolívar Espínola", "vice": "Brunetto", "partido": "PMJ", "votos": 441, "ganador": false, "foto": "" },
+          { "nombre": "Juan Vital Andrada", "vice": "Brunetto", "partido": "PT", "votos": 310, "ganador": false, "foto": "" },
+          { "nombre": "Nancy Espasandín", "vice": "Grecco", "partido": "P.Conv", "votos": 190, "ganador": false, "foto": "" }
         ],
         "mapa": {
-          "Montevideo": { "ganador": "FA", "votos": { "FA": 312778, "PN": 241222, "PC": 226372, "PGP": 118977, "PVEE": 6728 } },
-          "Canelones": { "ganador": "PN", "votos": { "PN": 87251, "PC": 70153, "FA": 35424, "PGP": 17849, "PVEE": 1099 } },
-          "Maldonado": { "ganador": "PN", "votos": { "PN": 28584, "PC": 22331, "FA": 7444, "PGP": 5504, "PVEE": 834 } },
-          "Rocha": { "ganador": "PN", "votos": { "PN": 23134, "PC": 17758, "FA": 2752, "PGP": 1846, "PVEE": 21 } },
-          "Treinta y Tres": { "ganador": "PN", "votos": { "PN": 16920, "PC": 11695, "FA": 1468, "PGP": 886, "PVEE": 95 } },
-          "Cerro Largo": { "ganador": "PN", "votos": { "PN": 32577, "PC": 15675, "FA": 3007, "PGP": 1729, "PVEE": 215 } },
-          "Rivera": { "ganador": "PN", "votos": { "PN": 30509, "PC": 26299, "FA": 3322, "PGP": 1167, "PVEE": 64 } },
-          "Artigas": { "ganador": "PN", "votos": { "PN": 19766, "PC": 19061, "FA": 2193, "PGP": 1743, "PVEE": 37 } },
-          "Salto": { "ganador": "PN", "votos": { "PN": 33628, "PC": 24503, "FA": 5771, "PGP": 3519, "PVEE": 380 } },
-          "Paysandú": { "ganador": "PN", "votos": { "PN": 34026, "PC": 21099, "FA": 6912, "PGP": 3929, "PVEE": 264 } },
-          "Río Negro": { "ganador": "PC", "votos": { "PC": 13527, "PN": 12302, "FA": 3214, "PGP": 1011, "PVEE": 28 } },
-          "Soriano": { "ganador": "PN", "votos": { "PN": 27284, "PC": 18948, "FA": 5517, "PGP": 2594, "PVEE": 164 } },
-          "Colonia": { "ganador": "PN", "votos": { "PN": 40476, "PC": 26249, "FA": 9067, "PGP": 3856, "PVEE": 194 } },
-          "San José": { "ganador": "PN", "votos": { "PN": 31716, "PC": 14938, "FA": 5901, "PGP": 3920, "PVEE": 230 } },
-          "Flores": { "ganador": "PN", "votos": { "PN": 9480, "PC": 5544, "FA": 1351, "PGP": 684, "PVEE": 61 } },
-          "Florida": { "ganador": "PN", "votos": { "PN": 22540, "PC": 15224, "FA": 4222, "PGP": 3070, "PVEE": 95 } },
-          "Durazno": { "ganador": "PN", "votos": { "PN": 21239, "PC": 10776, "FA": 2069, "PGP": 1174, "PVEE": 68 } },
-          "Lavalleja": { "ganador": "PN", "votos": { "PN": 22888, "PC": 16629, "FA": 2251, "PGP": 2249, "PVEE": 143 } },
-          "Tacuarembó": { "ganador": "PN", "votos": { "PN": 30448, "PC": 20183, "FA": 3740, "PGP": 1746, "PVEE": 115 } }
+          "Montevideo": { "ganador": "FA", "votos": { "FA": 312778, "PN": 241222, "PC": 226372, "PGP": 118977, "PVEE": 6728, "PMJ": 350, "PT": 197 } },
+          "Canelones": { "ganador": "PN", "votos": { "PN": 87251, "PC": 70153, "FA": 35424, "PGP": 17849, "PVEE": 1099, "PMJ": 77, "PT": 27 } },
+          "Maldonado": { "ganador": "PN", "votos": { "PN": 28584, "PC": 22331, "FA": 7444, "PGP": 5504, "PVEE": 834, "PMJ": 0, "PT": 0 } },
+          "Rocha": { "ganador": "PN", "votos": { "PN": 23134, "PC": 17758, "FA": 2752, "PGP": 1846, "PVEE": 21, "PMJ": 0, "PT": 4 } },
+          "Treinta y Tres": { "ganador": "PN", "votos": { "PN": 16920, "PC": 11695, "FA": 1468, "PGP": 886, "PVEE": 95, "PMJ": 0, "PT": 0 } },
+          "Cerro Largo": { "ganador": "PN", "votos": { "PN": 32577, "PC": 15675, "FA": 3007, "PGP": 1729, "PVEE": 215, "PMJ": 0, "PT": 0 } },
+          "Rivera": { "ganador": "PN", "votos": { "PN": 30509, "PC": 26299, "FA": 3322, "PGP": 1167, "PVEE": 64, "PMJ": 0, "PT": 5 } },
+          "Artigas": { "ganador": "PN", "votos": { "PN": 19766, "PC": 19061, "FA": 2193, "PGP": 1743, "PVEE": 37, "PMJ": 0, "PT": 0 } },
+          "Salto": { "ganador": "PN", "votos": { "PN": 33628, "PC": 24503, "FA": 5771, "PGP": 3519, "PVEE": 380, "PMJ": 0, "PT": 0 } },
+          "Paysandú": { "ganador": "PN", "votos": { "PN": 34026, "PC": 21099, "FA": 6912, "PGP": 3929, "PVEE": 264, "PMJ": 0, "PT": 0 } },
+          "Río Negro": { "ganador": "PC", "votos": { "PC": 13527, "PN": 12302, "FA": 3214, "PGP": 1011, "PVEE": 28, "PMJ": 0, "PT": 4 } },
+          "Soriano": { "ganador": "PN", "votos": { "PN": 27284, "PC": 18948, "FA": 5517, "PGP": 2594, "PVEE": 164, "PMJ": 0, "PT": 7 } },
+          "Colonia": { "ganador": "PN", "votos": { "PN": 40476, "PC": 26249, "FA": 9067, "PGP": 3856, "PVEE": 194, "PMJ": 0, "PT": 29 } },
+          "San José": { "ganador": "PN", "votos": { "PN": 31716, "PC": 14938, "FA": 5901, "PGP": 3920, "PVEE": 230, "PMJ": 14, "PT": 0 } },
+          "Flores": { "ganador": "PN", "votos": { "PN": 9480, "PC": 5544, "FA": 1351, "PGP": 684, "PVEE": 61, "PMJ": 0, "PT": 0 } },
+          "Florida": { "ganador": "PN", "votos": { "PN": 22540, "PC": 15224, "FA": 4222, "PGP": 3070, "PVEE": 95, "PMJ": 0, "PT": 16 } },
+          "Durazno": { "ganador": "PN", "votos": { "PN": 21239, "PC": 10776, "FA": 2069, "PGP": 1174, "PVEE": 68, "PMJ": 0, "PT": 0 } },
+          "Lavalleja": { "ganador": "PN", "votos": { "PN": 22888, "PC": 16629, "FA": 2251, "PGP": 2249, "PVEE": 143, "PMJ": 0, "PT": 0 } },
+          "Tacuarembó": { "ganador": "PN", "votos": { "PN": 30448, "PC": 20183, "FA": 3740, "PGP": 1746, "PVEE": 115, "PMJ": 0, "PT": 21 } }
         },
         "senado": { "PN": 12, "PC": 9, "FA": 7, "PGP": 2 },
         "diputados": {
@@ -60,8 +63,8 @@
         "nombre": { "es": "Plebiscito Jubilaciones", "en": "Pension Plebiscite" },
         "descripcion": { "es": "Propuesta de vincular las jubilaciones al salario de los funcionarios públicos activos.", "en": "Proposal to link pensions to the salary of active public servants." },
         "opciones": [
-          { "nombre": { "es": "Sí (aprobado)", "en": "Yes (approved)" }, "votos": 1421060, "color": "#27ae60" },
-          { "nombre": { "es": "No", "en": "No" }, "votos": 635295, "color": "#e74c3c" }
+          { "nombre": { "es": "Sí (aprobado)", "en": "Yes (approved)" }, "votos": 1681592, "color": "#27ae60" },
+          { "nombre": { "es": "No votó", "en": "Didn't vote" }, "votos": 374763, "color": "#e74c3c" }
         ],
         "mapa": {}
       }
