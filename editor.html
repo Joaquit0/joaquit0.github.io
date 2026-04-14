@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Editor de Elecciones — EleccionesUY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0d0d14;
+  --surface:   #13131f;
+  --surface2:  #1a1a2e;
+  --border:    rgba(255,255,255,0.07);
+  --border2:   rgba(255,255,255,0.13);
+  --text:      #e8e8f0;
+  --muted:     #6b6b85;
+  --accent:    #7c6ef5;
+  --accent2:   #a89cf7;
+  --success:   #22c55e;
+  --danger:    #ef4444;
+  --map-empty: #2a2a3e;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 52px 1fr;
+}
+
+/* ── HEADER ── */
+header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 24px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  z-index: 200;
+}
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 1.1rem;
+  color: var(--accent2);
+  letter-spacing: -0.02em;
+}
+.logo span { color: var(--muted); font-weight: 400; }
+.header-actions { display: flex; gap: 10px; }
+.btn {
+  font-family: 'DM Sans', sans-serif;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text);
+  padding: 7px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  display: flex; align-items: center; gap: 6px;
+}
+.btn:hover { border-color: var(--accent); color: var(--accent2); }
+.btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent2); color: #fff; }
+
+/* ── LAYOUT ── */
+.workspace {
+  display: grid;
+  grid-template-columns: 300px 1fr 320px;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── LEFT PANEL ── */
+.left-panel {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.panel-header {
+  padding: 16px 18px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+.candidates-list {
+  flex: 1; overflow-y: auto; padding: 12px;
+  display: flex; flex-direction: column; gap: 10px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+/* ── CANDIDATE CARD ── */
+.cand-card {
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: var(--surface2);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s;
+  position: relative;
+}
+.cand-card:hover { border-color: var(--border2); transform: translateY(-1px); }
+.cand-card.selected { border-color: var(--accent) !important; }
+.cand-card-inner { display: flex; align-items: stretch; }
+.cand-photo {
+  width: 70px; height: 80px;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem; font-weight: 800; color: rgba(255,255,255,0.9);
+  font-family: 'Syne', sans-serif;
+  position: relative; overflow: hidden;
+}
+.cand-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center top;
+  position: absolute; inset: 0;
+}
+.cand-body { padding: 10px 12px; flex: 1; min-width: 0; }
+.cand-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 0.88rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.cand-vice { font-size: 0.72rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cand-party { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 5px; }
+.cand-stats { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; }
+.cand-pct { font-size: 1.2rem; font-weight: 800; font-family: 'Syne', sans-serif; }
+.cand-votes { font-size: 0.7rem; color: var(--muted); }
+.cand-bar-wrap { height: 3px; background: rgba(255,255,255,0.07); border-radius: 2px; margin-top: 5px; overflow: hidden; }
+.cand-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+.badge-winner {
+  font-size: 0.58rem; font-weight: 800; letter-spacing: 0.07em;
+  text-transform: uppercase; background: var(--success);
+  color: #fff; padding: 2px 6px; border-radius: 4px;
+  margin-left: 6px; display: inline-block;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+.cand-delete {
+  position: absolute; top: 6px; right: 6px;
+  width: 20px; height: 20px;
+  background: rgba(239,68,68,0.15);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: var(--danger);
+  cursor: pointer; opacity: 0; transition: opacity 0.18s;
+  z-index: 10;
+}
+.cand-card:hover .cand-delete { opacity: 1; }
+
+.add-btn {
+  margin: 0 12px 12px;
+  padding: 10px;
+  border: 1.5px dashed var(--border2);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.83rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+  text-align: center;
+}
+.add-btn:hover { border-color: var(--accent); color: var(--accent2); background: rgba(124,110,245,0.06); }
+
+/* ── CENTER MAP ── */
+.map-panel {
+  background: var(--bg);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.map-hint {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  font-size: 0.75rem; color: var(--muted);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 7px 14px; border-radius: 20px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+#map-container { width: 100%; max-width: 600px; padding: 20px; }
+#map-container svg { width: 100%; height: auto; filter: drop-shadow(0 8px 32px rgba(0,0,0,0.5)); }
+#map-container path {
+  stroke: #0d0d14; stroke-width: 1.5;
+  transition: fill 0.4s ease, fill-opacity 0.4s ease, opacity 0.2s;
+  cursor: pointer;
+  fill: var(--map-empty);
+}
+#map-container path:hover { opacity: 0.75; stroke-width: 2.5; stroke: rgba(255,255,255,0.4); }
+#map-container path.dept-active { stroke: white !important; stroke-width: 2.5 !important; opacity: 1 !important; }
+#map-container #label_points { display: none; }
+
+#map-tooltip {
+  position: fixed;
+  background: #1a1a2e;
+  border: 1px solid var(--border2);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 0.82rem;
+  pointer-events: none;
+  z-index: 9999;
+  display: none;
+  min-width: 150px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+#map-tooltip strong { display: block; font-family: 'Syne', sans-serif; font-weight: 700; margin-bottom: 4px; font-size: 0.9rem; }
+.tt-row { display: flex; justify-content: space-between; gap: 16px; font-size: 0.8rem; margin-top: 3px; }
+
+/* ── RIGHT PANEL ── */
+.right-panel {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.right-panel-inner {
+  flex: 1; overflow-y: auto; padding: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+
+/* EDIT FORM */
+.edit-form { display: flex; flex-direction: column; gap: 14px; }
+.field-group { display: flex; flex-direction: column; gap: 5px; }
+.field-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.field-input {
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  padding: 9px 12px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  transition: border-color 0.18s;
+  width: 100%;
+}
+.field-input:focus { outline: none; border-color: var(--accent); }
+.color-row { display: flex; align-items: center; gap: 10px; }
+.color-preview {
+  width: 36px; height: 36px; border-radius: 8px;
+  border: 2px solid var(--border2);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: border-color 0.18s;
+}
+.color-preview:hover { border-color: var(--border2); }
+input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
+
+/* SLIDERS */
+.dept-editor { display: flex; flex-direction: column; gap: 14px; }
+.dept-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 1.1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 2px;
+}
+.dept-pop { font-size: 0.75rem; color: var(--muted); margin-top: -8px; }
+.slider-group { display: flex; flex-direction: column; gap: 8px; }
+.slider-item { display: flex; flex-direction: column; gap: 4px; }
+.slider-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.82rem; }
+.slider-name { font-weight: 600; }
+.slider-pct { font-weight: 800; font-family: 'Syne', sans-serif; font-size: 0.95rem; }
+input[type="range"] {
+  width: 100%; height: 6px;
+  -webkit-appearance: none; appearance: none;
+  background: var(--surface2);
+  border-radius: 3px;
+  cursor: pointer;
+  outline: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
+.total-bar {
+  height: 6px; border-radius: 3px;
+  background: var(--surface2);
+  overflow: hidden; margin-top: 4px;
+  display: flex;
+}
+.total-bar-seg { height: 100%; transition: width 0.3s ease; }
+.total-label { font-size: 0.72rem; color: var(--muted); text-align: right; margin-top: 4px; }
+.total-label.error { color: var(--danger); }
+
+.empty-state {
+  text-align: center; padding: 40px 20px;
+  color: var(--muted);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.empty-icon { font-size: 2.5rem; opacity: 0.4; }
+.empty-text { font-size: 0.85rem; line-height: 1.5; }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 28px;
+  width: 400px;
+  max-width: 95vw;
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.2s;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+}
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 1.15rem;
+  margin-bottom: 20px;
+}
+.modal-form { display: flex; flex-direction: column; gap: 14px; }
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
+
+/* LEGEND */
+.map-legend {
+  position: absolute; bottom: 54px; right: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: none; flex-direction: column; gap: 6px;
+  min-width: 160px;
+}
+.map-legend.visible { display: flex; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 600; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+/* TABS */
+.right-tabs { display: flex; border-bottom: 1px solid var(--border); }
+.right-tab {
+  flex: 1; padding: 11px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.78rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  color: var(--muted);
+  background: none; border: none;
+  cursor: pointer; border-bottom: 2px solid transparent;
+  transition: all 0.18s;
+}
+.right-tab.active { color: var(--accent2); border-bottom-color: var(--accent); }
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.fade-up { animation: fadeUp 0.25s ease forwards; }
+</style>
+</head>
+<body>
+
+<div id="map-tooltip"></div>
+
+<header>
+  <div class="logo">EleccionesUY <span>/ Editor</span></div>
+  <div class="header-actions">
+    <button class="btn" onclick="exportJSON()">⬇ Exportar JSON</button>
+    <button class="btn btn-primary" onclick="resetAll()">↺ Nueva Elección</button>
+  </div>
+</header>
+
+<div class="workspace">
+
+  <!-- ── LEFT: CANDIDATOS ── -->
+  <div class="left-panel">
+    <div class="panel-header">
+      <span class="panel-title">Candidatos</span>
+      <span id="total-votes-display" style="font-size:0.75rem;color:var(--muted);"></span>
+    </div>
+    <div class="candidates-list" id="candidates-list"></div>
+    <button class="add-btn" onclick="openAddModal()">＋ Agregar candidato</button>
+  </div>
+
+  <!-- ── CENTER: MAPA ── -->
+  <div class="map-panel">
+    <div id="map-container">
+      <p style="color:var(--muted);text-align:center;padding:40px;font-size:0.9rem;">Cargando mapa...</p>
+    </div>
+    <div class="map-hint">Hacé clic en un departamento para asignar votos</div>
+    <div class="map-legend" id="map-legend"></div>
+  </div>
+
+  <!-- ── RIGHT: EDITOR / DEPT SLIDERS ── -->
+  <div class="right-panel">
+    <div class="right-tabs">
+      <button class="right-tab active" id="tab-edit" onclick="setRightTab('edit')">Editar Candidato</button>
+      <button class="right-tab" id="tab-dept" onclick="setRightTab('dept')">Departamento</button>
+    </div>
+    <div class="right-panel-inner" id="right-panel-inner">
+      <div class="empty-state fade-up">
+        <div class="empty-icon">🗺️</div>
+        <div class="empty-text">Seleccioná un candidato para editar sus datos, o hacé clic en un departamento del mapa para asignar votos.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MODAL AGREGAR/EDITAR -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(e)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-title">Nuevo Candidato</div>
+    <div class="modal-form" id="modal-form">
+      <div class="field-group">
+        <label class="field-label">Nombre completo</label>
+        <input class="field-input" id="m-name" placeholder="Ej: Juan García" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Compañero de fórmula (vice)</label>
+        <input class="field-input" id="m-vice" placeholder="Ej: María López" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Partido político</label>
+        <input class="field-input" id="m-party" placeholder="Ej: Frente Amplio" oninput="onPartyInput(this.value)" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Color del partido</label>
+        <div class="color-row">
+          <div class="color-preview" id="m-color-preview" onclick="document.getElementById('m-color-input').click()"></div>
+          <input type="color" id="m-color-input" value="#7c6ef5" oninput="updateColorPreview(this.value)" />
+          <span style="font-size:0.78rem;color:var(--muted);">Hacé clic en el círculo para cambiar</span>
+        </div>
+      </div>
+      <div class="field-group">
+        <label class="field-label">URL de foto (opcional)</label>
+        <input class="field-input" id="m-photo" placeholder="https://..." />
+      </div>
+    </div>
+    <div class="modal-actions" style="margin-top:20px;">
+      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="saveModal()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════
+   DATOS Y ESTADO
+══════════════════════════════════════════════ */
+const KNOWN_PARTIES = {
+  'Frente Amplio': '#005595', 'FA': '#005595',
+  'Partido Nacional': '#60b8e0', 'PN': '#60b8e0',
+  'Partido Colorado': '#e05c5c', 'PC': '#e05c5c',
+  'Cabildo Abierto': '#e8a020', 'CA': '#e8a020',
+  'Partido Independiente': '#7030a0', 'PI': '#7030a0',
+  'Nuevo Espacio': '#1341d6', 'NE': '#1341d6',
+  'Unión Cívica': '#e65768', 'UC': '#e65768',
+};
+
+const NAMES_FIRST = ['Alejandro','Beatriz','Carlos','Diana','Eduardo','Fernanda','Gonzalo','Helena','Ignacio','Julia','Lucas','Mercedes','Nicolás','Olga','Pablo','Raquel','Sebastián','Tamara','Ulises','Valeria'];
+const NAMES_LAST  = ['García','Fernández','López','González','Rodríguez','Martínez','Álvarez','Sánchez','Romero','Torres','Díaz','Pérez','Suárez','Morales','Cabrera','Medina','Herrera','Núñez','Vega','Castro'];
+const RANDOM_PARTIES = ['Partido del Sol','Movimiento Progresista','Alianza Nacional','Frente Ciudadano','Nueva Alternativa'];
+const RANDOM_COLORS  = ['#e05c5c','#60b8e0','#005595','#e8a020','#7030a0','#27b84d','#f03e3e','#4eb551','#1341d6','#e65768'];
+
+let candidates = [];
+let deptData   = {}; // { deptName: { candidId: pct, ... } }
+let deptInfo   = {}; // populated from JSON
+let selectedCandId = null;
+let selectedDept   = null;
+let modalEditId    = null; // null = new, string = edit
+let rightTab       = 'edit';
+
+function randomName()  { return NAMES_FIRST[Math.floor(Math.random()*NAMES_FIRST.length)] + ' ' + NAMES_LAST[Math.floor(Math.random()*NAMES_LAST.length)]; }
+function randomColor() { return RANDOM_COLORS[Math.floor(Math.random()*RANDOM_COLORS.length)]; }
+function randomParty() { return RANDOM_PARTIES[Math.floor(Math.random()*RANDOM_PARTIES.length)]; }
+function uid() { return Math.random().toString(36).slice(2,9); }
+function getInitials(name) { return name.trim().split(' ').filter(w=>w.length>1).slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
+function fmtN(n) { return Math.round(n).toLocaleString('es-UY'); }
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+async function init() {
+  // Load map
+  try {
+    const r = await fetch('mapa.svg');
+    if (!r.ok) throw new Error();
+    document.getElementById('map-container').innerHTML = await r.text();
+    setupMapInteraction();
+  } catch {
+    document.getElementById('map-container').innerHTML = '<p style="color:#ef4444;text-align:center;padding:40px;">No se pudo cargar mapa.svg.<br><small>Asegurate de correr esto en un servidor local.</small></p>';
+  }
+
+  // Load dept info
+  try {
+    const r = await fetch('data/info_departamentos.json');
+    deptInfo = await r.json();
+  } catch {
+    // fallback
+    const depts = ['Montevideo','Canelones','Maldonado','Salto','Paysandú','Rivera','Tacuarembó','Colonia','San José','Cerro Largo','Soriano','Artigas','Rocha','Río Negro','Florida','Durazno','Lavalleja','Treinta y Tres','Flores'];
+    depts.forEach(d => { deptInfo[d] = { poblacion: 50000, emoji: '🗺️' }; });
+  }
+
+  // Create 2 default candidates
+  addCandidate(true);
+  addCandidate(true);
+  renderAll();
+}
+
+/* ══════════════════════════════════════════════
+   CANDIDATE MANAGEMENT
+══════════════════════════════════════════════ */
+function addCandidate(silent = false) {
+  const c = {
+    id:     uid(),
+    name:   randomName(),
+    vice:   '',
+    party:  randomParty(),
+    color:  randomColor(),
+    photo:  '',
+  };
+  candidates.push(c);
+  // Initialize dept sliders for this candidate (equal split)
+  rebalanceDepts();
+  if (!silent) renderAll();
+}
+
+function removeCandidate(id) {
+  if (candidates.length <= 1) return;
+  candidates = candidates.filter(c => c.id !== id);
+  if (selectedCandId === id) selectedCandId = null;
+  rebalanceDepts();
+  renderAll();
+}
+
+function rebalanceDepts() {
+  if (candidates.length === 0) return;
+  const eq = parseFloat((100 / candidates.length).toFixed(1));
+  Object.keys(deptInfo).forEach(dept => {
+    if (!deptData[dept]) {
+      // Initialize equal split
+      const obj = {};
+      candidates.forEach((c, i) => { obj[c.id] = (i === candidates.length - 1) ? (100 - eq * (candidates.length - 1)) : eq; });
+      deptData[dept] = obj;
+    } else {
+      // Add new candidate share from smallest existing
+      candidates.forEach(c => {
+        if (!(c.id in deptData[dept])) {
+          deptData[dept][c.id] = 0;
+        }
+      });
+      // Remove deleted candidates
+      Object.keys(deptData[dept]).forEach(id => {
+        if (!candidates.find(c => c.id === id)) delete deptData[dept][id];
+      });
+    }
+  });
+}
+
+/* ══════════════════════════════════════════════
+   TALLIES
+══════════════════════════════════════════════ */
+function getTotals() {
+  const totals = {};
+  candidates.forEach(c => { totals[c.id] = { votes: 0, pct: 0 }; });
+  let grandTotal = 0;
+  Object.entries(deptData).forEach(([dept, pcts]) => {
+    const pop = (deptInfo[dept] || {}).poblacion || 0;
+    Object.entries(pcts).forEach(([id, pct]) => {
+      if (totals[id]) { totals[id].votes += (pct / 100) * pop; grandTotal += (pct / 100) * pop; }
+    });
+  });
+  if (grandTotal > 0) candidates.forEach(c => { totals[c.id].pct = (totals[c.id].votes / grandTotal) * 100; });
+  return totals;
+}
+
+function getDeptWinner(dept) {
+  const pcts = deptData[dept];
+  if (!pcts) return null;
+  let best = null, bestPct = -1;
+  Object.entries(pcts).forEach(([id, pct]) => {
+    if (pct > bestPct) { bestPct = pct; best = id; }
+  });
+  if (!best) return null;
+  const entries = Object.entries(pcts).sort((a,b)=>b[1]-a[1]);
+  const margin = entries.length > 1 ? entries[0][1] - entries[1][1] : 100;
+  return { id: best, pct: bestPct, margin };
+}
+
+/* ══════════════════════════════════════════════
+   MAP RENDERING
+══════════════════════════════════════════════ */
+const DEPTO_ID = {
+  'Paysandú':'UYPA','Artigas':'UYAR','Salto':'UYSA','Rivera':'UYRV','Rocha':'UYRO',
+  'Treinta y Tres':'UYTT','Cerro Largo':'UYCL','Maldonado':'UYMA','Canelones':'UYCA',
+  'Montevideo':'UYMO','San José':'UYSJ','Colonia':'UYCO','Soriano':'UYSO',
+  'Río Negro':'UYRN','Tacuarembó':'UYTA','Durazno':'UYDU','Flores':'UYFS',
+  'Florida':'UYFD','Lavalleja':'UYLA'
+};
+
+function renderMap() {
+  Object.entries(DEPTO_ID).forEach(([dept, svgId]) => {
+    const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
+    if (!path) return;
+    const winner = getDeptWinner(dept);
+    if (!winner) { path.style.fill = 'var(--map-empty)'; path.style.fillOpacity = 1; return; }
+    const cand = candidates.find(c => c.id === winner.id);
+    if (!cand) { path.style.fill = 'var(--map-empty)'; return; }
+    path.style.fill = cand.color;
+    // Opacity based on margin
+    let opacity = winner.margin > 15 ? 1 : winner.margin > 7 ? 0.78 : winner.margin > 2 ? 0.6 : 0.42;
+    path.style.fillOpacity = opacity;
+  });
+  renderLegend();
+}
+
+function renderLegend() {
+  const legend = document.getElementById('map-legend');
+  if (candidates.length === 0) { legend.classList.remove('visible'); return; }
+  legend.classList.add('visible');
+  legend.innerHTML = candidates.map(c => `
+    <div class="legend-item">
+      <div class="legend-dot" style="background:${c.color}"></div>
+      <span>${c.name.split(' ')[0]}</span>
+    </div>
+  `).join('');
+}
+
+function setupMapInteraction() {
+  const tooltip = document.getElementById('map-tooltip');
+  document.querySelectorAll('#uruguay-map #features path').forEach(path => {
+    path.addEventListener('click', () => {
+      const deptName = path.getAttribute('name');
+      if (!deptName) return;
+      // Highlight
+      document.querySelectorAll('#uruguay-map #features path').forEach(p => p.classList.remove('dept-active'));
+      path.classList.add('dept-active');
+      selectedDept = deptName;
+      setRightTab('dept');
+      renderRightPanel();
+    });
+    path.addEventListener('mousemove', e => {
+      const deptName = path.getAttribute('name');
+      if (!deptName) return;
+      const winner = getDeptWinner(deptName);
+      let html = `<strong>${deptName}</strong>`;
+      const pop = (deptInfo[deptName] || {}).poblacion;
+      if (pop) html += `<div style="font-size:0.72rem;color:var(--muted);margin-bottom:4px;">Población: ${fmtN(pop)}</div>`;
+      if (winner) {
+        const pcts = deptData[deptName] || {};
+        const sorted = [...candidates].sort((a,b) => (pcts[b.id]||0) - (pcts[a.id]||0));
+        sorted.forEach(c => {
+          const pct = (pcts[c.id]||0).toFixed(1);
+          html += `<div class="tt-row"><span style="color:${c.color};font-weight:700;">${c.name.split(' ')[0]}</span><span>${pct}%</span></div>`;
+        });
+      } else { html += '<div style="color:var(--muted);font-size:0.78rem;">Sin datos asignados</div>'; }
+      tooltip.innerHTML = html;
+      tooltip.style.display = 'block';
+      tooltip.style.left = (e.clientX + 14) + 'px';
+      tooltip.style.top  = (e.clientY - 10) + 'px';
+    });
+    path.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+  });
+}
+
+/* ══════════════════════════════════════════════
+   LEFT PANEL — CANDIDATE CARDS
+══════════════════════════════════════════════ */
+function renderCandidates() {
+  const totals = getTotals();
+  const grandVotes = Object.values(totals).reduce((s,t) => s+t.votes, 0);
+  const maxPct = Math.max(...candidates.map(c => totals[c.id]?.pct || 0));
+  
+  // Total votes display
+  const tvd = document.getElementById('total-votes-display');
+  tvd.textContent = grandVotes > 0 ? fmtN(grandVotes) + ' votos totales' : '';
+
+  const list = document.getElementById('candidates-list');
+  list.innerHTML = candidates.map(c => {
+    const t = totals[c.id] || { votes: 0, pct: 0 };
+    const isWinner = t.pct > 50;
+    const isTop    = candidates.length > 1 && t.pct === maxPct && maxPct > 0;
+    const initials = getInitials(c.name);
+
+    return `
+    <div class="cand-card ${selectedCandId === c.id ? 'selected' : ''}" style="border-color:${c.color}20;" onclick="selectCand('${c.id}')">
+      <div class="cand-delete" onclick="event.stopPropagation();removeCandidate('${c.id}')">✕</div>
+      <div class="cand-card-inner">
+        <div class="cand-photo" style="background:${c.color};">
+          ${c.photo ? `<img src="${c.photo}" alt="${c.name}" onerror="this.style.display='none'">` : initials}
+        </div>
+        <div class="cand-body">
+          <div class="cand-name">
+            ${c.name}
+            ${isWinner ? '<span class="badge-winner">Ganador</span>' : ''}
+          </div>
+          ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
+          <div class="cand-party" style="color:${c.color}">${c.party}</div>
+          <div class="cand-stats">
+            <div class="cand-pct" style="color:${c.color}">${t.pct.toFixed(1)}%</div>
+            <div class="cand-votes">${fmtN(t.votes)} votos</div>
+          </div>
+          <div class="cand-bar-wrap">
+            <div class="cand-bar-fill" style="width:${t.pct}%;background:${c.color};"></div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function selectCand(id) {
+  selectedCandId = id;
+  setRightTab('edit');
+  renderCandidates();
+  renderRightPanel();
+}
+
+/* ══════════════════════════════════════════════
+   RIGHT PANEL
+══════════════════════════════════════════════ */
+function setRightTab(tab) {
+  rightTab = tab;
+  document.getElementById('tab-edit').classList.toggle('active', tab === 'edit');
+  document.getElementById('tab-dept').classList.toggle('active', tab === 'dept');
+  renderRightPanel();
+}
+
+function renderRightPanel() {
+  const inner = document.getElementById('right-panel-inner');
+  if (rightTab === 'edit') {
+    if (!selectedCandId) {
+      inner.innerHTML = `<div class="empty-state fade-up"><div class="empty-icon">👆</div><div class="empty-text">Hacé clic en un candidato de la lista para editar sus datos.</div></div>`;
+      return;
+    }
+    const c = candidates.find(x => x.id === selectedCandId);
+    if (!c) return;
+    inner.innerHTML = `
+      <div class="edit-form fade-up">
+        <div class="field-group">
+          <label class="field-label">Nombre completo</label>
+          <input class="field-input" id="e-name" value="${c.name}" oninput="updateCand('name',this.value)" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Compañero de fórmula (vice)</label>
+          <input class="field-input" id="e-vice" value="${c.vice}" placeholder="Opcional" oninput="updateCand('vice',this.value)" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Partido político</label>
+          <input class="field-input" id="e-party" value="${c.party}" oninput="updateCandParty(this.value)" />
+        </div>
+        <div class="field-group">
+          <label class="field-label">Color del partido</label>
+          <div class="color-row">
+            <div class="color-preview" id="e-color-preview" style="background:${c.color};" onclick="document.getElementById('e-color-input').click()"></div>
+            <input type="color" id="e-color-input" value="${c.color}" oninput="updateCand('color',this.value);document.getElementById('e-color-preview').style.background=this.value;" />
+            <span style="font-size:0.78rem;color:var(--muted);">Clic en el círculo</span>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">URL de foto</label>
+          <input class="field-input" id="e-photo" value="${c.photo}" placeholder="https://..." oninput="updateCand('photo',this.value)" />
+        </div>
+        <button class="btn" style="margin-top:4px;" onclick="selectedCandId=null;renderRightPanel();renderCandidates();">✓ Listo</button>
+      </div>
+    `;
+    return;
+  }
+
+  // DEPT TAB
+  if (!selectedDept) {
+    inner.innerHTML = `<div class="empty-state fade-up"><div class="empty-icon">🗺️</div><div class="empty-text">Hacé clic en un departamento del mapa para asignar porcentajes de votos.</div></div>`;
+    return;
+  }
+  renderDeptSliders();
+}
+
+function renderDeptSliders() {
+  const inner = document.getElementById('right-panel-inner');
+  const dept  = selectedDept;
+  const pop   = (deptInfo[dept] || {}).poblacion || 0;
+  const emoji = (deptInfo[dept] || {}).emoji || '🗺️';
+  if (!deptData[dept]) rebalanceDepts();
+  const pcts = deptData[dept];
+
+  let sliderHtml = candidates.map(c => {
+    const val = (pcts[c.id] || 0).toFixed(1);
+    return `
+    <div class="slider-item">
+      <div class="slider-header">
+        <span class="slider-name" style="color:${c.color}">${c.name.split(' ')[0]} <span style="color:var(--muted);font-weight:400;font-size:0.72rem;">${c.party}</span></span>
+        <span class="slider-pct" id="spct-${c.id}" style="color:${c.color}">${val}%</span>
+      </div>
+      <input type="range" id="sld-${c.id}" min="0" max="100" step="0.5" value="${val}"
+        style="accent-color:${c.color};"
+        oninput="onSliderMove('${c.id}',this.value,'${dept}')"
+        onchange="onSliderMove('${c.id}',this.value,'${dept}')" />
+    </div>`;
+  }).join('');
+
+  const totalPct = Object.values(pcts).reduce((s,v)=>s+v, 0);
+  const isOk = Math.abs(totalPct - 100) < 0.5;
+
+  const barSegs = candidates.map(c => {
+    const w = (pcts[c.id]||0).toFixed(1);
+    return `<div class="total-bar-seg" style="width:${w}%;background:${c.color};"></div>`;
+  }).join('');
+
+  inner.innerHTML = `
+    <div class="dept-editor fade-up">
+      <div class="dept-title">${emoji} ${dept}</div>
+      <div class="dept-pop">Población: ${fmtN(pop)} habitantes · ${fmtN(pop * 0.65)} electores aprox.</div>
+      <div class="slider-group" style="margin-top:12px;">${sliderHtml}</div>
+      <div class="total-bar" id="total-bar">${barSegs}</div>
+      <div class="total-label ${isOk ? '' : 'error'}" id="total-label">Total: ${totalPct.toFixed(1)}% ${isOk ? '✓' : '(debe ser 100%)'}</div>
+      <button class="btn" style="margin-top:12px;width:100%;" onclick="normalizeDept('${dept}')">⚖ Normalizar a 100%</button>
+    </div>
+  `;
+}
+
+function onSliderMove(candId, val, dept) {
+  val = parseFloat(val);
+  if (!deptData[dept]) return;
+  deptData[dept][candId] = val;
+  // Update display without full re-render
+  const pct = document.getElementById(`spct-${candId}`);
+  if (pct) pct.textContent = val.toFixed(1) + '%';
+  // Update total bar
+  updateTotalDisplay(dept);
+  renderMap();
+  renderCandidates();
+}
+
+function updateTotalDisplay(dept) {
+  const pcts = deptData[dept] || {};
+  const total = Object.values(pcts).reduce((s,v)=>s+v,0);
+  const isOk = Math.abs(total - 100) < 0.5;
+  const lbl = document.getElementById('total-label');
+  if (lbl) { lbl.textContent = `Total: ${total.toFixed(1)}% ${isOk ? '✓' : '(debe ser 100%)'}`; lbl.className = 'total-label ' + (isOk ? '' : 'error'); }
+  const bar = document.getElementById('total-bar');
+  if (bar) {
+    bar.innerHTML = candidates.map(c => {
+      const w = (pcts[c.id]||0).toFixed(1);
+      return `<div class="total-bar-seg" style="width:${Math.min(parseFloat(w),100)}%;background:${c.color};"></div>`;
+    }).join('');
+  }
+}
+
+function normalizeDept(dept) {
+  const pcts = deptData[dept] || {};
+  const total = Object.values(pcts).reduce((s,v)=>s+v,0);
+  if (total === 0) { const eq = 100/candidates.length; candidates.forEach(c => { pcts[c.id]=eq; }); }
+  else { candidates.forEach(c => { pcts[c.id] = (pcts[c.id]||0) / total * 100; }); }
+  renderDeptSliders();
+  renderMap();
+  renderCandidates();
+}
+
+/* ══════════════════════════════════════════════
+   CANDIDATE EDIT (INLINE)
+══════════════════════════════════════════════ */
+function updateCand(field, val) {
+  const c = candidates.find(x => x.id === selectedCandId);
+  if (!c) return;
+  c[field] = val;
+  renderCandidates();
+  renderMap();
+}
+
+function updateCandParty(val) {
+  const c = candidates.find(x => x.id === selectedCandId);
+  if (!c) return;
+  c.party = val;
+  // Auto-color from known parties
+  const match = Object.entries(KNOWN_PARTIES).find(([k]) => k.toLowerCase() === val.toLowerCase());
+  if (match) {
+    c.color = match[1];
+    const prev = document.getElementById('e-color-preview');
+    const inp  = document.getElementById('e-color-input');
+    if (prev) prev.style.background = c.color;
+    if (inp)  inp.value = c.color;
+  }
+  renderCandidates();
+  renderMap();
+}
+
+/* ══════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════ */
+function openAddModal() {
+  modalEditId = null;
+  document.getElementById('modal-title').textContent = 'Nuevo Candidato';
+  document.getElementById('m-name').value  = '';
+  document.getElementById('m-vice').value  = '';
+  document.getElementById('m-party').value = '';
+  document.getElementById('m-photo').value = '';
+  const col = randomColor();
+  document.getElementById('m-color-input').value = col;
+  document.getElementById('m-color-preview').style.background = col;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function onPartyInput(val) {
+  const match = Object.entries(KNOWN_PARTIES).find(([k]) => k.toLowerCase() === val.toLowerCase());
+  if (match) {
+    document.getElementById('m-color-input').value = match[1];
+    document.getElementById('m-color-preview').style.background = match[1];
+  }
+}
+
+function updateColorPreview(val) {
+  document.getElementById('m-color-preview').style.background = val;
+}
+
+function saveModal() {
+  const name  = document.getElementById('m-name').value.trim()  || randomName();
+  const vice  = document.getElementById('m-vice').value.trim();
+  const party = document.getElementById('m-party').value.trim() || randomParty();
+  const color = document.getElementById('m-color-input').value;
+  const photo = document.getElementById('m-photo').value.trim();
+
+  const c = { id: uid(), name, vice, party, color, photo };
+  candidates.push(c);
+  rebalanceDepts();
+  closeModal();
+  renderAll();
+}
+
+/* ══════════════════════════════════════════════
+   EXPORT / RESET
+══════════════════════════════════════════════ */
+function exportJSON() {
+  const totals = getTotals();
+  const output = {
+    anio: new Date().getFullYear(),
+    candidatos: candidates.map(c => ({
+      nombre: c.name,
+      vice:   c.vice,
+      partido: c.party,
+      color:  c.color,
+      foto:   c.photo,
+      votos:  Math.round(totals[c.id]?.votes || 0),
+      pct:    parseFloat((totals[c.id]?.pct || 0).toFixed(2)),
+    })),
+    departamentos: {}
+  };
+  Object.entries(deptData).forEach(([dept, pcts]) => {
+    output.departamentos[dept] = {};
+    candidates.forEach(c => { output.departamentos[dept][c.name] = parseFloat((pcts[c.id]||0).toFixed(2)); });
+  });
+
+  const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `eleccion_${output.anio}.json`; a.click();
+}
+
+function resetAll() {
+  if (!confirm('¿Resetear toda la elección? Se perderán los datos actuales.')) return;
+  candidates = []; deptData = {}; selectedCandId = null; selectedDept = null;
+  addCandidate(true); addCandidate(true);
+  document.querySelectorAll('#uruguay-map #features path').forEach(p => p.classList.remove('dept-active'));
+  renderAll();
+}
+
+/* ══════════════════════════════════════════════
+   RENDER ALL
+══════════════════════════════════════════════ */
+function renderAll() {
+  renderCandidates();
+  renderMap();
+  renderRightPanel();
+}
+
+// Close modal on overlay click
+document.getElementById('modal-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+init();
+</script>
+</body>
+</html>
