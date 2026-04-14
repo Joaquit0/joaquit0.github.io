@@ -82,6 +82,7 @@
         .brujula-legend span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
         .leg-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
+        /* ── HERO ── */
         .hero-container { display: flex; align-items: center; justify-content: space-between; max-width: 1000px; margin: 80px auto; padding: 0 20px; gap: 50px; }
         .hero-text { flex: 1; text-align: left; }
         .hero-img-box { flex: 0 0 45%; display: flex; justify-content: flex-end; }
@@ -93,6 +94,8 @@
         .btn-hero { padding: 16px 28px; background: var(--azul-vibrante); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s, transform 0.15s; box-shadow: 0 4px 14px rgba(59,130,246,0.3); }
         .btn-hero:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-hero:active { transform: translateY(0); }
+        .btn-hero.secondary { background: var(--card-bg); color: var(--azul-vibrante); border: 2px solid var(--azul-vibrante); box-shadow: none; }
+        .btn-hero.secondary:hover { background: var(--azul-claro-hover); }
         .btn-hero.disabled { opacity: 0.45; cursor: not-allowed; background: var(--text-muted); box-shadow: none; }
         .btn-hero.disabled:hover { transform: none; opacity: 0.45; }
 
@@ -164,6 +167,7 @@
             <div class="hero-buttons">
                 <button class="btn-hero" id="btn-nacionales" onclick="window.location.href='elecciones.html'">Elecciones Nacionales</button>
                 <button class="btn-hero" id="btn-test" onclick="irTest()">Test Ideológico</button>
+                <button class="btn-hero secondary" id="btn-editor" onclick="window.location.href='editor.html'">🗺️ Editor</button>
                 <button class="btn-hero disabled" id="btn-galeria" onclick="proximamente(this)">Galería</button>
             </div>
         </div>
@@ -254,6 +258,7 @@ const i18n = {
         homeDesc:"Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o comparar tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.",
         btnNacionales:"Elecciones Nacionales",
         btnTestHome:"Test Ideológico",
+        btnEditor:"🗺️ Editor",
         btnGaleria:"Galería",
         proximamente:"Próximamente",
         countdownTitle:"Elecciones Internas",
@@ -272,6 +277,7 @@ const i18n = {
         homeDesc:"Explore the different elections that took place throughout Uruguay's history, or compare your ideas with those of the country's main political parties to find out who you align with most.",
         btnNacionales:"National Elections",
         btnTestHome:"Ideological Test",
+        btnEditor:"🗺️ Editor",
         btnGaleria:"Gallery",
         proximamente:"Coming soon",
         countdownTitle:"Internal Elections",
@@ -297,256 +303,88 @@ const posicionesPartidos = {
 
 const preguntas = [
     { cat:["Economía","Economy"], t:["El Estado debe fortalecer y expandir las empresas públicas como motor del desarrollo nacional.","The State must strengthen and expand public companies as a driver of national development."], p:{FA:5,PN:2,PC:2,PI:3,CA:3}, ex:-1.8, ey: 0.5,
-      just:{ 
-        FA:"«Las empresas públicas serán un pilar estratégico... son patrimonio uruguayo, forman parte de la identidad nacional».", 
-        PN:"Propone «impulsar la apertura de parte de capital de empresas subsidiarias del Estado al financiamiento en el mercado de capitales».", 
-        PC:"«Impulsaremos empresas públicas competitivas... generando las condiciones propicias para la participación privada».", 
-        PI:"No plantea expansión ni reducción. Se enfoca en mejorar su gobernanza mediante concursos abiertos.", 
-        CA:"Analiza la viabilidad de capitalización parcial mediante flotación de acciones, manteniendo el control estatal." 
-      }
+      just:{ FA:"«Las empresas públicas serán un pilar estratégico... son patrimonio uruguayo, forman parte de la identidad nacional».", PN:"Propone «impulsar la apertura de parte de capital de empresas subsidiarias del Estado al financiamiento en el mercado de capitales».", PC:"«Impulsaremos empresas públicas competitivas... generando las condiciones propicias para la participación privada».", PI:"No plantea expansión ni reducción. Se enfoca en mejorar su gobernanza mediante concursos abiertos.", CA:"Analiza la viabilidad de capitalización parcial mediante flotación de acciones, manteniendo el control estatal." }
     },
     { cat:["Economía","Economy"], t:["Uruguay debe bajar el gasto público y reducir el tamaño del Estado.","Uruguay must lower public spending and reduce the size of the State."], p:{FA:1,PN:4,PC:5,PI:3,CA:4}, ex: 1.8, ey:-0.3,
-      just:{ 
-        FA:"«El gasto público deberá responder a las crecientes necesidades sociales y recuperar lo perdido».", 
-        PN:"«No se aumentarán los impuestos... Reduciendo la cantidad de empleados públicos a razón de 1% anual».", 
-        PC:"«Entendemos razonable una reducción del gasto real no personal del orden del 10%».", 
-        PI:"Busca modernización y eficiencia, pero sin recortes explícitos.", 
-        CA:"«Reducción y mantenimiento del gasto público del gobierno hasta el 27% del PBI... reducción del 5% en todos los rubros»." 
-      }
+      just:{ FA:"«El gasto público deberá responder a las crecientes necesidades sociales y recuperar lo perdido».", PN:"«No se aumentarán los impuestos... Reduciendo la cantidad de empleados públicos a razón de 1% anual».", PC:"«Entendemos razonable una reducción del gasto real no personal del orden del 10%».", PI:"Busca modernización y eficiencia, pero sin recortes explícitos.", CA:"«Reducción y mantenimiento del gasto público del gobierno hasta el 27% del PBI... reducción del 5% en todos los rubros»." }
     },
     { cat:["Economía","Economy"], t:["Los impuestos a las grandes fortunas y patrimonios deben aumentarse para reducir la desigualdad.","Taxes on large fortunes and wealth should be increased to reduce inequality."], p:{FA:5,PN:1,PC:2,PI:3,CA:2}, ex:-1.5, ey: 0.2,
-      just:{ 
-        FA:"«Con el objetivo de avanzar en la reducción de la desigualdad, estudiar las formas para incrementar el impuesto al patrimonio».", 
-        PN:"«No se aumentarán los impuestos». Compromiso explícito y sin excepciones.", 
-        PC:"Propone reducción de carga tributaria y del gasto, no nuevos impuestos.", 
-        PI:"Propone mayor progresividad para MiPYMES, pero no propone explícitamente aumentar impuestos a grandes fortunas.", 
-        CA:"Plantea revisar franjas del IRPF pero no propone nuevos impuestos patrimoniales." 
-      }
+      just:{ FA:"«Con el objetivo de avanzar en la reducción de la desigualdad, estudiar las formas para incrementar el impuesto al patrimonio».", PN:"«No se aumentarán los impuestos». Compromiso explícito y sin excepciones.", PC:"Propone reducción de carga tributaria y del gasto, no nuevos impuestos.", PI:"Propone mayor progresividad para MiPYMES, pero no propone explícitamente aumentar impuestos a grandes fortunas.", CA:"Plantea revisar franjas del IRPF pero no propone nuevos impuestos patrimoniales." }
     },
     { cat:["Economía","Economy"], t:["Uruguay debe buscar acuerdos de libre comercio fuera del Mercosur sin esperar consenso regional.","Uruguay should seek free trade agreements outside Mercosur without waiting for regional consensus."], p:{FA:1,PN:5,PC:5,PI:5,CA:2}, ex: 1.6, ey:-0.4,
-      just:{ 
-        FA:"Prioriza la integración regional sobre acuerdos bilaterales. Tiene un «compromiso con la integración y construcción política regional».", 
-        PN:"«se deben perseguir las negociaciones bilaterales y plurilaterales, que no requieren de acuerdos con otros países».", 
-        PC:"«iniciaremos grupos de trabajo para negociar acuerdos de libre comercio con países tales como Ecuador, Panamá, Perú y Costa Rica».", 
-        PI:"«Mantener y profundizar la apertura de nuestra economía» y avanzar en acuerdos para abatir aranceles.", 
-        CA:"Propone un Mercosur «que abra definitivamente sus barreras internas». Énfasis en soberanía y fortalecer el bloque." 
-      }
+      just:{ FA:"Prioriza la integración regional sobre acuerdos bilaterales. Tiene un «compromiso con la integración y construcción política regional».", PN:"«se deben perseguir las negociaciones bilaterales y plurilaterales, que no requieren de acuerdos con otros países».", PC:"«iniciaremos grupos de trabajo para negociar acuerdos de libre comercio con países tales como Ecuador, Panamá, Perú y Costa Rica».", PI:"«Mantener y profundizar la apertura de nuestra economía» y avanzar en acuerdos para abatir aranceles.", CA:"Propone un Mercosur «que abra definitivamente sus barreras internas». Énfasis en soberanía y fortalecer el bloque." }
     },
     { cat:["Economía","Economy"], t:["El fomento del emprendedurismo y las pequeñas empresas es clave para el desarrollo económico.","Fostering entrepreneurship and small businesses is key to economic development."], p:{FA:3,PN:4,PC:4,PI:5,CA:4}, ex: 0.8, ey:-0.2,
-      just:{ 
-        FA:"No se opone, pero su énfasis está en empresas públicas y el rol del Estado. Las MiPYMES no son el eje central de su programa.", 
-        PN:"Tiene propuestas específicas para MiPYMES: incentivos fiscales, formación dual, reducción de burocracia.", 
-        PC:"Apoyo con incentivos fiscales y reducción de la carga burocrática.", 
-        PI:"«Las MIPYMES representan un porcentaje significativo... la política debe apoyar a las que tengan potencial de crecimiento».", 
-        CA:"Tiene propuestas favorables y específicas de apoyo a las pequeñas y medianas empresas." 
-      }
+      just:{ FA:"No se opone, pero su énfasis está en empresas públicas y el rol del Estado. Las MiPYMES no son el eje central de su programa.", PN:"Tiene propuestas específicas para MiPYMES: incentivos fiscales, formación dual, reducción de burocracia.", PC:"Apoyo con incentivos fiscales y reducción de la carga burocrática.", PI:"«Las MIPYMES representan un porcentaje significativo... la política debe apoyar a las que tengan potencial de crecimiento».", CA:"Tiene propuestas favorables y específicas de apoyo a las pequeñas y medianas empresas." }
     },
     { cat:["Educación","Education"],t:["La transformación educativa impulsada entre 2020 y 2025 fue positiva y debe profundizarse.","The educational transformation driven between 2020 and 2025 was positive and should be deepened."], p:{FA:1,PN:5,PC:5,PI:4,CA:3}, ex: 1.2, ey: 0.3,
-      just:{ 
-        FA:"Implica revertir la línea del gobierno anterior. «retomaremos el crecimiento de la inversión en educación pública estatal».", 
-        PN:"Destaca la Transformación Educativa y propone una «segunda etapa de la TE para continuar consolidando».", 
-        PC:"«nuestra educación ha experimentado importantes mejoras a partir de la Transformación Educativa».", 
-        PI:"«Para el próximo gobierno se propone consolidar, profundizar y completar el proceso de transformación iniciado».", 
-        CA:"Apoya la transformación y propone profundizarla, pero agrega su propia propuesta de una Universidad Pedagógica Nacional." 
-      }
+      just:{ FA:"Implica revertir la línea del gobierno anterior. «retomaremos el crecimiento de la inversión en educación pública estatal».", PN:"Destaca la Transformación Educativa y propone una «segunda etapa de la TE para continuar consolidando».", PC:"«nuestra educación ha experimentado importantes mejoras a partir de la Transformación Educativa».", PI:"«Para el próximo gobierno se propone consolidar, profundizar y completar el proceso de transformación iniciado».", CA:"Apoya la transformación y propone profundizarla, pero agrega su propia propuesta de una Universidad Pedagógica Nacional." }
     },
     { cat:["Educación","Education"],t:["La educación pública necesita más tiempo pedagógico y más centros de tiempo completo.","Public education needs more pedagogical time and more full-time centers."], p:{FA:4,PN:4,PC:4,PI:4,CA:3}, ex:-0.5, ey: 0.5,
-      just:{ 
-        FA:"Propone retomar la inversión del 6% del PIB en educación y apoyar la extensión del tiempo.", 
-        PN:"Propone la creación de 80 nuevos centros de tiempo completo.", 
-        PC:"Propone «universalización progresiva de la educación inicial y primaria de tiempo completo».", 
-        PI:"Propone «ampliación de los centros con extensión de tiempo pedagógico en todos los niveles».", 
-        CA:"No se opone, pero su programa educativo tiene mayor énfasis en valores, formación docente y orden disciplinario." 
-      }
+      just:{ FA:"Propone retomar la inversión del 6% del PIB en educación y apoyar la extensión del tiempo.", PN:"Propone la creación de 80 nuevos centros de tiempo completo.", PC:"Propone «universalización progresiva de la educación inicial y primaria de tiempo completo».", PI:"Propone «ampliación de los centros con extensión de tiempo pedagógico en todos los niveles».", CA:"No se opone, pero su programa educativo tiene mayor énfasis en valores, formación docente y orden disciplinario." }
     },
     { cat:["Educación","Education"],t:["La currícula escolar debería incorporar más valores y formación cívica tradicional.","School curricula should incorporate more values and traditional civic training."], p:{FA:2,PN:3,PC:3,PI:2,CA:5}, ex: 0.5, ey: 1.5,
-      just:{ 
-        FA:"No propone este enfoque tradicional. Propone educación inclusiva, perspectiva de género transversal e interseccionalidad.", 
-        PN:"Menciona educación emocional y formación ciudadana, pero sin la connotación conservadora.", 
-        PC:"Menciona formación ciudadana y valores, sin oposición a la perspectiva de género.", 
-        PI:"No propone este enfoque. Propone perspectiva de género en todas las políticas públicas.", 
-        CA:"Propone la «Eliminación de ideología de género» y establece la «Educación en valores» como capítulo específico." 
-      }
+      just:{ FA:"No propone este enfoque tradicional. Propone educación inclusiva, perspectiva de género transversal e interseccionalidad.", PN:"Menciona educación emocional y formación ciudadana, pero sin la connotación conservadora.", PC:"Menciona formación ciudadana y valores, sin oposición a la perspectiva de género.", PI:"No propone este enfoque. Propone perspectiva de género en todas las políticas públicas.", CA:"Propone la «Eliminación de ideología de género» y establece la «Educación en valores» como capítulo específico." }
     },
     { cat:["Seguridad","Security"], t:["Uruguay debe declarar una emergencia nacional en seguridad pública.","Uruguay should declare a national emergency in public security."], p:{FA:1,PN:3,PC:3,PI:2,CA:5}, ex: 0.8, ey: 1.8,
-      just:{ 
-        FA:"Enfoque en causas estructurales del delito, no en medidas de emergencia. Propone «convivencia pacífica».", 
-        PN:"Plantea seguridad como prioridad, y propone «redoblar el esfuerzo en el abatimiento de los homicidios y del crimen organizado».", 
-        PC:"Plantea seguridad como prioridad pero sin llegar a la declaración de emergencia.", 
-        PI:"Propone una mirada integral que supere los «enfoques basados preponderantemente en aspectos punitivos».", 
-        CA:"«Se impone como punto de partida declarar el estado de emergencia nacional en seguridad pública y también en adicciones»." 
-      }
+      just:{ FA:"Enfoque en causas estructurales del delito, no en medidas de emergencia. Propone «convivencia pacífica».", PN:"Plantea seguridad como prioridad, y propone «redoblar el esfuerzo en el abatimiento de los homicidios y del crimen organizado».", PC:"Plantea seguridad como prioridad pero sin llegar a la declaración de emergencia.", PI:"Propone una mirada integral que supere los «enfoques basados preponderantemente en aspectos punitivos».", CA:"«Se impone como punto de partida declarar el estado de emergencia nacional en seguridad pública y también en adicciones»." }
     },
     { cat:["Seguridad","Security"], t:["Combatir el crimen requiere tanto más policías y penas más severas como políticas sociales.","Fighting crime requires more police and more severe penalties as well as social policies."], p:{FA:3,PN:4,PC:4,PI:4,CA:3}, ex: 0.3, ey: 0.8,
-      just:{ 
-        FA:"Se inclina más hacia las políticas sociales para combatir las causas estructurales del delito.", 
-        PN:"Busca un equilibrio explícito entre prevención, represión y políticas sociales.", 
-        PC:"Busca un equilibrio entre represión firme y atención a las causas sociales.", 
-        PI:"Propone una mirada integral equilibrando los factores sociales y policiales.", 
-        CA:"Se inclina fuertemente hacia un enfoque más represivo y punitivo frente al delito." 
-      }
+      just:{ FA:"Se inclina más hacia las políticas sociales para combatir las causas estructurales del delito.", PN:"Busca un equilibrio explícito entre prevención, represión y políticas sociales.", PC:"Busca un equilibrio entre represión firme y atención a las causas sociales.", PI:"Propone una mirada integral equilibrando los factores sociales y policiales.", CA:"Se inclina fuertemente hacia un enfoque más represivo y punitivo frente al delito." }
     },
     { cat:["Seguridad","Security"], t:["El sistema carcelario debe privilegiar la reinserción social sobre el castigo.","The prison system should prioritize social reintegration over punishment."], p:{FA:5,PN:3,PC:3,PI:4,CA:1}, ex:-1.0, ey:-1.5,
-      just:{ 
-        FA:"Prioriza la «profundización de las políticas de integración social», y propone pasarlo a un Ministerio de Justicia.", 
-        PN:"Combina el objetivo de reinserción con el orden carcelario, sin ponerla por encima de la seguridad.", 
-        PC:"Combina la búsqueda de reinserción social con un estricto orden carcelario.", 
-        PI:"Propone «Universalizarse a toda la población privada de libertad las oportunidades de estudio, trabajo, recreación».", 
-        CA:"Apunta al «trabajo obligatorio de todos los presos y la creación de una cárcel de máxima seguridad»." 
-      }
+      just:{ FA:"Prioriza la «profundización de las políticas de integración social», y propone pasarlo a un Ministerio de Justicia.", PN:"Combina el objetivo de reinserción con el orden carcelario, sin ponerla por encima de la seguridad.", PC:"Combina la búsqueda de reinserción social con un estricto orden carcelario.", PI:"Propone «Universalizarse a toda la población privada de libertad las oportunidades de estudio, trabajo, recreación».", CA:"Apunta al «trabajo obligatorio de todos los presos y la creación de una cárcel de máxima seguridad»." }
     },
     { cat:["Seguridad","Security"], t:["El trabajo en prisión debe ser obligatorio para todos los reclusos.","Prison work should be mandatory for all inmates."], p:{FA:1,PN:3,PC:2,PI:2,CA:5}, ex: 0.5, ey: 1.8,
-      just:{ 
-        FA:"Propone que «toda persona privada de libertad que quiera trabajar pueda hacerlo» (es un derecho voluntario).", 
-        PN:"Promueve el trabajo carcelario como herramienta clave de reinserción, pero sin exigir obligatoriedad total.", 
-        PC:"Promueve el trabajo carcelario como herramienta de rehabilitación sin estricta obligatoriedad.", 
-        PI:"Promueve el trabajo carcelario sin obligatoriedad, enfocado en oportunidades.", 
-        CA:"«Proponemos una Reestructura del Sistema Carcelario... estableciendo el trabajo de forma obligatoria»." 
-      }
+      just:{ FA:"Propone que «toda persona privada de libertad que quiera trabajar pueda hacerlo» (es un derecho voluntario).", PN:"Promueve el trabajo carcelario como herramienta clave de reinserción, pero sin exigir obligatoriedad total.", PC:"Promueve el trabajo carcelario como herramienta de rehabilitación sin estricta obligatoriedad.", PI:"Promueve el trabajo carcelario sin obligatoriedad, enfocado en oportunidades.", CA:"«Proponemos una Reestructura del Sistema Carcelario... estableciendo el trabajo de forma obligatoria»." }
     },
     { cat:["Drogas","Drugs"], t:["La regulación del cannabis debe fortalecerse y hacerse más accesible para los usuarios.","Cannabis regulation should be strengthened and made more accessible to users."], p:{FA:5,PN:2,PC:3,PI:5,CA:1}, ex:-1.2, ey:-1.8,
-      just:{ 
-        FA:"Propone fortalecerla «para garantizar el libre ejercicio de la ciudadanía... con el objetivo de reducir los impactos del tráfico ilícito».", 
-        PN:"Propone «realizar una fuerte campaña educativa y publicitaria para alertar sobre los riesgos» en lugar de flexibilizar.", 
-        PC:"Mantiene la política actual sin proponer ampliación ni restricción directa. Su foco principal es la prevención.", 
-        PI:"Propone eliminar el registro de compradores, habilitar la compra a turistas y eliminar el límite de cantidades.", 
-        CA:"Propone controles estrictos sobre clubes y autocultivadores. Es contrario al modelo vigente de regulación." 
-      }
+      just:{ FA:"Propone fortalecerla «para garantizar el libre ejercicio de la ciudadanía... con el objetivo de reducir los impactos del tráfico ilícito».", PN:"Propone «realizar una fuerte campaña educativa y publicitaria para alertar sobre los riesgos» en lugar de flexibilizar.", PC:"Mantiene la política actual sin proponer ampliación ni restricción directa. Su foco principal es la prevención.", PI:"Propone eliminar el registro de compradores, habilitar la compra a turistas y eliminar el límite de cantidades.", CA:"Propone controles estrictos sobre clubes y autocultivadores. Es contrario al modelo vigente de regulación." }
     },
     { cat:["Drogas","Drugs"], t:["Uruguay debe avanzar hacia la regulación de otras sustancias, alejándose del prohibicionismo.","Uruguay should move towards the regulation of other substances, moving away from prohibitionism."], p:{FA:4,PN:2,PC:2,PI:4,CA:1}, ex:-1.0, ey:-1.8,
-      just:{ 
-        FA:"Promueve medidas alternativas a la privación de libertad para el microtráfico y proporcionalidad en las penas.", 
-        PN:"Su foco está en la prevención, el tratamiento y la represión del tráfico, no en promover nuevas regulaciones.", 
-        PC:"Foco centrado en prevención y tratamiento de adicciones. No plantea avanzar en nuevas regulaciones de mercado.", 
-        PI:"«Es necesario asumir con claridad que la meta es salir del prohibicionismo». Fomenta estudiar usos medicinales.", 
-        CA:"«Hay que terminar con el modelo de 'reducción de riesgos y daños' y pasar a uno de verdadera prevención»." 
-      }
+      just:{ FA:"Promueve medidas alternativas a la privación de libertad para el microtráfico y proporcionalidad en las penas.", PN:"Su foco está en la prevención, el tratamiento y la represión del tráfico, no en promover nuevas regulaciones.", PC:"Foco centrado en prevención y tratamiento de adicciones. No plantea avanzar en nuevas regulaciones de mercado.", PI:"«Es necesario asumir con claridad que la meta es salir del prohibicionismo». Fomenta estudiar usos medicinales.", CA:"«Hay que terminar con el modelo de 'reducción de riesgos y daños' y pasar a uno de verdadera prevención»." }
     },
     { cat:["Drogas","Drugs"], t:["La prevención del consumo de drogas debe basarse en abstinencia y no en 'reducción de daños'.","Drug consumption prevention should be based on abstinence and not on 'harm reduction'."], p:{FA:1,PN:3,PC:2,PI:2,CA:5}, ex: 0.5, ey: 1.6,
-      just:{ 
-        FA:"Defiende firmemente el modelo de reducción de daños y las políticas de salud pública para usuarios.", 
-        PN:"Mantiene una posición intermedia centrada en la prevención educativa.", 
-        PC:"Posición centrada en la prevención educativa y el tratamiento integral de las adicciones.", 
-        PI:"Defiende explícitamente el enfoque de derechos humanos y el modelo de reducción de daños.", 
-        CA:"«Hay que terminar con el modelo de 'reducción de riesgos y daños' y pasar a uno de verdadera prevención»." 
-      }
+      just:{ FA:"Defiende firmemente el modelo de reducción de daños y las políticas de salud pública para usuarios.", PN:"Mantiene una posición intermedia centrada en la prevención educativa.", PC:"Posición centrada en la prevención educativa y el tratamiento integral de las adicciones.", PI:"Defiende explícitamente el enfoque de derechos humanos y el modelo de reducción de daños.", CA:"«Hay que terminar con el modelo de 'reducción de riesgos y daños' y pasar a uno de verdadera prevención»." }
     },
     { cat:["Derechos","Rights"], t:["Las políticas de igualdad de género deben ser transversales a todas las instituciones del Estado.","Gender equality policies should be transversal to all State institutions."], p:{FA:5,PN:3,PC:4,PI:5,CA:1}, ex:-1.5, ey:-1.0,
-      just:{ 
-        FA:"«La perspectiva de género, las interseccionalidades [...] están presentes en casi todos los temas» del programa.", 
-        PN:"Reconoce la igualdad de género como objetivo (especialmente laboral) pero no la impone como eje transversal.", 
-        PC:"Propone aplicar perspectiva de género en educación STEM, mercado laboral y políticas de seguridad.", 
-        PI:"«La perspectiva de género es una herramienta de análisis... tiene que ser transversal a todas las propuestas».", 
-        CA:"«Los intentos para imponer una perversa ideología de género buscan instalar el enfrentamiento...»." 
-      }
+      just:{ FA:"«La perspectiva de género, las interseccionalidades [...] están presentes en casi todos los temas» del programa.", PN:"Reconoce la igualdad de género como objetivo (especialmente laboral) pero no la impone como eje transversal.", PC:"Propone aplicar perspectiva de género en educación STEM, mercado laboral y políticas de seguridad.", PI:"«La perspectiva de género es una herramienta de análisis... tiene que ser transversal a todas las propuestas».", CA:"«Los intentos para imponer una perversa ideología de género buscan instalar el enfrentamiento...»." }
     },
     { cat:["Derechos","Rights"], t:["Las cuotas o medidas de paridad para mujeres en cargos políticos son necesarias y justas.","Quotas or parity measures for women in political positions are necessary and fair."], p:{FA:5,PN:2,PC:3,PI:4,CA:2}, ex:-1.3, ey:-0.5,
-      just:{ 
-        FA:"Propone explícitamente la «Participación paritaria para asegurar una mejor democracia».", 
-        PN:"Menciona la igualdad de género desde un enfoque de igualdad de oportunidades, no apoyando cuotas obligatorias.", 
-        PC:"Promueve la participación femenina mediante incentivos, pero sin una posición explícita sobre imponer cuotas.", 
-        PI:"Busca promover medidas afirmativas y estudiar la «reforma de las leyes electorales en este sentido».", 
-        CA:"Opuesto a las cuotas de representación. Defiende la familia tradicional y rechaza lo que denomina 'ideología de género'." 
-      }
+      just:{ FA:"Propone explícitamente la «Participación paritaria para asegurar una mejor democracia».", PN:"Menciona la igualdad de género desde un enfoque de igualdad de oportunidades, no apoyando cuotas obligatorias.", PC:"Promueve la participación femenina mediante incentivos, pero sin una posición explícita sobre imponer cuotas.", PI:"Busca promover medidas afirmativas y estudiar la «reforma de las leyes electorales en este sentido».", CA:"Opuesto a las cuotas de representación. Defiende la familia tradicional y rechaza lo que denomina 'ideología de género'." }
     },
     { cat:["Derechos","Rights"], t:["La 'perspectiva de género' en la educación y el Estado hace más daño que bien.","The 'gender perspective' in education and the State does more harm than good."], p:{FA:1,PN:2,PC:2,PI:1,CA:5}, ex: 1.3, ey: 1.2,
-      just:{ 
-        FA:"Posición diametralmente opuesta: la perspectiva de género es un eje estructurador y necesario de su programa.", 
-        PN:"Incorpora la perspectiva de género en sus programas sin compartir en absoluto la postura de confrontación de CA.", 
-        PC:"Incorpora la perspectiva de género en sus políticas y programas gubernamentales.", 
-        PI:"La perspectiva de género es considerada una herramienta transversal y fundamental en su visión de Estado.", 
-        CA:"«Los intentos para imponer una perversa ideología de género buscan instalar el enfrentamiento... sexualización de niños»." 
-      }
+      just:{ FA:"Posición diametralmente opuesta: la perspectiva de género es un eje estructurador y necesario de su programa.", PN:"Incorpora la perspectiva de género en sus programas sin compartir en absoluto la postura de confrontación de CA.", PC:"Incorpora la perspectiva de género en sus políticas y programas gubernamentales.", PI:"La perspectiva de género es considerada una herramienta transversal y fundamental en su visión de Estado.", CA:"«Los intentos para imponer una perversa ideología de género buscan instalar el enfrentamiento... sexualización de niños»." }
     },
     { cat:["Social","Social"], t:["Las transferencias monetarias a familias pobres son el mejor instrumento para reducir la pobreza.","Cash transfers to poor families are the best instrument to reduce poverty."], p:{FA:4,PN:3,PC:3,PI:4,CA:3}, ex:-0.8, ey: 0.2,
-      just:{ 
-        FA:"Propone fortalecer las asignaciones familiares del Plan de Equidad como uno de los ejes de la política social.", 
-        PN:"Reconoce el rol de las transferencias (TMC) pero las combina activamente con políticas de empleo, educación y familia.", 
-        PC:"Reconoce la utilidad de las TMC, pero sin priorizarlas por encima de otros instrumentos de desarrollo social.", 
-        PI:"Propone «Fortalecer y mejorar las transferencias monetarias condicionadas... como columna vertebral del Mides».", 
-        CA:"Reconoce el uso de las TMC pero las combina con políticas fuertemente centradas en la familia y el salario maternal." 
-      }
+      just:{ FA:"Propone fortalecer las asignaciones familiares del Plan de Equidad como uno de los ejes de la política social.", PN:"Reconoce el rol de las transferencias (TMC) pero las combina activamente con políticas de empleo, educación y familia.", PC:"Reconoce la utilidad de las TMC, pero sin priorizarlas por encima de otros instrumentos de desarrollo social.", PI:"Propone «Fortalecer y mejorar las transferencias monetarias condicionadas... como columna vertebral del Mides».", CA:"Reconoce el uso de las TMC pero las combina con políticas fuertemente centradas en la familia y el salario maternal." }
     },
     { cat:["Social","Social"], t:["La familia tradicional debe ser el eje central de las políticas sociales del Estado.","The traditional family should be the central axis of the State's social policies."], p:{FA:2,PN:3,PC:3,PI:2,CA:5}, ex: 0.5, ey: 1.5,
-      just:{ 
-        FA:"Menciona los «cambios en los modelos de familia» como realidades a atender. Diseña políticas para todo tipo de familias.", 
-        PN:"Incluye a la familia en sus políticas pero sin el énfasis ideológico exclusivo en el modelo tradicional.", 
-        PC:"Incluye a la familia en sus políticas sociales sin un énfasis ideológico o conservador.", 
-        PI:"La corresponsabilidad y los nuevos arreglos son ejes de sus políticas; no define a la familia tradicional como el eje central.", 
-        CA:"«Se concibe a la familia como pilar...». Propone un 'salario maternal' para que las madres puedan quedarse en el hogar." 
-      }
+      just:{ FA:"Menciona los «cambios en los modelos de familia» como realidades a atender. Diseña políticas para todo tipo de familias.", PN:"Incluye a la familia en sus políticas pero sin el énfasis ideológico exclusivo en el modelo tradicional.", PC:"Incluye a la familia en sus políticas sociales sin un énfasis ideológico o conservador.", PI:"La corresponsabilidad y los nuevos arreglos son ejes de sus políticas; no define a la familia tradicional como el eje central.", CA:"«Se concibe a la familia como pilar...». Propone un 'salario maternal' para que las madres puedan quedarse en el hogar." }
     },
     { cat:["Social","Social"], t:["El sistema de cuidados debe expandirse con corresponsabilidad entre Estado, mercado y familias.","The care system should be expanded with co-responsibility between the State, market, and families."], p:{FA:5,PN:3,PC:3,PI:4,CA:2}, ex:-1.0, ey:-0.3,
-      just:{ 
-        FA:"Propone «Fortalecer el Sistema de Cuidados [...] fomentar la corresponsabilidad del Estado y empresas».", 
-        PN:"Apoyan la expansión y mantenimiento del sistema de cuidados, manteniendo una posición de continuidad.", 
-        PC:"Apoyan la expansión del sistema de cuidados en una línea de continuidad institucional.", 
-        PI:"Propone «una política de cuidados moderna y sostenible» con un enfoque universal y cofinanciado.", 
-        CA:"Prefiere el modelo familiar de cuidado. Propone el salario maternal y la responsabilidad de los hijos hacia padres mayores." 
-      }
+      just:{ FA:"Propone «Fortalecer el Sistema de Cuidados [...] fomentar la corresponsabilidad del Estado y empresas».", PN:"Apoyan la expansión y mantenimiento del sistema de cuidados, manteniendo una posición de continuidad.", PC:"Apoyan la expansión del sistema de cuidados en una línea de continuidad institucional.", PI:"Propone «una política de cuidados moderna y sostenible» con un enfoque universal y cofinanciado.", CA:"Prefiere el modelo familiar de cuidado. Propone el salario maternal y la responsabilidad de los hijos hacia padres mayores." }
     },
     { cat:["Social","Social"], t:["La pobreza infantil es el principal problema social del Uruguay y debe ser prioridad absoluta.","Child poverty is the main social problem in Uruguay and should be an absolute priority."], p:{FA:4,PN:3,PC:3,PI:5,CA:4}, ex:-0.5, ey: 0.5,
-      just:{ 
-        FA:"Prioriza el combate a la pobreza infantil desde una perspectiva estructural de reducción de la desigualdad.", 
-        PN:"La pobreza infantil se enmarca en políticas sociales más amplias, no figurando como una 'prioridad absoluta' excluyente.", 
-        PC:"Se atiende y enmarca dentro de las políticas sociales más amplias del partido.", 
-        PI:"«Bajar a cero el número de niños en situación de pobreza... Esto es una prioridad para nuestro partido».", 
-        CA:"Priorizan fuertemente la pobreza infantil, enfocándose en la familia y transferencias de recursos a madres." 
-      }
+      just:{ FA:"Prioriza el combate a la pobreza infantil desde una perspectiva estructural de reducción de la desigualdad.", PN:"La pobreza infantil se enmarca en políticas sociales más amplias, no figurando como una 'prioridad absoluta' excluyente.", PC:"Se atiende y enmarca dentro de las políticas sociales más amplias del partido.", PI:"«Bajar a cero el número de niños en situación de pobreza... Esto es una prioridad para nuestro partido».", CA:"Priorizan fuertemente la pobreza infantil, enfocándose en la familia y transferencias de recursos a madres." }
     },
     { cat:["Salud","Health"], t:["La cobertura del Seguro Nacional de Salud debe universalizarse para todas las personas.","National Health Insurance coverage should be universalized for all people."], p:{FA:5,PN:3,PC:4,PI:5,CA:3}, ex:-1.2, ey: 0.3,
-      just:{ 
-        FA:"Propone universalizar el acceso a la salud como un derecho humano esencial, ampliando la cobertura a grupos excluidos.", 
-        PN:"Busca mejoras de eficiencia y calidad en la gestión del sistema actual sin priorizar una universalización total forzada.", 
-        PC:"Apoya la universalización pero fomentando una mayor participación privada y competencia entre prestadores.", 
-        PI:"Promete «Universalizar la cobertura del Seguro Nacional de Salud... (alrededor de 900.000 personas actualmente excluidas)».", 
-        CA:"Busca mejoras de eficiencia y atención en el sistema de salud actual sin plantear la universalización como prioridad máxima." 
-      }
+      just:{ FA:"Propone universalizar el acceso a la salud como un derecho humano esencial, ampliando la cobertura a grupos excluidos.", PN:"Busca mejoras de eficiencia y calidad en la gestión del sistema actual sin priorizar una universalización total forzada.", PC:"Apoya la universalización pero fomentando una mayor participación privada y competencia entre prestadores.", PI:"Promete «Universalizar la cobertura del Seguro Nacional de Salud... (alrededor de 900.000 personas actualmente excluidas)».", CA:"Busca mejoras de eficiencia y atención en el sistema de salud actual sin plantear la universalización como prioridad máxima." }
     },
     { cat:["Salud","Health"], t:["La atención de salud mental y adicciones necesita mucha más inversión pública.","Mental health and addiction care need much more public investment."], p:{FA:4,PN:3,PC:3,PI:3,CA:4}, ex:-0.7, ey: 0.1,
-      just:{ 
-        FA:"Coincide plenamente en destinar mayor inversión, basándose en un enfoque de garantía de derechos.", 
-        PN:"Reconoce el déficit, pero mantiene una posición de continuidad y mejora gradual de recursos.", 
-        PC:"Mantiene una posición de continuidad y mejora gradual en la inversión para salud mental.", 
-        PI:"Reconoce el déficit como parte integral de la mejora necesaria en el sistema de salud.", 
-        CA:"Enfatiza fuertemente la inversión en salud mental y adicciones, especialmente por su vínculo con la crisis de seguridad." 
-      }
+      just:{ FA:"Coincide plenamente en destinar mayor inversión, basándose en un enfoque de garantía de derechos.", PN:"Reconoce el déficit, pero mantiene una posición de continuidad y mejora gradual de recursos.", PC:"Mantiene una posición de continuidad y mejora gradual en la inversión para salud mental.", PI:"Reconoce el déficit como parte integral de la mejora necesaria en el sistema de salud.", CA:"Enfatiza fuertemente la inversión en salud mental y adicciones, especialmente por su vínculo con la crisis de seguridad." }
     },
     { cat:["Estado","State"], t:["La reforma jubilatoria de 2023 fue correcta y debe profundizarse.","The 2023 pension reform was correct and should be deepened."], p:{FA:1,PN:5,PC:5,PI:4,CA:3}, ex: 1.4, ey: 0.3,
-      just:{ 
-        FA:"Considera el período como de «retrocesos y contramarchas». Plantea revisar la reforma hacia un sistema más solidario.", 
-        PN:"«La reforma... se destaca por haber otorgado más derechos a trabajadores y jubilados». La considera un logro fundamental.", 
-        PC:"«Consideramos que la reforma jubilatoria fue una iniciativa positiva, que otorga un horizonte de medio plazo al régimen».", 
-        PI:"Afirma que «La Reforma de la Seguridad Social brinda sostenibilidad y equidad a nuestro sistema previsional».", 
-        CA:"Apoya la sostenibilidad del sistema (foco en equidad), pero sin hacer una cita positiva explícita de la ley del 2023." 
-      }
+      just:{ FA:"Considera el período como de «retrocesos y contramarchas». Plantea revisar la reforma hacia un sistema más solidario.", PN:"«La reforma... se destaca por haber otorgado más derechos a trabajadores y jubilados». La considera un logro fundamental.", PC:"«Consideramos que la reforma jubilatoria fue una iniciativa positiva, que otorga un horizonte de medio plazo al régimen».", PI:"Afirma que «La Reforma de la Seguridad Social brinda sostenibilidad y equidad a nuestro sistema previsional».", CA:"Apoya la sostenibilidad del sistema (foco en equidad), pero sin hacer una cita positiva explícita de la ley del 2023." }
     },
     { cat:["Ambiente","Environment"], t:["La transición ecológica debe ser una prioridad, incluso si implica cambios en el modelo agropecuario.","The ecological transition should be a priority, even if it implies changes in the agricultural model."], p:{FA:4,PN:2,PC:2,PI:3,CA:2}, ex:-1.2, ey:-0.5,
-      just:{ 
-        FA:"«proponemos un proceso de transición ecológica justa a todo nivel». Lo plantea como uno de sus ejes programáticos principales.", 
-        PN:"Prioriza el crecimiento agropecuario con «sistemas de producción sostenibles» pero sin plantear cambios estructurales al modelo.", 
-        PC:"Priorizan abiertamente el crecimiento productivo y económico del sector agropecuario.", 
-        PI:"Propone sostenibilidad ambiental como eje transversal, buscando «producción sostenible» sin sacrificar el crecimiento agro.", 
-        CA:"No prioriza en absoluto la transición ecológica frente al impulso de la producción nacional." 
-      }
+      just:{ FA:"«proponemos un proceso de transición ecológica justa a todo nivel». Lo plantea como uno de sus ejes programáticos principales.", PN:"Prioriza el crecimiento agropecuario con «sistemas de producción sostenibles» pero sin plantear cambios estructurales al modelo.", PC:"Priorizan abiertamente el crecimiento productivo y económico del sector agropecuario.", PI:"Propone sostenibilidad ambiental como eje transversal, buscando «producción sostenible» sin sacrificar el crecimiento agro.", CA:"No prioriza en absoluto la transición ecológica frente al impulso de la producción nacional." }
     },
     { cat:["Estado","State"], t:["El Estado uruguayo debe ser más transparente, con publicación obligatoria de más declaraciones juradas.","The Uruguayan State should be more transparent, with mandatory publication of more sworn statements."], p:{FA:3,PN:3,PC:3,PI:5,CA:4}, ex:-0.3, ey:-0.7,
-      just:{ 
-        FA:"Apoya la transparencia institucional pero sin incluir propuestas concretas nuevas sobre publicación de declaraciones juradas.", 
-        PN:"Apoya la transparencia general en la gestión del Estado.", 
-        PC:"Apoya la transparencia general en las instituciones gubernamentales.", 
-        PI:"Propone «Ampliar la obligación de publicidad de las declaraciones juradas... alcanzando a legisladores y altos cargos».", 
-        CA:"Propone una «Ley Anti Corrupción y Mafias» y la figura del «informante financiero». Foco general en combatir corrupción." 
-      }
+      just:{ FA:"Apoya la transparencia institucional pero sin incluir propuestas concretas nuevas sobre publicación de declaraciones juradas.", PN:"Apoya la transparencia general en la gestión del Estado.", PC:"Apoya la transparencia general en las instituciones gubernamentales.", PI:"Propone «Ampliar la obligación de publicidad de las declaraciones juradas... alcanzando a legisladores y altos cargos».", CA:"Propone una «Ley Anti Corrupción y Mafias» y la figura del «informante financiero». Foco general en combatir corrupción." }
     },
     { cat:["Internacional","International"], t:["Uruguay debe fortalecer el Mercosur y la integración regional latinoamericana.","Uruguay should strengthen Mercosur and Latin American regional integration."], p:{FA:5,PN:2,PC:2,PI:3,CA:3}, ex:-1.3, ey: 0.2,
-      just:{ 
-        FA:"Sostiene un «irrestricto compromiso con la integración y construcción política regional» de vocación latinoamericanista.", 
-        PN:"Prioriza los acuerdos bilaterales (TLCs) y busca flexibilizar el bloque o avanzar en las negociaciones al margen de este.", 
-        PC:"Buscan flexibilizar el bloque regional y priorizan abiertamente las negociaciones de acuerdos bilaterales.", 
-        PI:"Propone un Mercosur «mucho más abierto, flexible y eficaz». Mantiene una posición más pragmática sobre la integración.", 
-        CA:"Propone fortalecer el Mercosur en infraestructura y libre circulación, pero con un fuerte énfasis en la soberanía nacional." 
-      }
+      just:{ FA:"Sostiene un «irrestricto compromiso con la integración y construcción política regional» de vocación latinoamericanista.", PN:"Prioriza los acuerdos bilaterales (TLCs) y busca flexibilizar el bloque o avanzar en las negociaciones al margen de este.", PC:"Buscan flexibilizar el bloque regional y priorizan abiertamente las negociaciones de acuerdos bilaterales.", PI:"Propone un Mercosur «mucho más abierto, flexible y eficaz». Mantiene una posición más pragmática sobre la integración.", CA:"Propone fortalecer el Mercosur en infraestructura y libre circulación, pero con un fuerte énfasis en la soberanía nacional." }
     }
 ];
 
@@ -589,6 +427,7 @@ function changeLanguage() {
     document.getElementById('home-desc').innerText   = t.homeDesc;
     document.getElementById('btn-nacionales').innerText = t.btnNacionales;
     document.getElementById('btn-test').innerText       = t.btnTestHome;
+    document.getElementById('btn-editor').innerText     = t.btnEditor;
     document.getElementById('btn-galeria').innerText    = t.btnGaleria;
     document.getElementById('txt-countdown-title').innerText = t.countdownTitle;
     document.getElementById('txt-disclaimer').innerText = t.disclaimer;
@@ -611,19 +450,12 @@ function updateCountdown() {
     const targetDate = new Date("June 24, 2029 08:00:00").getTime();
     const now = new Date().getTime();
     const distance = targetDate - now;
-
-    if (distance < 0) {
-        document.getElementById("countdown").innerHTML = "¡Hoy son las elecciones!";
-        return;
-    }
-
+    if (distance < 0) { document.getElementById("countdown").innerHTML = "¡Hoy son las elecciones!"; return; }
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    document.getElementById("countdown").innerHTML = 
-        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
 }
 setInterval(updateCountdown, 1000);
 updateCountdown();
@@ -656,8 +488,7 @@ let _lastUserX = null, _lastUserY = null;
 let _compassObs = null;
 
 function initCompass(userX, userY) {
-    _lastUserX = userX;
-    _lastUserY = userY;
+    _lastUserX = userX; _lastUserY = userY;
     const wrap = document.querySelector('.brujula-canvas-wrap');
     if (_compassObs) _compassObs.disconnect();
     _compassObs = new ResizeObserver(() => drawCompass(_lastUserX, _lastUserY));
@@ -670,11 +501,9 @@ function drawCompass(userX, userY) {
     if (!canvas) return;
     const wrap = canvas.parentElement;
     const size = wrap.offsetWidth || 400;
-    canvas.width  = size;
-    canvas.height = size;
+    canvas.width  = size; canvas.height = size;
     const ctx = canvas.getContext('2d');
     const isDark = document.body.getAttribute('data-theme') === 'dark';
-
     ctx.fillStyle = isDark ? '#1e1e1e' : '#f8fafc';
     ctx.fillRect(0, 0, size, size);
     const quads = [
@@ -684,62 +513,35 @@ function drawCompass(userX, userY) {
         { x:size/2, y:size/2, color: isDark?'rgba(160,100,0,0.15)':'rgba(251,146,60,0.09)'  }
     ];
     quads.forEach(q => { ctx.fillStyle = q.color; ctx.fillRect(q.x, q.y, size/2, size/2); });
-
     ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
     ctx.lineWidth = 1;
     for (let i=1; i<4; i++) {
         ctx.beginPath(); ctx.moveTo(0, size*i/4); ctx.lineTo(size, size*i/4); ctx.stroke();
         ctx.beginPath(); ctx.moveTo(size*i/4, 0); ctx.lineTo(size*i/4, size); ctx.stroke();
     }
-
     ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.15)';
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([4, 4]);
+    ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
     ctx.beginPath(); ctx.moveTo(size/2, 0); ctx.lineTo(size/2, size); ctx.stroke();
     ctx.beginPath(); ctx.moveTo(0, size/2); ctx.lineTo(size, size/2); ctx.stroke();
     ctx.setLineDash([]);
-
     const pad = 16;
     function toPixelX(v, max=2) { return size/2 + (v/max) * (size/2 - pad); }
     function toPixelY(v, max=2) { return size/2 - (v/max) * (size/2 - pad); }
-
     function drawDot(px, py, color, radius, label, isUser) {
-        ctx.beginPath();
-        ctx.arc(px, py, radius + 4, 0, Math.PI*2);
-        ctx.fillStyle = color + (isDark ? '40' : '28');
-        ctx.fill();
-        ctx.beginPath();
-        ctx.arc(px, py, radius, 0, Math.PI*2);
-        ctx.fillStyle = color;
-        ctx.fill();
-        if (isUser) {
-            ctx.beginPath();
-            ctx.arc(px, py, radius, 0, Math.PI*2);
-            ctx.strokeStyle = '#fff';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-        }
-        if (label && !isUser) {
-            ctx.fillStyle = '#fff';
-            ctx.font = `600 ${Math.max(7, Math.round(radius * 0.75))}px Inter, sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(label, px, py + 0.5);
-        }
+        ctx.beginPath(); ctx.arc(px, py, radius + 4, 0, Math.PI*2);
+        ctx.fillStyle = color + (isDark ? '40' : '28'); ctx.fill();
+        ctx.beginPath(); ctx.arc(px, py, radius, 0, Math.PI*2);
+        ctx.fillStyle = color; ctx.fill();
+        if (isUser) { ctx.beginPath(); ctx.arc(px, py, radius, 0, Math.PI*2); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
+        if (label && !isUser) { ctx.fillStyle = '#fff'; ctx.font = `600 ${Math.max(7, Math.round(radius * 0.75))}px Inter, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, px, py + 0.5); }
     }
-
-    partidosData.forEach(p => {
-        const pos = posicionesPartidos[p.id];
-        drawDot(toPixelX(pos.ex), toPixelY(pos.ey), coloresPartidos[p.id], 10, p.id, false);
-    });
-
+    partidosData.forEach(p => { const pos = posicionesPartidos[p.id]; drawDot(toPixelX(pos.ex), toPixelY(pos.ey), coloresPartidos[p.id], 10, p.id, false); });
     if (userX !== null) {
         drawDot(toPixelX(userX), toPixelY(userY), '#3b82f6', 11, '●', true);
         const ux = toPixelX(userX), uy = toPixelY(userY);
         const lblText = i18n[currentLang].lblTu;
         ctx.fillStyle = isDark ? '#f1f5f9' : '#1a2a44';
-        ctx.font = `600 11px Inter, sans-serif`;
-        ctx.textAlign = 'center';
+        ctx.font = `600 11px Inter, sans-serif`; ctx.textAlign = 'center';
         const lblY = uy > size * 0.85 ? uy - 20 : uy + 22;
         ctx.fillText(lblText, ux, lblY);
     }
@@ -749,10 +551,8 @@ function calcularPosicionIdeologica(userAnswers) {
     let sumX = 0, sumY = 0, wX = 0, wY = 0;
     preguntas.forEach((q, i) => {
         const normalized = (userAnswers[i] - 3) / 2;
-        sumX += normalized * q.ex;
-        sumY += normalized * q.ey;
-        wX   += Math.abs(q.ex);
-        wY   += Math.abs(q.ey);
+        sumX += normalized * q.ex; sumY += normalized * q.ey;
+        wX   += Math.abs(q.ex);   wY   += Math.abs(q.ey);
     });
     const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
     return { x: clamp((sumX/wX)*2,-2,2), y: clamp((sumY/wY)*2,-2,2) };
@@ -761,15 +561,10 @@ function calcularPosicionIdeologica(userAnswers) {
 function mostrarResultados() {
     const userAnswers = preguntas.map((_, i) => parseInt(document.getElementById(`q${i}`).value));
     let scores = { FA:0, PN:0, PC:0, PI:0, CA:0 };
-    preguntas.forEach((q, i) => {
-        partidosData.forEach(p => scores[p.id] += (1 - (Math.abs(userAnswers[i] - q.p[p.id]) / 4)));
-    });
-    const ranking = partidosData.map(p => ({
-        ...p, score: ((scores[p.id] / preguntas.length) * 100).toFixed(1)
-    })).sort((a, b) => b.score - a.score);
+    preguntas.forEach((q, i) => { partidosData.forEach(p => scores[p.id] += (1 - (Math.abs(userAnswers[i] - q.p[p.id]) / 4))); });
+    const ranking = partidosData.map(p => ({ ...p, score: ((scores[p.id] / preguntas.length) * 100).toFixed(1) })).sort((a, b) => b.score - a.score);
     const { x: userX, y: userY } = calcularPosicionIdeologica(userAnswers);
     document.getElementById('main-container').className = 'container container-results';
-
     const rankCont = document.getElementById('ranking-container');
     rankCont.innerHTML = '';
     ranking.forEach(r => {
@@ -777,21 +572,15 @@ function mostrarResultados() {
             <div class="ranking-card">
                 <img class="partido-flag" src="${r.flag}" alt="${r.nombre}" onerror="this.style.background='${coloresPartidos[r.id]}';this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
                 <div class="ranking-info">
-                    <div style="display:flex; justify-content:space-between; font-weight:700;">
-                        <span>${r.nombre}</span><span>${r.score}%</span>
-                    </div>
+                    <div style="display:flex; justify-content:space-between; font-weight:700;"><span>${r.nombre}</span><span>${r.score}%</span></div>
                     <div class="barra-ext"><div class="barra-int" style="width:${r.score}%; background:${coloresPartidos[r.id]}"></div></div>
                 </div>
             </div>`;
     });
-
     const legend = document.getElementById('brujula-legend');
     legend.innerHTML = '';
-    partidosData.forEach(p => {
-        legend.innerHTML += `<span><span class="leg-dot" style="background:${coloresPartidos[p.id]}"></span>${p.nombre}</span>`;
-    });
+    partidosData.forEach(p => { legend.innerHTML += `<span><span class="leg-dot" style="background:${coloresPartidos[p.id]}"></span>${p.nombre}</span>`; });
     legend.innerHTML += `<span><span class="leg-dot" style="background:#3b82f6; outline:2px solid #3b82f6; outline-offset:1px;"></span>${i18n[currentLang].lblTu}</span>`;
-
     const detCont = document.getElementById('detalle-container');
     detCont.innerHTML = '';
     preguntas.forEach((q, i) => {
@@ -801,7 +590,6 @@ function mostrarResultados() {
         let visual = `<div class="comparativa-visual"><div class="punto-usuario" style="left:${((userVal-1)/4)*100}%;"></div>`;
         const posGrp = {1:[],2:[],3:[],4:[],5:[]};
         partidosData.forEach(p => posGrp[q.p[p.id]].push(p));
-        
         for (let v=1; v<=5; v++) {
             posGrp[v].forEach((p, idx) => {
                 const quoteText = q.just && q.just[p.id] ? q.just[p.id] : i18n[currentLang].quote;
@@ -816,14 +604,11 @@ function mostrarResultados() {
                     <div style="font-weight:600; line-height:1.4; font-size:0.95rem;">${qText}</div>
                 </div>
                 <div style="margin-top:12px;">
-                    <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-muted); margin-bottom:8px;">
-                        <span>${i18n[currentLang].disagree}</span><span>${i18n[currentLang].agree}</span>
-                    </div>
+                    <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-muted); margin-bottom:8px;"><span>${i18n[currentLang].disagree}</span><span>${i18n[currentLang].agree}</span></div>
                     ${visual}
                 </div>
             </div>`;
     });
-
     document.getElementById('page-test').classList.remove('active');
     document.getElementById('page-results').classList.add('active');
     window.scrollTo(0, 0);
@@ -857,11 +642,7 @@ function mostrarMetodologia(e) {
 
 /* ── INIT ── */
 const savedLang = localStorage.getItem('uruvoto-lang');
-if (savedLang) {
-    setLang(savedLang);
-} else {
-    setLang('es');
-}
+if (savedLang) { setLang(savedLang); } else { setLang('es'); }
 updateThemeIcon();
 
 function irHome() {
