@@ -1,0 +1,21 @@
+{
+  "Montevideo":     { "poblacion": 1381000, "emoji": "🏙️" },
+  "Canelones":      { "poblacion": 559000,  "emoji": "🌾" },
+  "Maldonado":      { "poblacion": 188000,  "emoji": "🏖️" },
+  "Salto":          { "poblacion": 131000,  "emoji": "🌊" },
+  "Paysandú":       { "poblacion": 113000,  "emoji": "🏭" },
+  "Rivera":         { "poblacion": 103000,  "emoji": "🌿" },
+  "Tacuarembó":     { "poblacion": 90000,   "emoji": "🐄" },
+  "Colonia":        { "poblacion": 119000,  "emoji": "⛵" },
+  "San José":       { "poblacion": 108000,  "emoji": "🌻" },
+  "Cerro Largo":    { "poblacion": 82000,   "emoji": "🏔️" },
+  "Soriano":        { "poblacion": 82000,   "emoji": "🌱" },
+  "Artigas":        { "poblacion": 73000,   "emoji": "🦅" },
+  "Rocha":          { "poblacion": 69000,   "emoji": "🌅" },
+  "Río Negro":      { "poblacion": 54000,   "emoji": "🌊" },
+  "Florida":        { "poblacion": 67000,   "emoji": "🌼" },
+  "Durazno":        { "poblacion": 57000,   "emoji": "🍑" },
+  "Lavalleja":      { "poblacion": 58000,   "emoji": "🏞️" },
+  "Treinta y Tres": { "poblacion": 48000,   "emoji": "🌾" },
+  "Flores":         { "poblacion": 25000,   "emoji": "🌸" }
+}
