@@ -1,0 +1,181 @@
+{
+  "anio": 2025,
+  "vueltas": [
+    {
+      "nombre": { "es": "Primera vuelta", "en": "First round" },
+      "candidatos": [
+        {
+          "nombre": "Yamandú Orsi",
+          "vice": "Carolina Cosse",
+          "partido": "FA",
+          "votos": 1100000,
+          "ganador": false,
+          "foto": "fotos/orsi.jpg"
+        },
+        {
+          "nombre": "Álvaro Delgado",
+          "vice": "Valeria Ripoll",
+          "partido": "PN",
+          "votos": 950000,
+          "ganador": false,
+          "foto": "fotos/delgado.jpg"
+        }
+      ],
+      "mapa": {
+        "Montevideo": { "ganador": "FA", "votos": { "FA": 450000, "PN": 200000, "PC": 80000 } },
+        "Canelones":  { "ganador": "FA", "votos": { "FA": 180000, "PN": 160000 } }
+      },
+      "senado": { "FA": 16, "PN": 11, "PC": 3 },
+      "diputados": { "FA": 48, "PN": 40, "PC": 11 }
+    },
+    {
+      "nombre": { "es": "Segunda vuelta", "en": "Second round" },
+      "candidatos": [
+        { "nombre": "Yamandú Orsi",  "partido": "FA", "votos": 1180000, "ganador": true },
+        { "nombre": "Álvaro Delgado","partido": "PN", "votos": 1050000, "ganador": false }
+      ],
+      "mapa": {
+        "Montevideo": { "ganador": "FA", "votos": { "FA": 480000, "PN": 210000 } }
+      },
+      "senado": {},
+      "diputados": {}
+    }
+  ],
+  "plebiscitos": [],
+
+  // ── NUEVO CAMPO: internas (solo en años >= 1999) ──────────
+  "internas": [
+    {
+      "partido": "FA",
+      "candidatos": [
+        {
+          "nombre": "Yamandú Orsi",
+          "vice": "Carolina Cosse",
+          "votos": 320000,
+          "ganador": true,
+          "foto": "fotos/orsi.jpg"
+        },
+        {
+          "nombre": "Mario Bergara",
+          "votos": 120000,
+          "ganador": false
+        }
+      ],
+      "mapa": {
+        "Montevideo": { "ganador": "FA", "votos": { "FA": 130000 } },
+        "Canelones":  { "ganador": "FA", "votos": { "FA": 90000 } }
+      }
+    },
+    {
+      "partido": "PN",
+      "candidatos": [
+        {
+          "nombre": "Álvaro Delgado",
+          "votos": 280000,
+          "ganador": true,
+          "foto": "fotos/delgado.jpg"
+        },
+        {
+          "nombre": "Jorge Gandini",
+          "votos": 95000,
+          "ganador": false
+        }
+      ],
+      "mapa": {
+        "Montevideo": { "ganador": "PN" },
+        "Canelones":  { "ganador": "PN" }
+      }
+    },
+    {
+      "partido": "PC",
+      "candidatos": [
+        {
+          "nombre": "Robert Silva",
+          "votos": 80000,
+          "ganador": true
+        }
+      ],
+      "mapa": {}
+    }
+  ]
+}
+
+
+// ══════════════════════════════════════════════════════════
+// ESQUEMA: data/dept/2024.json  (elección departamental)
+// Archivo SEPARADO, en subcarpeta data/dept/
+// ══════════════════════════════════════════════════════════
+{
+  "anio": 2024,
+  "departamentos": {
+    "Montevideo": {
+      "ganador": {
+        "nombre": "Mauricio Zunino",
+        "partido": "FA",
+        "foto": "fotos/zunino.jpg"
+      },
+      "candidatos": [
+        {
+          "nombre": "Mauricio Zunino",
+          "partido": "FA",
+          "votos": 420000,
+          "ganador": true,
+          "foto": "fotos/zunino.jpg"
+        },
+        {
+          "nombre": "Laura Raffo",
+          "partido": "PN",
+          "votos": 310000,
+          "ganador": false
+        },
+        {
+          "nombre": "Andrés Ojeda",
+          "partido": "PC",
+          "votos": 90000,
+          "ganador": false
+        }
+      ]
+    },
+    "Canelones": {
+      "ganador": {
+        "nombre": "Yamandú Orsi",
+        "partido": "FA",
+        "foto": "fotos/orsi.jpg"
+      },
+      "candidatos": [
+        {
+          "nombre": "Yamandú Orsi",
+          "partido": "FA",
+          "votos": 185000,
+          "ganador": true
+        },
+        {
+          "nombre": "Sebastián Cal",
+          "partido": "PN",
+          "votos": 140000,
+          "ganador": false
+        }
+      ]
+    },
+    "Maldonado": {
+      "ganador": {
+        "nombre": "Enrique Antía",
+        "partido": "PN"
+      },
+      "candidatos": [
+        {
+          "nombre": "Enrique Antía",
+          "partido": "PN",
+          "votos": 72000,
+          "ganador": true
+        },
+        {
+          "nombre": "Candidato FA",
+          "partido": "FA",
+          "votos": 48000,
+          "ganador": false
+        }
+      ]
+    }
+  }
+}
