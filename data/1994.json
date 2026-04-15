@@ -5,9 +5,9 @@
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
         "candidatos": [
           { "nombre": "Julio María Sanguinetti", "vice": "Hugo Batalla", "partido": "PC", "votos": 656428, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/sanguinetti-94.png" },
-          { "nombre": "Tabaré Vázquez", "vice": "Mariano Arana", "partido": "FA", "votos": 621226, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-94.png" },
-          { "nombre": "Alberto Volonté", "vice": "Luis Brezzo", "partido": "PN", "votos": 633384, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/volont%C3%A9-94.png" },
-          { "nombre": "Rafael Michelini", "vice": "Rafael Pérez del Castillo", "partido": "NE", "votos": 104773, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/michelini-94.png" }
+          { "nombre": "Tabaré Vázquez", "vice": "Rodolfo Nin Novoa", "partido": "FA", "votos": 621226, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/v%C3%A1zquez-94.png" },
+          { "nombre": "Alberto Volonté", "vice": "Álvaro Ramos", "partido": "PN", "votos": 633384, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/volont%C3%A9-94.png" },
+          { "nombre": "Rafael Michelini", "vice": "Héctor Pérez Pereira", "partido": "NE", "votos": 104773, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/michelini-94.png" }
         ],
         "mapa": {
           "Montevideo": { "ganador": "FA", "votos": { "PC": 243921, "PN": 193566, "FA": 405111, "NE": 66696 } },
