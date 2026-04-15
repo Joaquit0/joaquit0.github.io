@@ -19,44 +19,49 @@
           "nombre": "Verónica Piñeiro",
           "partido": "FA",
           "votos": 101551,
-          "ganador": false
+          "ganador": false,
+          "foto": "https://file.garden/aYAawg4_plkXr2uQ/vero-25.png"
         },
         {
           "nombre": "Salvador Schelotto",
           "partido": "FA",
           "votos": 65252,
-          "ganador": false
+          "ganador": false,
+          "foto": "https://file.garden/aYAawg4_plkXr2uQ/salvador-25.png"
         },
         {
           "nombre": "Martín Lema",
           "partido": "CR",
           "votos": 298150,
-          "ganador": false
+          "ganador": false,
+          "foto": "https://file.garden/aYAawg4_plkXr2uQ/lema-25.png"
         },
         {
           "nombre": "Virginia Cáceres",
           "partido": "CR",
           "votos": 41459,
-          "ganador": false
+          "ganador": false,
+          "foto": "https://file.garden/aYAawg4_plkXr2uQ/vicky-25.png"
         },
         {
           "nombre": "Roque García",
           "partido": "CR",
           "votos": 5685,
-          "ganador": false
+          "ganador": false,
+          "foto": "https://file.garden/aYAawg4_plkXr2uQ/roque-25.png"
         }
       ]
     },
     "Canelones": {
       "ganador": {
-        "nombre": "Yamandú Orsi",
+        "nombre": "Francisco Legnani",
         "partido": "FA",
-        "foto": "fotos/orsi.jpg"
+        "foto": ""
       },
       "candidatos": [
         {
           "nombre": "Yamandú Orsi",
-          "partido": "FA",
+          "partido": "CR",
           "votos": 185000,
           "ganador": true
         },
