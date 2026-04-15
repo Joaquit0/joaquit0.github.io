@@ -1,0 +1,92 @@
+{
+  "anio": 2025,
+  "departamentos": {
+    "Montevideo": {
+      "ganador": {
+        "nombre": "Mario Bergara",
+        "partido": "FA",
+        "foto": "https://file.garden/aYAawg4_plkXr2uQ/image%2023.png"
+      },
+      "candidatos": [
+        {
+          "nombre": "Mario Bergara",
+          "partido": "FA",
+          "votos": 252039,
+          "ganador": true,
+          "foto": "https://file.garden/aYAawg4_plkXr2uQ/image%2023.png"
+        },
+        {
+          "nombre": "Verónica Piñeiro",
+          "partido": "FA",
+          "votos": 101551,
+          "ganador": false
+        },
+        {
+          "nombre": "Salvador Schelotto",
+          "partido": "FA",
+          "votos": 65252,
+          "ganador": false
+        },
+        {
+          "nombre": "Martín Lema",
+          "partido": "CR",
+          "votos": 298150,
+          "ganador": false
+        },
+        {
+          "nombre": "Virginia Cáceres",
+          "partido": "CR",
+          "votos": 41459,
+          "ganador": false
+        },
+        {
+          "nombre": "Roque García",
+          "partido": "CR",
+          "votos": 5685,
+          "ganador": false
+        }
+      ]
+    },
+    "Canelones": {
+      "ganador": {
+        "nombre": "Yamandú Orsi",
+        "partido": "FA",
+        "foto": "fotos/orsi.jpg"
+      },
+      "candidatos": [
+        {
+          "nombre": "Yamandú Orsi",
+          "partido": "FA",
+          "votos": 185000,
+          "ganador": true
+        },
+        {
+          "nombre": "Sebastián Cal",
+          "partido": "PN",
+          "votos": 140000,
+          "ganador": false
+        }
+      ]
+    },
+    "Maldonado": {
+      "ganador": {
+        "nombre": "Enrique Antía",
+        "partido": "PN"
+      },
+      "candidatos": [
+        {
+          "nombre": "Enrique Antía",
+          "partido": "PN",
+          "votos": 72000,
+          "ganador": true
+        },
+        {
+          "nombre": "Candidato FA",
+          "partido": "FA",
+          "votos": 48000,
+          "ganador": false
+        }
+      ]
+    }
+  }
+}
