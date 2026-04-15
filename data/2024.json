@@ -7,10 +7,10 @@
           { "nombre": "Yamandú Orsi", "vice": "Carolina Cosse", "partido": "FA", "votos": 1071826, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/image%209.png" },
           { "nombre": "Álvaro Delgado", "vice": "Valeria Ripoll", "partido": "PN", "votos": 655426, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/image%2010.png" },
           { "nombre": "Andrés Ojeda", "vice": "Robert Silva", "partido": "PC", "votos": 392592, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/image%2011.png" },
-          { "nombre": "Guido Manini Ríos", "vice": "Lorena Quintana", "partido": "CA", "votos": 60549, "ganador": false, "foto": "" },
+          { "nombre": "Guido Manini Ríos", "vice": "Lorena Quintana", "partido": "CA", "votos": 60549, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/manini-19.png" },
           { "nombre": "Pablo Mieres", "vice": "Mónica Bottero", "partido": "PI", "votos": 41618, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/mieres-19.png" },
           { "nombre": "César Vega", "vice": "Andrés Chucarro", "partido": "PERI", "votos": 9281, "ganador": false, "foto": "" },
-          { "nombre": "Gustavo Salle", "vice": "", "partido": "IS", "votos": 65796, "ganador": false, "foto": "" }
+          { "nombre": "Gustavo Salle", "vice": "", "partido": "IS", "votos": 65796, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/salle-24.png" }
         ],
         "mapa": {
           "Montevideo": { "ganador": "FA", "votos": { "FA": 438839, "PN": 214675, "PC": 98559, "CA": 76410, "PI": 12415, "PERI": 15978, "PG": 11715 } },
