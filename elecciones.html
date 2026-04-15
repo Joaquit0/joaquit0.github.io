@@ -15,13 +15,15 @@
             --card-bg: #ffffff;
             --text-muted: #64748b;
             --azul-texto: #1a2a44;
+            --azul-claro-hover: #f1f5f9;
         }
         [data-theme="dark"] {
-            --fondo: #0f172a;
-            --card-bg: #1e293b;
+            --fondo: #121212;
+            --card-bg: #1e1e1e;
             --azul-texto: #f1f5f9;
-            --borde-card: rgba(255,255,255,0.1);
-            --text-muted: #94a3b8;
+            --azul-claro-hover: #2c2c2c;
+            --borde-card: rgba(255,255,255,0.08);
+            --text-muted: #a3a3a3;
         }
 
         * { box-sizing: border-box; }
@@ -42,13 +44,11 @@
         /* ── HEADER ── */
         header { 
             background: var(--card-bg); border-bottom: 1px solid var(--borde-card); 
-            padding: 0.8rem 2rem; display: grid; grid-template-columns: 1fr auto 1fr; 
-            align-items: center; position: relative; z-index: 1000; height: 60px;
+            padding: 0.8rem 2rem; display: flex;
+            align-items: center; justify-content: center; gap: 20px;
+            position: relative; z-index: 1000; height: 60px;
         }
-        .header-left { display: flex; gap: 15px; align-items: center; }
-        .header-right { display: flex; gap: 10px; align-items: center; justify-content: flex-end; }
         .logo { font-weight: 700; font-size: 1.2rem; color: var(--azul-vibrante); cursor: pointer; text-decoration: none; }
-        .flag-center img { height: 32px; border-radius: 2px; }
         select, .btn-icon { background: var(--card-bg); color: var(--azul-texto); border: 1px solid var(--borde-card); padding: 8px 12px; border-radius: 8px; cursor: pointer; font-family: 'Inter'; }
 
         /* ── LAYOUT Y SCROLL INDEPENDIENTE ── */
@@ -113,6 +113,29 @@
             flex-direction: column;
         }
 
+        /* ── TIPO DE ELECCIÓN (Nacional / Departamental) ── */
+        .elec-type-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .elec-type-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 1.5px solid var(--borde-card);
+            background: var(--fondo);
+            color: var(--azul-texto);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.18s;
+            text-align: center;
+        }
+        .elec-type-btn:hover { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
+        .elec-type-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
+
         .top-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 8px; }
         .eleccion-selector, .vista-selector {
             background: var(--fondo); border: 1px solid var(--borde-card); border-radius: 14px;
@@ -158,7 +181,7 @@
         .content-section:first-child { border-top: none; padding-top: 0; }
         .content-section h3 { margin: 0 0 16px; font-size: 1rem; color: var(--azul-texto); font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px; }
 
-        /* TOP 3 CANDIDATOS */
+        /* CANDIDATOS (todos en grande si >1%) */
         .cand-top { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
         .cand-card {
             background: var(--fondo); border-radius: 12px; display: flex; flex-direction: row;
@@ -178,16 +201,64 @@
         .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
         .badge-ganador { display: inline-block; background: #16a34a; color: white; font-size: 0.65rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
 
-        /* Candidatos menores */
+        /* Candidatos menores (<1%) */
         .cand-minor-list { display: flex; flex-direction: column; gap: 8px; }
         .cand-minor { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 12px; padding: 10px 14px; background: var(--fondo); border: 1px solid var(--borde-card); border-radius: 12px; font-size: 0.85rem; }
 
+        /* ── INTERNAS ── */
+        .internas-filter-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding: 14px;
+            background: var(--fondo);
+            border-radius: 12px;
+            border: 1px solid var(--borde-card);
+        }
+        .interna-filter-btn {
+            padding: 7px 14px; border-radius: 8px; border: 1.5px solid var(--borde-card); background: var(--card-bg);
+            color: var(--azul-texto); font-family: 'Inter', sans-serif; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
+        }
+        .interna-filter-btn:hover { border-color: var(--azul-vibrante); }
+        .interna-filter-btn.active { color: white; }
+        .interna-filter-btn.active-todos { background: var(--azul-vibrante); border-color: var(--azul-vibrante); color: white; }
+
+        .interna-partido-section { margin-bottom: 28px; }
+        .interna-partido-header {
+            display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+            padding-bottom: 8px; border-bottom: 2px solid var(--borde-card);
+        }
+        .interna-partido-dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+        .interna-partido-name { font-size: 0.95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; }
+        .interna-ganador-badge { font-size: 0.7rem; background: #16a34a; color: white; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
+
         /* DEPARTAMENTALES GRID */
         .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
-        .dept-card { border-radius: 12px; overflow: hidden; background: var(--fondo); position: relative; border-width: 2px; border-style: solid; display: flex; flex-direction: row; cursor: default; height: 100px; }
+        .dept-card { 
+            border-radius: 12px; overflow: hidden; background: var(--fondo); position: relative; 
+            border-width: 2px; border-style: solid; display: flex; flex-direction: row; 
+            cursor: pointer; height: 100px; transition: transform 0.2s; 
+        }
+        .dept-card:hover { transform: translateY(-2px); }
+        .dept-card.selected { box-shadow: 0 0 0 3px var(--azul-vibrante); }
         .dept-photo { width: 40%; height: 100%; display: flex; align-items: center; justify-content: center; font-weight: 800; color: white; font-size: 2rem; border-right: 1px solid rgba(0,0,0,0.05); }
         .dept-info { padding: 10px; text-align: left; display: flex; flex-direction: column; justify-content: center; width: 60%; }
         .dept-info-name { font-weight: 800; font-size: 0.95rem; line-height: 1.1; margin-bottom: 4px;}
+        .dept-winner-name { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; line-height: 1.2; }
+
+        /* DETALLE DE DEPARTAMENTO (elecciones departamentales) */
+        .dept-detalle {
+            margin-top: 24px;
+            padding: 20px;
+            background: var(--fondo);
+            border-radius: 14px;
+            border: 1.5px solid var(--azul-vibrante);
+        }
+        .dept-detalle h4 {
+            margin: 0 0 16px; font-size: 1rem; font-weight: 800;
+            border-left: 4px solid var(--azul-vibrante); padding-left: 10px;
+        }
 
         /* PARLAMENTO (Senado/Diputados) */
         .legislativo-container { display: flex; flex-direction: column; gap: 90px; padding-top: 10px; margin-bottom: 20px; }
@@ -196,7 +267,6 @@
         
         .parliament-container { position: relative; width: 100%; max-width: 480px; margin: 0 auto; aspect-ratio: 2 / 1; display: block; overflow: visible; }
         
-        /* Círculos limpios, sin sombra */
         .parliament-dot { position: absolute; border-radius: 50%; cursor: pointer; transition: transform 0.2s; }
         .parliament-dot:hover { transform: scale(1.4); z-index: 50; }
         
@@ -208,7 +278,6 @@
         .parliament-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #1a1a1a transparent transparent transparent; }
         .parliament-dot:hover .parliament-tooltip { visibility: visible; opacity: 1; }
         
-        /* Espaciado de la leyenda mejorado */
         .parliament-legend { display: flex; flex-wrap: wrap; gap: 14px 24px; justify-content: center; margin-top: 60px; }
         .p-leg-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--azul-texto); }
         .p-leg-dot { width: 18px; height: 18px; border-radius: 50%; }
@@ -242,19 +311,12 @@
 <div id="error-banner"></div>
 
 <header>
-    <div class="header-left">
-        <a class="logo" href="index.html">EleccionesUY</a>
-    </div>
-    <div class="flag-center">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg" alt="Uruguay">
-    </div>
-    <div class="header-right">
-        <select id="lang-select" onchange="changeLanguage()">
-            <option value="es">Español</option>
-            <option value="en">English</option>
-        </select>
-        <button class="btn-icon" onclick="toggleDarkMode()" id="dark-btn">🌙</button>
-    </div>
+    <a class="logo" href="index.html">EleccionesUY</a>
+    <select id="lang-select" onchange="changeLanguage()">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+    </select>
+    <button class="btn-icon" onclick="toggleDarkMode()" id="dark-btn">🌙</button>
 </header>
 
 <div id="map-tooltip"></div>
@@ -270,6 +332,12 @@
     </div>
 
     <div class="right-panel" id="right-panel">
+
+        <!-- Selector tipo de elección -->
+        <div class="elec-type-bar">
+            <button class="elec-type-btn active" id="type-btn-nacional" onclick="switchElecType('nacional')">🗳️ Nacionales</button>
+            <button class="elec-type-btn" id="type-btn-departamental" onclick="switchElecType('departamental')">🏛️ Departamentales</button>
+        </div>
         
         <div class="top-controls">
             <div class="eleccion-selector">
@@ -277,11 +345,12 @@
                 <div class="year-grid" id="year-grid"></div>
             </div>
             
-            <div class="vista-selector">
+            <div class="vista-selector" id="vista-selector-wrapper">
                 <h3 id="lbl-vistas">Secciones</h3>
                 <div class="tabs-container" id="tabs-container">
                     <button class="tab-btn active" id="tab-btn-presidenciales" onclick="scrollToSec('presidenciales')">Presidenciales</button>
-                    <button class="tab-btn" id="tab-btn-departamentales" onclick="scrollToSec('departamentales')">Departamentales</button>
+                    <button class="tab-btn" id="tab-btn-internas" onclick="scrollToSec('internas')" style="display:none;">Internas</button>
+                    <button class="tab-btn" id="tab-btn-departamentales" onclick="scrollToSec('departamentales')" style="display:none;">Departamentales</button>
                     <button class="tab-btn" id="tab-btn-legislativo" onclick="scrollToSec('legislativo')">Legislativo</button>
                 </div>
             </div>
@@ -295,7 +364,14 @@
                 <div id="content-presidenciales"></div>
             </div>
             
-            <div id="sec-departamentales" class="content-section">
+            <!-- Internas (>=1999) -->
+            <div id="sec-internas" class="content-section" style="display:none;">
+                <h3>Elecciones Internas</h3>
+                <div id="content-internas"></div>
+            </div>
+
+            <!-- Departamentales (solo en modo nacional, pre-1999 o integradas) -->
+            <div id="sec-departamentales" class="content-section" style="display:none;">
                 <h3>Intendentes Electos por Departamento</h3>
                 <div id="content-departamentales"></div>
             </div>
@@ -307,6 +383,15 @@
         </div>
 
         <div id="pleb-content" class="fade-in" style="display:none;"></div>
+
+        <!-- Contenido modo Departamental -->
+        <div id="dept-mode-content" class="fade-in" style="display:none;">
+            <div id="sec-dept-intendentes" class="content-section" style="padding-top:0;border-top:none;">
+                <h3>Intendentes Electos</h3>
+                <div id="content-dept-intendentes"></div>
+            </div>
+            <div id="sec-dept-detalle" style="display:none;"></div>
+        </div>
 
     </div>
 </div>
@@ -338,14 +423,19 @@ const DEPTO_ID = {
 /* ════════════════════════════════════════════
    VARIABLES GLOBALES
 ════════════════════════════════════════════ */
-let ELECCIONES = []; 
+let ELECCIONES = [];
+let ELECCIONES_DEPT = []; // JSONs departamentales separados
 let currentLang = localStorage.getItem('uruvoto-lang') || 'es';
-let selectedAnio = null; 
+let selectedAnio = null;
 let selectedVuelta = 0;
 let selectedPleb = null;
-let currentTab = 'presidenciales'; 
+let currentTab = 'presidenciales';
 let mapMode = 'normal';
 let scrollObserver = null;
+let elecType = 'nacional'; // 'nacional' | 'departamental'
+let selectedDeptAnio = null;
+let selectedDeptDepto = null;
+let internaFilterPartido = 'todos'; // filtro para internas
 
 document.getElementById('lang-select').value = currentLang;
 
@@ -366,20 +456,73 @@ function photoHTML(c, className) {
 }
 
 /* ════════════════════════════════════════════
+   SWITCH TIPO ELECCIÓN
+════════════════════════════════════════════ */
+function switchElecType(type) {
+    elecType = type;
+    document.getElementById('type-btn-nacional').classList.toggle('active', type === 'nacional');
+    document.getElementById('type-btn-departamental').classList.toggle('active', type === 'departamental');
+
+    if (type === 'nacional') {
+        // Mostrar controles nacionales
+        document.getElementById('all-content').style.display = 'block';
+        document.getElementById('pleb-content').style.display = 'none';
+        document.getElementById('dept-mode-content').style.display = 'none';
+        document.getElementById('vista-selector-wrapper').style.display = '';
+        renderYears();
+        renderVueltaBar();
+        renderRightPanelContent();
+        renderMapa();
+    } else {
+        // Modo departamental
+        document.getElementById('all-content').style.display = 'none';
+        document.getElementById('pleb-content').style.display = 'none';
+        document.getElementById('dept-mode-content').style.display = 'block';
+        document.getElementById('sec-dept-detalle').style.display = 'none';
+        document.getElementById('vista-selector-wrapper').style.display = 'none';
+        document.getElementById('vuelta-bar').innerHTML = '';
+        selectedDeptDepto = null;
+
+        // Seleccionar el año más cercano en departamentales
+        if (ELECCIONES_DEPT.length > 0) {
+            const candidato = ELECCIONES_DEPT.find(e => e.anio === selectedAnio) 
+                || ELECCIONES_DEPT[ELECCIONES_DEPT.length - 1];
+            selectedDeptAnio = candidato.anio;
+        }
+        renderYears();
+        renderDeptMode();
+        renderMapa();
+    }
+}
+
+/* ════════════════════════════════════════════
    RENDER DE CONTROLES
 ════════════════════════════════════════════ */
 function renderYears() {
     const grid = document.getElementById('year-grid');
     grid.innerHTML = '';
-    ELECCIONES.forEach(e => {
+
+    const source = elecType === 'departamental' ? ELECCIONES_DEPT : ELECCIONES;
+    const currentSelected = elecType === 'departamental' ? selectedDeptAnio : selectedAnio;
+
+    source.forEach(e => {
         const btn = document.createElement('button');
-        btn.className = 'year-btn' + (e.anio === selectedAnio ? ' active' : '');
+        btn.className = 'year-btn' + (e.anio === currentSelected ? ' active' : '');
         btn.textContent = e.anio;
-        btn.onclick = () => { 
-            selectedAnio = e.anio; 
-            selectedVuelta = 0; 
-            selectedPleb = null; 
-            renderAll(); 
+        btn.onclick = () => {
+            if (elecType === 'departamental') {
+                selectedDeptAnio = e.anio;
+                selectedDeptDepto = null;
+                renderYears();
+                renderDeptMode();
+                renderMapa();
+            } else {
+                selectedAnio = e.anio;
+                selectedVuelta = 0;
+                selectedPleb = null;
+                internaFilterPartido = 'todos';
+                renderAll();
+            }
         };
         grid.appendChild(btn);
     });
@@ -391,7 +534,6 @@ function renderVueltaBar() {
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
     if (!elec) return;
 
-    // Solo mostrar las vueltas presidenciales si la sección actual en pantalla es presidenciales
     if (currentTab === 'presidenciales') {
         elec.vueltas.forEach((v, i) => {
             const btn = document.createElement('button');
@@ -402,7 +544,6 @@ function renderVueltaBar() {
         });
     }
 
-    // Plebiscitos siempre visibles
     elec.plebiscitos.forEach((p, i) => {
         const btn = document.createElement('button');
         btn.className = 'vuelta-btn plebiscito' + (selectedPleb === i ? ' active' : '');
@@ -423,15 +564,11 @@ function toggleMapMode() {
 function scrollToSec(sec) {
     selectedPleb = null;
     const el = document.getElementById('sec-' + sec);
-    if (el) {
-        // Solucionado para scrollear correctamente hacia el div sin importar los pixeles
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     currentTab = sec;
     updateTabUI();
     renderVueltaBar();
     renderMapa();
-    
     document.getElementById('all-content').style.display = 'block';
     document.getElementById('pleb-content').style.display = 'none';
 }
@@ -443,32 +580,39 @@ function updateTabUI() {
     });
 }
 
+function updateNacionalTabs() {
+    const elec = ELECCIONES.find(e => e.anio === selectedAnio);
+    const hasInternas = elec && elec.anio >= 1999 && elec.internas && elec.internas.length > 0;
+    const hasOldDept = elec && elec.anio < 1999;
+
+    document.getElementById('tab-btn-internas').style.display = hasInternas ? '' : 'none';
+    document.getElementById('tab-btn-departamentales').style.display = hasOldDept ? '' : 'none';
+
+    document.getElementById('sec-internas').style.display = hasInternas ? '' : 'none';
+    document.getElementById('sec-departamentales').style.display = hasOldDept ? '' : 'none';
+}
+
 /* ════════════════════════════════════════════
    SCROLL OBSERVER
 ════════════════════════════════════════════ */
 function initScrollObserver() {
     if (scrollObserver) scrollObserver.disconnect();
-    
     const panel = window.innerWidth > 1100 ? document.getElementById('right-panel') : null;
     const sections = document.querySelectorAll('.content-section');
-    
-    // Ajustado el rootMargin para que detecte mejor la sección activa al scrollear
     scrollObserver = new IntersectionObserver((entries) => {
-        if (selectedPleb !== null) return; 
-        
+        if (selectedPleb !== null) return;
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 const secName = entry.target.id.replace('sec-', '');
                 if (currentTab !== secName) {
                     currentTab = secName;
                     updateTabUI();
-                    renderVueltaBar(); 
-                    renderMapa(); 
+                    renderVueltaBar();
+                    renderMapa();
                 }
             }
         });
     }, { root: panel, rootMargin: "-30% 0px -50% 0px", threshold: 0 });
-
     sections.forEach(s => scrollObserver.observe(s));
 }
 
@@ -476,116 +620,267 @@ function initScrollObserver() {
    RENDER DEL MAPA
 ════════════════════════════════════════════ */
 function renderMapa() {
+    // Reset
+    document.querySelectorAll('#uruguay-map #features path').forEach(el => {
+        el.style.fill = color('default');
+        el.style.fillOpacity = 1;
+    });
+
+    if (elecType === 'departamental') {
+        renderMapaDept();
+        return;
+    }
+
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
     if (!elec) return;
 
     let mapaData = {};
+
     if (selectedPleb !== null) {
         mapaData = elec.plebiscitos[selectedPleb].mapa || {};
+    } else if (currentTab === 'internas' && elec.internas) {
+        // Mapa de internas: pintar según partido seleccionado o partido ganador general
+        renderMapaInternas(elec);
+        return;
     } else {
         const indexToUse = (currentTab === 'presidenciales') ? selectedVuelta : 0;
         mapaData = elec.vueltas[indexToUse]?.mapa || {};
     }
 
-    document.querySelectorAll('#uruguay-map #features path').forEach(el => {
-        // Corregido: ya no llama a DEFAULT_FILL(), usa la función color() global
-        el.style.fill = color('default');
-        el.style.fillOpacity = 1;
-    });
+    applyMapaData(mapaData);
+}
 
+function applyMapaData(mapaData) {
     Object.entries(mapaData).forEach(([depto, info]) => {
         const svgId = DEPTO_ID[depto];
         if (!svgId) return;
-        
         let partidoId = typeof info === 'string' ? info : info.ganador;
         const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
         if (!path) return;
-        
         path.style.fill = color(partidoId);
 
-        // Modo Margen de Victoria
         if (mapMode === 'margin' && typeof info === 'object' && info.votos) {
             const votesArray = Object.values(info.votos).sort((a,b) => b - a);
             if (votesArray.length >= 2) {
                 const total = votesArray.reduce((sum, v) => sum + v, 0);
                 const margin = ((votesArray[0] - votesArray[1]) / total) * 100;
-                let opacity = 1;
-                
-                if (margin > 10) opacity = 1;
-                else if (margin >= 5) opacity = 0.8;
-                else if (margin > 1) opacity = 0.6;
-                else opacity = 0.35; 
-                
+                let opacity = margin > 10 ? 1 : margin >= 5 ? 0.8 : margin > 1 ? 0.6 : 0.35;
                 path.style.fillOpacity = opacity;
             }
         }
     });
 }
 
-function setupTooltips() {
-    // Corregido: Se declara la variable del tooltip para que no dé error
-    const tooltip = document.getElementById('map-tooltip');
+function renderMapaInternas(elec) {
+    // Si filtro = todos: pintar con el partido que ganó más votos en cada departamento entre todos los partidos
+    // Si filtro = partido específico: pintar con el candidato ganador de ese partido por depto
+    if (internaFilterPartido === 'todos') {
+        // Agregar votos por depto entre todos los partidos
+        const deptoVotos = {};
+        elec.internas.forEach(interna => {
+            const mapaInterna = interna.mapa || {};
+            Object.entries(mapaInterna).forEach(([depto, info]) => {
+                if (!deptoVotos[depto]) deptoVotos[depto] = {};
+                const totalInterna = (interna.candidatos || []).reduce((s, c) => s + c.votos, 0);
+                // simplificado: ganador de la interna por depto
+                const g = typeof info === 'string' ? info : info.ganador;
+                if (!deptoVotos[depto][interna.partido]) deptoVotos[depto][interna.partido] = 0;
+                deptoVotos[depto][interna.partido] += interna.candidatos?.find(c=>c.ganador)?.votos || 0;
+            });
+        });
+        // Pintar con el partido de mayor votos nacionales (mapa general: primer vuelta nacional)
+        const elec0 = elec.vueltas[0];
+        applyMapaData(elec0?.mapa || {});
+    } else {
+        const interna = elec.internas.find(i => i.partido === internaFilterPartido);
+        if (interna && interna.mapa) {
+            applyMapaData(interna.mapa);
+        }
+    }
+}
 
+function renderMapaDept() {
+    const elecDept = ELECCIONES_DEPT.find(e => e.anio === selectedDeptAnio);
+    if (!elecDept) return;
+    Object.entries(elecDept.departamentos || {}).forEach(([depto, info]) => {
+        const svgId = DEPTO_ID[depto];
+        if (!svgId) return;
+        const ganador = info.ganador || info;
+        const partidoId = typeof ganador === 'string' ? ganador : ganador.partido;
+        const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
+        if (!path) return;
+        path.style.fill = color(partidoId);
+        if (selectedDeptDepto === depto) {
+            path.style.stroke = '#fff';
+            path.style.strokeWidth = '3';
+        } else {
+            path.style.stroke = 'var(--card-bg)';
+            path.style.strokeWidth = '1.5';
+        }
+    });
+}
+
+function setupTooltips() {
+    const tooltip = document.getElementById('map-tooltip');
     document.querySelectorAll('#uruguay-map #features path').forEach(el => {
         el.addEventListener('mousemove', e => {
             const name = el.getAttribute('name');
-            const elec = ELECCIONES.find(ev => ev.anio === selectedAnio);
             let tooltipHtml = '';
-            
-            const indexToUse = (currentTab === 'presidenciales') ? selectedVuelta : 0;
 
-            if (selectedPleb !== null && elec) {
-                const mapaData = elec.plebiscitos[selectedPleb].mapa || {};
-                const deptoInfo = mapaData[name];
+            if (elecType === 'departamental') {
+                const elecDept = ELECCIONES_DEPT.find(ed => ed.anio === selectedDeptAnio);
                 tooltipHtml = `<strong>${name}</strong>`;
-                const partidoId = typeof deptoInfo === 'string' ? deptoInfo : (deptoInfo?.ganador || null);
-                tooltipHtml += partidoId ? `<span style="color:${color(partidoId)}">${PARTIDO_NOMBRES[partidoId] || partidoId}</span>` : '<span style="color:#94a3b8">Sin datos</span>';
-            } 
-            else if (currentTab === 'legislativo') {
-                const dipData = elec.vueltas[indexToUse]?.diputados;
-                tooltipHtml = `<strong>Resumen - ${name}</strong>`;
-                if(dipData && dipData[name]) {
-                    let total = 0;
-                    Object.entries(dipData[name]).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
-                        tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)};font-weight:bold;">${PARTIDO_NOMBRES[p]||p}</span><span>${cant}</span></div>`;
-                        total += cant;
-                    });
-                    tooltipHtml += `<div style="margin-top:6px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.2); font-weight:bold;">Total: ${total}</div>`;
-                } else if (dipData && typeof Object.values(dipData)[0] === 'number') {
-                    tooltipHtml += `<span>Distribución departamental no disponible</span>`;
+                if (elecDept && elecDept.departamentos && elecDept.departamentos[name]) {
+                    const info = elecDept.departamentos[name];
+                    const ganador = info.ganador || info;
+                    const pId = typeof ganador === 'string' ? ganador : ganador.partido;
+                    tooltipHtml += `<span style="color:${color(pId)}">${PARTIDO_NOMBRES[pId] || pId}</span>`;
+                    if (ganador.nombre) tooltipHtml += `<div style="margin-top:4px;font-size:0.8rem;">${ganador.nombre}</div>`;
                 } else {
-                    tooltipHtml += `<span>Distribución no disponible</span>`;
+                    tooltipHtml += '<span style="color:#94a3b8">Sin datos</span>';
                 }
-            }
-            else {
-                const mapaData = elec?.vueltas[indexToUse]?.mapa || {};
-                const deptoInfo = mapaData[name];
-                tooltipHtml = `<strong>${name}</strong>`;
-                if (typeof deptoInfo === 'object' && deptoInfo.votos) {
-                    let totalDepto = 0;
-                    for (let p in deptoInfo.votos) totalDepto += deptoInfo.votos[p];
-                    Object.keys(deptoInfo.votos).sort((a,b) => deptoInfo.votos[b] - deptoInfo.votos[a]).forEach(p => {
-                        let v = deptoInfo.votos[p];
-                        let pct = pctOf(v, totalDepto);
-                        tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)}; font-weight:bold;">${PARTIDO_NOMBRES[p] || p}</span><span>${fmtVotos(v)} (${pct}%)</span></div>`;
-                    });
-                } else {
+            } else {
+                const elec = ELECCIONES.find(ev => ev.anio === selectedAnio);
+                const indexToUse = (currentTab === 'presidenciales') ? selectedVuelta : 0;
+
+                if (selectedPleb !== null && elec) {
+                    const mapaData = elec.plebiscitos[selectedPleb].mapa || {};
+                    const deptoInfo = mapaData[name];
+                    tooltipHtml = `<strong>${name}</strong>`;
                     const partidoId = typeof deptoInfo === 'string' ? deptoInfo : (deptoInfo?.ganador || null);
                     tooltipHtml += partidoId ? `<span style="color:${color(partidoId)}">${PARTIDO_NOMBRES[partidoId] || partidoId}</span>` : '<span style="color:#94a3b8">Sin datos</span>';
+                } else if (currentTab === 'legislativo') {
+                    const dipData = elec?.vueltas[indexToUse]?.diputados;
+                    tooltipHtml = `<strong>Resumen - ${name}</strong>`;
+                    if(dipData && dipData[name]) {
+                        let total = 0;
+                        Object.entries(dipData[name]).sort((a,b)=>b[1]-a[1]).forEach(([p, cant]) => {
+                            tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)};font-weight:bold;">${PARTIDO_NOMBRES[p]||p}</span><span>${cant}</span></div>`;
+                            total += cant;
+                        });
+                        tooltipHtml += `<div style="margin-top:6px; padding-top:4px; border-top:1px solid rgba(255,255,255,0.2); font-weight:bold;">Total: ${total}</div>`;
+                    } else {
+                        tooltipHtml += `<span>Distribución no disponible</span>`;
+                    }
+                } else {
+                    const mapaData = elec?.vueltas[indexToUse]?.mapa || {};
+                    const deptoInfo = mapaData[name];
+                    tooltipHtml = `<strong>${name}</strong>`;
+                    if (typeof deptoInfo === 'object' && deptoInfo?.votos) {
+                        let totalDepto = 0;
+                        for (let p in deptoInfo.votos) totalDepto += deptoInfo.votos[p];
+                        Object.keys(deptoInfo.votos).sort((a,b) => deptoInfo.votos[b] - deptoInfo.votos[a]).forEach(p => {
+                            let v = deptoInfo.votos[p];
+                            let pct = pctOf(v, totalDepto);
+                            tooltipHtml += `<div class="tooltip-row"><span style="color:${color(p)}; font-weight:bold;">${PARTIDO_NOMBRES[p] || p}</span><span>${fmtVotos(v)} (${pct}%)</span></div>`;
+                        });
+                    } else {
+                        const partidoId = typeof deptoInfo === 'string' ? deptoInfo : (deptoInfo?.ganador || null);
+                        tooltipHtml += partidoId ? `<span style="color:${color(partidoId)}">${PARTIDO_NOMBRES[partidoId] || partidoId}</span>` : '<span style="color:#94a3b8">Sin datos</span>';
+                    }
                 }
             }
-            
+
             tooltip.style.display = 'block';
             tooltip.style.left = (e.clientX + 14) + 'px';
             tooltip.style.top  = (e.clientY - 10) + 'px';
             tooltip.innerHTML = tooltipHtml;
         });
         el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+        // Click en mapa: en modo departamental, seleccionar departamento
+        el.addEventListener('click', () => {
+            if (elecType === 'departamental') {
+                const name = el.getAttribute('name');
+                selectedDeptDepto = selectedDeptDepto === name ? null : name;
+                renderDeptMode();
+                renderMapaDept();
+            }
+        });
     });
 }
 
 /* ════════════════════════════════════════════
-   HEMICICLOS PERFECTOS (ALGORITMO MEJORADO)
+   MODO DEPARTAMENTAL
+════════════════════════════════════════════ */
+function renderDeptMode() {
+    const elecDept = ELECCIONES_DEPT.find(e => e.anio === selectedDeptAnio);
+    if (!elecDept) {
+        document.getElementById('content-dept-intendentes').innerHTML = '<p style="color:var(--text-muted)">Sin datos departamentales para este año.</p>';
+        return;
+    }
+
+    const deptos = elecDept.departamentos || {};
+    let html = '<div class="dept-grid">';
+    Object.keys(DEPTO_ID).forEach(depto => {
+        const info = deptos[depto];
+        if (!info) return;
+        const ganador = info.ganador || info;
+        const pId = typeof ganador === 'string' ? ganador : ganador.partido;
+        const winnerName = ganador.nombre || '';
+        const isSelected = selectedDeptDepto === depto;
+
+        html += `
+        <div class="dept-card ${isSelected ? 'selected' : ''}" style="border-color:${color(pId)}" onclick="selectDepto('${depto}')">
+            <div class="dept-photo" style="background:${color(pId)};">${pId}</div>
+            <div class="dept-info">
+                <div class="dept-info-name">${depto}</div>
+                <div style="color:${color(pId)}; font-size:0.75rem; font-weight:800;">${PARTIDO_NOMBRES[pId] || pId}</div>
+                ${winnerName ? `<div class="dept-winner-name">${winnerName}</div>` : ''}
+            </div>
+        </div>`;
+    });
+    html += '</div>';
+    document.getElementById('content-dept-intendentes').innerHTML = html;
+
+    // Detalle del departamento seleccionado
+    if (selectedDeptDepto && deptos[selectedDeptDepto]) {
+        renderDeptDetalle(selectedDeptDepto, deptos[selectedDeptDepto]);
+        document.getElementById('sec-dept-detalle').style.display = '';
+    } else {
+        document.getElementById('sec-dept-detalle').style.display = 'none';
+    }
+}
+
+function selectDepto(depto) {
+    selectedDeptDepto = selectedDeptDepto === depto ? null : depto;
+    renderDeptMode();
+    renderMapaDept();
+}
+
+function renderDeptDetalle(depto, info) {
+    const candidatos = info.candidatos || [];
+    if (candidatos.length === 0) {
+        document.getElementById('sec-dept-detalle').innerHTML = `<div class="dept-detalle"><h4>${depto} — Sin candidatos registrados</h4></div>`;
+        return;
+    }
+    const total = candidatos.reduce((s, c) => s + (c.votos || 0), 0);
+    candidatos.sort((a, b) => b.votos - a.votos);
+
+    let html = `<div class="dept-detalle"><h4>Candidatos en ${depto}</h4><div class="cand-top">`;
+    candidatos.forEach(c => {
+        const pct = pctOf(c.votos, total);
+        const pId = c.partido;
+        html += `
+        <div class="cand-card" style="border-color:${color(pId)};">
+            <div class="cand-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
+            <div class="cand-info-wrap">
+                <div class="cand-nombre">${c.nombre} ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
+                <div class="cand-partido" style="color:${color(pId)}">${PARTIDO_NOMBRES[pId] || pId}</div>
+                <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
+                <div class="cand-bottom-stats">
+                    <div class="cand-pct" style="color:${color(pId)}">${pct}%</div>
+                    <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(pId)}"></div></div>
+                </div>
+            </div>
+        </div>`;
+    });
+    html += '</div></div>';
+    document.getElementById('sec-dept-detalle').innerHTML = html;
+}
+
+/* ════════════════════════════════════════════
+   HEMICICLOS
 ════════════════════════════════════════════ */
 function distributeSeatsMock(candidatos, totalSeats) {
     let totalVotes = candidatos.reduce((s, c) => s + c.votos, 0);
@@ -602,38 +897,33 @@ function renderParliament(dotsArray, containerId, targetSeats) {
     const container = document.getElementById(containerId);
     if(!container) return;
     container.innerHTML = '';
-    const w = container.offsetWidth || 480; 
-    const h = w / 2; 
+    const w = container.offsetWidth || 480;
+    const h = w / 2;
     const cx = w / 2;
-    const cy = h; 
+    const cy = h;
 
-    // Filas precisas que suman la cantidad exacta de bancas
     let rowConfigs = [];
-    if (targetSeats === 30) rowConfigs = [6, 10, 14]; // 3 filas (Senado)
-    else if (targetSeats === 99) rowConfigs = [11, 16, 20, 24, 28]; // 5 filas (Diputados)
+    if (targetSeats === 30) rowConfigs = [6, 10, 14];
+    else if (targetSeats === 99) rowConfigs = [11, 16, 20, 24, 28];
     else rowConfigs = [targetSeats];
 
     const numRows = rowConfigs.length;
-    const dotSize = targetSeats <= 30 ? 32 : 12; // Círculo de senadores es MUCHO más grande
+    const dotSize = targetSeats <= 30 ? 32 : 12;
     const padding = dotSize / 2;
     const maxR = (w / 2) - padding;
     const minR = maxR * 0.4;
     const rowThickness = numRows > 1 ? (maxR - minR) / (numRows - 1) : 0;
-    
+
     let positions = [];
     rowConfigs.forEach((numDots, rIndex) => {
         const radius = minR + rowThickness * rIndex;
         for (let i = 0; i < numDots; i++) {
-            // Distribución equitativa a lo largo del arco (de PI a 0)
             let angle = numDots === 1 ? Math.PI / 2 : Math.PI - (i / (numDots - 1)) * Math.PI;
             positions.push({ angle: angle, x: cx + radius * Math.cos(angle), y: cy - radius * Math.sin(angle) });
         }
     });
 
-    // Llenar estrictamente de izquierda a derecha (ángulo de mayor a menor)
     positions.sort((a, b) => b.angle - a.angle);
-
-    // Ordenar partidos en un espectro político aproximado
     const order = ['UP', 'FA', 'PGP', 'NE', 'PI', 'PN', 'PC', 'CA', 'UC'];
     dotsArray.sort((a, b) => order.indexOf(a.partido) - order.indexOf(b.partido));
 
@@ -653,25 +943,138 @@ function renderParliament(dotsArray, containerId, targetSeats) {
 }
 
 /* ════════════════════════════════════════════
-   RENDER DEL CONTENIDO (PANEL DERECHO)
+   RENDER INTERNAS
+════════════════════════════════════════════ */
+function renderInternas(elec) {
+    const internasDiv = document.getElementById('content-internas');
+    if (!elec.internas || elec.internas.length === 0) {
+        internasDiv.innerHTML = '<p style="color:var(--text-muted)">Sin datos de internas para este año.</p>';
+        return;
+    }
+
+    // Barra de filtro
+    let filterHtml = '<div class="internas-filter-bar">';
+    filterHtml += `<button class="interna-filter-btn ${internaFilterPartido === 'todos' ? 'active active-todos' : ''}" onclick="setInternaFilter('todos')">Todos</button>`;
+    elec.internas.forEach(interna => {
+        const pId = interna.partido;
+        const isActive = internaFilterPartido === pId;
+        filterHtml += `<button class="interna-filter-btn ${isActive ? 'active' : ''}" 
+            style="${isActive ? `background:${color(pId)};border-color:${color(pId)};` : `border-color:${color(pId)};color:${color(pId)};`}"
+            onclick="setInternaFilter('${pId}')">${PARTIDO_NOMBRES[pId] || pId}</button>`;
+    });
+    filterHtml += '</div>';
+
+    const internasFiltradas = internaFilterPartido === 'todos'
+        ? elec.internas
+        : elec.internas.filter(i => i.partido === internaFilterPartido);
+
+    let html = filterHtml;
+
+    if (internaFilterPartido === 'todos') {
+        // Vista: un card grande por partido, mostrando candidato ganador de la interna
+        html += '<div class="cand-top">';
+        internasFiltradas.forEach(interna => {
+            const pId = interna.partido;
+            const totalInterna = interna.candidatos.reduce((s, c) => s + c.votos, 0);
+            const ganador = interna.candidatos.find(c => c.ganador) || interna.candidatos[0];
+            const pct = pctOf(ganador.votos, totalInterna);
+            html += `
+            <div class="cand-card" style="border-color:${color(pId)};">
+                <div class="cand-photo-wrap">${photoHTML(ganador, 'cand-photo')}</div>
+                <div class="cand-info-wrap">
+                    <div class="cand-nombre">${ganador.nombre} <span class="badge-ganador">Ganador interna</span></div>
+                    ${ganador.vice ? `<div class="cand-vice">Vice: ${ganador.vice}</div>` : ''}
+                    <div class="cand-partido" style="color:${color(pId)}">${PARTIDO_NOMBRES[pId] || pId}</div>
+                    <div class="cand-votos">${fmtVotos(ganador.votos)} votos · ${fmtVotos(totalInterna)} totales en la interna</div>
+                    <div class="cand-bottom-stats">
+                        <div class="cand-pct" style="color:${color(pId)}">${pct}%</div>
+                        <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(pId)}"></div></div>
+                    </div>
+                </div>
+            </div>`;
+        });
+        html += '</div>';
+    } else {
+        // Vista detallada de la interna de ese partido, con todos los candidatos
+        internasFiltradas.forEach(interna => {
+            const pId = interna.partido;
+            const totalInterna = interna.candidatos.reduce((s, c) => s + c.votos, 0);
+            const cands = [...interna.candidatos].sort((a, b) => b.votos - a.votos);
+            const pct1 = parseFloat(pctOf(cands[0]?.votos || 0, totalInterna));
+
+            html += `<div class="interna-partido-section">
+                <div class="interna-partido-header">
+                    <div class="interna-partido-dot" style="background:${color(pId)}"></div>
+                    <span class="interna-partido-name">${PARTIDO_NOMBRES[pId] || pId}</span>
+                </div>
+                <div class="cand-top">`;
+
+            cands.forEach(c => {
+                const pct = parseFloat(pctOf(c.votos, totalInterna));
+                if (pct < 1) {
+                    // Candidatos con menos de 1% van en formato compacto
+                    html += `<div class="cand-minor">
+                        <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
+                        <div>
+                            <div style="font-weight:700;font-size:0.9rem;">${c.nombre}</div>
+                            <div style="font-size:0.78rem;color:var(--text-muted)">${fmtVotos(c.votos)} votos</div>
+                        </div>
+                        <div style="font-size:1rem;font-weight:800;color:${color(pId)}">${pct.toFixed(1)}%</div>
+                    </div>`;
+                } else {
+                    html += `
+                    <div class="cand-card" style="border-color:${color(pId)};">
+                        <div class="cand-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
+                        <div class="cand-info-wrap">
+                            <div class="cand-nombre">${c.nombre} ${c.ganador ? '<span class="badge-ganador">Ganador interna</span>' : ''}</div>
+                            ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
+                            <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
+                            <div class="cand-bottom-stats">
+                                <div class="cand-pct" style="color:${color(pId)}">${pct.toFixed(1)}%</div>
+                                <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct.toFixed(1)}%; background:${color(pId)}"></div></div>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+            });
+
+            html += `</div></div>`;
+        });
+    }
+
+    internasDiv.innerHTML = html;
+}
+
+function setInternaFilter(partido) {
+    internaFilterPartido = partido;
+    const elec = ELECCIONES.find(e => e.anio === selectedAnio);
+    if (elec) {
+        renderInternas(elec);
+        renderMapaInternas(elec);
+    }
+}
+
+/* ════════════════════════════════════════════
+   RENDER DEL CONTENIDO NACIONAL
 ════════════════════════════════════════════ */
 function renderRightPanelContent() {
+    if (elecType !== 'nacional') return;
+
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
     const plebDiv = document.getElementById('pleb-content');
     const allDiv = document.getElementById('all-content');
 
-    // 1. MANEJO DE PLEBISCITOS
+    updateNacionalTabs();
+
+    // 1. PLEBISCITOS
     if (selectedPleb !== null) {
         allDiv.style.display = 'none';
         plebDiv.style.display = 'block';
-        
         const pleb = elec.plebiscitos[selectedPleb];
         const total = pleb.opciones.reduce((s, o) => s + o.votos, 0);
-        
         let html = `<h3 style="margin: 0 0 16px; font-size: 1rem; color: var(--azul-texto); font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px;">Resultados del Plebiscito</h3>`;
         html += `<p class="plebiscito-info">${txt(pleb.descripcion)}</p><div class="pleb-result">`;
         const maxVotos = Math.max(...pleb.opciones.map(o => o.votos));
-        
         pleb.opciones.forEach(op => {
             const pct = pctOf(op.votos, total);
             const isWinner = op.votos === maxVotos;
@@ -690,32 +1093,30 @@ function renderRightPanelContent() {
         return;
     }
 
-    // 2. MANEJO DE SECCIONES GENERALES
     allDiv.style.display = 'block';
     plebDiv.style.display = 'none';
-    const indexToUse = selectedVuelta; 
+    const indexToUse = selectedVuelta;
     const vuelta = elec.vueltas[indexToUse];
     if (!vuelta) return;
 
     // --- A. PRESIDENCIALES ---
+    // Todos en grande si >= 1%, resto en compacto
     const cands = [...vuelta.candidatos].sort((a,b) => b.votos - a.votos);
     const total = cands.reduce((s, c) => s + c.votos, 0);
-    const top3 = cands.slice(0, 3);
-    const rest = cands.slice(3);
+    const grandes = cands.filter(c => parseFloat(pctOf(c.votos, total)) >= 1);
+    const pequenos = cands.filter(c => parseFloat(pctOf(c.votos, total)) < 1);
 
     let presHtml = '<div class="cand-top">';
-    top3.forEach(c => {
+    grandes.forEach(c => {
         const pct = pctOf(c.votos, total);
         presHtml += `
         <div class="cand-card" style="border-color:${color(c.partido)};">
             <div class="cand-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
             <div class="cand-info-wrap">
-                <div class="cand-info">
-                    <div class="cand-nombre">${c.nombre} ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
-                    ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
-                    <div class="cand-partido" style="color:${color(c.partido)}">${PARTIDO_NOMBRES[c.partido] || c.partido}</div>
-                    <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
-                </div>
+                <div class="cand-nombre">${c.nombre} ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
+                ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
+                <div class="cand-partido" style="color:${color(c.partido)}">${PARTIDO_NOMBRES[c.partido] || c.partido}</div>
+                <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
                 <div class="cand-bottom-stats">
                     <div class="cand-pct" style="color:${color(c.partido)}">${pct}%</div>
                     <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(c.partido)}"></div></div>
@@ -725,45 +1126,51 @@ function renderRightPanelContent() {
     });
     presHtml += '</div>';
 
-    if (rest.length > 0) {
+    if (pequenos.length > 0) {
         presHtml += '<div class="cand-minor-list">';
-        rest.forEach(c => {
+        pequenos.forEach(c => {
             const pct = pctOf(c.votos, total);
             presHtml += `
             <div class="cand-minor">
                 <div style="width:36px;height:36px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
                 <div>
-                    <div class="cand-nombre" style="font-size:0.95rem;">${c.nombre} ${c.ganador ? '<span class="badge-ganador" style="font-size:0.5rem;padding:2px 4px;">Ganador</span>' : ''}</div>
-                    <div class="cand-votos">${PARTIDO_NOMBRES[c.partido] || c.partido} · ${fmtVotos(c.votos)} votos</div>
+                    <div style="font-weight:700;font-size:0.9rem;">${c.nombre}</div>
+                    <div style="font-size:0.78rem;color:var(--text-muted)">${PARTIDO_NOMBRES[c.partido] || c.partido} · ${fmtVotos(c.votos)} votos</div>
                 </div>
-                <div class="cand-pct" style="font-size:1.1rem; color:${color(c.partido)}">${pct}%</div>
+                <div style="font-size:1rem;font-weight:800;color:${color(c.partido)}">${pct}%</div>
             </div>`;
         });
         presHtml += '</div>';
     }
     document.getElementById('content-presidenciales').innerHTML = presHtml;
 
-    // --- B. DEPARTAMENTALES ---
-    const mapaData = elec.vueltas[0].mapa || {}; 
-    let deptHtml = '<div class="dept-grid">';
-    Object.keys(DEPTO_ID).forEach(depto => {
-        const info = mapaData[depto];
-        if(!info) return;
-        const winnerPartyId = typeof info === 'string' ? info : info.ganador;
+    // --- B. INTERNAS (>=1999) ---
+    if (elec.anio >= 1999 && elec.internas && elec.internas.length > 0) {
+        renderInternas(elec);
+    }
 
-        deptHtml += `
-        <div class="dept-card" style="border-color:${color(winnerPartyId)}">
-            <div class="dept-photo" style="background:${color(winnerPartyId)};">${winnerPartyId}</div>
-            <div class="dept-info">
-                <div class="dept-info-name">Intendente</div>
-                <div style="color:${color(winnerPartyId)}; font-size:0.75rem; font-weight:800;">${PARTIDO_NOMBRES[winnerPartyId] || winnerPartyId}</div>
-            </div>
-        </div>`;
-    });
-    deptHtml += '</div>';
-    document.getElementById('content-departamentales').innerHTML = deptHtml;
+    // --- C. DEPARTAMENTALES (pre-1999 en JSON nacional) ---
+    if (elec.anio < 1999) {
+        const mapaData = elec.vueltas[0].mapa || {};
+        let deptHtml = '<div class="dept-grid">';
+        Object.keys(DEPTO_ID).forEach(depto => {
+            const info = mapaData[depto];
+            if(!info) return;
+            const winnerPartyId = typeof info === 'string' ? info : info.ganador;
+            deptHtml += `
+            <div class="dept-card" style="border-color:${color(winnerPartyId)}">
+                <div class="dept-photo" style="background:${color(winnerPartyId)};">${winnerPartyId}</div>
+                <div class="dept-info">
+                    <div class="dept-info-name">${depto}</div>
+                    <div style="color:${color(winnerPartyId)}; font-size:0.75rem; font-weight:800;">${PARTIDO_NOMBRES[winnerPartyId] || winnerPartyId}</div>
+                </div>
+            </div>`;
+        });
+        deptHtml += '</div>';
+        document.getElementById('content-departamentales').innerHTML = deptHtml;
+    }
 
-    // --- C. LEGISLATIVO ---
+    // --- D. LEGISLATIVO ---
     const legHtml = `
         <div class="legislativo-container">
             <div class="parliament-wrapper">
@@ -780,8 +1187,6 @@ function renderRightPanelContent() {
     `;
     document.getElementById('content-legislativo').innerHTML = legHtml;
 
-    // Calcular Arrays para Hemiciclos
-    // SENADO
     const senData = elec.vueltas[0].senado || distributeSeatsMock(elec.vueltas[0].candidatos, 30);
     let dotsSen = []; let legSen = {};
     Object.entries(senData).forEach(([p, cant]) => {
@@ -790,8 +1195,7 @@ function renderRightPanelContent() {
     });
     let sLegend = '';
     Object.entries(legSen).sort((a,b)=>b[1]-a[1]).forEach(([p, c]) => sLegend += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${PARTIDO_NOMBRES[p]||p}: ${c}</div>`);
-    
-    // DIPUTADOS
+
     const dipData = elec.vueltas[0].diputados;
     const deptoNombres = elec.vueltas[0].diputadosNombres || {};
     let dotsDip = []; let legDip = {};
@@ -818,7 +1222,6 @@ function renderRightPanelContent() {
     let dLegend = '';
     Object.entries(legDip).sort((a,b)=>b[1]-a[1]).forEach(([p, c]) => dLegend += `<div class="p-leg-item"><div class="p-leg-dot" style="background:${color(p)}"></div>${p}: ${c}</div>`);
 
-    // Render diferido de parlamentos para asegurar que los divs existen
     setTimeout(() => {
         document.getElementById('legend-senado').innerHTML = sLegend;
         document.getElementById('legend-diputados').innerHTML = dLegend;
@@ -853,53 +1256,48 @@ const isDarkInit = document.body.getAttribute('data-theme') === 'dark';
 document.getElementById('dark-btn').innerText = isDarkInit ? '☀️' : '🌙';
 
 window.addEventListener('resize', () => {
-    if(currentTab === 'legislativo' && ELECCIONES.length > 0) {
-        renderRightPanelContent();
-    }
+    if(currentTab === 'legislativo' && ELECCIONES.length > 0) renderRightPanelContent();
 });
 
-const YEARS_TO_FETCH = [1984, 1989, 1994, 1999, 2004, 2009, 2014, 2019, 2024, 2029];
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+const YEARS_NACIONAL   = [1984, 1989, 1994, 1999, 2004, 2009, 2014, 2019, 2024, 2029];
+const YEARS_DEPT       = [1984, 1989, 1994, 1999, 2000, 2004, 2005, 2009, 2010, 2014, 2015, 2019, 2020, 2024, 2025];
 
 async function initApp() {
     try {
-        // 1. Cargar el mapa SVG
         const svgRes = await fetch('mapa.svg');
         if (!svgRes.ok) throw new Error('Error mapa');
         document.getElementById('map-container').innerHTML = await svgRes.text();
 
-        // 2. Cargar todos los archivos JSON en paralelo desde la carpeta 'data'
-        // Esto asume que tienes archivos como data/1984.json, data/1989.json...
-        const fetchPromises = YEARS_TO_FETCH.map(year => 
-            // Ponemos el .json en minúscula, ya que los servidores a veces son sensibles a mayúsculas/minúsculas
-            fetch(`data/${year}.json`)
-                .then(res => {
-                    // Si el archivo de ese año no existe (ej. un error 404), devolvemos null
-                    if (!res.ok) return null; 
-                    return res.json();
-                })
-                // Si hay un error de red, también devolvemos null para no romper todo el sitio
-                .catch(() => null)
+        // Cargar elecciones nacionales
+        const nacPromises = YEARS_NACIONAL.map(year =>
+            fetch(`data/${year}.json`).then(r => r.ok ? r.json() : null).catch(() => null)
+        );
+        // Cargar elecciones departamentales (archivos separados en data/dept/)
+        const deptPromises = YEARS_DEPT.map(year =>
+            fetch(`data/dept/${year}.json`).then(r => r.ok ? r.json() : null).catch(() => null)
         );
 
-        // Esperamos a que terminen todas las peticiones al mismo tiempo
-        const resultados = await Promise.all(fetchPromises);
+        const [nacResults, deptResults] = await Promise.all([
+            Promise.all(nacPromises),
+            Promise.all(deptPromises)
+        ]);
 
-        // 3. Limpiar y estructurar la información
-        // Filtramos los nulls (archivos que no estaban) y usamos .flat() por si guardaste 
-        // cada año adentro de un array [{anio: 1984...}] en vez de un objeto directo {anio: 1984...}
-        ELECCIONES = resultados.filter(data => data !== null).flat();
+        ELECCIONES = nacResults.filter(d => d !== null).flat();
+        ELECCIONES_DEPT = deptResults.filter(d => d !== null).flat();
 
-        if (ELECCIONES.length === 0) {
-            throw new Error('No se encontraron datos en la carpeta data/');
+        ELECCIONES.sort((a, b) => a.anio - b.anio);
+        ELECCIONES_DEPT.sort((a, b) => a.anio - b.anio);
+
+        if (ELECCIONES.length === 0) throw new Error('No se encontraron datos en data/');
+
+        selectedAnio = ELECCIONES[ELECCIONES.length - 1].anio;
+        if (ELECCIONES_DEPT.length > 0) {
+            selectedDeptAnio = ELECCIONES_DEPT[ELECCIONES_DEPT.length - 1].anio;
         }
 
-        // Ordenamos por año para garantizar que la línea de tiempo se vea correcta
-        ELECCIONES.sort((a, b) => a.anio - b.anio);
-
-        // Seleccionamos el último año cargado por defecto
-        selectedAnio = ELECCIONES[ELECCIONES.length - 1].anio;
-        
-        // Renderizar la UI
         renderAll();
         setupTooltips();
         initScrollObserver();
@@ -908,7 +1306,7 @@ async function initApp() {
         console.error(error);
         const errBanner = document.getElementById('error-banner');
         errBanner.style.display = 'block';
-        errBanner.innerHTML = '⚠️ Error cargando los archivos desde la carpeta <strong>data/</strong> o el <strong>mapa.svg</strong>. Asegúrate de estar corriendo el sitio en un servidor local y no abriendo el index.html directamente.';
+        errBanner.innerHTML = '⚠️ Error cargando archivos desde <strong>data/</strong> o <strong>mapa.svg</strong>. Asegurate de correr el sitio en un servidor local.';
         document.getElementById('map-container').innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 20px;">Esperando recursos externos...</p>';
     }
 }
