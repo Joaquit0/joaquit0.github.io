@@ -4,12 +4,12 @@
       {
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
         "candidatos": [
-          { "nombre": "Juan María Bordaberry", "vice": "Jorge Sapelli", "partido": "PC", "votos": 379515, "ganador": true, "foto": "" },
-          { "nombre": "Wilson Ferreira Aldunate", "vice": "Carlos Julio Pereyra", "partido": "PN", "votos": 439649, "ganador": false, "foto": "" },
-          { "nombre": "Líber Seregni", "vice": "Juan José Crottogini", "partido": "PDC", "votos": 304275, "ganador": false, "foto": "" },
-          { "nombre": "Jorge Batlle", "vice": "Renán Rodríguez", "partido": "PC", "votos": 242804, "ganador": false, "foto": "" },
-          { "nombre": "Mario Aguerrondo", "vice": "Heber", "partido": "PN", "votos": 228569, "ganador": false, "foto": "" },
-          { "nombre": "Amílcar Vasconcellos", "vice": "Manuel Flores Mora", "partido": "PC", "votos": 48839, "ganador": false, "foto": "" },
+          { "nombre": "Juan María Bordaberry", "vice": "Jorge Sapelli", "partido": "PC", "votos": 379515, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/bordaberry-71.png" },
+          { "nombre": "Wilson Ferreira Aldunate", "vice": "Carlos Julio Pereyra", "partido": "PN", "votos": 439649, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/wilson-71.png" },
+          { "nombre": "Líber Seregni", "vice": "Juan José Crottogini", "partido": "PDC", "votos": 304275, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/seregni-71.png" },
+          { "nombre": "Jorge Batlle", "vice": "Renán Rodríguez", "partido": "PC", "votos": 242804, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/batlle-71.png" },
+          { "nombre": "Mario Aguerrondo", "vice": "Heber", "partido": "PN", "votos": 228569, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/Aguerrondo-71.png" },
+          { "nombre": "Amílcar Vasconcellos", "vice": "Manuel Flores Mora", "partido": "PC", "votos": 48839, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/amilcar-71.png" },
           { "nombre": "Pérez del Castillo", "vice": "Saralegui", "partido": "PURC", "votos": 8844, "ganador": false, "foto": "" },
           { "nombre": "Pintos", "vice": "Torielli", "partido": "PC", "votos": 5402, "ganador": false, "foto": "" },
           { "nombre": "Ribas Gorlero", "vice": "", "partido": "PC", "votos": 4025, "ganador": false, "foto": "" },
