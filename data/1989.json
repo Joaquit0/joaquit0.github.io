@@ -14,25 +14,25 @@
           { "nombre": "Nancy Espasandín", "vice": "Grecco", "partido": "P.Conv", "votos": 190, "ganador": false, "foto": "" }
         ],
         "mapa": {
-          "Montevideo": { "ganador": "FA", "votos": { "FA": 312778, "PN": 241222, "PC": 226372, "PGP": 118977, "PVEE": 6728, "PMJ": 350, "PT": 197 } },
-          "Canelones": { "ganador": "PN", "votos": { "PN": 87251, "PC": 70153, "FA": 35424, "PGP": 17849, "PVEE": 1099, "PMJ": 77, "PT": 27 } },
-          "Maldonado": { "ganador": "PN", "votos": { "PN": 28584, "PC": 22331, "FA": 7444, "PGP": 5504, "PVEE": 834, "PMJ": 0, "PT": 0 } },
-          "Rocha": { "ganador": "PN", "votos": { "PN": 23134, "PC": 17758, "FA": 2752, "PGP": 1846, "PVEE": 21, "PMJ": 0, "PT": 4 } },
-          "Treinta y Tres": { "ganador": "PN", "votos": { "PN": 16920, "PC": 11695, "FA": 1468, "PGP": 886, "PVEE": 95, "PMJ": 0, "PT": 0 } },
-          "Cerro Largo": { "ganador": "PN", "votos": { "PN": 32577, "PC": 15675, "FA": 3007, "PGP": 1729, "PVEE": 215, "PMJ": 0, "PT": 0 } },
-          "Rivera": { "ganador": "PN", "votos": { "PN": 30509, "PC": 26299, "FA": 3322, "PGP": 1167, "PVEE": 64, "PMJ": 0, "PT": 5 } },
-          "Artigas": { "ganador": "PN", "votos": { "PN": 19766, "PC": 19061, "FA": 2193, "PGP": 1743, "PVEE": 37, "PMJ": 0, "PT": 0 } },
-          "Salto": { "ganador": "PN", "votos": { "PN": 33628, "PC": 24503, "FA": 5771, "PGP": 3519, "PVEE": 380, "PMJ": 0, "PT": 0 } },
-          "Paysandú": { "ganador": "PN", "votos": { "PN": 34026, "PC": 21099, "FA": 6912, "PGP": 3929, "PVEE": 264, "PMJ": 0, "PT": 0 } },
-          "Río Negro": { "ganador": "PC", "votos": { "PC": 13527, "PN": 12302, "FA": 3214, "PGP": 1011, "PVEE": 28, "PMJ": 0, "PT": 4 } },
-          "Soriano": { "ganador": "PN", "votos": { "PN": 27284, "PC": 18948, "FA": 5517, "PGP": 2594, "PVEE": 164, "PMJ": 0, "PT": 7 } },
-          "Colonia": { "ganador": "PN", "votos": { "PN": 40476, "PC": 26249, "FA": 9067, "PGP": 3856, "PVEE": 194, "PMJ": 0, "PT": 29 } },
-          "San José": { "ganador": "PN", "votos": { "PN": 31716, "PC": 14938, "FA": 5901, "PGP": 3920, "PVEE": 230, "PMJ": 14, "PT": 0 } },
-          "Flores": { "ganador": "PN", "votos": { "PN": 9480, "PC": 5544, "FA": 1351, "PGP": 684, "PVEE": 61, "PMJ": 0, "PT": 0 } },
-          "Florida": { "ganador": "PN", "votos": { "PN": 22540, "PC": 15224, "FA": 4222, "PGP": 3070, "PVEE": 95, "PMJ": 0, "PT": 16 } },
-          "Durazno": { "ganador": "PN", "votos": { "PN": 21239, "PC": 10776, "FA": 2069, "PGP": 1174, "PVEE": 68, "PMJ": 0, "PT": 0 } },
-          "Lavalleja": { "ganador": "PN", "votos": { "PN": 22888, "PC": 16629, "FA": 2251, "PGP": 2249, "PVEE": 143, "PMJ": 0, "PT": 0 } },
-          "Tacuarembó": { "ganador": "PN", "votos": { "PN": 30448, "PC": 20183, "FA": 3740, "PGP": 1746, "PVEE": 115, "PMJ": 0, "PT": 21 } }
+          "Montevideo": { "ganador": "FA", "votos": { "FA": 312778, "PN": 241222, "PC": 226372, "PGP": 118977, "PVEE": 6728, "PMJ": 350, "PT": 197, "P.Conv": 178 } },
+          "Canelones": { "ganador": "PN", "votos": { "PN": 87251, "PC": 70153, "FA": 35424, "PGP": 17849, "PVEE": 1099, "PMJ": 77, "PT": 27, "P.Conv": 8 } },
+          "Maldonado": { "ganador": "PN", "votos": { "PN": 28584, "PC": 22331, "FA": 7444, "PGP": 5504, "PVEE": 834, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Rocha": { "ganador": "PN", "votos": { "PN": 23134, "PC": 17758, "FA": 2752, "PGP": 1846, "PVEE": 21, "PMJ": 0, "PT": 4, "P.Conv": 0 } },
+          "Treinta y Tres": { "ganador": "PN", "votos": { "PN": 16920, "PC": 11695, "FA": 1468, "PGP": 886, "PVEE": 95, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Cerro Largo": { "ganador": "PN", "votos": { "PN": 32577, "PC": 15675, "FA": 3007, "PGP": 1729, "PVEE": 215, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Rivera": { "ganador": "PN", "votos": { "PN": 30509, "PC": 26299, "FA": 3322, "PGP": 1167, "PVEE": 64, "PMJ": 0, "PT": 5, "P.Conv": 0 } },
+          "Artigas": { "ganador": "PN", "votos": { "PN": 19766, "PC": 19061, "FA": 2193, "PGP": 1743, "PVEE": 37, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Salto": { "ganador": "PN", "votos": { "PN": 33628, "PC": 24503, "FA": 5771, "PGP": 3519, "PVEE": 380, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Paysandú": { "ganador": "PN", "votos": { "PN": 34026, "PC": 21099, "FA": 6912, "PGP": 3929, "PVEE": 264, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Río Negro": { "ganador": "PC", "votos": { "PC": 13527, "PN": 12302, "FA": 3214, "PGP": 1011, "PVEE": 28, "PMJ": 0, "PT": 4, "P.Conv": 0 } },
+          "Soriano": { "ganador": "PN", "votos": { "PN": 27284, "PC": 18948, "FA": 5517, "PGP": 2594, "PVEE": 164, "PMJ": 0, "PT": 7, "P.Conv": 0 } },
+          "Colonia": { "ganador": "PN", "votos": { "PN": 40476, "PC": 26249, "FA": 9067, "PGP": 3856, "PVEE": 194, "PMJ": 0, "PT": 29, "P.Conv": 0 } },
+          "San José": { "ganador": "PN", "votos": { "PN": 31716, "PC": 14938, "FA": 5901, "PGP": 3920, "PVEE": 230, "PMJ": 14, "PT": 0, "P.Conv": 4 } },
+          "Flores": { "ganador": "PN", "votos": { "PN": 9480, "PC": 5544, "FA": 1351, "PGP": 684, "PVEE": 61, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Florida": { "ganador": "PN", "votos": { "PN": 22540, "PC": 15224, "FA": 4222, "PGP": 3070, "PVEE": 95, "PMJ": 0, "PT": 16, "P.Conv": 0 } },
+          "Durazno": { "ganador": "PN", "votos": { "PN": 21239, "PC": 10776, "FA": 2069, "PGP": 1174, "PVEE": 68, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Lavalleja": { "ganador": "PN", "votos": { "PN": 22888, "PC": 16629, "FA": 2251, "PGP": 2249, "PVEE": 143, "PMJ": 0, "PT": 0, "P.Conv": 0 } },
+          "Tacuarembó": { "ganador": "PN", "votos": { "PN": 30448, "PC": 20183, "FA": 3740, "PGP": 1746, "PVEE": 115, "PMJ": 0, "PT": 21, "P.Conv": 0 } }
         },
         "senado": { "PN": 12, "PC": 9, "FA": 7, "PGP": 2 },
         "diputados": {
@@ -55,6 +55,145 @@
           "Durazno": { "PN": 1, "PC": 1 },
           "Lavalleja": { "PN": 1, "PC": 1 },
           "Tacuarembó": { "PN": 1, "PC": 1 }
+        },
+        "diputadosNombres": {
+          "Montevideo": [
+            { "nombre": "Guillermo Alvarez", "partido": "FA" },
+            { "nombre": "Oscar Guzmán Amorín Supparo", "partido": "PC" },
+            { "nombre": "Juan Carlos Ayala Pereira", "partido": "PN" },
+            { "nombre": "Javier Barrios Anza", "partido": "PN" },
+            { "nombre": "José Bayardi", "partido": "FA" },
+            { "nombre": "Carmen Beramendi", "partido": "FA" },
+            { "nombre": "Mario Mateo Cantón Spina", "partido": "PC" },
+            { "nombre": "Gonzalo Carámbula Volpi", "partido": "FA" },
+            { "nombre": "Guillermo Chifflet", "partido": "FA" },
+            { "nombre": "Hugo Andrés Cores Pérez", "partido": "FA" },
+            { "nombre": "Alberto Couriel", "partido": "FA" },
+            { "nombre": "Armando Da Silva Tavares", "partido": "PC" },
+            { "nombre": "José E. Díaz Chávez", "partido": "FA" },
+            { "nombre": "Daniel Díaz Maynard", "partido": "PGP" },
+            { "nombre": "Yamandú Fau", "partido": "PGP" },
+            { "nombre": "Eduardo Fazzio", "partido": "PC" },
+            { "nombre": "Juan Raúl Ferreira", "partido": "PN" },
+            { "nombre": "Daniel García Pintos", "partido": "PC" },
+            { "nombre": "Alem García", "partido": "PN" },
+            { "nombre": "Ramón I. Guadalupe Chocho", "partido": "FA" },
+            { "nombre": "Luis A. Hierro López", "partido": "PC" },
+            { "nombre": "Doreen Javier Ibarra", "partido": "FA" },
+            { "nombre": "Héctor Lescano", "partido": "PGP" },
+            { "nombre": "León Lev", "partido": "FA" },
+            { "nombre": "José Losada Corbo", "partido": "PN" },
+            { "nombre": "Jorge Machiñena Smeraldi", "partido": "PN" },
+            { "nombre": "Oscar Magurno Souto", "partido": "PC" },
+            { "nombre": "Rubén Martinez Huelmo", "partido": "PN" },
+            { "nombre": "Eden Melo Santa Marina", "partido": "PGP" },
+            { "nombre": "Rafael Michelini", "partido": "PGP" },
+            { "nombre": "Antonio Ricardo Morell Bordoli", "partido": "PN" },
+            { "nombre": "Alba Estela Osores Pereda de Lanza", "partido": "PC" },
+            { "nombre": "Heber Pinto", "partido": "PC" },
+            { "nombre": "Ana Lia Piñeyrúa Olmos", "partido": "PN" },
+            { "nombre": "Carlos Pita", "partido": "FA" },
+            { "nombre": "Sergio Previtali Roballo", "partido": "FA" },
+            { "nombre": "Walter Riesgo", "partido": "PGP" },
+            { "nombre": "Ricardo Juan Rocha Imaz", "partido": "PN" },
+            { "nombre": "A. Francisco Rodriguez Camusso", "partido": "FA" },
+            { "nombre": "Matilde Rodríguez de Gutiérrez Ruiz", "partido": "PN" },
+            { "nombre": "Rafael Sanseviero", "partido": "FA" },
+            { "nombre": "Helios Sarthou", "partido": "FA" },
+            { "nombre": "Juan A. Singer", "partido": "PC" },
+            { "nombre": "Héctor Martín Sturla", "partido": "PN" },
+            { "nombre": "Andrés Toriani", "partido": "FA" },
+            { "nombre": "Jaime Mario Trobo", "partido": "PN" },
+            { "nombre": "Roberto Vázquez Platero", "partido": "PC" }
+          ],
+          "Canelones": [
+            { "nombre": "Cayetano Capeche González", "partido": "PC" },
+            { "nombre": "Tabaré Angel Caputi Rodriguez", "partido": "PGP" },
+            { "nombre": "Marcos Gustavo Carámbula Volpi", "partido": "FA" },
+            { "nombre": "Wilson Miguel Craviotto Casas", "partido": "PC" },
+            { "nombre": "Daniel Hugo Delgado Sicco", "partido": "PN" },
+            { "nombre": "Ramón Legnani", "partido": "FA" },
+            { "nombre": "Oscar Lenzi Lateulade", "partido": "PC" },
+            { "nombre": "Agapo Luis Palomeque", "partido": "PN" },
+            { "nombre": "Nicolás Storace Montes", "partido": "PN" },
+            { "nombre": "Carlos Enrique Suárez Lerena", "partido": "PN" },
+            { "nombre": "Pedro Suárez Lorenzo", "partido": "PN" }
+          ],
+          "Maldonado": [
+            { "nombre": "Antonio Guerra Caraballo", "partido": "PC" },
+            { "nombre": "Ambrosio Rodriguez", "partido": "PN" },
+            { "nombre": "Wilson Sanabria", "partido": "PC" },
+            { "nombre": "Heriberto Sosa Acosta", "partido": "PGP" }
+          ],
+          "Rocha": [
+            { "nombre": "Néstor Moreira Graña", "partido": "PN" },
+            { "nombre": "María Celia Rubio de Varacchi", "partido": "PC" }
+          ],
+          "Treinta y Tres": [
+            { "nombre": "Francisco Ortiz", "partido": "PN" },
+            { "nombre": "Diana Saravia Olmos", "partido": "PC" }
+          ],
+          "Cerro Largo": [
+            { "nombre": "Jorge Coronel Nieto", "partido": "PN" },
+            { "nombre": "Luis Eduardo Mallo Irastorza", "partido": "PN" }
+          ],
+          "Rivera": [
+            { "nombre": "Luis Alberto Heber", "partido": "PN" },
+            { "nombre": "Baltasar Prieto Prieto", "partido": "PC" }
+          ],
+          "Artigas": [
+            { "nombre": "Otto Fernández De Avila", "partido": "PC" },
+            { "nombre": "Aldorio Silveira", "partido": "PN" }
+          ],
+          "Salto": [
+            { "nombre": "Luis Batlle Bertolini", "partido": "PC" },
+            { "nombre": "Juan Manuel Gutiérrez Gard", "partido": "PN" }
+          ],
+          "Paysandú": [
+            { "nombre": "Agapito Alvarez Viera", "partido": "PN" },
+            { "nombre": "Carlos Bertacchi", "partido": "PGP" },
+            { "nombre": "Juan Federico Bosch Indart", "partido": "PN" },
+            { "nombre": "Hugo Antonio Giupponi Quintana", "partido": "PC" },
+            { "nombre": "Humberto A. González Perla", "partido": "FA" }
+          ],
+          "Río Negro": [
+            { "nombre": "Felipe Haedo Harley", "partido": "PN" },
+            { "nombre": "Guillermo Stirling", "partido": "PC" }
+          ],
+          "Soriano": [
+            { "nombre": "Luis Alberto Andriolo Sasso", "partido": "PN" },
+            { "nombre": "Luis Bernardo Pozzolo", "partido": "PC" }
+          ],
+          "Colonia": [
+            { "nombre": "Thelman Borges Abemorad", "partido": "FA" },
+            { "nombre": "Jorge Eduardo Conde Montes de Oca", "partido": "PC" },
+            { "nombre": "Carlos M. Garat", "partido": "PN" },
+            { "nombre": "Edison Sedarri Luaces", "partido": "PN" }
+          ],
+          "San José": [
+            { "nombre": "Jorge Chápper", "partido": "PN" },
+            { "nombre": "Alejandro Zorrilla de San Martin Llamas", "partido": "PN" }
+          ],
+          "Flores": [
+            { "nombre": "Luis Alberto Ferrizo Ferreyra", "partido": "PN" },
+            { "nombre": "Ramón Pereira Pabén", "partido": "PC" }
+          ],
+          "Florida": [
+            { "nombre": "Juan Justo Amaro Cedrés", "partido": "PC" },
+            { "nombre": "Arturo Heber Füllgraff", "partido": "PN" }
+          ],
+          "Durazno": [
+            { "nombre": "Néstor Homero Andrade Rodríguez", "partido": "PN" },
+            { "nombre": "Marcelo José Antonaccio Caorsi", "partido": "PC" }
+          ],
+          "Lavalleja": [
+            { "nombre": "Abayubá Martorell Librán", "partido": "PC" },
+            { "nombre": "Gonzalo Piana Effinger", "partido": "PN" }
+          ],
+          "Tacuarembó": [
+            { "nombre": "Eber da Rosa", "partido": "PN" },
+            { "nombre": "Nereo Felipe Lateulade Martinez", "partido": "PC" }
+          ]
         }
       }
     ],
