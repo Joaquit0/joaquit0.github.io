@@ -4,10 +4,16 @@
       {
         "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
         "candidatos": [
-          { "nombre": "Julio María Sanguinetti", "vice": "Enrique Tarigo", "partido": "PC", "votos": 777701, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/sanguinetti-94.png" },
-          { "nombre": "Alberto Zumarán", "vice": "Gonzalo Aguirre Ramírez", "partido": "PN", "votos": 660773, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/zumar%C3%A1n-84.png" },
+          { "nombre": "Julio María Sanguinetti", "vice": "Enrique Tarigo", "partido": "PC", "votos": 592061, "ganador": true, "foto": "https://file.garden/aYAawg4_plkXr2uQ/sanguinetti-94.png" },
+          { "nombre": "Jorge Pacheco Areco", "vice": "Carlos Pirán", "partido": "PC", "votos": 183801, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/pacheco-84.png" },
+          { "nombre": "Alberto Zumarán", "vice": "Gonzalo Aguirre Ramírez", "partido": "PN", "votos": 554443, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/zumar%C3%A1n-84.png" },
+          { "nombre": "Dardo Ortíz", "vice": "Guillermo Ferber", "partido": "PN", "votos": 83237, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/dardo-84.png" },
+          { "nombre": "Juan Carlos Payssé", "vice": "Cristina Maeso", "partido": "PN", "votos": 21644, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/Payss%C3%A9-84.png" },
           { "nombre": "Juan José Crottogini", "vice": "José D Elía", "partido": "FA", "votos": 401104, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/crottogini-84.png" },
-          { "nombre": "Juan Vicente Chiarino", "vice": "Humberto Ciganda", "partido": "UC", "votos": 45841, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/chiarino-84.png" }
+          { "nombre": "Juan Vicente Chiarino", "vice": "Federico Slinger", "partido": "UC", "votos": 45841, "ganador": false, "foto": "https://file.garden/aYAawg4_plkXr2uQ/chiarino-84.png" },
+          { "nombre": "Juan Vital Andrada", "vice": "Santa María", "partido": "PT", "votos": 488, "ganador": false, "foto": "" },
+          { "nombre": "Néstor Bolentini", "vice": "Pérez", "partido": "PUP", "votos": 302, "ganador": false, "foto": "" },
+          { "nombre": "Ceriotti", "vice": "Pressa", "partido": "P.CONV", "votos": 153, "ganador": false, "foto": "" }
         ],
         "mapa": {
           "Montevideo": { "ganador": "PC", "votos": { "PC": 318588, "PN": 239080, "FA": 297490, "UC": 27953 } },
