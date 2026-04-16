@@ -460,6 +460,80 @@
         }
         .sources-list a:hover { text-decoration: underline; }
 
+        /* ── PARTY GROUP (multi-candidate same party) ── */
+        .cand-party-group {
+            display: flex;
+            flex-direction: row;
+            border-radius: 12px;
+            border: 2px solid var(--borde-card);
+            overflow: hidden;
+            margin-bottom: 0; /* handled by cand-top gap */
+        }
+        .cand-card-leader {
+            flex: 1;
+            margin-bottom: 0;
+            min-width: 0;
+        }
+        .cand-side-list {
+            width: 180px;
+            flex-shrink: 0;
+            border-left: 2px solid;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 0;
+            background: var(--fondo);
+            border-radius: 0 10px 10px 0;
+            overflow: hidden;
+        }
+        .cand-side-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--borde-card);
+        }
+        .cand-side-item:last-child { border-bottom: none; }
+        .cand-side-info { flex: 1; min-width: 0; }
+        .cand-side-name { font-weight: 700; font-size: 0.78rem; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cand-side-vice { font-size: 0.68rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .cand-side-votos { font-size: 0.72rem; color: var(--text-muted); }
+        .cand-side-pct { font-weight: 800; font-size: 0.95rem; flex-shrink: 0; }
+
+        /* ── EVOLUTION CHART ── */
+        .evo-section {
+            padding-top: 24px;
+            margin-bottom: 40px;
+            border-top: 1px solid var(--borde-card);
+        }
+        .evo-section h3 { margin: 0 0 16px; font-size: 1rem; color: var(--azul-texto); font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px; }
+        .evo-chart-wrap {
+            position: relative;
+            width: 100%;
+            user-select: none;
+        }
+        .evo-chart-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
+        .evo-tooltip {
+            position: fixed;
+            background: #1a1a2e;
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            pointer-events: none;
+            z-index: 9999;
+            display: none;
+            min-width: 150px;
+            max-width: 200px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+        .evo-tooltip img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; object-position: center top; margin-bottom: 6px; display: block; }
+        .evo-tooltip .evo-tt-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: white; margin-bottom: 6px; flex-shrink: 0; }
+        .evo-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+        .evo-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; cursor: pointer; opacity: 1; transition: opacity 0.2s; }
+        .evo-legend-item.hidden { opacity: 0.3; }
+        .evo-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.3s ease; }
 
@@ -495,6 +569,7 @@
 </header>
 
 <div id="map-tooltip"></div>
+<div id="evo-tooltip" class="evo-tooltip"></div>
 
 <div class="main-layout">
     <div class="map-panel">
@@ -527,6 +602,7 @@
                     <button class="tab-btn" id="tab-btn-internas" onclick="scrollToSec('internas')" style="display:none;">Internas</button>
                     <button class="tab-btn" id="tab-btn-departamentales" onclick="scrollToSec('departamentales')" style="display:none;">Departamentales</button>
                     <button class="tab-btn" id="tab-btn-legislativo" onclick="scrollToSec('legislativo')">Legislativo</button>
+                    <button class="tab-btn" id="tab-btn-evolucion" onclick="scrollToSec('evolucion')">Evolución</button>
                 </div>
             </div>
         </div>
@@ -558,6 +634,13 @@
 
             <!-- FUENTES (modo nacional) -->
             <div id="sec-fuentes-nacional"></div>
+
+            <!-- EVOLUCIÓN -->
+            <div id="sec-evolucion" class="evo-section">
+                <h3>Evolución de votos por partido</h3>
+                <div class="evo-chart-wrap" id="evo-chart-wrap"></div>
+                <div class="evo-legend" id="evo-legend"></div>
+            </div>
         </div>
 
         <div id="pleb-content" class="fade-in" style="display:none;"></div>
@@ -707,6 +790,7 @@ function switchElecType(type) {
         renderVueltaBar();
         renderRightPanelContent();
         renderMapa();
+        renderEvolucion();
     } else {
         document.getElementById('all-content').style.display = 'none';
         document.getElementById('pleb-content').style.display = 'none';
@@ -1175,23 +1259,51 @@ function renderDeptDetalle(depto, info) {
     const total = candidatos.reduce((s, c) => s + (c.votos || 0), 0);
     candidatos.sort((a, b) => b.votos - a.votos);
 
-    let html = `<div class="dept-detalle"><h4>Candidatos en ${depto}</h4><div class="cand-top">`;
+    // Group by party
+    const deptPartyGroups = {};
     candidatos.forEach(c => {
-        const pct = pctOf(c.votos, total);
-        const pId = c.partido;
+        if (!deptPartyGroups[c.partido]) deptPartyGroups[c.partido] = [];
+        deptPartyGroups[c.partido].push(c);
+    });
+    const deptSortedGroups = Object.values(deptPartyGroups).sort((a, b) => b[0].votos - a[0].votos);
+
+    let html = `<div class="dept-detalle"><h4>Candidatos en ${depto}</h4><div class="cand-top">`;
+    deptSortedGroups.forEach(group => {
+        const leader = group[0];
+        const rest = group.slice(1);
+        const pct = pctOf(leader.votos, total);
+        const pId = leader.partido;
+        html += `<div class="cand-party-group" style="border-color:${color(pId)};">`;
         html += `
-        <div class="cand-card" style="border-color:${color(pId)};">
-            <div class="cand-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
+        <div class="cand-card cand-card-leader" style="border-color:${color(pId)}; border-width: ${rest.length ? '2px 0 2px 2px' : '2px'}; border-radius: ${rest.length ? '12px 0 0 12px' : '12px'};">
+            <div class="cand-photo-wrap">${photoHTML(leader, 'cand-photo')}</div>
             <div class="cand-info-wrap">
-                <div class="cand-nombre">${c.nombre} ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
+                <div class="cand-nombre">${leader.nombre} ${leader.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
                 <div class="cand-partido" style="color:${color(pId)}">${PARTIDO_NOMBRES[pId] || pId}</div>
-                <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
+                <div class="cand-votos">${fmtVotos(leader.votos)} votos</div>
                 <div class="cand-bottom-stats">
                     <div class="cand-pct" style="color:${color(pId)}">${pct}%</div>
                     <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(pId)}"></div></div>
                 </div>
             </div>
         </div>`;
+        if (rest.length > 0) {
+            html += `<div class="cand-side-list" style="border-color:${color(pId)};">`;
+            rest.forEach(c => {
+                const cpct = pctOf(c.votos, total);
+                html += `
+                <div class="cand-side-item">
+                    <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
+                    <div class="cand-side-info">
+                        <div class="cand-side-name">${c.nombre}</div>
+                        <div class="cand-side-votos">${fmtVotos(c.votos)} votos</div>
+                    </div>
+                    <div class="cand-side-pct" style="color:${color(pId)}">${cpct}%</div>
+                </div>`;
+            });
+            html += '</div>';
+        }
+        html += '</div>';
     });
     html += '</div></div>';
     document.getElementById('sec-dept-detalle').innerHTML = html;
@@ -1415,26 +1527,66 @@ function renderRightPanelContent() {
     // --- A. PRESIDENCIALES ---
     const cands = [...vuelta.candidatos].sort((a,b) => b.votos - a.votos);
     const total = cands.reduce((s, c) => s + c.votos, 0);
-    const grandes = cands.filter(c => parseFloat(pctOf(c.votos, total)) >= 1);
-    const pequenos = cands.filter(c => parseFloat(pctOf(c.votos, total)) < 1);
+
+    // Group candidates by party, keeping each party's internal sort by votes
+    const partidoGroups = {};
+    cands.forEach(c => {
+        if (!partidoGroups[c.partido]) partidoGroups[c.partido] = [];
+        partidoGroups[c.partido].push(c);
+    });
+    // Sort groups by the top candidate's votes descending
+    const sortedGroups = Object.values(partidoGroups).sort((a, b) => b[0].votos - a[0].votos);
+
+    const grandes = [];   // groups where top cand >= 1%
+    const pequenos = [];  // all individual cands < 1% (no group)
+    sortedGroups.forEach(group => {
+        if (parseFloat(pctOf(group[0].votos, total)) >= 1) grandes.push(group);
+        else group.forEach(c => pequenos.push(c));
+    });
 
     let presHtml = '<div class="cand-top">';
-    grandes.forEach(c => {
-        const pct = pctOf(c.votos, total);
+    grandes.forEach(group => {
+        const leader = group[0];
+        const rest = group.slice(1);
+        const pct = pctOf(leader.votos, total);
+        const pId = leader.partido;
+
+        presHtml += `<div class="cand-party-group" style="border-color:${color(pId)};">`;
+        // Leader card
         presHtml += `
-        <div class="cand-card" style="border-color:${color(c.partido)};">
-            <div class="cand-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
+        <div class="cand-card cand-card-leader" style="border-color:${color(pId)}; border-width: ${rest.length ? '2px 0 2px 2px' : '2px'}; border-radius: ${rest.length ? '12px 0 0 12px' : '12px'};">
+            <div class="cand-photo-wrap">${photoHTML(leader, 'cand-photo')}</div>
             <div class="cand-info-wrap">
-                <div class="cand-nombre">${c.nombre} ${c.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
-                ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
-                <div class="cand-partido" style="color:${color(c.partido)}">${PARTIDO_NOMBRES[c.partido] || c.partido}</div>
-                <div class="cand-votos">${fmtVotos(c.votos)} votos</div>
+                <div class="cand-nombre">${leader.nombre} ${leader.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
+                ${leader.vice ? `<div class="cand-vice">Vice: ${leader.vice}</div>` : ''}
+                <div class="cand-partido" style="color:${color(pId)}">${PARTIDO_NOMBRES[pId] || pId}</div>
+                <div class="cand-votos">${fmtVotos(leader.votos)} votos</div>
                 <div class="cand-bottom-stats">
-                    <div class="cand-pct" style="color:${color(c.partido)}">${pct}%</div>
-                    <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(c.partido)}"></div></div>
+                    <div class="cand-pct" style="color:${color(pId)}">${pct}%</div>
+                    <div class="barra-cand"><div class="barra-cand-fill" style="width:${pct}%; background:${color(pId)}"></div></div>
                 </div>
             </div>
         </div>`;
+
+        // Side candidates (same party, less votes)
+        if (rest.length > 0) {
+            presHtml += `<div class="cand-side-list" style="border-color:${color(pId)};">`;
+            rest.forEach(c => {
+                const cpct = pctOf(c.votos, total);
+                presHtml += `
+                <div class="cand-side-item">
+                    <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
+                    <div class="cand-side-info">
+                        <div class="cand-side-name">${c.nombre}</div>
+                        ${c.vice ? `<div class="cand-side-vice">Vice: ${c.vice}</div>` : ''}
+                        <div class="cand-side-votos">${fmtVotos(c.votos)} votos</div>
+                    </div>
+                    <div class="cand-side-pct" style="color:${color(pId)}">${cpct}%</div>
+                </div>`;
+            });
+            presHtml += '</div>';
+        }
+        presHtml += '</div>'; // cand-party-group
     });
     presHtml += '</div>';
 
@@ -1545,12 +1697,167 @@ function renderRightPanelContent() {
     renderFuentes(elec, 'sec-fuentes-nacional');
 }
 
+/* ════════════════════════════════════════════
+   EVOLUCIÓN DE VOTOS
+════════════════════════════════════════════ */
+let evoHiddenParties = new Set();
+
+function renderEvolucion() {
+    const wrap = document.getElementById('evo-chart-wrap');
+    const legendEl = document.getElementById('evo-legend');
+    if (!wrap || ELECCIONES.length === 0) return;
+
+    // Collect all elections sorted by year, primera vuelta only
+    const elections = [...ELECCIONES].sort((a, b) => a.anio - b.anio);
+
+    // Build party -> [ {anio, pct, candidato, foto} ] map
+    // Use total votes across all candidates per year as denominator
+    const partyData = {};
+    elections.forEach(elec => {
+        const vuelta = elec.vueltas[0];
+        if (!vuelta) return;
+        const cands = vuelta.candidatos;
+        const total = cands.reduce((s, c) => s + c.votos, 0);
+        if (total === 0) return;
+
+        // Aggregate votes per party (sum all candidates of same party)
+        const partyVotesYear = {};
+        const partyCandidateYear = {}; // store top candidate per party
+        cands.forEach(c => {
+            if (!partyVotesYear[c.partido]) { partyVotesYear[c.partido] = 0; partyCandidateYear[c.partido] = c; }
+            partyVotesYear[c.partido] += c.votos;
+            if (c.votos > partyCandidateYear[c.partido].votos) partyCandidateYear[c.partido] = c;
+        });
+
+        Object.entries(partyVotesYear).forEach(([pId, votos]) => {
+            if (!partyData[pId]) partyData[pId] = [];
+            partyData[pId].push({
+                anio: elec.anio,
+                pct: parseFloat(((votos / total) * 100).toFixed(1)),
+                votos,
+                candidato: partyCandidateYear[pId],
+            });
+        });
+    });
+
+    // Only show parties that appeared in at least 1 election with >=1%
+    const relevantParties = Object.entries(partyData)
+        .filter(([, pts]) => pts.some(p => p.pct >= 1))
+        .sort((a, b) => {
+            const maxA = Math.max(...a[1].map(p => p.pct));
+            const maxB = Math.max(...b[1].map(p => p.pct));
+            return maxB - maxA;
+        });
+
+    const years = [...new Set(elections.map(e => e.anio))];
+    const W = 560, H = 280;
+    const padL = 36, padR = 20, padT = 16, padB = 32;
+    const chartW = W - padL - padR;
+    const chartH = H - padT - padB;
+
+    const xOf = anio => padL + ((anio - years[0]) / (years[years.length - 1] - years[0] || 1)) * chartW;
+    const yOf = pct => padT + chartH - (pct / 100) * chartH;
+
+    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+    // Grid lines
+    [0, 25, 50, 75, 100].forEach(tick => {
+        const y = yOf(tick);
+        svg += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--borde-card)" stroke-width="1"/>`;
+        svg += `<text x="${padL - 4}" y="${y + 4}" text-anchor="end" font-size="9" fill="var(--text-muted)" font-family="Inter">${tick}%</text>`;
+    });
+
+    // Year labels
+    years.forEach(yr => {
+        const x = xOf(yr);
+        svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + chartH}" stroke="var(--borde-card)" stroke-width="1" stroke-dasharray="3,3"/>`;
+        svg += `<text x="${x}" y="${H - 4}" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="Inter">${yr}</text>`;
+    });
+
+    // Lines
+    relevantParties.forEach(([pId, pts]) => {
+        if (evoHiddenParties.has(pId)) return;
+        const c = color(pId);
+        const sorted = [...pts].sort((a, b) => a.anio - b.anio);
+        const d = sorted.map((p, i) => `${i === 0 ? 'M' : 'L'}${xOf(p.anio).toFixed(1)},${yOf(p.pct).toFixed(1)}`).join(' ');
+        svg += `<path d="${d}" stroke="${c}" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>`;
+    });
+
+    // Dots (interactive)
+    relevantParties.forEach(([pId, pts]) => {
+        if (evoHiddenParties.has(pId)) return;
+        const c = color(pId);
+        pts.forEach(p => {
+            const x = xOf(p.anio).toFixed(1);
+            const y = yOf(p.pct).toFixed(1);
+            const candData = encodeURIComponent(JSON.stringify({
+                nombre: p.candidato?.nombre || '',
+                pct: p.pct,
+                votos: p.votos,
+                partido: pId,
+                foto: p.candidato?.foto || '',
+                anio: p.anio
+            }));
+            svg += `<circle cx="${x}" cy="${y}" r="5" fill="${c}" stroke="var(--card-bg)" stroke-width="2"
+                style="cursor:pointer"
+                onmouseenter="evoShowTip(event,'${candData}')"
+                onmouseleave="evoHideTip()"
+            />`;
+        });
+    });
+
+    svg += '</svg>';
+    wrap.innerHTML = svg;
+
+    // Legend
+    let legendHtml = '';
+    relevantParties.forEach(([pId]) => {
+        const hidden = evoHiddenParties.has(pId);
+        legendHtml += `<div class="evo-legend-item ${hidden ? 'hidden' : ''}" onclick="evoToggleParty('${pId}')">
+            <div class="evo-legend-dot" style="background:${color(pId)}"></div>
+            ${PARTIDO_NOMBRES[pId] || pId}
+        </div>`;
+    });
+    legendEl.innerHTML = legendHtml;
+}
+
+function evoShowTip(event, dataEncoded) {
+    const d = JSON.parse(decodeURIComponent(dataEncoded));
+    const tt = document.getElementById('evo-tooltip');
+    let inner = '';
+    if (d.foto) {
+        inner += `<img src="${d.foto}" alt="${d.nombre}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:center top;margin-bottom:6px;display:block;">`;
+    } else if (d.nombre) {
+        const initials = d.nombre.split(' ').filter(w => w.length > 2).slice(0,2).map(w => w[0]).join('').toUpperCase();
+        inner += `<div style="width:48px;height:48px;border-radius:50%;background:${color(d.partido)};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;color:white;margin-bottom:6px;">${initials}</div>`;
+    }
+    inner += `<div style="font-weight:700;font-size:0.9rem;margin-bottom:2px;">${d.nombre || d.partido}</div>`;
+    inner += `<div style="color:${color(d.partido)};font-weight:800;font-size:0.8rem;">${PARTIDO_NOMBRES[d.partido] || d.partido}</div>`;
+    inner += `<div style="margin-top:4px;font-size:0.85rem;font-weight:800;">${d.pct}%</div>`;
+    inner += `<div style="font-size:0.75rem;color:#94a3b8;">${fmtVotos(d.votos)} votos · ${d.anio}</div>`;
+    tt.innerHTML = inner;
+    tt.style.display = 'block';
+    tt.style.left = (event.clientX + 14) + 'px';
+    tt.style.top = (event.clientY - 10) + 'px';
+}
+
+function evoHideTip() {
+    document.getElementById('evo-tooltip').style.display = 'none';
+}
+
+function evoToggleParty(pId) {
+    if (evoHiddenParties.has(pId)) evoHiddenParties.delete(pId);
+    else evoHiddenParties.add(pId);
+    renderEvolucion();
+}
+
 function renderAll() {
     if (!ELECCIONES || ELECCIONES.length === 0) return;
     renderYears();
     renderVueltaBar();
     renderRightPanelContent();
     renderMapa();
+    renderEvolucion();
 }
 
 window.addEventListener('resize', () => {
@@ -1595,6 +1902,7 @@ async function initApp() {
         }
 
         renderAll();
+        renderEvolucion();
         setupTooltips();
         initScrollObserver();
 
