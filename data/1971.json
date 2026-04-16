@@ -1,0 +1,65 @@
+{
+    "anio": 1971,
+    "vueltas": [
+      {
+        "nombre": { "es": "1ª Vuelta", "en": "1st Round" },
+        "candidatos": [
+          { "nombre": "Juan María Bordaberry", "vice": "Jorge Sapelli", "partido": "PC", "votos": 379515, "ganador": true, "foto": "" },
+          { "nombre": "Wilson Ferreira Aldunate", "vice": "Carlos Julio Pereyra", "partido": "PN", "votos": 439649, "ganador": false, "foto": "" },
+          { "nombre": "Líber Seregni", "vice": "Juan José Crottogini", "partido": "PDC", "votos": 304275, "ganador": false, "foto": "" },
+          { "nombre": "Jorge Batlle", "vice": "Renán Rodríguez", "partido": "PC", "votos": 242804, "ganador": false, "foto": "" },
+          { "nombre": "Mario Aguerrondo", "vice": "Heber", "partido": "PN", "votos": 228569, "ganador": false, "foto": "" },
+          { "nombre": "Amílcar Vasconcellos", "vice": "Manuel Flores Mora", "partido": "PC", "votos": 48839, "ganador": false, "foto": "" },
+          { "nombre": "Pérez del Castillo", "vice": "Saralegui", "partido": "PURC", "votos": 8844, "ganador": false, "foto": "" },
+          { "nombre": "Pintos", "vice": "Torielli", "partido": "PC", "votos": 5402, "ganador": false, "foto": "" },
+          { "nombre": "Ribas Gorlero", "vice": "", "partido": "PC", "votos": 4025, "ganador": false, "foto": "" },
+          { "nombre": "Vásquez Méndez", "vice": "Rodríguez Nadales", "partido": "PJP", "votos": 288, "ganador": false, "foto": "" },
+          { "nombre": "Bolívar Espínola", "vice": "Alvarez Varela", "partido": "PMJ", "votos": 241, "ganador": false, "foto": "" },
+          { "nombre": "Suárez", "vice": "Irujo de Grendene", "partido": "PJDO", "votos": 25, "ganador": false, "foto": "" }
+        ],
+        "mapa": {
+          "Montevideo": { "ganador": "PC", "votos": { "PC": 278392, "PN": 209651, "PDC": 212406, "PURC": 3911, "PJP": 266, "PMJ": 192, "PJDO": 25 } },
+          "Canelones": { "ganador": "PC", "votos": { "PC": 76222, "PN": 73714, "PDC": 19262, "PURC": 611, "PJP": 22, "PMJ": 44, "PJDO": 0 } },
+          "Maldonado": { "ganador": "PC", "votos": { "PC": 23089, "PN": 17925, "PDC": 4337, "PURC": 144, "PJP": 0, "PMJ": 2, "PJDO": 0 } },
+          "Rocha": { "ganador": "PN", "votos": { "PN": 20597, "PC": 19237, "PDC": 2613, "PURC": 55, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Treinta y Tres": { "ganador": "PN", "votos": { "PN": 17880, "PC": 12234, "PDC": 2386, "PURC": 47, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Cerro Largo": { "ganador": "PN", "votos": { "PN": 30440, "PC": 16475, "PDC": 3457, "PURC": 22, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Rivera": { "ganador": "PN", "votos": { "PN": 25742, "PC": 22044, "PDC": 3947, "PURC": 102, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Artigas": { "ganador": "PC", "votos": { "PC": 18477, "PN": 12490, "PDC": 2656, "PURC": 118, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Salto": { "ganador": "PN", "votos": { "PN": 28472, "PC": 26446, "PDC": 6635, "PURC": 286, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Paysandú": { "ganador": "PC", "votos": { "PC": 24752, "PN": 23779, "PDC": 7464, "PURC": 429, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Río Negro": { "ganador": "PN", "votos": { "PN": 12268, "PC": 12143, "PDC": 3550, "PURC": 11, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Soriano": { "ganador": "PN", "votos": { "PN": 25382, "PC": 23384, "PDC": 5562, "PURC": 152, "PJP": 0, "PMJ": 3, "PJDO": 0 } },
+          "Colonia": { "ganador": "PN", "votos": { "PN": 37809, "PC": 28998, "PDC": 8457, "PURC": 298, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "San José": { "ganador": "PN", "votos": { "PN": 27702, "PC": 17991, "PDC": 4895, "PURC": 1970, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Flores": { "ganador": "PN", "votos": { "PN": 10166, "PC": 7292, "PDC": 1500, "PURC": 164, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Florida": { "ganador": "PN", "votos": { "PN": 22727, "PC": 18924, "PDC": 3895, "PURC": 114, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Durazno": { "ganador": "PN", "votos": { "PN": 19650, "PC": 14476, "PDC": 2976, "PURC": 68, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Lavalleja": { "ganador": "PN", "votos": { "PN": 23972, "PC": 19857, "PDC": 3308, "PURC": 140, "PJP": 0, "PMJ": 0, "PJDO": 0 } },
+          "Tacuarembó": { "ganador": "PN", "votos": { "PN": 28456, "PC": 21191, "PDC": 4969, "PURC": 202, "PJP": 0, "PMJ": 0, "PJDO": 0 } }
+        },
+        "senado": { "PC": 13, "PN": 12, "PDC": 5 },
+        "diputados": {
+          "Montevideo": { "PC": 17, "PN": 13, "PDC": 13 },
+          "Canelones": { "PC": 5, "PN": 4, "PDC": 1 },
+          "Maldonado": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Rocha": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Treinta y Tres": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Cerro Largo": { "PN": 2, "PC": 1, "PDC": 0 },
+          "Rivera": { "PN": 2, "PC": 1, "PDC": 0 },
+          "Artigas": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Salto": { "PN": 2, "PC": 1, "PDC": 1 },
+          "Paysandú": { "PC": 2, "PN": 1, "PDC": 1 },
+          "Río Negro": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Soriano": { "PC": 1, "PN": 1, "PDC": 1 },
+          "Colonia": { "PN": 2, "PC": 2, "PDC": 1 },
+          "San José": { "PN": 2, "PC": 1, "PDC": 0 },
+          "Flores": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Florida": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Durazno": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Lavalleja": { "PC": 1, "PN": 1, "PDC": 0 },
+          "Tacuarembó": { "PN": 2, "PC": 1, "PDC": 0 }
+        }
+      }
+    ]
+}
