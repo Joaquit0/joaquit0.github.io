@@ -776,7 +776,7 @@ function renderVueltaBar() {
         });
     }
 
-    elec.plebiscitos.forEach((p, i) => {
+    (elec.plebiscitos || []).forEach((p, i) => {
         const btn = document.createElement('button');
         btn.className = 'vuelta-btn plebiscito' + (selectedPleb === i ? ' active' : '');
         btn.textContent = txt(p.nombre);
