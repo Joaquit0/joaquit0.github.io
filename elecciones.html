@@ -55,74 +55,47 @@
 
         .logo { font-weight: 700; font-size: 1.2rem; color: var(--azul-vibrante); cursor: pointer; text-decoration: none; }
 
-        /* Language toggle */
         .lang-toggle {
-            display: flex;
-            align-items: center;
-            border: 1px solid var(--borde-card);
-            border-radius: 8px;
-            overflow: hidden;
-            height: 27px;
-            width: 85.063px;
-            flex-shrink: 0;
+            display: flex; align-items: center; border: 1px solid var(--borde-card);
+            border-radius: 8px; overflow: hidden; height: 27px; width: 85.063px; flex-shrink: 0;
         }
         .lang-toggle-btn {
-            flex: 1;
-            height: 100%;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.18s;
-            padding: 0;
-            letter-spacing: 0.03em;
+            flex: 1; height: 100%; border: none; background: transparent; color: var(--text-muted);
+            font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 700; cursor: pointer;
+            transition: all 0.18s; padding: 0; letter-spacing: 0.03em;
         }
-        .lang-toggle-btn.active {
-            background: var(--azul-vibrante);
-            color: white;
-        }
-        .lang-toggle-divider {
-            width: 1px;
-            height: 100%;
-            background: var(--borde-card);
-            flex-shrink: 0;
-        }
+        .lang-toggle-btn.active { background: var(--azul-vibrante); color: white; }
+        .lang-toggle-divider { width: 1px; height: 100%; background: var(--borde-card); flex-shrink: 0; }
 
-        /* Dark mode button */
         .btn-icon {
-            background: var(--card-bg);
-            border: 1px solid var(--borde-card);
-            width: 34px;
-            height: 34px;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            flex-shrink: 0;
-            transition: border-color 0.2s;
+            background: var(--card-bg); border: 1px solid var(--borde-card); width: 34px; height: 34px;
+            border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            padding: 0; flex-shrink: 0; transition: border-color 0.2s;
         }
         .btn-icon:hover { border-color: var(--azul-vibrante); }
-        .btn-icon img {
-            width: 18px;
-            height: 18px;
-            display: block;
-        }
+        .btn-icon img { width: 18px; height: 18px; display: block; }
         [data-theme="dark"] .btn-icon img.icon-sun { filter: brightness(0) invert(1); }
 
-        /* ── LAYOUT Y SCROLL INDEPENDIENTE ── */
+        /* ── LAYOUT ── */
+        /* Outer wrapper: header + everything below */
+        .page-body {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 60px);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        /* Top two-column area */
         .main-layout {
             display: grid;
             grid-template-columns: 50fr 50fr;
             gap: 0;
-            height: calc(100vh - 60px);
+            /* Takes as much height as needed but at least fills viewport */
+            min-height: calc(100vh - 60px);
         }
 
-        /* MAPA FIJO A LA IZQUIERDA */
+        /* MAP: sticky so it stays put while right panel scrolls */
         .map-panel {
             padding: 24px;
             display: flex;
@@ -130,17 +103,13 @@
             align-items: center;
             justify-content: center;
             background: var(--fondo);
-            position: relative;
-            height: 100%;
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 60px);
             overflow: hidden;
         }
         .map-controls {
-            position: absolute;
-            top: 24px;
-            left: 24px;
-            display: flex;
-            gap: 8px;
-            z-index: 10;
+            position: absolute; top: 24px; left: 24px; display: flex; gap: 8px; z-index: 10;
         }
         .map-mode-btn {
             background: var(--card-bg); color: var(--azul-texto); border: 1.5px solid var(--borde-card);
@@ -164,37 +133,20 @@
         #map-tooltip strong { display: block; font-size: 1rem; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px;}
         .tooltip-row { display: flex; justify-content: space-between; gap: 20px; font-size: 0.85rem; margin-top: 4px; }
 
-        /* SCROLL PANEL A LA DERECHA */
+        /* RIGHT PANEL: scrolls within the two-column area */
         .right-panel {
             border-left: 1px solid var(--borde-card);
             padding: 24px;
             background: var(--card-bg);
-            height: 100%;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            display: flex;
-            flex-direction: column;
+            /* No height/overflow here — it grows with content, page-body scrolls */
         }
 
-        /* ── TIPO DE ELECCIÓN (Nacional / Departamental) ── */
-        .elec-type-bar {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
+        /* ── TIPO DE ELECCIÓN ── */
+        .elec-type-bar { display: flex; gap: 8px; margin-bottom: 12px; }
         .elec-type-btn {
-            flex: 1;
-            padding: 10px 16px;
-            border-radius: 10px;
-            border: 1.5px solid var(--borde-card);
-            background: var(--fondo);
-            color: var(--azul-texto);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.18s;
-            text-align: center;
+            flex: 1; padding: 10px 16px; border-radius: 10px; border: 1.5px solid var(--borde-card);
+            background: var(--fondo); color: var(--azul-texto); font-family: 'Inter', sans-serif;
+            font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.18s; text-align: center;
         }
         .elec-type-btn:hover { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
         .elec-type-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
@@ -209,27 +161,15 @@
             letter-spacing: 0.08em; color: var(--text-muted); font-weight: 700; 
         }
         .year-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-
-        /* Year buttons: fill row evenly, grow to fill space */
         .year-btn {
-            padding: 7px 0;
-            border-radius: 8px;
-            border: 1.5px solid var(--borde-card);
-            background: var(--card-bg);
-            color: var(--azul-texto);
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.18s;
-            flex: 1 1 calc(33.333% - 8px);
-            min-width: 0;
-            text-align: center;
+            padding: 7px 0; border-radius: 8px; border: 1.5px solid var(--borde-card);
+            background: var(--card-bg); color: var(--azul-texto); font-family: 'Inter', sans-serif;
+            font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.18s;
+            flex: 1 1 calc(33.333% - 8px); min-width: 0; text-align: center;
         }
         .year-btn:hover { border-color: var(--azul-vibrante); color: var(--azul-vibrante); }
         .year-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
 
-        /* TABS (Vistas/Anclas) */
         .tabs-container { display: flex; flex-direction: column; gap: 6px; justify-content: center; flex-grow: 1; }
         .tab-btn {
             background: var(--card-bg); border: 1.5px solid var(--borde-card); font-family: 'Inter'; font-weight: 600; 
@@ -248,22 +188,34 @@
         .vuelta-btn.active { background: var(--azul-vibrante); color: white; border-color: var(--azul-vibrante); }
         .vuelta-btn.plebiscito.active { background: #7c3aed; border-color: #7c3aed; }
 
-        /* SECCIONES SCROLLEABLES */
+        /* SECCIONES */
         .content-section {
-            padding-top: 24px;
-            margin-bottom: 40px;
-            border-top: 1px solid var(--borde-card);
+            padding-top: 24px; margin-bottom: 40px; border-top: 1px solid var(--borde-card);
         }
         .content-section:first-child { border-top: none; padding-top: 0; }
         .content-section h3 { margin: 0 0 16px; font-size: 1rem; color: var(--azul-texto); font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px; }
 
-        /* CANDIDATOS (todos en grande si >1%) */
+        /* CANDIDATOS */
         .cand-top { display: flex; flex-direction: column; gap: 16px; margin-bottom: 20px; }
+
+        /* Party group: no border, just stacks leader + sub-candidates */
+        .cand-party-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        /* Leader card — full size, same as before */
         .cand-card {
             background: var(--fondo); border-radius: 12px; display: flex; flex-direction: row;
             overflow: hidden; border-width: 2px; border-style: solid; transition: transform 0.2s; height: 150px;
         }
         .cand-card:hover { transform: translateY(-2px); }
+        /* When leader has sub-candidates below, flatten bottom corners */
+        .cand-card.has-subs {
+            border-radius: 12px 12px 0 0;
+            border-bottom-width: 1px;
+        }
         .cand-photo-wrap { width: 120px; height: 100%; flex-shrink: 0; border-right: 1px solid rgba(0,0,0,0.05); background: #fff; }
         .cand-photo { width: 100%; height: 100%; object-fit: cover; object-position: center top; }
         .cand-info-wrap { padding: 14px 20px; display: flex; flex-direction: column; justify-content: center; flex-grow: 1; }
@@ -277,20 +229,40 @@
         .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
         .badge-ganador { display: inline-block; background: #16a34a; color: white; font-size: 0.65rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
 
+        /* Sub-candidates: compact rows stacked below the leader */
+        .cand-sub-list {
+            display: flex;
+            flex-direction: column;
+            border: 2px solid; /* color set inline matching party */
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
+            background: var(--fondo);
+        }
+        .cand-sub-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-top: 1px solid var(--borde-card);
+        }
+        .cand-sub-item:first-child { border-top: none; }
+        .cand-sub-photo-wrap { width: 48px; height: 48px; flex-shrink: 0; border-radius: 8px; overflow: hidden; background: #fff; }
+        .cand-sub-info { flex: 1; min-width: 0; }
+        .cand-sub-name { font-weight: 700; font-size: 0.9rem; line-height: 1.2; }
+        .cand-sub-vice { font-size: 0.75rem; color: var(--text-muted); }
+        .cand-sub-votos { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .cand-sub-bar-wrap { flex: 1; max-width: 120px; }
+        .cand-sub-pct { font-weight: 800; font-size: 1rem; flex-shrink: 0; min-width: 48px; text-align: right; }
+
         /* Candidatos menores (<1%) */
         .cand-minor-list { display: flex; flex-direction: column; gap: 8px; }
         .cand-minor { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 12px; padding: 10px 14px; background: var(--fondo); border: 1px solid var(--borde-card); border-radius: 12px; font-size: 0.85rem; }
 
         /* ── INTERNAS ── */
         .internas-filter-bar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-            padding: 14px;
-            background: var(--fondo);
-            border-radius: 12px;
-            border: 1px solid var(--borde-card);
+            display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px;
+            padding: 14px; background: var(--fondo); border-radius: 12px; border: 1px solid var(--borde-card);
         }
         .interna-filter-btn {
             padding: 7px 14px; border-radius: 8px; border: 1.5px solid var(--borde-card); background: var(--card-bg);
@@ -299,7 +271,6 @@
         .interna-filter-btn:hover { border-color: var(--azul-vibrante); }
         .interna-filter-btn.active { color: white; }
         .interna-filter-btn.active-todos { background: var(--azul-vibrante); border-color: var(--azul-vibrante); color: white; }
-
         .interna-partido-section { margin-bottom: 28px; }
         .interna-partido-header {
             display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
@@ -323,83 +294,31 @@
         .dept-info-name { font-weight: 800; font-size: 0.95rem; line-height: 1.1; margin-bottom: 4px;}
         .dept-winner-name { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; line-height: 1.2; }
 
-        /* DETALLE DE DEPARTAMENTO (elecciones departamentales) */
         .dept-detalle {
-            margin-top: 24px;
-            padding: 20px;
-            background: var(--fondo);
-            border-radius: 14px;
-            border: 1.5px solid var(--azul-vibrante);
+            margin-top: 24px; padding: 20px; background: var(--fondo);
+            border-radius: 14px; border: 1.5px solid var(--azul-vibrante);
         }
-        .dept-detalle h4 {
-            margin: 0 0 16px; font-size: 1rem; font-weight: 800;
-            border-left: 4px solid var(--azul-vibrante); padding-left: 10px;
-        }
+        .dept-detalle h4 { margin: 0 0 16px; font-size: 1rem; font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px; }
 
-        /* Dept summary (no depto selected) */
         .dept-summary-bar {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 24px;
-            padding: 20px;
-            background: var(--fondo);
-            border-radius: 14px;
-            border: 1.5px solid var(--borde-card);
+            display: flex; flex-direction: column; gap: 10px; margin-top: 24px;
+            padding: 20px; background: var(--fondo); border-radius: 14px; border: 1.5px solid var(--borde-card);
         }
-        .dept-summary-bar h4 {
-            margin: 0 0 14px;
-            font-size: 1rem;
-            font-weight: 800;
-            border-left: 4px solid var(--azul-vibrante);
-            padding-left: 10px;
-        }
-        .dept-summary-row {
-            display: grid;
-            grid-template-columns: 1fr auto auto;
-            align-items: center;
-            gap: 14px;
-        }
-        .dept-summary-partido {
-            font-weight: 700;
-            font-size: 0.9rem;
-        }
-        .dept-summary-votos {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-align: right;
-            white-space: nowrap;
-        }
-        .dept-summary-pct {
-            font-weight: 800;
-            font-size: 1rem;
-            text-align: right;
-            min-width: 48px;
-        }
-        .dept-summary-barra-wrap {
-            grid-column: 1 / -1;
-            height: 5px;
-            background: #e2e8f0;
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: -6px;
-        }
-        .dept-summary-barra-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.8s ease;
-        }
+        .dept-summary-bar h4 { margin: 0 0 14px; font-size: 1rem; font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px; }
+        .dept-summary-row { display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 14px; }
+        .dept-summary-partido { font-weight: 700; font-size: 0.9rem; }
+        .dept-summary-votos { font-size: 0.8rem; color: var(--text-muted); text-align: right; white-space: nowrap; }
+        .dept-summary-pct { font-weight: 800; font-size: 1rem; text-align: right; min-width: 48px; }
+        .dept-summary-barra-wrap { grid-column: 1 / -1; height: 5px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: -6px; }
+        .dept-summary-barra-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
 
-        /* PARLAMENTO (Senado/Diputados) */
+        /* PARLAMENTO */
         .legislativo-container { display: flex; flex-direction: column; gap: 90px; padding-top: 10px; margin-bottom: 20px; }
         .parliament-wrapper { text-align: center; }
         .parliament-wrapper h4 { margin: 0 0 40px 0; font-size: 1.15rem; font-weight: 800; color: var(--azul-texto); background: var(--fondo); display: inline-block; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--borde-card);}
-        
         .parliament-container { position: relative; width: 100%; max-width: 480px; margin: 0 auto; aspect-ratio: 2 / 1; display: block; overflow: visible; }
-        
         .parliament-dot { position: absolute; border-radius: 50%; cursor: pointer; transition: transform 0.2s; }
         .parliament-dot:hover { transform: scale(1.4); z-index: 50; }
-        
         .parliament-tooltip {
             visibility: hidden; position: absolute; bottom: calc(100% + 14px); left: 50%; transform: translateX(-50%); 
             background: #1a1a1a; color: white; padding: 10px 14px; border-radius: 8px; font-size: 0.85rem; font-weight: 600;
@@ -407,7 +326,6 @@
         }
         .parliament-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #1a1a1a transparent transparent transparent; }
         .parliament-dot:hover .parliament-tooltip { visibility: visible; opacity: 1; }
-        
         .parliament-legend { display: flex; flex-wrap: wrap; gap: 14px 24px; justify-content: center; margin-top: 60px; }
         .p-leg-item { display: flex; align-items: center; gap: 8px; font-size: 0.95rem; font-weight: 700; color: var(--azul-texto); }
         .p-leg-dot { width: 18px; height: 18px; border-radius: 50%; }
@@ -424,89 +342,34 @@
         .pleb-barra { height: 6px; background: #e2e8f0; border-radius: 4px; margin-top: 8px; overflow: hidden; grid-column: 1 / -1; }
         .pleb-barra-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
 
-        /* ── FUENTES / DISCLAIMER ── */
+        /* ── FUENTES ── */
         .sources-section {
-            margin-top: 40px;
-            padding: 20px;
-            background: var(--fondo);
-            border-radius: 14px;
-            border: 1px solid var(--borde-card);
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            line-height: 1.7;
+            margin-top: 40px; padding: 20px; background: var(--fondo); border-radius: 14px;
+            border: 1px solid var(--borde-card); font-size: 0.8rem; color: var(--text-muted); line-height: 1.7;
         }
-        .sources-section h4 {
-            margin: 0 0 12px;
-            font-size: 0.75rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--text-muted);
-        }
-        .sources-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
+        .sources-section h4 { margin: 0 0 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+        .sources-list { display: flex; flex-direction: column; gap: 6px; list-style: none; padding: 0; margin: 0; }
         .sources-list li { display: flex; align-items: flex-start; gap: 8px; }
         .sources-list li::before { content: '→'; color: var(--azul-vibrante); font-weight: 700; flex-shrink: 0; }
-        .sources-list a {
-            color: var(--azul-vibrante);
-            text-decoration: none;
-            font-weight: 600;
-        }
+        .sources-list a { color: var(--azul-vibrante); text-decoration: none; font-weight: 600; }
         .sources-list a:hover { text-decoration: underline; }
 
-        /* ── PARTY GROUP (multi-candidate same party) ── */
-        .cand-party-group {
-            display: flex;
-            flex-direction: row;
-            border-radius: 12px;
-            border: 2px solid var(--borde-card);
-            overflow: hidden;
-            margin-bottom: 0; /* handled by cand-top gap */
-        }
-        .cand-card-leader {
-            flex: 1;
-            margin-bottom: 0;
-            min-width: 0;
-        }
-        .cand-side-list {
-            width: 180px;
-            flex-shrink: 0;
-            border-left: 2px solid;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 0;
-            background: var(--fondo);
-            border-radius: 0 10px 10px 0;
-            overflow: hidden;
-        }
-        .cand-side-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 12px;
-            border-bottom: 1px solid var(--borde-card);
-        }
-        .cand-side-item:last-child { border-bottom: none; }
-        .cand-side-info { flex: 1; min-width: 0; }
-        .cand-side-name { font-weight: 700; font-size: 0.78rem; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .cand-side-vice { font-size: 0.68rem; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .cand-side-votos { font-size: 0.72rem; color: var(--text-muted); }
-        .cand-side-pct { font-weight: 800; font-size: 0.95rem; flex-shrink: 0; }
-
-        /* ── EVOLUTION CHART ── */
-        .evo-section {
-            padding-top: 24px;
-            margin-bottom: 40px;
+        /* ── EVOLUCIÓN: FULL WIDTH PANEL ── */
+        /* Sits below the two-column layout, spanning full width */
+        .evo-fullwidth {
+            width: 100%;
+            background: var(--card-bg);
             border-top: 1px solid var(--borde-card);
+            padding: 40px 60px 48px;
         }
-        .evo-section h3 { margin: 0 0 16px; font-size: 1rem; color: var(--azul-texto); font-weight: 800; border-left: 4px solid var(--azul-vibrante); padding-left: 10px; }
+        .evo-fullwidth h3 {
+            margin: 0 0 24px;
+            font-size: 1rem;
+            color: var(--azul-texto);
+            font-weight: 800;
+            border-left: 4px solid var(--azul-vibrante);
+            padding-left: 10px;
+        }
         .evo-chart-wrap {
             position: relative;
             width: 100%;
@@ -514,18 +377,9 @@
         }
         .evo-chart-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
         .evo-tooltip {
-            position: fixed;
-            background: #1a1a2e;
-            color: white;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 0.82rem;
-            pointer-events: none;
-            z-index: 9999;
-            display: none;
-            min-width: 150px;
-            max-width: 200px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            position: fixed; background: #1a1a2e; color: white; padding: 10px 14px; border-radius: 10px;
+            font-size: 0.82rem; pointer-events: none; z-index: 9999; display: none; min-width: 150px;
+            max-width: 200px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
         }
         .evo-tooltip img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; object-position: center top; margin-bottom: 6px; display: block; }
         .evo-tooltip .evo-tt-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: white; margin-bottom: 6px; flex-shrink: 0; }
@@ -539,9 +393,11 @@
 
         @media (max-width: 1100px) {
             body { overflow: auto; }
-            .main-layout { height: auto; grid-template-columns: 1fr; }
+            .page-body { height: auto; overflow: visible; }
+            .main-layout { height: auto; grid-template-columns: 1fr; min-height: auto; }
             .map-panel { height: auto; position: static; padding: 16px; border-bottom: 1px solid var(--borde-card); }
-            .right-panel { height: auto; overflow-y: visible; border-left: none; }
+            .right-panel { border-left: none; }
+            .evo-fullwidth { padding: 32px 20px 40px; }
         }
     </style>
 </head>
@@ -555,13 +411,11 @@
         <a class="logo" href="index.html">EleccionesUY</a>
     </div>
     <div class="header-right">
-        <!-- Language toggle -->
         <div class="lang-toggle">
             <button class="lang-toggle-btn active" id="lang-btn-es" onclick="setLanguage('es')">ES</button>
             <div class="lang-toggle-divider"></div>
             <button class="lang-toggle-btn" id="lang-btn-en" onclick="setLanguage('en')">EN</button>
         </div>
-        <!-- Dark mode button -->
         <button class="btn-icon" onclick="toggleDarkMode()" id="dark-btn" title="Toggle dark mode">
             <img id="dark-mode-icon" src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/moon.svg" alt="Toggle theme" class="icon-moon">
         </button>
@@ -571,96 +425,87 @@
 <div id="map-tooltip"></div>
 <div id="evo-tooltip" class="evo-tooltip"></div>
 
-<div class="main-layout">
-    <div class="map-panel">
-        <div class="map-controls">
-            <button id="btn-map-mode" onclick="toggleMapMode()" class="map-mode-btn">Margen de Victoria</button>
-        </div>
-        <div id="map-container">
-            <p style="color: var(--text-muted); font-weight: 600;">Cargando mapa e información...</p>
-        </div>
-    </div>
+<!-- Page body: scrolls as one unit -->
+<div class="page-body" id="page-body">
 
-    <div class="right-panel" id="right-panel">
-
-        <!-- Selector tipo de elección -->
-        <div class="elec-type-bar">
-            <button class="elec-type-btn active" id="type-btn-nacional" onclick="switchElecType('nacional')">Nacionales</button>
-            <button class="elec-type-btn" id="type-btn-departamental" onclick="switchElecType('departamental')">Departamentales</button>
+    <!-- Two-column: sticky map + scrolling right panel -->
+    <div class="main-layout">
+        <div class="map-panel">
+            <div class="map-controls">
+                <button id="btn-map-mode" onclick="toggleMapMode()" class="map-mode-btn">Margen de Victoria</button>
+            </div>
+            <div id="map-container">
+                <p style="color: var(--text-muted); font-weight: 600;">Cargando mapa e información...</p>
+            </div>
         </div>
-        
-        <div class="top-controls">
-            <div class="eleccion-selector">
-                <h3 id="lbl-elecciones">Elecciones</h3>
-                <div class="year-grid" id="year-grid"></div>
+
+        <div class="right-panel" id="right-panel">
+            <div class="elec-type-bar">
+                <button class="elec-type-btn active" id="type-btn-nacional" onclick="switchElecType('nacional')">Nacionales</button>
+                <button class="elec-type-btn" id="type-btn-departamental" onclick="switchElecType('departamental')">Departamentales</button>
             </div>
             
-            <div class="vista-selector" id="vista-selector-wrapper">
-                <h3 id="lbl-vistas">Secciones</h3>
-                <div class="tabs-container" id="tabs-container">
-                    <button class="tab-btn active" id="tab-btn-presidenciales" onclick="scrollToSec('presidenciales')">Presidenciales</button>
-                    <button class="tab-btn" id="tab-btn-internas" onclick="scrollToSec('internas')" style="display:none;">Internas</button>
-                    <button class="tab-btn" id="tab-btn-departamentales" onclick="scrollToSec('departamentales')" style="display:none;">Departamentales</button>
-                    <button class="tab-btn" id="tab-btn-legislativo" onclick="scrollToSec('legislativo')">Legislativo</button>
-                    <button class="tab-btn" id="tab-btn-evolucion" onclick="scrollToSec('evolucion')">Evolución</button>
+            <div class="top-controls">
+                <div class="eleccion-selector">
+                    <h3 id="lbl-elecciones">Elecciones</h3>
+                    <div class="year-grid" id="year-grid"></div>
+                </div>
+                <div class="vista-selector" id="vista-selector-wrapper">
+                    <h3 id="lbl-vistas">Secciones</h3>
+                    <div class="tabs-container" id="tabs-container">
+                        <button class="tab-btn active" id="tab-btn-presidenciales" onclick="scrollToSec('presidenciales')">Presidenciales</button>
+                        <button class="tab-btn" id="tab-btn-internas" onclick="scrollToSec('internas')" style="display:none;">Internas</button>
+                        <button class="tab-btn" id="tab-btn-departamentales" onclick="scrollToSec('departamentales')" style="display:none;">Departamentales</button>
+                        <button class="tab-btn" id="tab-btn-legislativo" onclick="scrollToSec('legislativo')">Legislativo</button>
+                        <button class="tab-btn" id="tab-btn-evolucion" onclick="scrollToSec('evolucion')">Evolución</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="vuelta-bar" id="vuelta-bar"></div>
+            <div class="vuelta-bar" id="vuelta-bar"></div>
 
-        <div id="all-content" class="fade-in">
-            <div id="sec-presidenciales" class="content-section">
-                <h3>Resultados Nacionales</h3>
-                <div id="content-presidenciales"></div>
-            </div>
-            
-            <!-- Internas (>=1999) -->
-            <div id="sec-internas" class="content-section" style="display:none;">
-                <h3>Elecciones Internas</h3>
-                <div id="content-internas"></div>
-            </div>
-
-            <!-- Departamentales (solo en modo nacional, pre-1999 o integradas) -->
-            <div id="sec-departamentales" class="content-section" style="display:none;">
-                <h3>Intendentes Electos por Departamento</h3>
-                <div id="content-departamentales"></div>
-            </div>
-            
-            <div id="sec-legislativo" class="content-section">
-                <h3>Composición del Parlamento</h3>
-                <div id="content-legislativo"></div>
+            <div id="all-content" class="fade-in">
+                <div id="sec-presidenciales" class="content-section">
+                    <h3>Resultados Nacionales</h3>
+                    <div id="content-presidenciales"></div>
+                </div>
+                <div id="sec-internas" class="content-section" style="display:none;">
+                    <h3>Elecciones Internas</h3>
+                    <div id="content-internas"></div>
+                </div>
+                <div id="sec-departamentales" class="content-section" style="display:none;">
+                    <h3>Intendentes Electos por Departamento</h3>
+                    <div id="content-departamentales"></div>
+                </div>
+                <div id="sec-legislativo" class="content-section">
+                    <h3>Composición del Parlamento</h3>
+                    <div id="content-legislativo"></div>
+                </div>
+                <div id="sec-fuentes-nacional"></div>
             </div>
 
-            <!-- FUENTES (modo nacional) -->
-            <div id="sec-fuentes-nacional"></div>
+            <div id="pleb-content" class="fade-in" style="display:none;"></div>
 
-            <!-- EVOLUCIÓN -->
-            <div id="sec-evolucion" class="evo-section">
-                <h3>Evolución de votos por partido</h3>
-                <div class="evo-chart-wrap" id="evo-chart-wrap"></div>
-                <div class="evo-legend" id="evo-legend"></div>
+            <div id="dept-mode-content" class="fade-in" style="display:none;">
+                <div id="sec-dept-intendentes" class="content-section" style="padding-top:0;border-top:none;">
+                    <h3>Intendentes Electos</h3>
+                    <div id="content-dept-intendentes"></div>
+                    <div id="dept-party-summary"></div>
+                </div>
+                <div id="sec-dept-detalle" style="display:none;"></div>
+                <div id="sec-fuentes-dept"></div>
             </div>
         </div>
-
-        <div id="pleb-content" class="fade-in" style="display:none;"></div>
-
-        <!-- Contenido modo Departamental -->
-        <div id="dept-mode-content" class="fade-in" style="display:none;">
-            <div id="sec-dept-intendentes" class="content-section" style="padding-top:0;border-top:none;">
-                <h3>Intendentes Electos</h3>
-                <div id="content-dept-intendentes"></div>
-                <!-- Detalle o resumen por partido si no hay depto seleccionado -->
-                <div id="dept-party-summary"></div>
-            </div>
-            <div id="sec-dept-detalle" style="display:none;"></div>
-
-            <!-- FUENTES (modo departamental) -->
-            <div id="sec-fuentes-dept"></div>
-        </div>
-
     </div>
-</div>
+
+    <!-- Full-width evolution section -->
+    <div class="evo-fullwidth" id="sec-evolucion">
+        <h3>Evolución de votos por partido</h3>
+        <div class="evo-chart-wrap" id="evo-chart-wrap"></div>
+        <div class="evo-legend" id="evo-legend"></div>
+    </div>
+
+</div><!-- end page-body -->
 
 <script>
 /* ════════════════════════════════════════════
@@ -705,7 +550,6 @@ let selectedDeptAnio = null;
 let selectedDeptDepto = null;
 let internaFilterPartido = 'todos';
 
-// Init lang toggle
 updateLangToggleUI();
 
 /* ════════════════════════════════════════════
@@ -766,10 +610,8 @@ function updateDarkModeIcon(isDark) {
     }
 }
 
-// Init icon on load
 (function() {
     const isDark = document.body.getAttribute('data-theme') === 'dark';
-    // Icon will be initialized after DOM is ready - handled inline in HTML below
     window.addEventListener('DOMContentLoaded', () => updateDarkModeIcon(isDark));
 })();
 
@@ -817,7 +659,6 @@ function switchElecType(type) {
 function renderYears() {
     const grid = document.getElementById('year-grid');
     grid.innerHTML = '';
-
     const source = elecType === 'departamental' ? ELECCIONES_DEPT : ELECCIONES;
     const currentSelected = elecType === 'departamental' ? selectedDeptAnio : selectedAnio;
 
@@ -879,8 +720,17 @@ function toggleMapMode() {
 
 function scrollToSec(sec) {
     selectedPleb = null;
+    // For 'evolucion', the section is outside the right panel now — scroll page-body
     const el = document.getElementById('sec-' + sec);
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (el) {
+        const pageBody = document.getElementById('page-body');
+        if (pageBody) {
+            const offset = el.getBoundingClientRect().top + pageBody.scrollTop - 70;
+            pageBody.scrollTo({ top: offset, behavior: 'smooth' });
+        } else {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
     currentTab = sec;
     updateTabUI();
     renderVueltaBar();
@@ -913,7 +763,6 @@ function updateNacionalTabs() {
 ════════════════════════════════════════════ */
 function initScrollObserver() {
     if (scrollObserver) scrollObserver.disconnect();
-    const panel = window.innerWidth > 1100 ? document.getElementById('right-panel') : null;
     const sections = document.querySelectorAll('.content-section');
     scrollObserver = new IntersectionObserver((entries) => {
         if (selectedPleb !== null) return;
@@ -928,7 +777,7 @@ function initScrollObserver() {
                 }
             }
         });
-    }, { root: panel, rootMargin: "-30% 0px -50% 0px", threshold: 0 });
+    }, { rootMargin: "-30% 0px -50% 0px", threshold: 0 });
     sections.forEach(s => scrollObserver.observe(s));
 }
 
@@ -941,26 +790,20 @@ function renderMapa() {
         el.style.fillOpacity = 1;
     });
 
-    if (elecType === 'departamental') {
-        renderMapaDept();
-        return;
-    }
+    if (elecType === 'departamental') { renderMapaDept(); return; }
 
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
     if (!elec) return;
 
     let mapaData = {};
-
     if (selectedPleb !== null) {
         mapaData = elec.plebiscitos[selectedPleb].mapa || {};
     } else if (currentTab === 'internas' && elec.internas) {
-        renderMapaInternas(elec);
-        return;
+        renderMapaInternas(elec); return;
     } else {
         const indexToUse = (currentTab === 'presidenciales') ? selectedVuelta : 0;
         mapaData = elec.vueltas[indexToUse]?.mapa || {};
     }
-
     applyMapaData(mapaData);
 }
 
@@ -972,7 +815,6 @@ function applyMapaData(mapaData) {
         const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
         if (!path) return;
         path.style.fill = color(partidoId);
-
         if (mapMode === 'margin' && typeof info === 'object' && info.votos) {
             const votesArray = Object.values(info.votos).sort((a,b) => b - a);
             if (votesArray.length >= 2) {
@@ -991,9 +833,7 @@ function renderMapaInternas(elec) {
         applyMapaData(elec0?.mapa || {});
     } else {
         const interna = elec.internas.find(i => i.partido === internaFilterPartido);
-        if (interna && interna.mapa) {
-            applyMapaData(interna.mapa);
-        }
+        if (interna && interna.mapa) applyMapaData(interna.mapa);
     }
 }
 
@@ -1009,11 +849,9 @@ function renderMapaDept() {
         if (!path) return;
         path.style.fill = color(partidoId);
         if (selectedDeptDepto === depto) {
-            path.style.stroke = '#fff';
-            path.style.strokeWidth = '3';
+            path.style.stroke = '#fff'; path.style.strokeWidth = '3';
         } else {
-            path.style.stroke = 'var(--card-bg)';
-            path.style.strokeWidth = '1.5';
+            path.style.stroke = 'var(--card-bg)'; path.style.strokeWidth = '1.5';
         }
     });
 }
@@ -1040,7 +878,6 @@ function setupTooltips() {
             } else {
                 const elec = ELECCIONES.find(ev => ev.anio === selectedAnio);
                 const indexToUse = (currentTab === 'presidenciales') ? selectedVuelta : 0;
-
                 if (selectedPleb !== null && elec) {
                     const mapaData = elec.plebiscitos[selectedPleb].mapa || {};
                     const deptoInfo = mapaData[name];
@@ -1078,14 +915,12 @@ function setupTooltips() {
                     }
                 }
             }
-
             tooltip.style.display = 'block';
             tooltip.style.left = (e.clientX + 14) + 'px';
             tooltip.style.top  = (e.clientY - 10) + 'px';
             tooltip.innerHTML = tooltipHtml;
         });
         el.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
-
         el.addEventListener('click', () => {
             if (elecType === 'departamental') {
                 const name = el.getAttribute('name');
@@ -1098,29 +933,19 @@ function setupTooltips() {
 }
 
 /* ════════════════════════════════════════════
-   FUENTES / DISCLAIMER
+   FUENTES
 ════════════════════════════════════════════ */
 function renderFuentes(elec, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
-
     const fuentes = elec?.fuentes || [];
-    if (fuentes.length === 0) {
-        container.innerHTML = '';
-        return;
-    }
-
-    let html = `<div class="sources-section">
-        <h4>Fuentes</h4>
-        <ul class="sources-list">`;
+    if (fuentes.length === 0) { container.innerHTML = ''; return; }
+    let html = `<div class="sources-section"><h4>Fuentes</h4><ul class="sources-list">`;
     fuentes.forEach(f => {
         const label = f.label || f.url || f;
         const url = f.url || (typeof f === 'string' ? f : null);
-        if (url) {
-            html += `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a></li>`;
-        } else {
-            html += `<li><span>${label}</span></li>`;
-        }
+        if (url) html += `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a></li>`;
+        else html += `<li><span>${label}</span></li>`;
     });
     html += `</ul></div>`;
     container.innerHTML = html;
@@ -1129,24 +954,14 @@ function renderFuentes(elec, containerId) {
 function renderFuentesDept(elecDept, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
-
     const fuentes = elecDept?.fuentes || [];
-    if (fuentes.length === 0) {
-        container.innerHTML = '';
-        return;
-    }
-
-    let html = `<div class="sources-section" style="margin-top:24px;">
-        <h4>Fuentes</h4>
-        <ul class="sources-list">`;
+    if (fuentes.length === 0) { container.innerHTML = ''; return; }
+    let html = `<div class="sources-section" style="margin-top:24px;"><h4>Fuentes</h4><ul class="sources-list">`;
     fuentes.forEach(f => {
         const label = f.label || f.url || f;
         const url = f.url || (typeof f === 'string' ? f : null);
-        if (url) {
-            html += `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a></li>`;
-        } else {
-            html += `<li><span>${label}</span></li>`;
-        }
+        if (url) html += `<li><a href="${url}" target="_blank" rel="noopener noreferrer">${label}</a></li>`;
+        else html += `<li><span>${label}</span></li>`;
     });
     html += `</ul></div>`;
     container.innerHTML = html;
@@ -1187,7 +1002,6 @@ function renderDeptMode() {
     html += '</div>';
     document.getElementById('content-dept-intendentes').innerHTML = html;
 
-    // Detalle del departamento seleccionado O resumen por partido
     if (selectedDeptDepto && deptos[selectedDeptDepto]) {
         renderDeptDetalle(selectedDeptDepto, deptos[selectedDeptDepto]);
         document.getElementById('sec-dept-detalle').style.display = '';
@@ -1196,38 +1010,25 @@ function renderDeptMode() {
         document.getElementById('sec-dept-detalle').style.display = 'none';
         renderDeptPartySummary(elecDept);
     }
-
-    // Fuentes
     renderFuentesDept(elecDept, 'sec-fuentes-dept');
 }
 
 function renderDeptPartySummary(elecDept) {
     const container = document.getElementById('dept-party-summary');
     if (!container) return;
-
     const deptos = elecDept.departamentos || {};
-    // Sumar votos de candidatos por partido en todos los departamentos
     const partyVotos = {};
     let totalGeneral = 0;
-
     Object.values(deptos).forEach(info => {
-        const candidatos = info.candidatos || [];
-        candidatos.forEach(c => {
+        (info.candidatos || []).forEach(c => {
             const v = c.votos || 0;
             partyVotos[c.partido] = (partyVotos[c.partido] || 0) + v;
             totalGeneral += v;
         });
     });
-
-    if (totalGeneral === 0 || Object.keys(partyVotos).length === 0) {
-        container.innerHTML = '';
-        return;
-    }
-
+    if (totalGeneral === 0 || Object.keys(partyVotos).length === 0) { container.innerHTML = ''; return; }
     const sorted = Object.entries(partyVotos).sort((a, b) => b[1] - a[1]);
-
-    let html = `<div class="dept-summary-bar">
-        <h4>Resultados nacionales por partido</h4>`;
+    let html = `<div class="dept-summary-bar"><h4>Resultados nacionales por partido</h4>`;
     sorted.forEach(([pId, votos]) => {
         const pct = pctOf(votos, totalGeneral);
         html += `
@@ -1259,13 +1060,17 @@ function renderDeptDetalle(depto, info) {
     const total = candidatos.reduce((s, c) => s + (c.votos || 0), 0);
     candidatos.sort((a, b) => b.votos - a.votos);
 
-    // Group by party
     const deptPartyGroups = {};
     candidatos.forEach(c => {
         if (!deptPartyGroups[c.partido]) deptPartyGroups[c.partido] = [];
         deptPartyGroups[c.partido].push(c);
     });
-    const deptSortedGroups = Object.values(deptPartyGroups).sort((a, b) => b[0].votos - a[0].votos);
+    // Sort groups by total party votes
+    const deptSortedGroups = Object.values(deptPartyGroups).sort((a, b) => {
+        const totalA = a.reduce((s, c) => s + (c.votos || 0), 0);
+        const totalB = b.reduce((s, c) => s + (c.votos || 0), 0);
+        return totalB - totalA;
+    });
 
     let html = `<div class="dept-detalle"><h4>Candidatos en ${depto}</h4><div class="cand-top">`;
     deptSortedGroups.forEach(group => {
@@ -1273,9 +1078,11 @@ function renderDeptDetalle(depto, info) {
         const rest = group.slice(1);
         const pct = pctOf(leader.votos, total);
         const pId = leader.partido;
-        html += `<div class="cand-party-group" style="border-color:${color(pId)};">`;
+        const hasSubs = rest.length > 0;
+
+        html += `<div class="cand-party-group">`;
         html += `
-        <div class="cand-card cand-card-leader" style="border-color:${color(pId)}; border-width: ${rest.length ? '2px 0 2px 2px' : '2px'}; border-radius: ${rest.length ? '12px 0 0 12px' : '12px'};">
+        <div class="cand-card ${hasSubs ? 'has-subs' : ''}" style="border-color:${color(pId)};">
             <div class="cand-photo-wrap">${photoHTML(leader, 'cand-photo')}</div>
             <div class="cand-info-wrap">
                 <div class="cand-nombre">${leader.nombre} ${leader.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
@@ -1287,18 +1094,21 @@ function renderDeptDetalle(depto, info) {
                 </div>
             </div>
         </div>`;
-        if (rest.length > 0) {
-            html += `<div class="cand-side-list" style="border-color:${color(pId)};">`;
+        if (hasSubs) {
+            html += `<div class="cand-sub-list" style="border-color:${color(pId)};">`;
             rest.forEach(c => {
                 const cpct = pctOf(c.votos, total);
                 html += `
-                <div class="cand-side-item">
-                    <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
-                    <div class="cand-side-info">
-                        <div class="cand-side-name">${c.nombre}</div>
-                        <div class="cand-side-votos">${fmtVotos(c.votos)} votos</div>
+                <div class="cand-sub-item">
+                    <div class="cand-sub-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
+                    <div class="cand-sub-info">
+                        <div class="cand-sub-name">${c.nombre}</div>
+                        <div class="cand-sub-votos">${fmtVotos(c.votos)} votos</div>
                     </div>
-                    <div class="cand-side-pct" style="color:${color(pId)}">${cpct}%</div>
+                    <div class="cand-sub-bar-wrap">
+                        <div class="barra-cand"><div class="barra-cand-fill" style="width:${cpct}%; background:${color(pId)}"></div></div>
+                    </div>
+                    <div class="cand-sub-pct" style="color:${color(pId)}">${cpct}%</div>
                 </div>`;
             });
             html += '</div>';
@@ -1427,14 +1237,12 @@ function renderInternas(elec) {
             const pId = interna.partido;
             const totalInterna = interna.candidatos.reduce((s, c) => s + c.votos, 0);
             const cands = [...interna.candidatos].sort((a, b) => b.votos - a.votos);
-
             html += `<div class="interna-partido-section">
                 <div class="interna-partido-header">
                     <div class="interna-partido-dot" style="background:${color(pId)}"></div>
                     <span class="interna-partido-name">${PARTIDO_NOMBRES[pId] || pId}</span>
                 </div>
                 <div class="cand-top">`;
-
             cands.forEach(c => {
                 const pct = parseFloat(pctOf(c.votos, totalInterna));
                 if (pct < 1) {
@@ -1462,21 +1270,16 @@ function renderInternas(elec) {
                     </div>`;
                 }
             });
-
             html += `</div></div>`;
         });
     }
-
     internasDiv.innerHTML = html;
 }
 
 function setInternaFilter(partido) {
     internaFilterPartido = partido;
     const elec = ELECCIONES.find(e => e.anio === selectedAnio);
-    if (elec) {
-        renderInternas(elec);
-        renderMapaInternas(elec);
-    }
+    if (elec) { renderInternas(elec); renderMapaInternas(elec); }
 }
 
 /* ════════════════════════════════════════════
@@ -1528,17 +1331,22 @@ function renderRightPanelContent() {
     const cands = [...vuelta.candidatos].sort((a,b) => b.votos - a.votos);
     const total = cands.reduce((s, c) => s + c.votos, 0);
 
-    // Group candidates by party, keeping each party's internal sort by votes
+    // Group by party, sort within each group by votes desc
     const partidoGroups = {};
     cands.forEach(c => {
         if (!partidoGroups[c.partido]) partidoGroups[c.partido] = [];
         partidoGroups[c.partido].push(c);
     });
-    // Sort groups by the top candidate's votes descending
-    const sortedGroups = Object.values(partidoGroups).sort((a, b) => b[0].votos - a[0].votos);
 
-    const grandes = [];   // groups where top cand >= 1%
-    const pequenos = [];  // all individual cands < 1% (no group)
+    // Sort groups by TOTAL party votes (not just the leader)
+    const sortedGroups = Object.values(partidoGroups).sort((a, b) => {
+        const totalA = a.reduce((s, c) => s + (c.votos || 0), 0);
+        const totalB = b.reduce((s, c) => s + (c.votos || 0), 0);
+        return totalB - totalA;
+    });
+
+    const grandes = [];   // groups where leader >= 1%
+    const pequenos = [];  // individual cands < 1%
     sortedGroups.forEach(group => {
         if (parseFloat(pctOf(group[0].votos, total)) >= 1) grandes.push(group);
         else group.forEach(c => pequenos.push(c));
@@ -1550,11 +1358,14 @@ function renderRightPanelContent() {
         const rest = group.slice(1);
         const pct = pctOf(leader.votos, total);
         const pId = leader.partido;
+        const hasSubs = rest.length > 0;
 
-        presHtml += `<div class="cand-party-group" style="border-color:${color(pId)};">`;
-        // Leader card
+        // cand-party-group has no border — just stacks elements vertically
+        presHtml += `<div class="cand-party-group">`;
+
+        // Leader card — rounded bottom only if no subs below
         presHtml += `
-        <div class="cand-card cand-card-leader" style="border-color:${color(pId)}; border-width: ${rest.length ? '2px 0 2px 2px' : '2px'}; border-radius: ${rest.length ? '12px 0 0 12px' : '12px'};">
+        <div class="cand-card ${hasSubs ? 'has-subs' : ''}" style="border-color:${color(pId)};">
             <div class="cand-photo-wrap">${photoHTML(leader, 'cand-photo')}</div>
             <div class="cand-info-wrap">
                 <div class="cand-nombre">${leader.nombre} ${leader.ganador ? '<span class="badge-ganador">Ganador</span>' : ''}</div>
@@ -1568,20 +1379,23 @@ function renderRightPanelContent() {
             </div>
         </div>`;
 
-        // Side candidates (same party, less votes)
-        if (rest.length > 0) {
-            presHtml += `<div class="cand-side-list" style="border-color:${color(pId)};">`;
+        // Sub-candidates stacked below leader
+        if (hasSubs) {
+            presHtml += `<div class="cand-sub-list" style="border-color:${color(pId)};">`;
             rest.forEach(c => {
                 const cpct = pctOf(c.votos, total);
                 presHtml += `
-                <div class="cand-side-item">
-                    <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;">${photoHTML(c, 'cand-photo')}</div>
-                    <div class="cand-side-info">
-                        <div class="cand-side-name">${c.nombre}</div>
-                        ${c.vice ? `<div class="cand-side-vice">Vice: ${c.vice}</div>` : ''}
-                        <div class="cand-side-votos">${fmtVotos(c.votos)} votos</div>
+                <div class="cand-sub-item">
+                    <div class="cand-sub-photo-wrap">${photoHTML(c, 'cand-photo')}</div>
+                    <div class="cand-sub-info">
+                        <div class="cand-sub-name">${c.nombre}</div>
+                        ${c.vice ? `<div class="cand-sub-vice">Vice: ${c.vice}</div>` : ''}
+                        <div class="cand-sub-votos">${fmtVotos(c.votos)} votos</div>
                     </div>
-                    <div class="cand-side-pct" style="color:${color(pId)}">${cpct}%</div>
+                    <div class="cand-sub-bar-wrap">
+                        <div class="barra-cand"><div class="barra-cand-fill" style="width:${cpct}%; background:${color(pId)}"></div></div>
+                    </div>
+                    <div class="cand-sub-pct" style="color:${color(pId)}">${cpct}%</div>
                 </div>`;
             });
             presHtml += '</div>';
@@ -1613,7 +1427,7 @@ function renderRightPanelContent() {
         renderInternas(elec);
     }
 
-    // --- C. DEPARTAMENTALES (pre-1999 en JSON nacional) ---
+    // --- C. DEPARTAMENTALES (pre-1999) ---
     if (elec.anio < 1999) {
         const mapaData = elec.vueltas[0].mapa || {};
         let deptHtml = '<div class="dept-grid">';
@@ -1698,7 +1512,7 @@ function renderRightPanelContent() {
 }
 
 /* ════════════════════════════════════════════
-   EVOLUCIÓN DE VOTOS
+   EVOLUCIÓN DE VOTOS (full-width)
 ════════════════════════════════════════════ */
 let evoHiddenParties = new Set();
 
@@ -1707,11 +1521,8 @@ function renderEvolucion() {
     const legendEl = document.getElementById('evo-legend');
     if (!wrap || ELECCIONES.length === 0) return;
 
-    // Collect all elections sorted by year, primera vuelta only
     const elections = [...ELECCIONES].sort((a, b) => a.anio - b.anio);
 
-    // Build party -> [ {anio, pct, candidato, foto} ] map
-    // Use total votes across all candidates per year as denominator
     const partyData = {};
     elections.forEach(elec => {
         const vuelta = elec.vueltas[0];
@@ -1720,9 +1531,8 @@ function renderEvolucion() {
         const total = cands.reduce((s, c) => s + c.votos, 0);
         if (total === 0) return;
 
-        // Aggregate votes per party (sum all candidates of same party)
         const partyVotesYear = {};
-        const partyCandidateYear = {}; // store top candidate per party
+        const partyCandidateYear = {};
         cands.forEach(c => {
             if (!partyVotesYear[c.partido]) { partyVotesYear[c.partido] = 0; partyCandidateYear[c.partido] = c; }
             partyVotesYear[c.partido] += c.votos;
@@ -1731,27 +1541,20 @@ function renderEvolucion() {
 
         Object.entries(partyVotesYear).forEach(([pId, votos]) => {
             if (!partyData[pId]) partyData[pId] = [];
-            partyData[pId].push({
-                anio: elec.anio,
-                pct: parseFloat(((votos / total) * 100).toFixed(1)),
-                votos,
-                candidato: partyCandidateYear[pId],
-            });
+            partyData[pId].push({ anio: elec.anio, pct: parseFloat(((votos / total) * 100).toFixed(1)), votos, candidato: partyCandidateYear[pId] });
         });
     });
 
-    // Only show parties that appeared in at least 1 election with >=1%
     const relevantParties = Object.entries(partyData)
         .filter(([, pts]) => pts.some(p => p.pct >= 1))
-        .sort((a, b) => {
-            const maxA = Math.max(...a[1].map(p => p.pct));
-            const maxB = Math.max(...b[1].map(p => p.pct));
-            return maxB - maxA;
-        });
+        .sort((a, b) => Math.max(...b[1].map(p => p.pct)) - Math.max(...a[1].map(p => p.pct)));
 
     const years = [...new Set(elections.map(e => e.anio))];
-    const W = 560, H = 280;
-    const padL = 36, padR = 20, padT = 16, padB = 32;
+
+    // Full-width: use a larger viewBox
+    const W = 900, H = 320;
+    // More padding on sides so tooltips near edges don't clip
+    const padL = 40, padR = 40, padT = 20, padB = 36;
     const chartW = W - padL - padR;
     const chartH = H - padT - padB;
 
@@ -1760,21 +1563,18 @@ function renderEvolucion() {
 
     let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
 
-    // Grid lines
     [0, 25, 50, 75, 100].forEach(tick => {
         const y = yOf(tick);
         svg += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--borde-card)" stroke-width="1"/>`;
-        svg += `<text x="${padL - 4}" y="${y + 4}" text-anchor="end" font-size="9" fill="var(--text-muted)" font-family="Inter">${tick}%</text>`;
+        svg += `<text x="${padL - 6}" y="${y + 4}" text-anchor="end" font-size="10" fill="var(--text-muted)" font-family="Inter">${tick}%</text>`;
     });
 
-    // Year labels
     years.forEach(yr => {
         const x = xOf(yr);
         svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + chartH}" stroke="var(--borde-card)" stroke-width="1" stroke-dasharray="3,3"/>`;
-        svg += `<text x="${x}" y="${H - 4}" text-anchor="middle" font-size="9" fill="var(--text-muted)" font-family="Inter">${yr}</text>`;
+        svg += `<text x="${x}" y="${H - 6}" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Inter">${yr}</text>`;
     });
 
-    // Lines
     relevantParties.forEach(([pId, pts]) => {
         if (evoHiddenParties.has(pId)) return;
         const c = color(pId);
@@ -1783,7 +1583,6 @@ function renderEvolucion() {
         svg += `<path d="${d}" stroke="${c}" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>`;
     });
 
-    // Dots (interactive)
     relevantParties.forEach(([pId, pts]) => {
         if (evoHiddenParties.has(pId)) return;
         const c = color(pId);
@@ -1798,7 +1597,7 @@ function renderEvolucion() {
                 foto: p.candidato?.foto || '',
                 anio: p.anio
             }));
-            svg += `<circle cx="${x}" cy="${y}" r="5" fill="${c}" stroke="var(--card-bg)" stroke-width="2"
+            svg += `<circle cx="${x}" cy="${y}" r="6" fill="${c}" stroke="var(--card-bg)" stroke-width="2"
                 style="cursor:pointer"
                 onmouseenter="evoShowTip(event,'${candData}')"
                 onmouseleave="evoHideTip()"
@@ -1809,7 +1608,6 @@ function renderEvolucion() {
     svg += '</svg>';
     wrap.innerHTML = svg;
 
-    // Legend
     let legendHtml = '';
     relevantParties.forEach(([pId]) => {
         const hidden = evoHiddenParties.has(pId);
@@ -1905,8 +1703,6 @@ async function initApp() {
         renderEvolucion();
         setupTooltips();
         initScrollObserver();
-
-        // Init dark mode icon correctly after full load
         updateDarkModeIcon(document.body.getAttribute('data-theme') === 'dark');
 
     } catch (error) {
