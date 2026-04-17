@@ -31,7 +31,7 @@
         body { 
             font-family: 'Inter', sans-serif; background: var(--fondo); 
             color: var(--azul-texto); margin: 0; padding: 0; 
-            transition: background 0.3s; overflow: hidden;
+            transition: background 0.3s;
         }
 
         /* ── ERROR BANNER ── */
@@ -77,35 +77,29 @@
         [data-theme="dark"] .btn-icon img.icon-sun { filter: brightness(0) invert(1); }
 
         /* ── LAYOUT ── */
-        /* Outer wrapper: header + everything below */
-        .page-body {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 60px);
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
+        /* page-body is a plain block — page scrolls naturally */
+        .page-body { display: block; }
 
-        /* Top two-column area */
+        /* Two-column flex: map stays sticky in its column, right grows freely */
         .main-layout {
-            display: grid;
-            grid-template-columns: 50fr 50fr;
-            gap: 0;
-            /* Takes as much height as needed but at least fills viewport */
-            min-height: calc(100vh - 60px);
+            display: flex;
+            align-items: flex-start;
         }
 
-        /* MAP: sticky so it stays put while right panel scrolls */
+        /* MAP COLUMN: sticky, stays on screen while right panel is taller */
+        /* position:sticky on a flex child works when the sibling is taller */
         .map-panel {
+            position: sticky;
+            top: 60px;
+            width: 50%;
+            flex-shrink: 0;
+            height: calc(100vh - 60px);
             padding: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             background: var(--fondo);
-            position: sticky;
-            top: 0;
-            height: calc(100vh - 60px);
             overflow: hidden;
         }
         .map-controls {
@@ -133,12 +127,13 @@
         #map-tooltip strong { display: block; font-size: 1rem; margin-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 4px;}
         .tooltip-row { display: flex; justify-content: space-between; gap: 20px; font-size: 0.85rem; margin-top: 4px; }
 
-        /* RIGHT PANEL: scrolls within the two-column area */
+        /* RIGHT PANEL: grows with content, page scrolls it naturally */
         .right-panel {
+            width: 50%;
+            min-width: 0;
             border-left: 1px solid var(--borde-card);
             padding: 24px;
             background: var(--card-bg);
-            /* No height/overflow here — it grows with content, page-body scrolls */
         }
 
         /* ── TIPO DE ELECCIÓN ── */
@@ -226,7 +221,8 @@
         .cand-bottom-stats { margin-top: 10px; display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
         .cand-pct { font-size: 1.6rem; font-weight: 900; line-height: 1; margin-bottom: 6px;}
         .barra-cand { width: 100%; height: 6px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
-        .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.8s ease; }
+        .barra-cand-fill { height: 100%; border-radius: 4px; transition: width 0.7s cubic-bezier(0.4,0,0.2,1); }
+        .cand-pct { transition: opacity 0.3s ease; }
         .badge-ganador { display: inline-block; background: #16a34a; color: white; font-size: 0.65rem; font-weight: 800; padding: 4px 8px; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
 
         /* Sub-candidates: compact rows stacked below the leader */
@@ -379,7 +375,8 @@
         .evo-tooltip {
             position: fixed; background: #1a1a2e; color: white; padding: 10px 14px; border-radius: 10px;
             font-size: 0.82rem; pointer-events: none; z-index: 9999; display: none; min-width: 150px;
-            max-width: 200px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            max-width: 210px; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+            opacity: 0; transition: opacity 0.18s ease;
         }
         .evo-tooltip img { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; object-position: center top; margin-bottom: 6px; display: block; }
         .evo-tooltip .evo-tt-avatar { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; color: white; margin-bottom: 6px; flex-shrink: 0; }
@@ -388,15 +385,18 @@
         .evo-legend-item.hidden { opacity: 0.3; }
         .evo-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in { animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 0.25s ease; }
+        /* Smooth year-switch transition on main content areas */
+        #content-presidenciales, #content-internas, #content-legislativo,
+        #content-departamentales, #content-dept-intendentes, #pleb-content {
+            transition: opacity 0.2s ease;
+        }
 
         @media (max-width: 1100px) {
-            body { overflow: auto; }
-            .page-body { height: auto; overflow: visible; }
-            .main-layout { height: auto; grid-template-columns: 1fr; min-height: auto; }
-            .map-panel { height: auto; position: static; padding: 16px; border-bottom: 1px solid var(--borde-card); }
-            .right-panel { border-left: none; }
+            .main-layout { flex-direction: column; }
+            .map-panel { width: 100%; position: static; height: auto; padding: 16px; border-bottom: 1px solid var(--borde-card); }
+            .right-panel { width: 100%; border-left: none; }
             .evo-fullwidth { padding: 32px 20px 40px; }
         }
     </style>
@@ -515,15 +515,17 @@ const COLORES = {
     'PC':  '#e05c5c', 'PN':  '#60b8e0', 'FA':  '#005595', 'NE':  '#1341d6',
     'PI':  '#7030a0', 'CA':  '#e8a020', 'UP':  '#e67e22', 'UC':  '#16a085',
     'PGP': '#4f79bd', 'default': '#94a3b8', 'PERI':  '#27b84d', 'PG':  '#62d17a',
-    'AP':  '#f03e3e', 'PVEE':  '#4eb551', 'Unión Cívica':  '#e65768', 
-    'Coalición Republicana':  '#2641bd', 'Identidad Soberana':  '#263deb',
-    'Partido Demócrata Cristiano':  '#005595'
+    'AP':  '#f03e3e', 'PVEE':  '#4eb551',
+    /* Short keys used in JSON data */
+    'IS':  '#263deb', 'CR':  '#2641bd', 'PDC': '#e65768',
+    /* Long-name fallbacks in case JSON uses full names */
+    'Unión Cívica':  '#e65768', 'Coalición Republicana': '#2641bd', 'Identidad Soberana': '#263deb'
 };
 
 const PARTIDO_NOMBRES = {
     FA:'Frente Amplio', PN:'Partido Nacional', PC:'Partido Colorado', CA:'Cabildo Abierto', 
     PI:'Partido Independiente', NE:'Nuevo Espacio', UP:'Unión Popular', UC:'Unión Cívica', PGP:'Por el Gob. del Pueblo',
-    IS:'Identidad Soberana', CR:'Coalición Republicana', PDC:'Partido Demócrata Cristiano'
+    IS:'Identidad Soberana', CR:'Coalición Republicana'
 };
 
 const DEPTO_ID = {
@@ -721,16 +723,10 @@ function toggleMapMode() {
 
 function scrollToSec(sec) {
     selectedPleb = null;
-    // For 'evolucion', the section is outside the right panel now — scroll page-body
     const el = document.getElementById('sec-' + sec);
     if (el) {
-        const pageBody = document.getElementById('page-body');
-        if (pageBody) {
-            const offset = el.getBoundingClientRect().top + pageBody.scrollTop - 70;
-            pageBody.scrollTo({ top: offset, behavior: 'smooth' });
-        } else {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        const offset = el.getBoundingClientRect().top + window.scrollY - 70;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
     }
     currentTab = sec;
     updateTabUI();
@@ -778,7 +774,7 @@ function initScrollObserver() {
                 }
             }
         });
-    }, { rootMargin: "-30% 0px -50% 0px", threshold: 0 });
+    }, { root: null, rootMargin: "-30% 0px -50% 0px", threshold: 0 });
     sections.forEach(s => scrollObserver.observe(s));
 }
 
@@ -1012,6 +1008,7 @@ function renderDeptMode() {
         renderDeptPartySummary(elecDept);
     }
     renderFuentesDept(elecDept, 'sec-fuentes-dept');
+    setTimeout(animateBars, 20);
 }
 
 function renderDeptPartySummary(elecDept) {
@@ -1319,6 +1316,7 @@ function renderRightPanelContent() {
         });
         html += '</div>';
         plebDiv.innerHTML = html;
+        setTimeout(animateBars, 20);
         return;
     }
 
@@ -1517,13 +1515,15 @@ function renderRightPanelContent() {
 ════════════════════════════════════════════ */
 let evoHiddenParties = new Set();
 
-function renderEvolucion() {
-    const wrap = document.getElementById('evo-chart-wrap');
-    const legendEl = document.getElementById('evo-legend');
-    if (!wrap || ELECCIONES.length === 0) return;
+// Store all data points for proximity hover detection
+let _evoAllPoints = [];   // { x, y, pId, pct, votos, candidato, anio }
+let _evoXOf = null;
+let _evoYOf = null;
+const EVO_MAX_PCT = 80; // Y axis cap — no party ever hits 100%
+const EVO_PROXIMITY_PCT = 1.2; // points within 1.2% on same year count as "close"
 
+function buildEvoPartyData() {
     const elections = [...ELECCIONES].sort((a, b) => a.anio - b.anio);
-
     const partyData = {};
     elections.forEach(elec => {
         const vuelta = elec.vueltas[0];
@@ -1531,7 +1531,6 @@ function renderEvolucion() {
         const cands = vuelta.candidatos;
         const total = cands.reduce((s, c) => s + c.votos, 0);
         if (total === 0) return;
-
         const partyVotesYear = {};
         const partyCandidateYear = {};
         cands.forEach(c => {
@@ -1539,12 +1538,21 @@ function renderEvolucion() {
             partyVotesYear[c.partido] += c.votos;
             if (c.votos > partyCandidateYear[c.partido].votos) partyCandidateYear[c.partido] = c;
         });
-
         Object.entries(partyVotesYear).forEach(([pId, votos]) => {
             if (!partyData[pId]) partyData[pId] = [];
             partyData[pId].push({ anio: elec.anio, pct: parseFloat(((votos / total) * 100).toFixed(1)), votos, candidato: partyCandidateYear[pId] });
         });
     });
+    return partyData;
+}
+
+function renderEvolucion() {
+    const wrap = document.getElementById('evo-chart-wrap');
+    const legendEl = document.getElementById('evo-legend');
+    if (!wrap || ELECCIONES.length === 0) return;
+
+    const elections = [...ELECCIONES].sort((a, b) => a.anio - b.anio);
+    const partyData = buildEvoPartyData();
 
     const relevantParties = Object.entries(partyData)
         .filter(([, pts]) => pts.some(p => p.pct >= 1))
@@ -1552,19 +1560,35 @@ function renderEvolucion() {
 
     const years = [...new Set(elections.map(e => e.anio))];
 
-    // Full-width: use a larger viewBox
-    const W = 900, H = 320;
-    // More padding on sides so tooltips near edges don't clip
-    const padL = 40, padR = 40, padT = 20, padB = 36;
+    const W = 900, H = 300;
+    const padL = 44, padR = 44, padT = 16, padB = 34;
     const chartW = W - padL - padR;
     const chartH = H - padT - padB;
 
     const xOf = anio => padL + ((anio - years[0]) / (years[years.length - 1] - years[0] || 1)) * chartW;
-    const yOf = pct => padT + chartH - (pct / 100) * chartH;
+    const yOf = pct => padT + chartH - (Math.min(pct, EVO_MAX_PCT) / EVO_MAX_PCT) * chartH;
+    _evoXOf = xOf;
+    _evoYOf = yOf;
 
-    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+    // Collect all renderable points for proximity detection
+    _evoAllPoints = [];
+    relevantParties.forEach(([pId, pts]) => {
+        if (evoHiddenParties.has(pId)) return;
+        pts.forEach(p => {
+            _evoAllPoints.push({
+                x: parseFloat(xOf(p.anio).toFixed(1)),
+                y: parseFloat(yOf(p.pct).toFixed(1)),
+                pId, pct: p.pct, votos: p.votos,
+                candidato: p.candidato, anio: p.anio
+            });
+        });
+    });
 
-    [0, 25, 50, 75, 100].forEach(tick => {
+    let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" id="evo-svg">`;
+
+    // Grid lines - only up to EVO_MAX_PCT
+    const ticks = [0, 20, 40, 60, 80].filter(t => t <= EVO_MAX_PCT);
+    ticks.forEach(tick => {
         const y = yOf(tick);
         svg += `<line x1="${padL}" y1="${y}" x2="${W - padR}" y2="${y}" stroke="var(--borde-card)" stroke-width="1"/>`;
         svg += `<text x="${padL - 6}" y="${y + 4}" text-anchor="end" font-size="10" fill="var(--text-muted)" font-family="Inter">${tick}%</text>`;
@@ -1573,35 +1597,32 @@ function renderEvolucion() {
     years.forEach(yr => {
         const x = xOf(yr);
         svg += `<line x1="${x}" y1="${padT}" x2="${x}" y2="${padT + chartH}" stroke="var(--borde-card)" stroke-width="1" stroke-dasharray="3,3"/>`;
-        svg += `<text x="${x}" y="${H - 6}" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Inter">${yr}</text>`;
+        svg += `<text x="${x}" y="${H - 4}" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Inter">${yr}</text>`;
     });
 
+    // Lines — thinner (1.8px)
     relevantParties.forEach(([pId, pts]) => {
         if (evoHiddenParties.has(pId)) return;
         const c = color(pId);
         const sorted = [...pts].sort((a, b) => a.anio - b.anio);
         const d = sorted.map((p, i) => `${i === 0 ? 'M' : 'L'}${xOf(p.anio).toFixed(1)},${yOf(p.pct).toFixed(1)}`).join(' ');
-        svg += `<path d="${d}" stroke="${c}" stroke-width="2.5" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.9"/>`;
+        svg += `<path d="${d}" stroke="${c}" stroke-width="1.8" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>`;
     });
 
+    // Dots — smaller (r=3.5), with transparent hit area for easy hover
     relevantParties.forEach(([pId, pts]) => {
         if (evoHiddenParties.has(pId)) return;
         const c = color(pId);
         pts.forEach(p => {
-            const x = xOf(p.anio).toFixed(1);
-            const y = yOf(p.pct).toFixed(1);
-            const candData = encodeURIComponent(JSON.stringify({
-                nombre: p.candidato?.nombre || '',
-                pct: p.pct,
-                votos: p.votos,
-                partido: pId,
-                foto: p.candidato?.foto || '',
-                anio: p.anio
-            }));
-            svg += `<circle cx="${x}" cy="${y}" r="6" fill="${c}" stroke="var(--card-bg)" stroke-width="2"
-                style="cursor:pointer"
-                onmouseenter="evoShowTip(event,'${candData}')"
-                onmouseleave="evoHideTip()"
+            const x = parseFloat(xOf(p.anio).toFixed(1));
+            const y = parseFloat(yOf(p.pct).toFixed(1));
+            const idx = _evoAllPoints.findIndex(pt => pt.pId === pId && pt.anio === p.anio);
+            // Visible dot with CSS transition for hover scale
+            svg += `<circle id="evo-dot-${pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}" cx="${x}" cy="${y}" r="3.5" fill="${c}" stroke="var(--card-bg)" stroke-width="1.5" style="transition:r 0.15s ease,stroke-width 0.15s ease;" pointer-events="none"/>`;
+            // Invisible hit area
+            svg += `<circle cx="${x}" cy="${y}" r="10" fill="transparent" style="cursor:pointer"
+                onmouseenter="evoEnterPoint(event,${idx})"
+                onmouseleave="evoLeavePoint(${idx})"
             />`;
         });
     });
@@ -1609,6 +1630,7 @@ function renderEvolucion() {
     svg += '</svg>';
     wrap.innerHTML = svg;
 
+    // Build legend
     let legendHtml = '';
     relevantParties.forEach(([pId]) => {
         const hidden = evoHiddenParties.has(pId);
@@ -1620,34 +1642,104 @@ function renderEvolucion() {
     legendEl.innerHTML = legendHtml;
 }
 
-function evoShowTip(event, dataEncoded) {
-    const d = JSON.parse(decodeURIComponent(dataEncoded));
+function evoEnterPoint(event, idx) {
+    const pt = _evoAllPoints[idx];
+    if (!pt) return;
+
+    // Find all points on the same year within EVO_PROXIMITY_PCT
+    const nearby = _evoAllPoints.filter(p =>
+        p.anio === pt.anio && Math.abs(p.pct - pt.pct) <= EVO_PROXIMITY_PCT
+    ).sort((a, b) => b.pct - a.pct);
+
+    // Highlight all nearby dots
+    nearby.forEach(p => {
+        const dotId = `evo-dot-${p.pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}`;
+        const dot = document.getElementById(dotId);
+        if (dot) { dot.setAttribute('r', '5.5'); dot.setAttribute('stroke-width', '2'); }
+    });
+
     const tt = document.getElementById('evo-tooltip');
-    let inner = '';
-    if (d.foto) {
-        inner += `<img src="${d.foto}" alt="${d.nombre}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;object-position:center top;margin-bottom:6px;display:block;">`;
-    } else if (d.nombre) {
-        const initials = d.nombre.split(' ').filter(w => w.length > 2).slice(0,2).map(w => w[0]).join('').toUpperCase();
-        inner += `<div style="width:48px;height:48px;border-radius:50%;background:${color(d.partido)};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.1rem;color:white;margin-bottom:6px;">${initials}</div>`;
+
+    if (nearby.length === 1) {
+        // Single point tooltip
+        const d = nearby[0];
+        let inner = '';
+        if (d.candidato?.foto) {
+            inner += `<img src="${d.candidato.foto}" alt="${d.candidato.nombre}" style="width:44px;height:44px;border-radius:50%;object-fit:cover;object-position:center top;margin-bottom:6px;display:block;">`;
+        } else {
+            const initials = (d.candidato?.nombre || d.pId).split(' ').filter(w => w.length > 2).slice(0,2).map(w => w[0]).join('').toUpperCase();
+            inner += `<div style="width:44px;height:44px;border-radius:50%;background:${color(d.pId)};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1rem;color:white;margin-bottom:6px;">${initials}</div>`;
+        }
+        inner += `<div style="font-weight:700;font-size:0.9rem;margin-bottom:2px;">${d.candidato?.nombre || d.pId}</div>`;
+        inner += `<div style="color:${color(d.pId)};font-weight:800;font-size:0.78rem;">${PARTIDO_NOMBRES[d.pId] || d.pId}</div>`;
+        inner += `<div style="margin-top:5px;font-size:0.85rem;font-weight:800;">${d.pct}%</div>`;
+        inner += `<div style="font-size:0.72rem;color:#94a3b8;">${fmtVotos(d.votos)} votos · ${d.anio}</div>`;
+        tt.innerHTML = inner;
+    } else {
+        // Multi-point grouped tooltip
+        let inner = `<div style="font-size:0.75rem;color:#94a3b8;margin-bottom:8px;font-weight:600;">${pt.anio} — partidos cercanos</div>`;
+        nearby.forEach(d => {
+            inner += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid rgba(255,255,255,0.1);">`;
+            inner += `<div style="width:10px;height:10px;border-radius:50%;background:${color(d.pId)};flex-shrink:0;"></div>`;
+            inner += `<div style="flex:1;min-width:0;">`;
+            inner += `<div style="font-weight:700;font-size:0.82rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${PARTIDO_NOMBRES[d.pId] || d.pId}</div>`;
+            if (d.candidato?.nombre) inner += `<div style="font-size:0.72rem;color:#94a3b8;">${d.candidato.nombre}</div>`;
+            inner += `</div>`;
+            inner += `<div style="font-weight:800;font-size:0.9rem;color:${color(d.pId)};flex-shrink:0;">${d.pct}%</div>`;
+            inner += `</div>`;
+        });
+        tt.innerHTML = inner;
     }
-    inner += `<div style="font-weight:700;font-size:0.9rem;margin-bottom:2px;">${d.nombre || d.partido}</div>`;
-    inner += `<div style="color:${color(d.partido)};font-weight:800;font-size:0.8rem;">${PARTIDO_NOMBRES[d.partido] || d.partido}</div>`;
-    inner += `<div style="margin-top:4px;font-size:0.85rem;font-weight:800;">${d.pct}%</div>`;
-    inner += `<div style="font-size:0.75rem;color:#94a3b8;">${fmtVotos(d.votos)} votos · ${d.anio}</div>`;
-    tt.innerHTML = inner;
+
+    // Position tooltip — clamp to avoid going off right/bottom edge
+    const ttW = 200;
+    const ttH = tt.scrollHeight || 120;
+    let left = event.clientX + 16;
+    let top = event.clientY - 10;
+    if (left + ttW > window.innerWidth - 10) left = event.clientX - ttW - 16;
+    if (top + ttH > window.innerHeight - 10) top = window.innerHeight - ttH - 10;
+    tt.style.left = left + 'px';
+    tt.style.top = top + 'px';
+    tt.style.opacity = '1';
     tt.style.display = 'block';
-    tt.style.left = (event.clientX + 14) + 'px';
-    tt.style.top = (event.clientY - 10) + 'px';
 }
 
-function evoHideTip() {
-    document.getElementById('evo-tooltip').style.display = 'none';
+function evoLeavePoint(idx) {
+    const pt = _evoAllPoints[idx];
+    if (!pt) return;
+    // Reset all nearby dots
+    const nearby = _evoAllPoints.filter(p =>
+        p.anio === pt.anio && Math.abs(p.pct - pt.pct) <= EVO_PROXIMITY_PCT
+    );
+    nearby.forEach(p => {
+        const dotId = `evo-dot-${p.pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}`;
+        const dot = document.getElementById(dotId);
+        if (dot) { dot.setAttribute('r', '3.5'); dot.setAttribute('stroke-width', '1.5'); }
+    });
+    const tt = document.getElementById('evo-tooltip');
+    tt.style.opacity = '0';
+    setTimeout(() => { if (tt.style.opacity === '0') tt.style.display = 'none'; }, 180);
 }
 
 function evoToggleParty(pId) {
     if (evoHiddenParties.has(pId)) evoHiddenParties.delete(pId);
     else evoHiddenParties.add(pId);
     renderEvolucion();
+}
+
+/* Trigger bar animations after DOM render */
+function animateBars() {
+    requestAnimationFrame(() => {
+        document.querySelectorAll('.barra-cand-fill, .dept-summary-barra-fill, .pleb-barra-fill').forEach(el => {
+            const target = el.style.width;
+            el.style.transition = 'none';
+            el.style.width = '0%';
+            requestAnimationFrame(() => {
+                el.style.transition = 'width 0.7s cubic-bezier(0.4,0,0.2,1)';
+                el.style.width = target;
+            });
+        });
+    });
 }
 
 function renderAll() {
@@ -1657,6 +1749,8 @@ function renderAll() {
     renderRightPanelContent();
     renderMapa();
     renderEvolucion();
+    // Kick off bar animations after a tiny delay to ensure DOM is painted
+    setTimeout(animateBars, 20);
 }
 
 window.addEventListener('resize', () => {
