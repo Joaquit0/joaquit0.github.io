@@ -21,6 +21,7 @@
   --success:   #16a34a;
   --danger:    #ef4444;
   --map-empty: #cbd5e1;
+  --range-track: #c8d8f0;
 }
 [data-theme="dark"] {
   --bg:        #121212;
@@ -33,6 +34,7 @@
   --accent:    #3b82f6;
   --accent2:   #60a5fa;
   --map-empty: #2a2a3e;
+  --range-track: #3a4a5e;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -66,7 +68,7 @@ header {
   position: absolute; left: 24px;
 }
 .logo span { color: var(--muted); font-weight: 400; font-size: 1rem; }
-.header-actions { display: flex; gap: 10px; align-items: center; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
 .header-right {
   position: absolute; right: 24px;
   display: flex; align-items: center; gap: 6px;
@@ -76,7 +78,7 @@ header {
   border: 1px solid var(--border2);
   background: var(--surface2);
   color: var(--text);
-  padding: 7px 16px;
+  padding: 7px 14px;
   border-radius: 8px;
   font-size: 0.82rem;
   font-weight: 600;
@@ -87,6 +89,8 @@ header {
 .btn:hover { border-color: var(--accent); color: var(--accent); }
 .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
 .btn-primary:hover { background: var(--accent2); border-color: var(--accent2); color: #fff; }
+.btn-danger { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--danger); }
+.btn-danger:hover { background: var(--danger); color: #fff; }
 .btn-icon-round {
   background: transparent; border: none; padding: 6px; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
@@ -96,58 +100,61 @@ header {
 /* ── LAYOUT ── */
 .workspace {
   display: grid;
-  grid-template-columns: 320px 1fr 340px;
+  grid-template-columns: 300px 1fr 340px;
   height: 100%;
   overflow: hidden;
 }
 
-/* ── LEFT PANEL ── */
+/* ── LEFT PANEL (floating cards, no bg) ── */
 .left-panel {
-  background: var(--surface);
+  background: transparent;
   border-right: 1px solid var(--border);
   display: flex; flex-direction: column;
   overflow: hidden;
+  padding: 0;
 }
 .panel-header {
-  padding: 16px 18px 12px;
-  border-bottom: 1px solid var(--border);
+  padding: 14px 14px 10px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .panel-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
   color: var(--muted);
 }
 .candidates-list {
-  flex: 1; overflow-y: auto; padding: 12px;
-  display: flex; flex-direction: column; gap: 10px;
+  flex: 1; overflow-y: auto; padding: 6px 10px 6px;
+  display: flex; flex-direction: column; gap: 8px;
   scrollbar-width: thin;
   scrollbar-color: var(--border2) transparent;
 }
 
-/* ── CANDIDATE CARD ── */
+/* ── CANDIDATE CARD (floating, no bg) ── */
 .cand-card {
-  border-radius: 12px;
-  border: 1.5px solid var(--border);
-  background: var(--surface2);
-  overflow: visible;
+  border-radius: 14px;
+  border: 1.5px solid var(--border2);
+  background: var(--surface);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+  overflow: hidden;
   cursor: pointer;
-  transition: border-color 0.2s, transform 0.15s;
+  transition: border-color 0.2s, transform 0.15s, box-shadow 0.2s;
   position: relative;
+  min-height: 80px;
 }
-.cand-card:hover { border-color: var(--border2); transform: translateY(-1px); }
-.cand-card.selected { border-color: var(--accent) !important; }
-.cand-card-inner { display: flex; align-items: stretch; border-radius: 12px; overflow: hidden; }
+.cand-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+.cand-card.selected { border-color: var(--accent) !important; box-shadow: 0 4px 20px rgba(59,130,246,0.25); }
+.cand-card-inner { display: flex; align-items: stretch; }
+
+/* Photo stretches full height of card */
 .cand-photo {
-  width: 76px; height: 90px;
+  width: 72px;
+  align-self: stretch;
   flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem; font-weight: 800; color: rgba(255,255,255,0.9);
+  font-size: 1.6rem; font-weight: 800; color: rgba(255,255,255,0.9);
   font-family: 'Inter', sans-serif;
   position: relative; overflow: hidden;
+  min-height: 78px;
 }
 .cand-photo img {
   width: 100%; height: 100%;
@@ -156,146 +163,101 @@ header {
 }
 .cand-body { padding: 10px 12px; flex: 1; min-width: 0; }
 .cand-name {
-  font-family: 'Inter', sans-serif;
   font-weight: 700; font-size: 0.88rem;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  line-height: 1.2;
-  padding-right: 26px;
+  line-height: 1.2; padding-right: 22px;
 }
-.cand-vice { font-size: 0.72rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cand-party { font-size: 0.73rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 5px; }
-.cand-stats { display: flex; align-items: baseline; gap: 8px; margin-top: 6px; }
-.cand-pct { font-size: 1.2rem; font-weight: 800; font-family: 'Inter', sans-serif; }
-.cand-votes { font-size: 0.7rem; color: var(--muted); }
+.cand-vice { font-size: 0.70rem; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cand-party { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+.cand-stats { display: flex; align-items: baseline; gap: 8px; margin-top: 5px; }
+.cand-pct { font-size: 1.15rem; font-weight: 800; }
+.cand-votes { font-size: 0.68rem; color: var(--muted); }
 .cand-bar-wrap { height: 3px; background: rgba(0,0,0,0.07); border-radius: 2px; margin-top: 5px; overflow: hidden; }
 .cand-bar-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
 .badge-winner {
-  font-size: 0.58rem; font-weight: 800; letter-spacing: 0.07em;
+  font-size: 0.56rem; font-weight: 800; letter-spacing: 0.07em;
   text-transform: uppercase; background: var(--success);
   color: #fff; padding: 2px 6px; border-radius: 4px;
-  display: inline-block;
-  animation: pulse 2s ease-in-out infinite;
+  display: inline-block; animation: pulse 2s ease-in-out infinite;
   vertical-align: middle; margin-left: 4px;
 }
-@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; } }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.7; } }
 .cand-delete {
-  position: absolute; top: 8px; right: 8px;
-  width: 20px; height: 20px;
-  background: rgba(239,68,68,0.15);
-  border: 1px solid rgba(239,68,68,0.3);
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.7rem; color: var(--danger);
-  cursor: pointer; opacity: 0; transition: opacity 0.18s;
-  z-index: 10;
+  position: absolute; top: 7px; right: 7px;
+  width: 18px; height: 18px;
+  background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; color: var(--danger); cursor: pointer; opacity: 0; transition: opacity 0.18s; z-index: 10;
 }
 .cand-card:hover .cand-delete { opacity: 1; }
 
 .add-btn {
-  margin: 0 12px 12px;
+  margin: 0 10px 10px;
   padding: 10px;
   border: 1.5px dashed var(--border2);
-  border-radius: 10px;
-  background: transparent;
-  color: var(--muted);
-  font-family: 'Inter', sans-serif;
-  font-size: 0.83rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.18s;
-  text-align: center;
+  border-radius: 10px; background: transparent; color: var(--muted);
+  font-family: 'Inter', sans-serif; font-size: 0.83rem; font-weight: 600;
+  cursor: pointer; transition: all 0.18s; text-align: center;
 }
-.add-btn:hover { border-color: var(--accent); color: var(--accent2); background: rgba(59,130,246,0.06); }
+.add-btn:hover { border-color: var(--accent); color: var(--accent2); background: rgba(59,130,246,0.05); }
 
 /* ── CENTER MAP ── */
 .map-panel {
-  background: var(--bg);
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  position: relative;
-  overflow: hidden;
+  background: var(--bg); display: flex; flex-direction: column;
+  align-items: center; justify-content: center; position: relative; overflow: hidden;
 }
 .map-hint {
   position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-  font-size: 0.75rem; color: var(--muted);
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 7px 14px; border-radius: 20px;
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 10;
+  font-size: 0.73rem; color: var(--muted);
+  background: var(--surface); border: 1px solid var(--border);
+  padding: 6px 14px; border-radius: 20px; white-space: nowrap; pointer-events: none; z-index: 10;
 }
 .map-controls {
   position: absolute; top: 14px; right: 14px;
-  display: flex; flex-direction: column; gap: 6px;
-  z-index: 20;
+  display: flex; flex-direction: column; gap: 6px; z-index: 20;
 }
 .map-ctrl-btn {
-  width: 32px; height: 32px;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
+  width: 32px; height: 32px; background: var(--surface);
+  border: 1px solid var(--border2); border-radius: 8px;
   display: flex; align-items: center; justify-content: center;
-  cursor: pointer;
-  font-size: 1rem; font-weight: 700;
-  color: var(--text);
-  transition: all 0.18s;
-  user-select: none;
+  cursor: pointer; font-size: 1rem; font-weight: 700; color: var(--text);
+  transition: all 0.18s; user-select: none;
 }
 .map-ctrl-btn:hover { border-color: var(--accent); color: var(--accent); }
 
 #map-viewport {
-  width: 100%; height: 100%;
-  position: absolute; inset: 0;
-  overflow: hidden;
-  cursor: grab;
+  width: 100%; height: 100%; position: absolute; inset: 0; overflow: hidden; cursor: grab;
 }
 #map-viewport:active { cursor: grabbing; }
-#map-movable {
-  position: absolute;
-  transform-origin: center center;
-  will-change: transform;
-}
+#map-movable { position: absolute; transform-origin: center center; will-change: transform; }
 #map-container { width: 520px; padding: 20px; }
 #map-container svg { width: 100%; height: auto; }
 #map-container path {
   stroke: var(--bg); stroke-width: 1.5;
   transition: fill 0.4s ease, fill-opacity 0.4s ease, opacity 0.2s;
-  cursor: pointer;
-  fill: var(--map-empty);
+  cursor: pointer; fill: var(--map-empty);
 }
 #map-container path:hover { opacity: 0.75; stroke-width: 2.5; stroke: rgba(255,255,255,0.4); }
 #map-container path.dept-active { stroke: white !important; stroke-width: 2.5 !important; opacity: 1 !important; }
 #map-container #label_points { display: none; }
 
 #map-tooltip {
-  position: fixed;
-  background: #1a1a2e;
-  border: 1px solid rgba(59,130,246,0.3);
-  color: #ffffff;
-  padding: 10px 14px;
-  border-radius: 10px;
-  font-size: 0.82rem;
-  pointer-events: none;
-  z-index: 9999;
-  display: none;
-  min-width: 150px;
+  position: fixed; background: #1a1a2e; border: 1px solid rgba(59,130,246,0.3);
+  color: #ffffff; padding: 10px 14px; border-radius: 10px; font-size: 0.82rem;
+  pointer-events: none; z-index: 9999; display: none; min-width: 150px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.3);
 }
-#map-tooltip strong { display: block; font-weight: 700; margin-bottom: 4px; font-size: 0.9rem; color: #ffffff; }
-.tt-row { display: flex; justify-content: space-between; gap: 16px; font-size: 0.8rem; margin-top: 3px; color: #ffffff; }
+#map-tooltip strong { display: block; font-weight: 700; margin-bottom: 4px; font-size: 0.9rem; color: #fff; }
+.tt-row { display: flex; justify-content: space-between; gap: 16px; font-size: 0.8rem; margin-top: 3px; color: #fff; }
 
 /* ── RIGHT PANEL ── */
 .right-panel {
-  background: var(--surface);
-  border-left: 1px solid var(--border);
-  display: flex; flex-direction: column;
-  overflow: hidden;
+  background: var(--surface); border-left: 1px solid var(--border);
+  display: flex; flex-direction: column; overflow: hidden;
 }
 .right-panel-inner {
   flex: 1; overflow-y: auto; padding: 16px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border2) transparent;
+  scrollbar-width: thin; scrollbar-color: var(--border2) transparent;
 }
 
 /* EDIT FORM */
@@ -303,43 +265,64 @@ header {
 .field-group { display: flex; flex-direction: column; gap: 5px; }
 .field-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
 .field-input {
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  color: var(--text);
-  padding: 9px 12px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.88rem;
-  transition: border-color 0.18s;
-  width: 100%;
+  background: var(--surface2); border: 1px solid var(--border2); border-radius: 8px;
+  color: var(--text); padding: 9px 12px; font-family: 'Inter', sans-serif; font-size: 0.88rem;
+  transition: border-color 0.18s; width: 100%;
 }
 .field-input:focus { outline: none; border-color: var(--accent); }
 .color-row { display: flex; align-items: center; gap: 10px; }
 .color-preview {
-  width: 36px; height: 36px; border-radius: 8px;
-  border: 2px solid var(--border2);
-  cursor: pointer;
-  flex-shrink: 0;
-  transition: border-color 0.18s;
+  width: 36px; height: 36px; border-radius: 8px; border: 2px solid var(--border2);
+  cursor: pointer; flex-shrink: 0; transition: border-color 0.18s;
 }
 input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
 
+/* IMAGE UPLOAD */
+.photo-upload-area {
+  border: 2px dashed var(--border2); border-radius: 10px;
+  padding: 16px; text-align: center; cursor: pointer;
+  transition: all 0.2s; background: var(--surface2); position: relative;
+}
+.photo-upload-area:hover, .photo-upload-area.drag-over {
+  border-color: var(--accent); background: rgba(59,130,246,0.05);
+}
+.photo-upload-area input[type="file"] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.photo-preview-thumb {
+  width: 60px; height: 72px; object-fit: cover; border-radius: 8px;
+  border: 2px solid var(--border2); margin: 0 auto 8px; display: block;
+}
+.photo-upload-hint { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+
+/* CROP MODAL */
+.crop-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+  z-index: 2000; display: none; align-items: center; justify-content: center;
+  flex-direction: column; gap: 16px;
+}
+.crop-overlay.open { display: flex; }
+.crop-container {
+  position: relative; background: #000; overflow: hidden;
+  border-radius: 12px; max-width: 90vw; max-height: 70vh;
+  cursor: crosshair;
+}
+.crop-canvas { display: block; max-width: 90vw; max-height: 70vh; }
+.crop-selection {
+  position: absolute; border: 2px solid #fff;
+  box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+  pointer-events: none;
+}
+.crop-actions { display: flex; gap: 10px; }
+
 /* SLIDERS / DEPT CARD */
 .dept-card {
-  background: var(--surface2);
-  border: 1.5px solid var(--border2);
-  border-radius: 16px;
-  padding: 18px 18px 16px;
+  background: var(--surface2); border: 1.5px solid var(--border2);
+  border-radius: 16px; padding: 18px 18px 16px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.07);
 }
 .dept-editor { display: flex; flex-direction: column; gap: 14px; }
-.dept-title {
-  font-family: 'Inter', sans-serif;
-  font-weight: 800; font-size: 1.15rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 10px;
-  margin-bottom: 2px;
-}
+.dept-title { font-weight: 800; font-size: 1.15rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 2px; }
 .dept-pop { font-size: 0.75rem; color: var(--muted); margin-top: -8px; }
 .slider-group { display: flex; flex-direction: column; gap: 10px; }
 .slider-item { display: flex; flex-direction: column; gap: 5px; }
@@ -347,15 +330,9 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
 .slider-name { font-weight: 600; }
 .slider-pct-wrap { display: flex; align-items: center; gap: 4px; }
 .slider-pct-input {
-  font-weight: 800; font-family: 'Inter', sans-serif; font-size: 1rem;
-  width: 58px; text-align: right;
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid transparent;
-  color: inherit;
-  padding: 0 2px;
-  cursor: text;
-  transition: border-color 0.18s;
+  font-weight: 800; font-size: 1rem; width: 56px; text-align: right;
+  background: transparent; border: none; border-bottom: 2px solid transparent;
+  color: inherit; padding: 0 2px; cursor: text; transition: border-color 0.18s;
   -moz-appearance: textfield;
 }
 .slider-pct-input::-webkit-outer-spin-button,
@@ -363,116 +340,283 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
 .slider-pct-input:focus { outline: none; border-bottom-color: currentColor; }
 .slider-pct-sym { font-size: 0.85rem; font-weight: 700; opacity: 0.7; }
 input[type="range"] {
-  width: 100%; height: 6px;
-  -webkit-appearance: none; appearance: none;
-  background: var(--surface2);
-  border-radius: 3px;
-  cursor: pointer;
-  outline: none;
+  width: 100%; height: 6px; -webkit-appearance: none; appearance: none;
+  background: var(--range-track); border-radius: 3px; cursor: pointer; outline: none;
 }
 input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px; height: 18px;
-  border-radius: 50%;
-  background: var(--accent);
-  border: 2px solid var(--bg);
-  cursor: pointer;
-  transition: transform 0.15s;
+  -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg); cursor: pointer; transition: transform 0.15s;
 }
 input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
 .total-bar {
-  height: 7px; border-radius: 4px;
-  background: var(--surface2);
-  overflow: hidden; margin-top: 6px;
-  display: flex;
-  border: 1px solid var(--border);
+  height: 7px; border-radius: 4px; background: var(--surface2);
+  overflow: hidden; margin-top: 6px; display: flex; border: 1px solid var(--border);
 }
 .total-bar-seg { height: 100%; transition: width 0.3s ease; }
 .total-label { font-size: 0.72rem; color: var(--muted); text-align: right; margin-top: 4px; }
 .total-label.error { color: var(--danger); }
 
 .empty-state {
-  text-align: center; padding: 40px 20px;
-  color: var(--muted);
+  text-align: center; padding: 40px 20px; color: var(--muted);
   display: flex; flex-direction: column; align-items: center; gap: 10px;
 }
 .empty-icon { font-size: 2.5rem; opacity: 0.4; }
 .empty-text { font-size: 0.85rem; line-height: 1.5; }
 
+/* RIGHT PANEL HEADER AREA */
+.right-panel-top {
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.right-panel-top-title { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+
+/* SECTION TOGGLE (pie chart) */
+.section-toggle {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 0.75rem; color: var(--muted); font-weight: 600;
+  cursor: pointer; user-select: none; padding: 4px 0;
+}
+.toggle-switch {
+  width: 32px; height: 18px; background: var(--border2); border-radius: 9px;
+  position: relative; transition: background 0.2s; flex-shrink: 0;
+}
+.toggle-switch::after {
+  content: ''; position: absolute; top: 2px; left: 2px;
+  width: 14px; height: 14px; border-radius: 50%; background: white;
+  transition: transform 0.2s; box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.toggle-switch.on { background: var(--accent); }
+.toggle-switch.on::after { transform: translateX(14px); }
+
+/* PIE CHART */
+.pie-wrap {
+  padding: 14px 16px 6px; border-top: 1px solid var(--border);
+  display: none; flex-direction: column; gap: 8px;
+}
+.pie-wrap.visible { display: flex; }
+#pie-svg { width: 100%; height: auto; display: block; }
+.pie-legend { display: flex; flex-direction: column; gap: 4px; padding: 0 2px; }
+.pie-legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; }
+.pie-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.pie-legend-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+.pie-legend-pct { font-weight: 800; font-size: 0.8rem; }
+
 /* ── MODAL ── */
 .modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.7);
-  backdrop-filter: blur(4px);
-  z-index: 1000;
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(4px); z-index: 1000;
   display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.2s;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s;
 }
 .modal-overlay.open { opacity: 1; pointer-events: all; }
 .modal {
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  border-radius: 16px;
-  padding: 28px;
-  width: 400px;
-  max-width: 95vw;
-  transform: translateY(16px) scale(0.97);
-  transition: transform 0.2s;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  background: var(--surface); border: 1px solid var(--border2); border-radius: 16px;
+  padding: 28px; width: 420px; max-width: 95vw;
+  transform: translateY(16px) scale(0.97); transition: transform 0.2s;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;
 }
 .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-.modal-title {
-  font-family: 'Inter', sans-serif;
-  font-weight: 800; font-size: 1.15rem;
-  margin-bottom: 20px;
-}
+.modal-title { font-weight: 800; font-size: 1.15rem; margin-bottom: 20px; }
 .modal-form { display: flex; flex-direction: column; gap: 14px; }
 .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 8px; }
 
 /* LEGEND */
 .map-legend {
   position: absolute; bottom: 54px; right: 14px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 14px;
-  display: none; flex-direction: column; gap: 6px;
-  min-width: 140px;
-  z-index: 15;
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 10px 14px; display: none; flex-direction: column; gap: 6px;
+  min-width: 140px; z-index: 15;
 }
 .map-legend.visible { display: flex; }
 .legend-item { display: flex; align-items: center; gap: 8px; font-size: 0.78rem; font-weight: 600; }
 .legend-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
 
-/* TABS */
-.right-tabs { display: flex; border-bottom: 1px solid var(--border); }
-.right-tab {
-  flex: 1; padding: 11px;
-  font-family: 'Inter', sans-serif;
-  font-size: 0.78rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.07em;
-  color: var(--muted);
-  background: none; border: none;
-  cursor: pointer; border-bottom: 2px solid transparent;
-  transition: all 0.18s;
+/* LOAD HISTORY MODAL */
+.history-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; max-height: 320px; overflow-y: auto;
 }
-.right-tab.active { color: var(--accent2); border-bottom-color: var(--accent); }
+.hist-btn {
+  padding: 10px 6px; border: 1.5px solid var(--border2); border-radius: 10px;
+  background: var(--surface2); color: var(--text); font-family: 'Inter', sans-serif;
+  font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.18s; text-align: center;
+}
+.hist-btn:hover { border-color: var(--accent); color: var(--accent); background: rgba(59,130,246,0.07); }
+
+/* SEGUNDA VUELTA MODAL */
+.sv-cand-block {
+  background: var(--surface2); border-radius: 10px; padding: 12px; border: 1px solid var(--border);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.sv-third-item { display: flex; flex-direction: column; gap: 4px; }
+.sv-third-header { display: flex; justify-content: space-between; font-size: 0.82rem; }
+.sv-third-name { font-weight: 600; }
+.sv-rows { display: flex; flex-direction: column; gap: 6px; }
+.sv-row { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; }
+.sv-row-label { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sv-row-input {
+  width: 60px; text-align: right; background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 6px; padding: 4px 8px; font-family: 'Inter', sans-serif; font-size: 0.85rem;
+  color: var(--text);
+}
+.sv-abstention { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+.sv-total-check { font-size: 0.72rem; font-weight: 700; margin-top: 4px; }
+.sv-total-check.ok { color: var(--success); }
+.sv-total-check.err { color: var(--danger); }
+
+/* ══ PRESENTACIÓN MODE ══ */
+.pres-overlay {
+  position: fixed; inset: 0; background: #050a12; z-index: 5000;
+  display: none; flex-direction: column;
+  font-family: 'Inter', sans-serif; color: #f1f5f9;
+  overflow: hidden;
+}
+.pres-overlay.active { display: flex; }
+.pres-header {
+  padding: 20px 48px; display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.07); flex-shrink: 0;
+}
+.pres-logo { font-size: 1.1rem; font-weight: 700; color: #3b82f6; letter-spacing: 0.05em; }
+.pres-title { font-size: 1rem; font-weight: 400; color: rgba(255,255,255,0.4); letter-spacing: 0.15em; text-transform: uppercase; }
+.pres-close {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.5); padding: 6px 14px; border-radius: 8px;
+  font-family: 'Inter', sans-serif; font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+}
+.pres-close:hover { color: #fff; background: rgba(255,255,255,0.12); }
+.pres-body {
+  flex: 1; display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; overflow: hidden;
+}
+.pres-map-side {
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px; position: relative; overflow: hidden;
+}
+.pres-map-side::after {
+  content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.1) 70%, transparent);
+}
+#pres-map-svg-wrap { width: 100%; max-width: 420px; }
+#pres-map-svg-wrap svg { width: 100%; height: auto; }
+#pres-map-svg-wrap path {
+  stroke: #050a12; stroke-width: 1.5;
+  transition: fill 0.6s ease, fill-opacity 0.6s ease;
+  fill: #1e2a3a;
+}
+
+.pres-results-side {
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 32px 48px 32px 36px; gap: 0; overflow: hidden;
+}
+.pres-results-title {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-bottom: 24px;
+}
+.pres-cand-row {
+  display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px;
+  opacity: 0; transform: translateY(20px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.pres-cand-row.revealed { opacity: 1; transform: translateY(0); }
+.pres-cand-top { display: flex; align-items: baseline; justify-content: space-between; }
+.pres-cand-name { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.01em; }
+.pres-cand-party { font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.4); margin-left: 8px; }
+.pres-cand-pct { font-size: 2rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+.pres-cand-votes-disp { font-size: 0.78rem; color: rgba(255,255,255,0.4); margin-top: -2px; }
+.pres-bar-track {
+  height: 8px; background: rgba(255,255,255,0.06); border-radius: 4px; overflow: hidden;
+}
+.pres-bar-fill {
+  height: 100%; border-radius: 4px; width: 0%;
+  transition: width 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.pres-winner-badge {
+  display: inline-block; font-size: 0.62rem; font-weight: 800; letter-spacing: 0.1em;
+  text-transform: uppercase; background: #16a34a; color: #fff;
+  padding: 3px 8px; border-radius: 5px; margin-left: 10px; vertical-align: middle;
+  animation: pulse 2s ease-in-out infinite;
+}
+.pres-dept-status {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  font-size: 0.72rem; color: rgba(255,255,255,0.3); font-style: italic;
+  transition: opacity 0.3s;
+}
+.pres-footer {
+  padding: 10px 48px; display: flex; align-items: center; justify-content: space-between;
+  border-top: 1px solid rgba(255,255,255,0.05); flex-shrink: 0;
+}
+.pres-progress-bar {
+  flex: 1; height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; margin-right: 16px;
+}
+.pres-progress-fill { height: 100%; background: #3b82f6; width: 0%; transition: width 0.4s ease; }
+.pres-progress-label { font-size: 0.72rem; color: rgba(255,255,255,0.3); white-space: nowrap; }
+
+/* CONFETTI CANVAS */
+#confetti-canvas {
+  position: fixed; inset: 0; pointer-events: none; z-index: 6000; display: none;
+}
+
+/* IMPORT BTN */
+.import-area {
+  display: flex; gap: 6px; padding: 0 10px 6px;
+}
+.import-area input[type="file"] { display: none; }
 
 @keyframes fadeUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
 .fade-up { animation: fadeUp 0.25s ease forwards; }
+
+/* SEGUNDA VUELTA banner */
+.sv-banner {
+  position: absolute; top: 14px; left: 14px; z-index: 25;
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: #fff; padding: 6px 14px; border-radius: 20px;
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em;
+  display: none; box-shadow: 0 2px 12px rgba(124,58,237,0.4);
+}
+.sv-banner.visible { display: block; }
 </style>
 </head>
 <body data-theme="light">
 <script>(function(){ const t=localStorage.getItem('uruvoto-theme'); if(t) document.body.setAttribute('data-theme',t); })();</script>
 
 <div id="map-tooltip"></div>
+<canvas id="confetti-canvas"></canvas>
+
+<!-- PRESENTACIÓN OVERLAY -->
+<div class="pres-overlay" id="pres-overlay">
+  <div class="pres-header">
+    <div class="pres-logo">EleccionesUY</div>
+    <div class="pres-title" id="pres-title-label">Resultados Electorales</div>
+    <button class="pres-close" onclick="closePres()">✕ Cerrar</button>
+  </div>
+  <div class="pres-body">
+    <div class="pres-map-side" style="position:relative;">
+      <div id="pres-map-svg-wrap"></div>
+      <div class="pres-dept-status" id="pres-dept-status"></div>
+    </div>
+    <div class="pres-results-side">
+      <div class="pres-results-title">Escrutinio en curso</div>
+      <div id="pres-cands-wrap"></div>
+    </div>
+  </div>
+  <div class="pres-footer">
+    <div class="pres-progress-bar"><div class="pres-progress-fill" id="pres-progress-fill"></div></div>
+    <div class="pres-progress-label" id="pres-progress-label">0 / 19 departamentos</div>
+  </div>
+</div>
 
 <header>
-  <div class="logo" onclick="window.location.href='index.html'" style="cursor:pointer;">EleccionesUY <span>/ Editor</span></div>
+  <div class="logo" onclick="window.location.href='index.html'">EleccionesUY <span>/ Editor</span></div>
   <div class="header-actions">
-    <button class="btn" onclick="exportJSON()">⬇ Exportar JSON</button>
-    <button class="btn btn-primary" onclick="resetAll()">↺ Nueva Elección</button>
+    <button class="btn" onclick="openHistoryModal()">📂 Cargar histórica</button>
+    <button class="btn" onclick="exportJSON()">⬇ Exportar</button>
+    <label class="btn" style="cursor:pointer;" title="Importar JSON">
+      ⬆ Importar
+      <input type="file" accept=".json" style="display:none" onchange="importJSON(event)">
+    </label>
+    <button class="btn" onclick="openSVModal()" title="Segunda vuelta">⚔ 2ª Vuelta</button>
+    <button class="btn btn-primary" onclick="startPres()">▶ Presentación</button>
+    <button class="btn" onclick="resetAll()">↺ Nueva</button>
   </div>
   <div class="header-right">
     <button class="btn-icon-round" onclick="toggleDarkMode()">
@@ -487,7 +631,7 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
   <div class="left-panel">
     <div class="panel-header">
       <span class="panel-title">Candidatos</span>
-      <span id="total-votes-display" style="font-size:0.75rem;color:var(--muted);"></span>
+      <span id="total-votes-display" style="font-size:0.73rem;color:var(--muted);"></span>
     </div>
     <div class="candidates-list" id="candidates-list"></div>
     <button class="add-btn" onclick="openAddModal()">＋ Agregar candidato</button>
@@ -495,6 +639,7 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
 
   <!-- ── CENTER: MAPA ── -->
   <div class="map-panel">
+    <div class="sv-banner" id="sv-banner">MODO 2ª VUELTA ACTIVO</div>
     <div id="map-viewport">
       <div id="map-movable">
         <div id="map-container">
@@ -505,22 +650,29 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
     <div class="map-controls">
       <div class="map-ctrl-btn" onclick="mapZoom(1.2)" title="Acercar">+</div>
       <div class="map-ctrl-btn" onclick="mapZoom(1/1.2)" title="Alejar">−</div>
-      <div class="map-ctrl-btn" onclick="mapReset()" title="Resetear" style="font-size:0.75rem;font-weight:700;">⊙</div>
+      <div class="map-ctrl-btn" onclick="mapReset()" title="Resetear" style="font-size:0.75rem;">⊙</div>
     </div>
     <div class="map-hint">Clic en departamento para asignar votos · Arrastrá para mover · Scroll para zoom</div>
     <div class="map-legend" id="map-legend"></div>
   </div>
 
-  <!-- ── RIGHT: EDITOR / DEPT SLIDERS ── -->
+  <!-- ── RIGHT: DEPT SLIDERS + PIE ── -->
   <div class="right-panel">
-    <div class="right-tabs">
-      <button class="right-tab active" id="tab-edit" onclick="setRightTab('edit')">Editar Candidato</button>
-      <button class="right-tab" id="tab-dept" onclick="setRightTab('dept')">Departamento</button>
+    <div class="right-panel-top">
+      <span class="right-panel-top-title" id="right-panel-top-title">Departamento</span>
+      <div class="section-toggle" onclick="togglePie()">
+        <span>Gráfico</span>
+        <div class="toggle-switch" id="pie-toggle"></div>
+      </div>
+    </div>
+    <div class="pie-wrap" id="pie-wrap">
+      <svg id="pie-svg" viewBox="0 0 200 200"></svg>
+      <div class="pie-legend" id="pie-legend"></div>
     </div>
     <div class="right-panel-inner" id="right-panel-inner">
       <div class="empty-state fade-up">
         <div class="empty-icon">🗺️</div>
-        <div class="empty-text">Seleccioná un candidato para editar sus datos, o hacé clic en un departamento del mapa para asignar votos.</div>
+        <div class="empty-text">Hacé clic en un candidato para editarlo, o en un departamento del mapa para asignar votos.</div>
       </div>
     </div>
   </div>
@@ -549,12 +701,20 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
         <div class="color-row">
           <div class="color-preview" id="m-color-preview" onclick="document.getElementById('m-color-input').click()"></div>
           <input type="color" id="m-color-input" value="#7c6ef5" oninput="updateColorPreview(this.value)" />
-          <span style="font-size:0.78rem;color:var(--muted);">Hacé clic en el círculo para cambiar</span>
+          <span style="font-size:0.78rem;color:var(--muted);">Hacé clic en el círculo</span>
         </div>
       </div>
       <div class="field-group">
-        <label class="field-label">URL de foto (opcional)</label>
-        <input class="field-input" id="m-photo" placeholder="https://..." />
+        <label class="field-label">Foto</label>
+        <input class="field-input" id="m-photo-url" placeholder="URL de foto (opcional)" style="margin-bottom:8px;" />
+        <div class="photo-upload-area" id="m-photo-drop"
+          ondragover="event.preventDefault();this.classList.add('drag-over')"
+          ondragleave="this.classList.remove('drag-over')"
+          ondrop="handlePhotoDrop(event,'m')">
+          <input type="file" accept="image/*" onchange="handlePhotoFile(event,'m')">
+          <img id="m-photo-thumb" class="photo-preview-thumb" style="display:none;" src="" alt="preview">
+          <div class="photo-upload-hint">📸 Arrastrá o hacé clic para subir<br><span style="font-size:0.68rem;">También podés pegar (Ctrl+V)</span></div>
+        </div>
       </div>
     </div>
     <div class="modal-actions" style="margin-top:20px;">
@@ -564,228 +724,81 @@ input[type="range"]:hover::-webkit-slider-thumb { transform: scale(1.2); }
   </div>
 </div>
 
+<!-- CROP OVERLAY -->
+<div class="crop-overlay" id="crop-overlay">
+  <div style="color:#fff;font-size:0.9rem;font-weight:600;opacity:0.8;">Arrastrá para seleccionar el área a recortar</div>
+  <div class="crop-container" id="crop-container">
+    <canvas class="crop-canvas" id="crop-canvas"></canvas>
+    <div class="crop-selection" id="crop-selection" style="display:none;"></div>
+  </div>
+  <div class="crop-actions">
+    <button class="btn" onclick="closeCrop()">Cancelar</button>
+    <button class="btn btn-primary" onclick="applyCrop()">✂ Recortar y usar</button>
+  </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="modal-overlay" id="history-modal">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title">Cargar elección histórica</div>
+    <div id="history-grid" class="history-grid" style="margin-bottom:20px;">
+      <div style="color:var(--muted);font-size:0.85rem;">Cargando...</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn" onclick="closeHistoryModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SEGUNDA VUELTA MODAL -->
+<div class="modal-overlay" id="sv-modal">
+  <div class="modal" onclick="event.stopPropagation()" style="width:480px;">
+    <div class="modal-title">⚔ Configurar Segunda Vuelta</div>
+    <div style="font-size:0.82rem;color:var(--muted);margin-bottom:16px;line-height:1.5;">
+      Los dos candidatos más votados pasan a segunda vuelta. Indicá cómo se distribuyen los votos de los demás partidos entre ellos.
+    </div>
+    <div id="sv-content"></div>
+    <div class="modal-actions" style="margin-top:16px;">
+      <button class="btn" onclick="closeSVModal()">Cancelar</button>
+      <button class="btn btn-primary" onclick="applySV()">Aplicar segunda vuelta</button>
+    </div>
+  </div>
+</div>
+
 <script>
 /* ══════════════════════════════════════════════
-   DATOS Y ESTADO
+   KNOWN PARTIES
 ══════════════════════════════════════════════ */
 const KNOWN_PARTIES = {
-  'Frente Amplio': '#005595', 'FA': '#005595',
-  'Partido Nacional': '#60b8e0', 'PN': '#60b8e0',
-  'Partido Colorado': '#e05c5c', 'PC': '#e05c5c',
-  'Cabildo Abierto': '#e8a020', 'CA': '#e8a020',
-  'Partido Independiente': '#7030a0', 'PI': '#7030a0',
-  'Nuevo Espacio': '#1341d6', 'NE': '#1341d6',
-  'Unión Cívica': '#e65768', 'UC': '#e65768',
+  'Frente Amplio':'#005595','FA':'#005595',
+  'Partido Nacional':'#60b8e0','PN':'#60b8e0',
+  'Partido Colorado':'#e05c5c','PC':'#e05c5c',
+  'Cabildo Abierto':'#e8a020','CA':'#e8a020',
+  'Partido Independiente':'#7030a0','PI':'#7030a0',
+  'Nuevo Espacio':'#1341d6','NE':'#1341d6',
+  'Unión Cívica':'#e65768','UC':'#e65768',
 };
 
-const NAMES_FIRST = ['Alejandro','Beatriz','Carlos','Diana','Eduardo','Fernanda','Gonzalo','Helena','Ignacio','Julia','Lucas','Mercedes','Nicolás','Olga','Pablo','Raquel','Sebastián','Tamara','Ulises','Valeria'];
-const NAMES_LAST  = ['García','Fernández','López','González','Rodríguez','Martínez','Álvarez','Sánchez','Romero','Torres','Díaz','Pérez','Suárez','Morales','Cabrera','Medina','Herrera','Núñez','Vega','Castro'];
-const RANDOM_PARTIES = ['Partido del Sol','Movimiento Progresista','Alianza Nacional','Frente Ciudadano','Nueva Alternativa','Coalición Socialista','Partido Demócrata','Partido Republicano','Liberales Unidos','Partido Conservador'];
-const RANDOM_COLORS  = ['#e05c5c','#60b8e0','#005595','#e8a020','#7030a0','#27b84d','#f03e3e','#4eb551','#1341d6','#e65768'];
+const DEPT_BY_POP = [
+  'Flores','Treinta y Tres','Río Negro','Lavalleja','Durazno',
+  'Artigas','Cerro Largo','Rocha','Soriano','Florida',
+  'Rivera','Tacuarembó','San José','Colonia','Paysandú',
+  'Salto','Maldonado','Canelones','Montevideo'
+];
 
-let candidates = [];
-let deptData   = {};
-let deptInfo   = {};
-let selectedCandId = null;
-let selectedDept   = null;
-let modalEditId    = null;
-let rightTab       = 'edit';
+const NAMES_FIRST=['Alejandro','Beatriz','Carlos','Diana','Eduardo','Fernanda','Gonzalo','Helena','Ignacio','Julia','Lucas','Mercedes','Nicolás','Olga','Pablo','Raquel','Sebastián','Tamara','Ulises','Valeria'];
+const NAMES_LAST=['García','Fernández','López','González','Rodríguez','Martínez','Álvarez','Sánchez','Romero','Torres','Díaz','Pérez','Suárez','Morales','Cabrera','Medina','Herrera','Núñez','Vega','Castro'];
+const RANDOM_PARTIES=['Partido del Sol','Movimiento Progresista','Alianza Nacional','Frente Ciudadano','Nueva Alternativa','Coalición Socialista','Partido Demócrata','Partido Republicano','Liberales Unidos','Partido Conservador'];
+const RANDOM_COLORS=['#e05c5c','#60b8e0','#005595','#e8a020','#7030a0','#27b84d','#f03e3e','#4eb551','#1341d6','#e65768'];
 
-/* MAP PAN/ZOOM STATE */
-let mapScale = 1, mapX = 0, mapY = 0;
-let isDragging = false, dragStartX = 0, dragStartY = 0, dragStartMapX = 0, dragStartMapY = 0;
+let candidates=[], deptData={}, deptInfo={}, selectedCandId=null, selectedDept=null;
+let modalEditId=null, showPie=false;
+let mapScale=1,mapX=0,mapY=0,isDragging=false,dragStartX=0,dragStartY=0,dragStartMapX=0,dragStartMapY=0;
+let cropCtx=null, cropImgData=null, cropTarget=null;
+let cropStartX=0,cropStartY=0,cropEndX=0,cropEndY=0,isCropping=false;
+let svActive=false;
 
-function randomName()  { return NAMES_FIRST[Math.floor(Math.random()*NAMES_FIRST.length)] + ' ' + NAMES_LAST[Math.floor(Math.random()*NAMES_LAST.length)]; }
-function randomColor() { return RANDOM_COLORS[Math.floor(Math.random()*RANDOM_COLORS.length)]; }
-function randomParty() { return RANDOM_PARTIES[Math.floor(Math.random()*RANDOM_PARTIES.length)]; }
-function uid() { return Math.random().toString(36).slice(2,9); }
-function getInitials(name) { return name.trim().split(' ').filter(w=>w.length>1).slice(0,2).map(w=>w[0]).join('').toUpperCase(); }
-function fmtN(n) { return Math.round(n).toLocaleString('es-UY'); }
-
-/* ══════════════════════════════════════════════
-   MAP PAN / ZOOM
-══════════════════════════════════════════════ */
-function applyMapTransform() {
-  const el = document.getElementById('map-movable');
-  if (!el) return;
-  const vp = document.getElementById('map-viewport');
-  const vw = vp.clientWidth, vh = vp.clientHeight;
-  el.style.left = (vw/2 + mapX) + 'px';
-  el.style.top  = (vh/2 + mapY) + 'px';
-  el.style.transform = `translate(-50%, -50%) scale(${mapScale})`;
-}
-
-function mapZoom(factor, cx, cy) {
-  const vp = document.getElementById('map-viewport');
-  const vw = vp.clientWidth, vh = vp.clientHeight;
-  const pivotX = (cx !== undefined ? cx : vw/2) - vw/2;
-  const pivotY = (cy !== undefined ? cy : vh/2) - vh/2;
-  const newScale = Math.min(Math.max(mapScale * factor, 0.5), 5);
-  const sf = newScale / mapScale;
-  mapX = pivotX + (mapX - pivotX) * sf;
-  mapY = pivotY + (mapY - pivotY) * sf;
-  mapScale = newScale;
-  applyMapTransform();
-}
-
-function mapReset() {
-  mapScale = 1; mapX = 0; mapY = 0;
-  applyMapTransform();
-}
-
-function setupMapPanZoom() {
-  const vp = document.getElementById('map-viewport');
-  if (!vp) return;
-
-  vp.addEventListener('mousedown', e => {
-    if (e.button !== 0) return;
-    isDragging = true;
-    dragStartX = e.clientX; dragStartY = e.clientY;
-    dragStartMapX = mapX; dragStartMapY = mapY;
-    e.preventDefault();
-  });
-  window.addEventListener('mousemove', e => {
-    if (!isDragging) return;
-    mapX = dragStartMapX + (e.clientX - dragStartX);
-    mapY = dragStartMapY + (e.clientY - dragStartY);
-    applyMapTransform();
-  });
-  window.addEventListener('mouseup', () => { isDragging = false; });
-
-  vp.addEventListener('wheel', e => {
-    e.preventDefault();
-    const rect = vp.getBoundingClientRect();
-    const cx = e.clientX - rect.left;
-    const cy = e.clientY - rect.top;
-    const factor = e.deltaY < 0 ? 1.12 : 1/1.12;
-    mapZoom(factor, cx, cy);
-  }, { passive: false });
-
-  // Touch support
-  let lastTouchDist = null;
-  vp.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) {
-      isDragging = true;
-      dragStartX = e.touches[0].clientX; dragStartY = e.touches[0].clientY;
-      dragStartMapX = mapX; dragStartMapY = mapY;
-    } else if (e.touches.length === 2) {
-      isDragging = false;
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
-      lastTouchDist = Math.hypot(dx, dy);
-    }
-  });
-  vp.addEventListener('touchmove', e => {
-    e.preventDefault();
-    if (e.touches.length === 1 && isDragging) {
-      mapX = dragStartMapX + (e.touches[0].clientX - dragStartX);
-      mapY = dragStartMapY + (e.touches[0].clientY - dragStartY);
-      applyMapTransform();
-    } else if (e.touches.length === 2 && lastTouchDist) {
-      const dx = e.touches[0].clientX - e.touches[1].clientX;
-      const dy = e.touches[0].clientY - e.touches[1].clientY;
-      const dist = Math.hypot(dx, dy);
-      mapZoom(dist / lastTouchDist);
-      lastTouchDist = dist;
-    }
-  }, { passive: false });
-  vp.addEventListener('touchend', () => { isDragging = false; lastTouchDist = null; });
-}
-
-/* ══════════════════════════════════════════════
-   INIT
-══════════════════════════════════════════════ */
-async function init() {
-  try {
-    const r = await fetch('mapa.svg');
-    if (!r.ok) throw new Error();
-    document.getElementById('map-container').innerHTML = await r.text();
-    setupMapInteraction();
-    setTimeout(() => { applyMapTransform(); setupMapPanZoom(); }, 50);
-  } catch {
-    document.getElementById('map-container').innerHTML = '<p style="color:#ef4444;text-align:center;padding:40px;">No se pudo cargar mapa.svg.<br><small>Asegurate de correr esto en un servidor local.</small></p>';
-  }
-
-  try {
-    const r = await fetch('data/info_departamentos.json');
-    deptInfo = await r.json();
-    // strip emojis from any stored data
-    Object.keys(deptInfo).forEach(d => { if (deptInfo[d].emoji) delete deptInfo[d].emoji; });
-  } catch {
-    const depts = ['Montevideo','Canelones','Maldonado','Salto','Paysandú','Rivera','Tacuarembó','Colonia','San José','Cerro Largo','Soriano','Artigas','Rocha','Río Negro','Florida','Durazno','Lavalleja','Treinta y Tres','Flores'];
-    depts.forEach(d => { deptInfo[d] = { poblacion: 50000 }; });
-  }
-
-  addCandidate(true);
-  addCandidate(true);
-  renderAll();
-}
-
-/* ══════════════════════════════════════════════
-   CANDIDATE MANAGEMENT
-══════════════════════════════════════════════ */
-function addCandidate(silent = false) {
-  const c = { id: uid(), name: randomName(), vice: '', party: randomParty(), color: randomColor(), photo: '' };
-  candidates.push(c);
-  rebalanceDepts();
-  if (!silent) renderAll();
-}
-
-function removeCandidate(id) {
-  if (candidates.length <= 1) return;
-  candidates = candidates.filter(c => c.id !== id);
-  if (selectedCandId === id) selectedCandId = null;
-  rebalanceDepts();
-  renderAll();
-}
-
-function rebalanceDepts() {
-  if (candidates.length === 0) return;
-  const eq = parseFloat((100 / candidates.length).toFixed(2));
-  Object.keys(deptInfo).forEach(dept => {
-    if (!deptData[dept]) {
-      const obj = {};
-      candidates.forEach((c, i) => { obj[c.id] = (i === candidates.length - 1) ? parseFloat((100 - eq * (candidates.length - 1)).toFixed(2)) : eq; });
-      deptData[dept] = obj;
-    } else {
-      candidates.forEach(c => { if (!(c.id in deptData[dept])) deptData[dept][c.id] = 0; });
-      Object.keys(deptData[dept]).forEach(id => { if (!candidates.find(c => c.id === id)) delete deptData[dept][id]; });
-    }
-  });
-}
-
-/* ══════════════════════════════════════════════
-   TALLIES
-══════════════════════════════════════════════ */
-function getTotals() {
-  const totals = {};
-  candidates.forEach(c => { totals[c.id] = { votes: 0, pct: 0 }; });
-  let grandTotal = 0;
-  Object.entries(deptData).forEach(([dept, pcts]) => {
-    const pop = (deptInfo[dept] || {}).poblacion || 0;
-    Object.entries(pcts).forEach(([id, pct]) => {
-      if (totals[id]) { totals[id].votes += (pct / 100) * pop; grandTotal += (pct / 100) * pop; }
-    });
-  });
-  if (grandTotal > 0) candidates.forEach(c => { totals[c.id].pct = (totals[c.id].votes / grandTotal) * 100; });
-  return totals;
-}
-
-function getDeptWinner(dept) {
-  const pcts = deptData[dept];
-  if (!pcts) return null;
-  let best = null, bestPct = -1;
-  Object.entries(pcts).forEach(([id, pct]) => { if (pct > bestPct) { bestPct = pct; best = id; } });
-  if (!best) return null;
-  const entries = Object.entries(pcts).sort((a,b)=>b[1]-a[1]);
-  const margin = entries.length > 1 ? entries[0][1] - entries[1][1] : 100;
-  return { id: best, pct: bestPct, margin };
-}
-
-/* ══════════════════════════════════════════════
-   MAP RENDERING
-══════════════════════════════════════════════ */
-const DEPTO_ID = {
+const DEPTO_ID={
   'Paysandú':'UYPA','Artigas':'UYAR','Salto':'UYSA','Rivera':'UYRV','Rocha':'UYRO',
   'Treinta y Tres':'UYTT','Cerro Largo':'UYCL','Maldonado':'UYMA','Canelones':'UYCA',
   'Montevideo':'UYMO','San José':'UYSJ','Colonia':'UYCO','Soriano':'UYSO',
@@ -793,441 +806,932 @@ const DEPTO_ID = {
   'Florida':'UYFD','Lavalleja':'UYLA'
 };
 
-function renderMap() {
-  Object.entries(DEPTO_ID).forEach(([dept, svgId]) => {
-    const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
-    if (!path) return;
-    const winner = getDeptWinner(dept);
-    if (!winner) { path.style.fill = 'var(--map-empty)'; path.style.fillOpacity = 1; return; }
-    const cand = candidates.find(c => c.id === winner.id);
-    if (!cand) { path.style.fill = 'var(--map-empty)'; return; }
-    path.style.fill = cand.color;
-    let opacity = winner.margin > 15 ? 1 : winner.margin > 7 ? 0.78 : winner.margin > 2 ? 0.6 : 0.42;
-    path.style.fillOpacity = opacity;
+function randomName(){return NAMES_FIRST[Math.floor(Math.random()*NAMES_FIRST.length)]+' '+NAMES_LAST[Math.floor(Math.random()*NAMES_LAST.length)];}
+function randomColor(){return RANDOM_COLORS[Math.floor(Math.random()*RANDOM_COLORS.length)];}
+function randomParty(){return RANDOM_PARTIES[Math.floor(Math.random()*RANDOM_PARTIES.length)];}
+function uid(){return Math.random().toString(36).slice(2,9);}
+function getInitials(name){return name.trim().split(' ').filter(w=>w.length>1).slice(0,2).map(w=>w[0]).join('').toUpperCase();}
+function fmtN(n){return Math.round(n).toLocaleString('es-UY');}
+function getLastName(name){const p=name.trim().split(' ');return p[p.length-1];}
+
+/* ══ MAP PAN / ZOOM ══ */
+function applyMapTransform(){
+  const el=document.getElementById('map-movable'); if(!el) return;
+  const vp=document.getElementById('map-viewport');
+  el.style.left=(vp.clientWidth/2+mapX)+'px'; el.style.top=(vp.clientHeight/2+mapY)+'px';
+  el.style.transform=`translate(-50%,-50%) scale(${mapScale})`;
+}
+function mapZoom(factor,cx,cy){
+  const vp=document.getElementById('map-viewport');
+  const vw=vp.clientWidth,vh=vp.clientHeight;
+  const px=(cx!==undefined?cx:vw/2)-vw/2, py=(cy!==undefined?cy:vh/2)-vh/2;
+  const ns=Math.min(Math.max(mapScale*factor,0.5),5);
+  const sf=ns/mapScale;
+  mapX=px+(mapX-px)*sf; mapY=py+(mapY-py)*sf; mapScale=ns;
+  applyMapTransform();
+}
+function mapReset(){mapScale=1;mapX=0;mapY=0;applyMapTransform();}
+function setupMapPanZoom(){
+  const vp=document.getElementById('map-viewport'); if(!vp) return;
+  vp.addEventListener('mousedown',e=>{if(e.button!==0)return;isDragging=true;dragStartX=e.clientX;dragStartY=e.clientY;dragStartMapX=mapX;dragStartMapY=mapY;e.preventDefault();});
+  window.addEventListener('mousemove',e=>{if(!isDragging)return;mapX=dragStartMapX+(e.clientX-dragStartX);mapY=dragStartMapY+(e.clientY-dragStartY);applyMapTransform();});
+  window.addEventListener('mouseup',()=>{isDragging=false;});
+  vp.addEventListener('wheel',e=>{e.preventDefault();const r=vp.getBoundingClientRect();mapZoom(e.deltaY<0?1.12:1/1.12,e.clientX-r.left,e.clientY-r.top);},{passive:false});
+  let ltd=null;
+  vp.addEventListener('touchstart',e=>{if(e.touches.length===1){isDragging=true;dragStartX=e.touches[0].clientX;dragStartY=e.touches[0].clientY;dragStartMapX=mapX;dragStartMapY=mapY;}else if(e.touches.length===2){isDragging=false;ltd=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);}});
+  vp.addEventListener('touchmove',e=>{e.preventDefault();if(e.touches.length===1&&isDragging){mapX=dragStartMapX+(e.touches[0].clientX-dragStartX);mapY=dragStartMapY+(e.touches[0].clientY-dragStartY);applyMapTransform();}else if(e.touches.length===2&&ltd){const d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);mapZoom(d/ltd);ltd=d;}},{passive:false});
+  vp.addEventListener('touchend',()=>{isDragging=false;ltd=null;});
+}
+
+/* ══ INIT ══ */
+async function init(){
+  try{
+    const r=await fetch('mapa.svg');
+    if(!r.ok)throw new Error();
+    document.getElementById('map-container').innerHTML=await r.text();
+    setupMapInteraction();
+    setTimeout(()=>{applyMapTransform();setupMapPanZoom();},50);
+  }catch{
+    document.getElementById('map-container').innerHTML='<p style="color:#ef4444;text-align:center;padding:40px;">No se pudo cargar mapa.svg.</p>';
+  }
+  try{
+    const r=await fetch('data/info_departamentos.json');
+    deptInfo=await r.json();
+  }catch{
+    const depts=Object.keys(DEPTO_ID);
+    depts.forEach(d=>{deptInfo[d]={poblacion:50000};});
+  }
+  addCandidate(true); addCandidate(true);
+  renderAll();
+  setupPasteHandler();
+}
+
+/* ══ CANDIDATE MANAGEMENT ══ */
+function addCandidate(silent=false){
+  const c={id:uid(),name:randomName(),vice:'',party:randomParty(),color:randomColor(),photo:''};
+  candidates.push(c);
+  rebalanceDepts();
+  if(!silent)renderAll();
+}
+function removeCandidate(id){
+  if(candidates.length<=1)return;
+  candidates=candidates.filter(c=>c.id!==id);
+  if(selectedCandId===id)selectedCandId=null;
+  rebalanceDepts();
+  renderAll();
+}
+function rebalanceDepts(){
+  if(candidates.length===0)return;
+  const eq=parseFloat((100/candidates.length).toFixed(2));
+  Object.keys(deptInfo).forEach(dept=>{
+    if(!deptData[dept]){
+      const obj={};
+      candidates.forEach((c,i)=>{obj[c.id]=(i===candidates.length-1)?parseFloat((100-eq*(candidates.length-1)).toFixed(2)):eq;});
+      deptData[dept]=obj;
+    }else{
+      candidates.forEach(c=>{if(!(c.id in deptData[dept]))deptData[dept][c.id]=0;});
+      Object.keys(deptData[dept]).forEach(id=>{if(!candidates.find(c=>c.id===id))delete deptData[dept][id];});
+    }
+  });
+}
+
+/* ══ TALLIES ══ */
+function getTotals(){
+  const totals={};
+  candidates.forEach(c=>{totals[c.id]={votes:0,pct:0};});
+  let grand=0;
+  Object.entries(deptData).forEach(([dept,pcts])=>{
+    const pop=(deptInfo[dept]||{}).poblacion||0;
+    Object.entries(pcts).forEach(([id,pct])=>{if(totals[id]){totals[id].votes+=(pct/100)*pop;grand+=(pct/100)*pop;}});
+  });
+  if(grand>0)candidates.forEach(c=>{totals[c.id].pct=(totals[c.id].votes/grand)*100;});
+  return totals;
+}
+
+function getDeptWinner(dept){
+  const pcts=deptData[dept]; if(!pcts)return null;
+  let best=null,bestPct=-1;
+  Object.entries(pcts).forEach(([id,pct])=>{if(pct>bestPct){bestPct=pct;best=id;}});
+  if(!best)return null;
+  const entries=Object.entries(pcts).sort((a,b)=>b[1]-a[1]);
+  const margin=entries.length>1?entries[0][1]-entries[1][1]:100;
+  return{id:best,pct:bestPct,margin};
+}
+
+/* ══ MAP RENDER ══ */
+function renderMap(){
+  Object.entries(DEPTO_ID).forEach(([dept,svgId])=>{
+    const path=document.querySelector(`#uruguay-map #features path#${svgId}`); if(!path)return;
+    const winner=getDeptWinner(dept);
+    if(!winner){path.style.fill='var(--map-empty)';path.style.fillOpacity=1;return;}
+    const cand=candidates.find(c=>c.id===winner.id);
+    if(!cand){path.style.fill='var(--map-empty)';return;}
+    path.style.fill=cand.color;
+    path.style.fillOpacity=winner.margin>15?1:winner.margin>7?0.78:winner.margin>2?0.6:0.42;
   });
   renderLegend();
 }
-
-function getLastName(name) {
-  const parts = name.trim().split(' ');
-  return parts[parts.length - 1];
-}
-
-function renderLegend() {
-  const legend = document.getElementById('map-legend');
-  if (candidates.length === 0) { legend.classList.remove('visible'); return; }
+function renderLegend(){
+  const legend=document.getElementById('map-legend');
+  if(candidates.length===0){legend.classList.remove('visible');return;}
   legend.classList.add('visible');
-  legend.innerHTML = candidates.map(c => `
-    <div class="legend-item">
-      <div class="legend-dot" style="background:${c.color}"></div>
-      <span>${getLastName(c.name)}</span>
-    </div>
-  `).join('');
+  legend.innerHTML=candidates.map(c=>`<div class="legend-item"><div class="legend-dot" style="background:${c.color}"></div><span>${getLastName(c.name)}</span></div>`).join('');
 }
 
-function setupMapInteraction() {
-  const tooltip = document.getElementById('map-tooltip');
-  document.querySelectorAll('#uruguay-map #features path').forEach(path => {
-    path.addEventListener('click', e => {
+function setupMapInteraction(){
+  const tooltip=document.getElementById('map-tooltip');
+  document.querySelectorAll('#uruguay-map #features path').forEach(path=>{
+    path.addEventListener('click',e=>{
       e.stopPropagation();
-      if (isDragging) return;
-      const deptName = path.getAttribute('name');
-      if (!deptName) return;
-      document.querySelectorAll('#uruguay-map #features path').forEach(p => p.classList.remove('dept-active'));
+      if(isDragging)return;
+      const dept=path.getAttribute('name'); if(!dept)return;
+      document.querySelectorAll('#uruguay-map #features path').forEach(p=>p.classList.remove('dept-active'));
       path.classList.add('dept-active');
-      selectedDept = deptName;
-      setRightTab('dept');
+      selectedDept=dept;
       renderRightPanel();
     });
-    path.addEventListener('mousemove', e => {
-      const deptName = path.getAttribute('name');
-      if (!deptName) return;
-      const winner = getDeptWinner(deptName);
-      let html = `<strong>${deptName}</strong>`;
-      const pop = (deptInfo[deptName] || {}).poblacion;
-      if (pop) html += `<div style="font-size:0.72rem;color:rgba(255,255,255,0.6);margin-bottom:4px;">Población: ${fmtN(pop)}</div>`;
-      if (winner) {
-        const pcts = deptData[deptName] || {};
-        const sorted = [...candidates].sort((a,b) => (pcts[b.id]||0) - (pcts[a.id]||0));
-        sorted.forEach(c => {
-          const pct = (pcts[c.id]||0).toFixed(1);
-          html += `<div class="tt-row"><span style="color:${c.color};font-weight:700;">${c.name.split(' ')[0]}</span><span>${pct}%</span></div>`;
+    path.addEventListener('mousemove',e=>{
+      const dept=path.getAttribute('name'); if(!dept)return;
+      const winner=getDeptWinner(dept);
+      let html=`<strong>${dept}</strong>`;
+      const pop=(deptInfo[dept]||{}).poblacion;
+      if(pop)html+=`<div style="font-size:0.72rem;color:rgba(255,255,255,0.6);margin-bottom:4px;">Población: ${fmtN(pop)}</div>`;
+      if(winner){
+        const pcts=deptData[dept]||{};
+        [...candidates].sort((a,b)=>(pcts[b.id]||0)-(pcts[a.id]||0)).forEach(c=>{
+          html+=`<div class="tt-row"><span style="color:${c.color};font-weight:700;">${c.name.split(' ')[0]}</span><span>${(pcts[c.id]||0).toFixed(1)}%</span></div>`;
         });
-      } else { html += '<div style="color:rgba(255,255,255,0.5);font-size:0.78rem;">Sin datos asignados</div>'; }
-      tooltip.innerHTML = html;
-      tooltip.style.display = 'block';
-      tooltip.style.left = (e.clientX + 14) + 'px';
-      tooltip.style.top  = (e.clientY - 10) + 'px';
+      }else{html+='<div style="color:rgba(255,255,255,0.5);font-size:0.78rem;">Sin datos</div>';}
+      tooltip.innerHTML=html; tooltip.style.display='block';
+      tooltip.style.left=(e.clientX+14)+'px'; tooltip.style.top=(e.clientY-10)+'px';
     });
-    path.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+    path.addEventListener('mouseleave',()=>{tooltip.style.display='none';});
   });
 }
 
-/* ══════════════════════════════════════════════
-   LEFT PANEL — CANDIDATE CARDS
-══════════════════════════════════════════════ */
-function renderCandidates() {
-  const totals = getTotals();
-  const grandVotes = Object.values(totals).reduce((s,t) => s+t.votes, 0);
-  const maxPct = Math.max(...candidates.map(c => totals[c.id]?.pct || 0));
-  const tvd = document.getElementById('total-votes-display');
-  tvd.textContent = grandVotes > 0 ? fmtN(grandVotes) + ' votos totales' : '';
-
-  const list = document.getElementById('candidates-list');
-  list.innerHTML = candidates.map(c => {
-    const t = totals[c.id] || { votes: 0, pct: 0 };
-    const isWinner = t.pct > 50;
-    const initials = getInitials(c.name);
-
+/* ══ LEFT PANEL ══ */
+function renderCandidates(){
+  const totals=getTotals();
+  const grandVotes=Object.values(totals).reduce((s,t)=>s+t.votes,0);
+  document.getElementById('total-votes-display').textContent=grandVotes>0?fmtN(grandVotes)+' votos':'';
+  document.getElementById('candidates-list').innerHTML=candidates.map(c=>{
+    const t=totals[c.id]||{votes:0,pct:0};
+    const isWinner=t.pct>50;
+    const initials=getInitials(c.name);
     return `
-    <div class="cand-card ${selectedCandId === c.id ? 'selected' : ''}" style="border-color:${c.color}33;" onclick="selectCand('${c.id}')">
+    <div class="cand-card ${selectedCandId===c.id?'selected':''}" style="border-color:${c.color}44;" onclick="selectCand('${c.id}')">
       <div class="cand-delete" onclick="event.stopPropagation();removeCandidate('${c.id}')">✕</div>
       <div class="cand-card-inner">
         <div class="cand-photo" style="background:${c.color};">
-          ${c.photo ? `<img src="${c.photo}" alt="${c.name}" onerror="this.style.display='none'">` : initials}
+          ${c.photo?`<img src="${c.photo}" alt="${c.name}" onerror="this.style.display='none'">`:''}
+          <span style="${c.photo?'opacity:0':''}position:relative;z-index:1;">${initials}</span>
         </div>
         <div class="cand-body">
-          <div class="cand-name">
-            ${c.name}
-            ${isWinner ? '<span class="badge-winner">Ganador</span>' : ''}
-          </div>
-          ${c.vice ? `<div class="cand-vice">Vice: ${c.vice}</div>` : ''}
+          <div class="cand-name">${c.name}${isWinner?'<span class="badge-winner">Ganador</span>':''}</div>
+          ${c.vice?`<div class="cand-vice">Vice: ${c.vice}</div>`:''}
           <div class="cand-party" style="color:${c.color}">${c.party}</div>
           <div class="cand-stats">
             <div class="cand-pct" style="color:${c.color}">${t.pct.toFixed(1)}%</div>
             <div class="cand-votes">${fmtN(t.votes)} votos</div>
           </div>
-          <div class="cand-bar-wrap">
-            <div class="cand-bar-fill" style="width:${t.pct}%;background:${c.color};"></div>
-          </div>
+          <div class="cand-bar-wrap"><div class="cand-bar-fill" style="width:${t.pct}%;background:${c.color};"></div></div>
         </div>
       </div>
     </div>`;
   }).join('');
 }
 
-function selectCand(id) {
-  selectedCandId = id;
-  setRightTab('edit');
-  renderCandidates();
-  renderRightPanel();
+function selectCand(id){
+  selectedCandId=id;
+  openEditModal(id);
 }
 
-/* ══════════════════════════════════════════════
-   RIGHT PANEL
-══════════════════════════════════════════════ */
-function setRightTab(tab) {
-  rightTab = tab;
-  document.getElementById('tab-edit').classList.toggle('active', tab === 'edit');
-  document.getElementById('tab-dept').classList.toggle('active', tab === 'dept');
-  renderRightPanel();
-}
-
-function renderRightPanel() {
-  const inner = document.getElementById('right-panel-inner');
-  if (rightTab === 'edit') {
-    if (!selectedCandId) {
-      inner.innerHTML = `<div class="empty-state fade-up"><div class="empty-icon">👆</div><div class="empty-text">Hacé clic en un candidato de la lista para editar sus datos.</div></div>`;
-      return;
-    }
-    const c = candidates.find(x => x.id === selectedCandId);
-    if (!c) return;
-    inner.innerHTML = `
-      <div class="edit-form fade-up">
-        <div class="field-group">
-          <label class="field-label">Nombre completo</label>
-          <input class="field-input" id="e-name" value="${c.name}" oninput="updateCand('name',this.value)" />
-        </div>
-        <div class="field-group">
-          <label class="field-label">Compañero de fórmula (vice)</label>
-          <input class="field-input" id="e-vice" value="${c.vice}" placeholder="Opcional" oninput="updateCand('vice',this.value)" />
-        </div>
-        <div class="field-group">
-          <label class="field-label">Partido político</label>
-          <input class="field-input" id="e-party" value="${c.party}" oninput="updateCandParty(this.value)" />
-        </div>
-        <div class="field-group">
-          <label class="field-label">Color del partido</label>
-          <div class="color-row">
-            <div class="color-preview" id="e-color-preview" style="background:${c.color};" onclick="document.getElementById('e-color-input').click()"></div>
-            <input type="color" id="e-color-input" value="${c.color}" oninput="updateCand('color',this.value);document.getElementById('e-color-preview').style.background=this.value;" />
-            <span style="font-size:0.78rem;color:var(--muted);">Clic en el círculo</span>
-          </div>
-        </div>
-        <div class="field-group">
-          <label class="field-label">URL de foto</label>
-          <input class="field-input" id="e-photo" value="${c.photo}" placeholder="https://..." oninput="updateCand('photo',this.value)" />
-        </div>
-        <button class="btn" style="margin-top:4px;" onclick="selectedCandId=null;renderRightPanel();renderCandidates();">✓ Listo</button>
-      </div>
-    `;
-    return;
-  }
-
-  if (!selectedDept) {
-    inner.innerHTML = `<div class="empty-state fade-up"><div class="empty-icon">🗺️</div><div class="empty-text">Hacé clic en un departamento del mapa para asignar porcentajes de votos.</div></div>`;
+/* ══ RIGHT PANEL (dept sliders only) ══ */
+function renderRightPanel(){
+  const inner=document.getElementById('right-panel-inner');
+  if(!selectedDept){
+    inner.innerHTML=`<div class="empty-state fade-up"><div class="empty-icon">🗺️</div><div class="empty-text">Hacé clic en un departamento del mapa para asignar porcentajes de votos.</div></div>`;
+    renderPie();
     return;
   }
   renderDeptSliders();
+  renderPie();
 }
 
-function renderDeptSliders() {
-  const inner = document.getElementById('right-panel-inner');
-  const dept  = selectedDept;
-  const pop   = (deptInfo[dept] || {}).poblacion || 0;
-  if (!deptData[dept]) rebalanceDepts();
-  const pcts = deptData[dept];
-
-  let sliderHtml = candidates.map(c => {
-    const val = parseFloat((pcts[c.id] || 0).toFixed(1));
+function renderDeptSliders(){
+  const inner=document.getElementById('right-panel-inner');
+  const dept=selectedDept;
+  document.getElementById('right-panel-top-title').textContent=dept||'Departamento';
+  const pop=(deptInfo[dept]||{}).poblacion||0;
+  if(!deptData[dept])rebalanceDepts();
+  const pcts=deptData[dept];
+  const sliderHtml=candidates.map(c=>{
+    const val=parseFloat((pcts[c.id]||0).toFixed(1));
     return `
     <div class="slider-item">
       <div class="slider-header">
-        <span class="slider-name" style="color:${c.color}">${c.name.split(' ')[0]} <span style="color:var(--muted);font-weight:400;font-size:0.72rem;">${c.party}</span></span>
+        <span class="slider-name" style="color:${c.color}">${c.name.split(' ')[0]} <span style="color:var(--muted);font-weight:400;font-size:0.7rem;">${c.party}</span></span>
         <div class="slider-pct-wrap" style="color:${c.color}">
-          <input class="slider-pct-input" id="spct-${c.id}" type="number" min="0" max="100" step="0.1" value="${val}"
-            style="color:${c.color};"
-            onchange="onPctInputChange('${c.id}', this.value, '${dept}')"
-            onkeydown="if(event.key==='Enter')this.blur()" />
+          <input class="slider-pct-input" id="spct-${c.id}" type="number" min="0" max="100" step="0.1" value="${val}" style="color:${c.color};"
+            onchange="onPctInputChange('${c.id}',this.value,'${dept}')"
+            onkeydown="if(event.key==='Enter')this.blur()"/>
           <span class="slider-pct-sym" style="color:${c.color}">%</span>
         </div>
       </div>
       <input type="range" id="sld-${c.id}" min="0" max="100" step="0.5" value="${val}"
         style="accent-color:${c.color};"
-        oninput="onSliderMove('${c.id}',parseFloat(this.value),'${dept}')" />
+        oninput="onSliderMove('${c.id}',parseFloat(this.value),'${dept}')"/>
     </div>`;
   }).join('');
-
-  const totalPct = Object.values(pcts).reduce((s,v)=>s+v, 0);
-  const isOk = Math.abs(totalPct - 100) < 0.5;
-
-  const barSegs = candidates.map(c => {
-    const w = Math.max(0, Math.min(100, pcts[c.id]||0));
-    return `<div class="total-bar-seg" style="width:${w}%;background:${c.color};"></div>`;
-  }).join('');
-
-  inner.innerHTML = `
+  const total=Object.values(pcts).reduce((s,v)=>s+v,0);
+  const isOk=Math.abs(total-100)<0.5;
+  const barSegs=candidates.map(c=>`<div class="total-bar-seg" style="width:${Math.max(0,Math.min(100,pcts[c.id]||0))}%;background:${c.color};"></div>`).join('');
+  inner.innerHTML=`
     <div class="dept-editor fade-up">
       <div class="dept-card">
         <div class="dept-title">${dept}</div>
         <div class="dept-pop" style="margin-bottom:14px;">Votantes: ${fmtN(pop)}</div>
         <div class="slider-group">${sliderHtml}</div>
         <div class="total-bar" id="total-bar" style="margin-top:14px;">${barSegs}</div>
-        <div class="total-label ${isOk ? '' : 'error'}" id="total-label">Total: ${totalPct.toFixed(1)}% ${isOk ? '✓' : '(debe ser 100%)'}</div>
+        <div class="total-label ${isOk?'':'error'}" id="total-label">Total: ${total.toFixed(1)}% ${isOk?'✓':'(debe ser 100%)'}</div>
       </div>
-      <button class="btn" style="margin-top:10px;width:100%;" onclick="normalizeDept('${dept}')">⚖ Normalizar a 100%</button>
-    </div>
-  `;
+    </div>`;
 }
 
-/* ══════════════════════════════════════════════
-   SLIDER LOGIC — AUTO-NORMALIZE
-══════════════════════════════════════════════ */
-function onSliderMove(candId, newVal, dept) {
-  newVal = parseFloat(newVal);
-  if (!deptData[dept]) return;
-  const pcts = deptData[dept];
-  const oldVal = pcts[candId] || 0;
-  const delta = newVal - oldVal;
-
-  if (Math.abs(delta) < 0.001) return;
-
-  // Distribute delta proportionally among others (subtract from them)
-  const others = candidates.filter(c => c.id !== candId);
-  const othersTotal = others.reduce((s,c) => s + (pcts[c.id]||0), 0);
-
-  if (othersTotal > 0.001) {
-    others.forEach(c => {
-      const share = (pcts[c.id]||0) / othersTotal;
-      pcts[c.id] = Math.max(0, (pcts[c.id]||0) - delta * share);
-    });
-  } else if (delta < 0) {
-    // If others are all 0 and we're decreasing, just set
-  }
-
-  // Clamp main slider
-  const othersSum = others.reduce((s,c) => s + (pcts[c.id]||0), 0);
-  pcts[candId] = Math.max(0, Math.min(100, 100 - othersSum));
-
-  // Update all slider/input displays
-  candidates.forEach(c => {
-    const v = parseFloat((pcts[c.id]||0).toFixed(1));
-    const sld = document.getElementById(`sld-${c.id}`);
-    const inp = document.getElementById(`spct-${c.id}`);
-    if (sld) sld.value = v;
-    if (inp && document.activeElement !== inp) inp.value = v;
+/* ══ SLIDER LOGIC ══ */
+function onSliderMove(candId,newVal,dept){
+  newVal=parseFloat(newVal);
+  if(!deptData[dept])return;
+  const pcts=deptData[dept];
+  const oldVal=pcts[candId]||0;
+  const delta=newVal-oldVal;
+  if(Math.abs(delta)<0.001)return;
+  const others=candidates.filter(c=>c.id!==candId);
+  const othersTotal=others.reduce((s,c)=>s+(pcts[c.id]||0),0);
+  if(othersTotal>0.001){others.forEach(c=>{const sh=(pcts[c.id]||0)/othersTotal;pcts[c.id]=Math.max(0,(pcts[c.id]||0)-delta*sh);});}
+  const othersSum=others.reduce((s,c)=>s+(pcts[c.id]||0),0);
+  pcts[candId]=Math.max(0,Math.min(100,100-othersSum));
+  candidates.forEach(c=>{
+    const v=parseFloat((pcts[c.id]||0).toFixed(1));
+    const sld=document.getElementById(`sld-${c.id}`);
+    const inp=document.getElementById(`spct-${c.id}`);
+    if(sld)sld.value=v;
+    if(inp&&document.activeElement!==inp)inp.value=v;
   });
-
   updateTotalDisplay(dept);
-  renderMap();
-  renderCandidates();
+  renderMap(); renderCandidates(); renderPie();
+}
+function onPctInputChange(candId,rawVal,dept){
+  let v=parseFloat(rawVal);
+  if(isNaN(v))return;
+  v=Math.max(0,Math.min(100,v));
+  onSliderMove(candId,v,dept);
+  const sld=document.getElementById(`sld-${candId}`);
+  if(sld)sld.value=v;
+}
+function updateTotalDisplay(dept){
+  const pcts=deptData[dept]||{};
+  const total=Object.values(pcts).reduce((s,v)=>s+v,0);
+  const isOk=Math.abs(total-100)<0.5;
+  const lbl=document.getElementById('total-label');
+  if(lbl){lbl.textContent=`Total: ${total.toFixed(1)}% ${isOk?'✓':'(debe ser 100%)'}`;lbl.className='total-label '+(isOk?'':'error');}
+  const bar=document.getElementById('total-bar');
+  if(bar){bar.innerHTML=candidates.map(c=>`<div class="total-bar-seg" style="width:${Math.max(0,Math.min(100,pcts[c.id]||0))}%;background:${c.color};"></div>`).join('');}
 }
 
-function onPctInputChange(candId, rawVal, dept) {
-  let newVal = parseFloat(rawVal);
-  if (isNaN(newVal)) return;
-  newVal = Math.max(0, Math.min(100, newVal));
-  onSliderMove(candId, newVal, dept);
-  // Also update the slider thumb position
-  const sld = document.getElementById(`sld-${candId}`);
-  if (sld) sld.value = newVal;
+/* ══ PIE CHART ══ */
+function togglePie(){
+  showPie=!showPie;
+  document.getElementById('pie-toggle').classList.toggle('on',showPie);
+  document.getElementById('pie-wrap').classList.toggle('visible',showPie);
+  renderPie();
+}
+function renderPie(){
+  if(!showPie)return;
+  const totals=getTotals();
+  const grand=Object.values(totals).reduce((s,t)=>s+t.votes,0);
+  const svg=document.getElementById('pie-svg');
+  const legend=document.getElementById('pie-legend');
+  if(!svg||!legend)return;
+  const cx=100,cy=100,r=80;
+  let startAngle=-Math.PI/2;
+  let paths='';
+  candidates.forEach(c=>{
+    const pct=(totals[c.id]?.pct||0)/100;
+    if(pct<=0)return;
+    const angle=pct*2*Math.PI;
+    const x1=cx+r*Math.cos(startAngle),y1=cy+r*Math.sin(startAngle);
+    const x2=cx+r*Math.cos(startAngle+angle),y2=cy+r*Math.sin(startAngle+angle);
+    const large=angle>Math.PI?1:0;
+    paths+=`<path d="M${cx},${cy} L${x1},${y1} A${r},${r} 0 ${large},1 ${x2},${y2} Z" fill="${c.color}" opacity="0.9">
+      <title>${c.name}: ${(totals[c.id]?.pct||0).toFixed(1)}%</title></path>`;
+    startAngle+=angle;
+  });
+  svg.innerHTML=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--surface2)"/>${paths}<circle cx="${cx}" cy="${cy}" r="36" fill="var(--surface)"/>
+    <text x="${cx}" y="${cy-6}" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="Inter">TOTAL</text>
+    <text x="${cx}" y="${cy+10}" text-anchor="middle" font-size="13" fill="var(--text)" font-weight="800" font-family="Inter">${fmtN(grand)}</text>`;
+  legend.innerHTML=candidates.map(c=>{
+    const t=totals[c.id]||{pct:0};
+    return `<div class="pie-legend-item">
+      <div class="pie-legend-dot" style="background:${c.color}"></div>
+      <span class="pie-legend-name">${c.name.split(' ')[0]}</span>
+      <span class="pie-legend-pct" style="color:${c.color}">${t.pct.toFixed(1)}%</span>
+    </div>`;
+  }).join('');
 }
 
-function updateTotalDisplay(dept) {
-  const pcts = deptData[dept] || {};
-  const total = Object.values(pcts).reduce((s,v)=>s+v,0);
-  const isOk = Math.abs(total - 100) < 0.5;
-  const lbl = document.getElementById('total-label');
-  if (lbl) { lbl.textContent = `Total: ${total.toFixed(1)}% ${isOk ? '✓' : '(debe ser 100%)'}`; lbl.className = 'total-label ' + (isOk ? '' : 'error'); }
-  const bar = document.getElementById('total-bar');
-  if (bar) {
-    bar.innerHTML = candidates.map(c => {
-      const w = Math.max(0, Math.min(100, pcts[c.id]||0));
-      return `<div class="total-bar-seg" style="width:${w}%;background:${c.color};"></div>`;
-    }).join('');
-  }
-}
+/* ══ CANDIDATE MODAL (add + edit) ══ */
+let pendingPhotoDataUrl='';
+let currentPhotoTarget='m';
 
-function normalizeDept(dept) {
-  const pcts = deptData[dept] || {};
-  const total = Object.values(pcts).reduce((s,v)=>s+v,0);
-  if (total === 0) { const eq = 100/candidates.length; candidates.forEach(c => { pcts[c.id]=eq; }); }
-  else { candidates.forEach(c => { pcts[c.id] = (pcts[c.id]||0) / total * 100; }); }
-  renderDeptSliders();
-  renderMap();
-  renderCandidates();
-}
-
-/* ══════════════════════════════════════════════
-   CANDIDATE EDIT (INLINE)
-══════════════════════════════════════════════ */
-function updateCand(field, val) {
-  const c = candidates.find(x => x.id === selectedCandId);
-  if (!c) return;
-  c[field] = val;
-  renderCandidates();
-  renderMap();
-}
-
-function updateCandParty(val) {
-  const c = candidates.find(x => x.id === selectedCandId);
-  if (!c) return;
-  c.party = val;
-  const match = Object.entries(KNOWN_PARTIES).find(([k]) => k.toLowerCase() === val.toLowerCase());
-  if (match) {
-    c.color = match[1];
-    const prev = document.getElementById('e-color-preview');
-    const inp  = document.getElementById('e-color-input');
-    if (prev) prev.style.background = c.color;
-    if (inp)  inp.value = c.color;
-  }
-  renderCandidates();
-  renderMap();
-}
-
-/* ══════════════════════════════════════════════
-   MODAL
-══════════════════════════════════════════════ */
-function openAddModal() {
-  modalEditId = null;
-  document.getElementById('modal-title').textContent = 'Nuevo Candidato';
-  document.getElementById('m-name').value  = '';
-  document.getElementById('m-vice').value  = '';
-  document.getElementById('m-party').value = '';
-  document.getElementById('m-photo').value = '';
-  const col = randomColor();
-  document.getElementById('m-color-input').value = col;
-  document.getElementById('m-color-preview').style.background = col;
+function openAddModal(){
+  modalEditId=null;
+  pendingPhotoDataUrl='';
+  document.getElementById('modal-title').textContent='Nuevo Candidato';
+  document.getElementById('m-name').value='';
+  document.getElementById('m-vice').value='';
+  document.getElementById('m-party').value='';
+  document.getElementById('m-photo-url').value='';
+  const col=randomColor();
+  document.getElementById('m-color-input').value=col;
+  document.getElementById('m-color-preview').style.background=col;
+  const thumb=document.getElementById('m-photo-thumb');
+  thumb.style.display='none'; thumb.src='';
   document.getElementById('modal-overlay').classList.add('open');
 }
 
-function closeModal() {
+function openEditModal(id){
+  const c=candidates.find(x=>x.id===id); if(!c)return;
+  modalEditId=id;
+  pendingPhotoDataUrl='';
+  document.getElementById('modal-title').textContent='Editar Candidato';
+  document.getElementById('m-name').value=c.name;
+  document.getElementById('m-vice').value=c.vice||'';
+  document.getElementById('m-party').value=c.party;
+  document.getElementById('m-photo-url').value=c.photo||'';
+  document.getElementById('m-color-input').value=c.color;
+  document.getElementById('m-color-preview').style.background=c.color;
+  const thumb=document.getElementById('m-photo-thumb');
+  if(c.photo){thumb.src=c.photo;thumb.style.display='block';}
+  else{thumb.style.display='none';thumb.src='';}
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal(){
   document.getElementById('modal-overlay').classList.remove('open');
+  selectedCandId=null; renderCandidates();
 }
 
-function onPartyInput(val) {
-  const match = Object.entries(KNOWN_PARTIES).find(([k]) => k.toLowerCase() === val.toLowerCase());
-  if (match) {
-    document.getElementById('m-color-input').value = match[1];
-    document.getElementById('m-color-preview').style.background = match[1];
+function onPartyInput(val){
+  const match=Object.entries(KNOWN_PARTIES).find(([k])=>k.toLowerCase()===val.toLowerCase());
+  if(match){document.getElementById('m-color-input').value=match[1];document.getElementById('m-color-preview').style.background=match[1];}
+}
+function updateColorPreview(val){document.getElementById('m-color-preview').style.background=val;}
+
+function saveModal(){
+  const name=document.getElementById('m-name').value.trim()||randomName();
+  const vice=document.getElementById('m-vice').value.trim();
+  const party=document.getElementById('m-party').value.trim()||randomParty();
+  const color=document.getElementById('m-color-input').value;
+  const urlPhoto=document.getElementById('m-photo-url').value.trim();
+  const photo=pendingPhotoDataUrl||urlPhoto;
+  if(modalEditId){
+    const c=candidates.find(x=>x.id===modalEditId);
+    if(c){c.name=name;c.vice=vice;c.party=party;c.color=color;c.photo=photo;}
+  }else{
+    candidates.push({id:uid(),name,vice,party,color,photo});
+    rebalanceDepts();
   }
-}
-
-function updateColorPreview(val) {
-  document.getElementById('m-color-preview').style.background = val;
-}
-
-function saveModal() {
-  const name  = document.getElementById('m-name').value.trim()  || randomName();
-  const vice  = document.getElementById('m-vice').value.trim();
-  const party = document.getElementById('m-party').value.trim() || randomParty();
-  const color = document.getElementById('m-color-input').value;
-  const photo = document.getElementById('m-photo').value.trim();
-  const c = { id: uid(), name, vice, party, color, photo };
-  candidates.push(c);
-  rebalanceDepts();
   closeModal();
   renderAll();
 }
 
-/* ══════════════════════════════════════════════
-   EXPORT / RESET
-══════════════════════════════════════════════ */
-function exportJSON() {
-  const totals = getTotals();
-  const output = {
-    anio: new Date().getFullYear(),
-    candidatos: candidates.map(c => ({
-      nombre: c.name, vice: c.vice, partido: c.party, color: c.color, foto: c.photo,
-      votos: Math.round(totals[c.id]?.votes || 0),
-      pct: parseFloat((totals[c.id]?.pct || 0).toFixed(2)),
-    })),
-    departamentos: {}
-  };
-  Object.entries(deptData).forEach(([dept, pcts]) => {
-    output.departamentos[dept] = {};
-    candidates.forEach(c => { output.departamentos[dept][c.name] = parseFloat((pcts[c.id]||0).toFixed(2)); });
+/* ══ PHOTO UPLOAD / CROP ══ */
+function handlePhotoFile(event,target){
+  const file=event.target.files[0]; if(!file)return;
+  openCrop(file,target);
+}
+function handlePhotoDrop(event,target){
+  event.preventDefault();
+  event.currentTarget.classList.remove('drag-over');
+  const file=event.dataTransfer.files[0]; if(!file||!file.type.startsWith('image/'))return;
+  openCrop(file,target);
+}
+function setupPasteHandler(){
+  document.addEventListener('paste',e=>{
+    const items=e.clipboardData?.items; if(!items)return;
+    for(const item of items){
+      if(item.type.startsWith('image/')){
+        const file=item.getAsFile(); if(!file)return;
+        if(document.getElementById('modal-overlay').classList.contains('open')){openCrop(file,'m');}
+        return;
+      }
+    }
   });
-  const blob = new Blob([JSON.stringify(output, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `eleccion_${output.anio}.json`; a.click();
 }
 
-function resetAll() {
-  if (!confirm('¿Resetear toda la elección? Se perderán los datos actuales.')) return;
-  candidates = []; deptData = {}; selectedCandId = null; selectedDept = null;
+function openCrop(file,target){
+  cropTarget=target;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.getElementById('crop-canvas');
+      const maxW=Math.min(img.width,700), maxH=Math.min(img.height,500);
+      const scale=Math.min(maxW/img.width,maxH/img.height,1);
+      canvas.width=img.width*scale; canvas.height=img.height*scale;
+      cropCtx=canvas.getContext('2d');
+      cropCtx.drawImage(img,0,0,canvas.width,canvas.height);
+      cropImgData={img,scale,cw:canvas.width,ch:canvas.height};
+      document.getElementById('crop-selection').style.display='none';
+      document.getElementById('crop-overlay').classList.add('open');
+      setupCropDrag(canvas);
+    };
+    img.src=ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function setupCropDrag(canvas){
+  const sel=document.getElementById('crop-selection');
+  const rect=()=>canvas.getBoundingClientRect();
+  canvas.onmousedown=e=>{
+    const r=rect();
+    cropStartX=e.clientX-r.left; cropStartY=e.clientY-r.top;
+    isCropping=true;
+  };
+  canvas.onmousemove=e=>{
+    if(!isCropping)return;
+    const r=rect();
+    cropEndX=e.clientX-r.left; cropEndY=e.clientY-r.top;
+    const x=Math.min(cropStartX,cropEndX),y=Math.min(cropStartY,cropEndY);
+    const w=Math.abs(cropEndX-cropStartX),h=Math.abs(cropEndY-cropStartY);
+    sel.style.display='block';
+    sel.style.left=x+'px'; sel.style.top=y+'px';
+    sel.style.width=w+'px'; sel.style.height=h+'px';
+  };
+  canvas.onmouseup=()=>{isCropping=false;};
+}
+
+function applyCrop(){
+  if(!cropImgData)return;
+  const canvas=document.getElementById('crop-canvas');
+  const sel=document.getElementById('crop-selection');
+  const cr=canvas.getBoundingClientRect();
+  let x=parseFloat(sel.style.left||0);
+  let y=parseFloat(sel.style.top||0);
+  let w=parseFloat(sel.style.width||canvas.width);
+  let h=parseFloat(sel.style.height||canvas.height);
+  if(w<5||h<5){x=0;y=0;w=canvas.width;h=canvas.height;}
+  const out=document.createElement('canvas'); out.width=w; out.height=h;
+  const ctx=out.getContext('2d');
+  ctx.drawImage(canvas,x,y,w,h,0,0,w,h);
+  const dataUrl=out.toDataURL('image/jpeg',0.85);
+  pendingPhotoDataUrl=dataUrl;
+  // Show preview
+  const thumb=document.getElementById('m-photo-thumb');
+  if(thumb){thumb.src=dataUrl;thumb.style.display='block';}
+  closeCrop();
+}
+function closeCrop(){document.getElementById('crop-overlay').classList.remove('open');}
+
+/* ══ EXPORT / IMPORT / RESET ══ */
+function exportJSON(){
+  const totals=getTotals();
+  const output={
+    anio:new Date().getFullYear(),
+    candidatos:candidates.map(c=>({
+      nombre:c.name,vice:c.vice,partido:c.party,color:c.color,foto:c.photo,
+      votos:Math.round(totals[c.id]?.votes||0),
+      pct:parseFloat((totals[c.id]?.pct||0).toFixed(2)),
+    })),
+    departamentos:{}
+  };
+  Object.entries(deptData).forEach(([dept,pcts])=>{
+    output.departamentos[dept]={};
+    candidates.forEach(c=>{output.departamentos[dept][c.name]=parseFloat((pcts[c.id]||0).toFixed(2));});
+  });
+  const blob=new Blob([JSON.stringify(output,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download=`eleccion_${output.anio}.json`;a.click();
+}
+
+function importJSON(event){
+  const file=event.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      loadFromJSON(data);
+    }catch{alert('Archivo JSON inválido.');}
+  };
+  reader.readAsText(file);
+  event.target.value='';
+}
+
+function loadFromJSON(data){
+  candidates=[]; deptData={};
+  // Normalize: might be elecciones historicas format or editor format
+  const cands=data.candidatos||[];
+  cands.forEach(c=>{
+    candidates.push({
+      id:uid(),
+      name:c.nombre||c.name||'Sin nombre',
+      vice:c.vice||'',
+      party:c.partido||c.party||'',
+      color:c.color||randomColor(),
+      photo:c.foto||c.photo||''
+    });
+  });
+  if(candidates.length===0){addCandidate(true);addCandidate(true);}
+  // Load dept data
+  const depts=data.departamentos||{};
+  Object.entries(depts).forEach(([dept,votes])=>{
+    deptData[dept]={};
+    // map by name
+    if(typeof votes==='object'&&!Array.isArray(votes)){
+      Object.entries(votes).forEach(([name,pct])=>{
+        const c=candidates.find(x=>x.name===name||x.party===name);
+        if(c)deptData[dept][c.id]=parseFloat(pct)||0;
+      });
+    }
+  });
+  rebalanceDepts();
+  selectedCandId=null; selectedDept=null;
+  svActive=false; document.getElementById('sv-banner').classList.remove('visible');
+  document.querySelectorAll('#uruguay-map #features path').forEach(p=>p.classList.remove('dept-active'));
   mapReset();
-  addCandidate(true); addCandidate(true);
-  document.querySelectorAll('#uruguay-map #features path').forEach(p => p.classList.remove('dept-active'));
   renderAll();
 }
 
-/* ══════════════════════════════════════════════
-   RENDER ALL
-══════════════════════════════════════════════ */
-function renderAll() {
-  renderCandidates();
-  renderMap();
-  renderRightPanel();
+function resetAll(){
+  if(!confirm('¿Resetear toda la elección?'))return;
+  candidates=[];deptData={};selectedCandId=null;selectedDept=null;
+  svActive=false; document.getElementById('sv-banner').classList.remove('visible');
+  mapReset();
+  addCandidate(true);addCandidate(true);
+  document.querySelectorAll('#uruguay-map #features path').forEach(p=>p.classList.remove('dept-active'));
+  renderAll();
 }
 
-document.getElementById('modal-overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+/* ══ LOAD HISTORICAL ══ */
+const HISTORICAL_YEARS=[1971,1984,1989,1994,1999,2004,2009,2014,2019,2024];
 
-function updateThemeIcon() {
-  const isDark = document.body.getAttribute('data-theme') === 'dark';
-  document.getElementById('dark-img').src = isDark
-    ? 'https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/sun.svg'
-    : 'https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/moon.svg';
+function openHistoryModal(){
+  document.getElementById('history-modal').classList.add('open');
+  document.getElementById('history-grid').innerHTML=HISTORICAL_YEARS.map(y=>
+    `<button class="hist-btn" onclick="loadHistorical(${y})">${y}</button>`
+  ).join('');
+}
+function closeHistoryModal(){document.getElementById('history-modal').classList.remove('open');}
+
+async function loadHistorical(year){
+  closeHistoryModal();
+  try{
+    const r=await fetch(`data/${year}.json`);
+    if(!r.ok)throw new Error(`No se encontró data/${year}.json`);
+    const raw=await r.json();
+    processHistoricalData(raw,year);
+  }catch(err){
+    alert(`No se pudo cargar la elección ${year}.\n${err.message}`);
+  }
 }
 
-function toggleDarkMode() {
-  const dark = document.body.getAttribute('data-theme') !== 'dark';
-  document.body.setAttribute('data-theme', dark ? 'dark' : 'light');
-  localStorage.setItem('uruvoto-theme', dark ? 'dark' : 'light');
+function processHistoricalData(raw,year){
+  // Format: may have multiple candidates per party. Pick most voted per party, sum all party votes.
+  // Possible formats: { candidatos:[{nombre,partido,votos,color,...}], departamentos:{...} }
+  // or { resultados:[...] }
+  let rawCands=raw.candidatos||raw.resultados||[];
+  
+  // Group by partido, keep highest-voted candidate, sum votes
+  const partyMap={};
+  rawCands.forEach(c=>{
+    const party=c.partido||c.party||'Desconocido';
+    const votes=c.votos||c.votes||0;
+    if(!partyMap[party]||votes>partyMap[party].topVotes){
+      partyMap[party]={
+        nombre:c.nombre||c.name,
+        partido:party,
+        color:c.color||KNOWN_PARTIES[party]||randomColor(),
+        foto:c.foto||c.photo||'',
+        vice:c.vice||'',
+        topVotes:votes,
+        totalVotes:0,
+      };
+    }
+    partyMap[party].totalVotes+=votes;
+  });
+
+  // Build candidates
+  candidates=[];
+  Object.values(partyMap).forEach(p=>{
+    candidates.push({id:uid(),name:p.nombre,vice:p.vice,party:p.partido,color:p.color,photo:p.foto,_votes:p.totalVotes});
+  });
+  // Sort by votes desc
+  candidates.sort((a,b)=>(b._votes||0)-(a._votes||0));
+
+  // Build dept data
+  deptData={};
+  const depts=raw.departamentos||{};
+  if(Object.keys(depts).length>0){
+    Object.entries(depts).forEach(([dept,votes])=>{
+      deptData[dept]={};
+      if(typeof votes==='object'&&!Array.isArray(votes)){
+        // votes might be keyed by candidate name or party name
+        // Compute total votes in dept
+        const totalDept=Object.values(votes).reduce((s,v)=>s+(typeof v==='number'?v:0),0);
+        Object.entries(votes).forEach(([name,v])=>{
+          const c=candidates.find(x=>x.name===name||x.party===name||getLastName(x.name)===name);
+          if(c&&totalDept>0)deptData[dept][c.id]=(v/totalDept)*100;
+        });
+      }
+    });
+  }
+  rebalanceDepts();
+  selectedCandId=null; selectedDept=null;
+  svActive=false; document.getElementById('sv-banner').classList.remove('visible');
+  document.querySelectorAll('#uruguay-map #features path').forEach(p=>p.classList.remove('dept-active'));
+  mapReset();
+  renderAll();
+}
+
+/* ══ SEGUNDA VUELTA ══ */
+function openSVModal(){
+  if(candidates.length<3){alert('Se necesitan al menos 3 candidatos para configurar segunda vuelta (2 finalistas + al menos 1 para redistribuir).');return;}
+  const totals=getTotals();
+  const sorted=[...candidates].sort((a,b)=>(totals[b.id]?.pct||0)-(totals[a.id]?.pct||0));
+  const finalists=sorted.slice(0,2);
+  const thirds=sorted.slice(2);
+  let html='<div style="display:flex;flex-direction:column;gap:16px;">';
+  html+=`<div style="font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;">Finalistas</div>`;
+  html+=`<div style="display:flex;gap:10px;margin-bottom:4px;">`;
+  finalists.forEach(c=>{html+=`<div style="flex:1;padding:10px;border-radius:10px;border:2px solid ${c.color};background:${c.color}18;text-align:center;font-size:0.85rem;font-weight:700;color:${c.color};">${c.name}<br><span style="font-size:0.72rem;font-weight:400;color:var(--muted);">${(totals[c.id]?.pct||0).toFixed(1)}%</span></div>`;});
+  html+=`</div>`;
+  html+=`<div style="font-size:0.8rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;">Redistribuir votos de otros partidos</div>`;
+  thirds.forEach(c=>{
+    const pct=(totals[c.id]?.pct||0).toFixed(1);
+    html+=`<div class="sv-cand-block">
+      <div style="font-size:0.85rem;font-weight:700;margin-bottom:6px;">${c.name} <span style="color:var(--muted);font-weight:400;">(${pct}%)</span></div>
+      <div class="sv-rows">`;
+    finalists.forEach((f,i)=>{
+      html+=`<div class="sv-row">
+        <div class="sv-row-label" style="color:${f.color}">${f.name.split(' ')[0]}</div>
+        <input class="sv-row-input" id="sv-${c.id}-${f.id}" type="number" min="0" max="100" step="1" value="${i===0?50:50}" 
+          oninput="updateSVcheck('${c.id}')">
+        <span style="font-size:0.8rem;color:var(--muted);">%</span>
+      </div>`;
+    });
+    html+=`<div class="sv-row">
+      <div class="sv-row-label" style="color:var(--muted);">Abstención / Blanco</div>
+      <input class="sv-row-input" id="sv-${c.id}-abs" type="number" min="0" max="100" step="1" value="0"
+        oninput="updateSVcheck('${c.id}')">
+      <span style="font-size:0.8rem;color:var(--muted);">%</span>
+    </div>`;
+    html+=`</div><div class="sv-total-check" id="sv-check-${c.id}">Total: 100% ✓</div></div>`;
+  });
+  html+='</div>';
+  document.getElementById('sv-content').innerHTML=html;
+  document.getElementById('sv-modal').classList.add('open');
+}
+function updateSVcheck(candId){
+  const totals=getTotals();
+  const sorted=[...candidates].sort((a,b)=>(totals[b.id]?.pct||0)-(totals[a.id]?.pct||0));
+  const finalists=sorted.slice(0,2);
+  let sum=parseFloat(document.getElementById(`sv-${candId}-abs`)?.value||0);
+  finalists.forEach(f=>{sum+=parseFloat(document.getElementById(`sv-${candId}-${f.id}`)?.value||0);});
+  const el=document.getElementById(`sv-check-${candId}`);
+  if(el){el.textContent=`Total: ${sum.toFixed(0)}% ${Math.abs(sum-100)<1?'✓':'⚠ debe ser 100%'}`;el.className='sv-total-check '+(Math.abs(sum-100)<1?'ok':'err');}
+}
+function closeSVModal(){document.getElementById('sv-modal').classList.remove('open');}
+function applySV(){
+  const totals=getTotals();
+  const sorted=[...candidates].sort((a,b)=>(totals[b.id]?.pct||0)-(totals[a.id]?.pct||0));
+  const finalists=sorted.slice(0,2);
+  const thirds=sorted.slice(2);
+  // For each dept, redistribute third-party votes proportionally
+  Object.keys(deptData).forEach(dept=>{
+    const pcts=deptData[dept];
+    thirds.forEach(c=>{
+      const cPct=pcts[c.id]||0; if(cPct<=0)return;
+      let totalPct=0;
+      finalists.forEach(f=>{totalPct+=parseFloat(document.getElementById(`sv-${c.id}-${f.id}`)?.value||0);});
+      const abs=parseFloat(document.getElementById(`sv-${c.id}-abs`)?.value||0);
+      finalists.forEach(f=>{
+        const share=parseFloat(document.getElementById(`sv-${c.id}-${f.id}`)?.value||0)/100;
+        pcts[f.id]=(pcts[f.id]||0)+cPct*share;
+      });
+      pcts[c.id]=0;
+    });
+    // Remove third candidates from display (set to 0)
+  });
+  closeSVModal();
+  svActive=true;
+  document.getElementById('sv-banner').classList.add('visible');
+  renderAll();
+}
+
+/* ══ PRESENTACIÓN ══ */
+let presAnimRunning=false;
+
+function startPres(){
+  if(candidates.length===0){alert('Agregá candidatos primero.');return;}
+  // Clone map SVG
+  const mapSvg=document.querySelector('#map-container svg');
+  if(mapSvg){
+    const clone=mapSvg.cloneNode(true);
+    // Remove any dept-active styling
+    clone.querySelectorAll('path').forEach(p=>{
+      p.classList.remove('dept-active');
+      p.style.stroke='#050a12'; p.style.strokeWidth='1.5'; p.style.fill='#1e2a3a';
+      p.removeAttribute('onmousemove'); p.removeAttribute('onclick'); p.removeAttribute('onmouseleave');
+    });
+    document.getElementById('pres-map-svg-wrap').innerHTML='';
+    document.getElementById('pres-map-svg-wrap').appendChild(clone);
+  }
+  // Build candidate rows
+  const totals=getTotals();
+  const maxPct=Math.max(...candidates.map(c=>totals[c.id]?.pct||0));
+  document.getElementById('pres-cands-wrap').innerHTML=candidates.map(c=>{
+    const t=totals[c.id]||{pct:0,votes:0};
+    const isWinner=t.pct===maxPct&&t.pct>0;
+    return `<div class="pres-cand-row" id="prow-${c.id}">
+      <div class="pres-cand-top">
+        <div><span class="pres-cand-name" style="color:${c.color}">${c.name}</span><span class="pres-cand-party">${c.party}</span>${isWinner?'<span class="pres-winner-badge">Ganador</span>':''}</div>
+        <div class="pres-cand-pct" id="ppct-${c.id}" style="color:${c.color}">0.0%</div>
+      </div>
+      <div class="pres-cand-votes-disp" id="pvotes-${c.id}">0 votos</div>
+      <div class="pres-bar-track"><div class="pres-bar-fill" id="pbar-${c.id}" style="background:${c.color};"></div></div>
+    </div>`;
+  }).join('');
+  document.getElementById('pres-overlay').classList.add('active');
+  presAnimRunning=true;
+  setTimeout(()=>runPresAnimation(totals,maxPct), 600);
+}
+
+function runPresAnimation(finalTotals, maxPct){
+  // Order depts: DEPT_BY_POP (smallest first)
+  const depts=[...DEPT_BY_POP];
+  const totalDepts=depts.length;
+  let step=0;
+  // Running totals
+  const running={};
+  candidates.forEach(c=>{running[c.id]={votes:0,pct:0};});
+
+  const STEP_MS=260; // ~5 seconds total
+
+  function doStep(){
+    if(!presAnimRunning||step>=totalDepts){
+      // Final reveal
+      candidates.forEach(c=>{
+        const t=finalTotals[c.id]||{pct:0,votes:0};
+        document.getElementById(`ppct-${c.id}`).textContent=t.pct.toFixed(1)+'%';
+        document.getElementById(`pvotes-${c.id}`).textContent=fmtN(t.votes)+' votos';
+        const bar=document.getElementById(`pbar-${c.id}`);
+        if(bar)bar.style.width=(t.pct/maxPct*100)+'%';
+        const row=document.getElementById(`prow-${c.id}`);
+        if(row)row.classList.add('revealed');
+      });
+      // Color full map
+      Object.entries(DEPTO_ID).forEach(([dept,svgId])=>{
+        const path=document.querySelector(`#pres-map-svg-wrap path#${svgId}`);
+        if(!path)return;
+        const winner=getDeptWinner(dept);
+        if(!winner){path.style.fill='#1e2a3a';path.style.fillOpacity=1;return;}
+        const cand=candidates.find(c=>c.id===winner.id);
+        if(!cand){path.style.fill='#1e2a3a';return;}
+        path.style.fill=cand.color;
+        path.style.fillOpacity=winner.margin>15?0.9:winner.margin>7?0.7:winner.margin>2?0.55:0.38;
+      });
+      document.getElementById('pres-progress-fill').style.width='100%';
+      document.getElementById('pres-progress-label').textContent=`${totalDepts} / ${totalDepts} departamentos`;
+      document.getElementById('pres-dept-status').textContent='Escrutinio completo';
+      setTimeout(launchConfetti,400);
+      return;
+    }
+
+    const dept=depts[step];
+    const pop=(deptInfo[dept]||{}).poblacion||0;
+    const pcts=deptData[dept]||{};
+    candidates.forEach(c=>{running[c.id].votes+=(pcts[c.id]||0)/100*pop;});
+    // Recompute running pcts
+    const grandRunning=Object.values(running).reduce((s,t)=>s+t.votes,0);
+    if(grandRunning>0)candidates.forEach(c=>{running[c.id].pct=running[c.id].votes/grandRunning*100;});
+    const runMax=Math.max(...candidates.map(c=>running[c.id].pct||0));
+
+    // Reveal rows
+    candidates.forEach(c=>{
+      const t=running[c.id];
+      document.getElementById(`ppct-${c.id}`).textContent=t.pct.toFixed(1)+'%';
+      document.getElementById(`pvotes-${c.id}`).textContent=fmtN(Math.round(t.votes))+' votos';
+      const bar=document.getElementById(`pbar-${c.id}`);
+      if(bar)bar.style.width=(runMax>0?(t.pct/runMax*100):0)+'%';
+      const row=document.getElementById(`prow-${c.id}`);
+      if(row)row.classList.add('revealed');
+    });
+
+    // Color dept on pres map
+    const svgId=DEPTO_ID[dept];
+    if(svgId){
+      const path=document.querySelector(`#pres-map-svg-wrap path#${svgId}`);
+      if(path){
+        const winner=getDeptWinner(dept);
+        if(winner){
+          const cand=candidates.find(c=>c.id===winner.id);
+          if(cand){path.style.fill=cand.color;path.style.fillOpacity=winner.margin>15?0.9:winner.margin>7?0.7:0.5;}
+        }
+      }
+    }
+
+    // Update progress
+    step++;
+    const pct=(step/totalDepts)*100;
+    document.getElementById('pres-progress-fill').style.width=pct+'%';
+    document.getElementById('pres-progress-label').textContent=`${step} / ${totalDepts} departamentos`;
+    document.getElementById('pres-dept-status').textContent=`Contando: ${dept}`;
+
+    setTimeout(doStep, STEP_MS);
+  }
+
+  // Stagger first reveals
+  candidates.forEach((c,i)=>{
+    setTimeout(()=>{
+      const row=document.getElementById(`prow-${c.id}`);
+      if(row)row.classList.add('revealed');
+    },i*80);
+  });
+  setTimeout(doStep,500);
+}
+
+function closePres(){
+  presAnimRunning=false;
+  document.getElementById('pres-overlay').classList.remove('active');
+  stopConfetti();
+}
+
+/* ══ CONFETTI (Uruguay flag colors: blue #0038A8, white #fff, yellow/gold #FCD116) ══ */
+let confettiAnim=null;
+function launchConfetti(){
+  const canvas=document.getElementById('confetti-canvas');
+  canvas.style.display='block';
+  canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+  const ctx=canvas.getContext('2d');
+  const UY_COLORS=['#0038A8','#ffffff','#FCD116','#003DA5','#fff9e0','#4477cc'];
+  const pieces=Array.from({length:180},()=>({
+    x:Math.random()*canvas.width,
+    y:-20-Math.random()*100,
+    w:8+Math.random()*8,
+    h:4+Math.random()*6,
+    r:Math.random()*Math.PI*2,
+    dr:(Math.random()-0.5)*0.2,
+    vx:(Math.random()-0.5)*3,
+    vy:2+Math.random()*4,
+    color:UY_COLORS[Math.floor(Math.random()*UY_COLORS.length)],
+    opacity:0.8+Math.random()*0.2
+  }));
+  function frame(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive=0;
+    pieces.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy; p.r+=p.dr; p.opacity-=0.003;
+      if(p.y<canvas.height+30&&p.opacity>0){alive++;
+        ctx.save(); ctx.globalAlpha=Math.max(0,p.opacity);
+        ctx.translate(p.x,p.y); ctx.rotate(p.r);
+        ctx.fillStyle=p.color; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+        ctx.restore();
+      }
+    });
+    if(alive>0)confettiAnim=requestAnimationFrame(frame);
+    else stopConfetti();
+  }
+  confettiAnim=requestAnimationFrame(frame);
+}
+function stopConfetti(){
+  if(confettiAnim)cancelAnimationFrame(confettiAnim);
+  const canvas=document.getElementById('confetti-canvas'); canvas.style.display='none';
+  const ctx=canvas.getContext('2d');ctx.clearRect(0,0,canvas.width,canvas.height);
+}
+
+/* ══ RENDER ALL ══ */
+function renderAll(){renderCandidates();renderMap();renderRightPanel();}
+
+/* ══ DARK MODE ══ */
+function updateThemeIcon(){
+  const isDark=document.body.getAttribute('data-theme')==='dark';
+  document.getElementById('dark-img').src=isDark
+    ?'https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/sun.svg'
+    :'https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/moon.svg';
+}
+function toggleDarkMode(){
+  const dark=document.body.getAttribute('data-theme')!=='dark';
+  document.body.setAttribute('data-theme',dark?'dark':'light');
+  localStorage.setItem('uruvoto-theme',dark?'dark':'light');
   updateThemeIcon();
 }
+
+document.getElementById('modal-overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('history-modal').addEventListener('click',function(e){if(e.target===this)closeHistoryModal();});
+document.getElementById('sv-modal').addEventListener('click',function(e){if(e.target===this)closeSVModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeHistoryModal();closeSVModal();closeCrop();closePres();}});
 
 updateThemeIcon();
 init();
