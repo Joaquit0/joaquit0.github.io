@@ -25,16 +25,16 @@
   --card-shadow: 0 2px 16px rgba(30,60,120,0.10);
 }
 [data-theme="dark"] {
-  --bg:        #10131a;
-  --surface:   #181c26;
-  --surface2:  #1e2435;
-  --border:    rgba(255,255,255,0.07);
-  --border2:   rgba(255,255,255,0.13);
-  --text:      #e8edf5;
-  --muted:     #8899b0;
+  --bg:        #121212;
+  --surface:   #1e1e1e;
+  --surface2:  #2c2c2c;
+  --border:    rgba(255,255,255,0.08);
+  --border2:   rgba(255,255,255,0.08);
+  --text:      #f1f5f9;
+  --muted:     #a3a3a3;
   --accent:    #4f8ef7;
   --accent2:   #7eb3ff;
-  --map-empty: #232a3a;
+  --map-empty: #2c2c2c;
   --range-track: #2a3550;
   --card-shadow: 0 2px 16px rgba(0,0,0,0.35);
 }
@@ -88,7 +88,7 @@ header {
   transition: background 0.15s;
 }
 .btn-icon-round:hover { background: var(--surface2); }
-.btn-icon-round img { width: 20px; height: 20px; object-fit: contain; filter: var(--icon-filter, none); }
+.btn-icon-round img { width: 20px; height: 20px; object-fit: contain; }
 [data-theme="dark"] .btn-icon-round img { filter: invert(1) brightness(2); }
 
 /* LAYOUT */
@@ -118,7 +118,6 @@ header {
   display: flex; flex-direction: column; gap: 7px;
   scrollbar-width: thin; scrollbar-color: var(--border2) transparent;
 }
-/* Add button right after list */
 .add-btn {
   margin: 6px 10px 10px;
   padding: 9px;
@@ -153,9 +152,7 @@ header {
   width: 100%; height: 100%; object-fit: cover; object-position: center top;
   position: absolute; inset: 0;
 }
-.cand-photo .initials {
-  position: relative; z-index: 1;
-}
+.cand-photo .initials { position: relative; z-index: 1; }
 .cand-photo.has-photo .initials { display: none; }
 .cand-body { padding: 9px 11px; flex: 1; min-width: 0; }
 .cand-name {
@@ -259,11 +256,6 @@ header {
 .pie-wrap { padding: 10px 12px 6px; display: none; flex-direction: column; gap: 6px; flex-shrink: 0; }
 .pie-wrap.visible { display: flex; }
 #pie-svg { width: 100%; height: auto; display: block; }
-.pie-legend { display: flex; flex-direction: column; gap: 3px; }
-.pie-legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.73rem; }
-.pie-legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-.pie-legend-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
-.pie-legend-pct { font-weight: 800; font-size: 0.77rem; }
 
 .right-panel-inner {
   flex: 1; overflow-y: auto; padding: 0 10px 10px;
@@ -281,17 +273,34 @@ header {
 .slider-group { display: flex; flex-direction: column; gap: 9px; }
 .slider-item { display: flex; flex-direction: column; gap: 4px; }
 .slider-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.83rem; }
-.slider-name-wrap { display: flex; align-items: center; gap: 6px; }
-.slider-name { font-weight: 600; }
+.slider-name-wrap { display: flex; align-items: center; gap: 6px; flex: 1; min-width: 0; }
+.slider-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* LOCK BUTTON — bigger, icon-based, right of name */
 .lock-btn {
-  width: 18px; height: 18px; border-radius: 4px; border: 1px solid var(--border2);
+  width: 26px; height: 26px; border-radius: 6px; border: 1.5px solid var(--border2);
   background: var(--surface2); cursor: pointer; display: flex; align-items: center;
-  justify-content: center; font-size: 0.75rem; transition: all 0.15s; flex-shrink: 0;
-  user-select: none; color: var(--muted);
+  justify-content: center; transition: all 0.15s; flex-shrink: 0;
+  user-select: none; color: var(--muted); margin-left: 4px;
 }
-.lock-btn.locked { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.5); color: #f59e0b; }
-.lock-btn:hover { border-color: var(--accent); }
-.slider-pct-wrap { display: flex; align-items: center; gap: 3px; }
+.lock-btn svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.lock-btn.locked { 
+  background: rgba(251,191,36,0.15); 
+  border-color: rgba(251,191,36,0.5); 
+  color: #f59e0b; 
+  opacity: 1;
+}
+.lock-btn:not(.locked) {
+  opacity: 0.45;
+}
+.lock-btn:hover { border-color: var(--accent); opacity: 1; }
+
+/* When locked, the slider row dims */
+.slider-item.is-locked input[type="range"] { opacity: 0.3; }
+.slider-item.is-locked .slider-name { opacity: 0.55; }
+.slider-item.is-locked .slider-pct-input { opacity: 0.55; }
+
+.slider-pct-wrap { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
 .slider-pct-input {
   font-weight: 800; font-size: 0.98rem; width: 54px; text-align: right;
   background: transparent; border: none; border-bottom: 2px solid transparent;
@@ -431,18 +440,18 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
   font-family: 'Inter', sans-serif; font-size: 0.76rem; cursor: pointer; transition: all 0.18s;
 }
 .pres-close-btn:hover { color: #fff; background: rgba(255,255,255,0.1); }
-.pres-body { flex: 1; display: grid; grid-template-columns: 55% 45%; overflow: hidden; }
+.pres-body { flex: 1; display: grid; grid-template-columns: 60% 40%; overflow: hidden; }
 
 /* PRES MAP — bigger */
 .pres-map-side {
   display: flex; align-items: center; justify-content: center;
-  padding: 16px 12px 16px 24px; position: relative; overflow: hidden;
+  padding: 12px 10px 12px 16px; position: relative; overflow: hidden;
 }
 .pres-map-side::after {
   content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 1px;
   background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.08) 30%, rgba(255,255,255,0.08) 70%, transparent);
 }
-#pres-map-svg-wrap { width: 100%; max-width: 500px; }
+#pres-map-svg-wrap { width: 100%; max-width: 620px; }
 #pres-map-svg-wrap svg { width: 100%; height: auto; }
 #pres-map-svg-wrap path {
   stroke: #060a12; stroke-width: 1.5;
@@ -453,7 +462,7 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
 /* PRES RESULTS */
 .pres-results-side {
   display: flex; flex-direction: column; justify-content: center;
-  padding: 24px 32px 24px 24px; overflow: hidden; position: relative;
+  padding: 24px 28px 24px 20px; overflow: hidden; position: relative;
 }
 .pres-results-title {
   font-size: 0.65rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
@@ -477,12 +486,12 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
 }
 .pres-cand-photo.visible { display: block; }
 .pres-cand-name-block {}
-.pres-cand-name { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; }
-.pres-cand-name.winner-name { font-size: 1.35rem; }
+.pres-cand-name { font-size: 1.05rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.15; transition: font-size 0.5s ease; }
+.pres-cand-name.winner-name { font-size: 1.5rem; }
 .pres-cand-party { font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.35); margin-top: 1px; }
 .pres-cand-right { text-align: right; flex-shrink: 0; }
-.pres-cand-pct { font-size: 1.7rem; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1; }
-.pres-cand-pct.winner-pct { font-size: 2.1rem; }
+.pres-cand-pct { font-size: 1.7rem; font-weight: 900; font-variant-numeric: tabular-nums; line-height: 1; transition: font-size 0.5s ease; }
+.pres-cand-pct.winner-pct { font-size: 2.4rem; }
 .pres-cand-votes-disp { font-size: 0.7rem; color: rgba(255,255,255,0.35); margin-top: 2px; }
 .pres-bar-track { height: 6px; background: rgba(255,255,255,0.06); border-radius: 3px; overflow: hidden; margin-top: 5px; }
 .pres-bar-fill { height: 100%; border-radius: 3px; width: 0%; transition: width 1s cubic-bezier(0.25,0.46,0.45,0.94); }
@@ -507,6 +516,12 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
 
 /* CONFETTI */
 #confetti-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 6000; display: none; }
+
+/* PHOTO in winner row bigger */
+.pres-cand-row.winner-row .pres-cand-photo.visible {
+  width: 50px; height: 60px;
+  transition: width 0.5s ease, height 0.5s ease;
+}
 
 @keyframes fadeUp { from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);} }
 .fade-up { animation: fadeUp 0.22s ease forwards; }
@@ -545,7 +560,8 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
   <div class="logo" onclick="window.location.href='index.html'">EleccionesUY <span>/ Editor</span></div>
   <div class="header-actions">
     <button class="btn" onclick="openHistoryModal()">Cargar historica</button>
-    <button class="btn" onclick="exportJSON()">Exportar</button>
+    <button class="btn" onclick="exportJSON()">Exportar JSON</button>
+    <button class="btn" onclick="exportImage()">Exportar imagen</button>
     <label class="btn" style="cursor:pointer;">
       Importar
       <input type="file" accept=".json" style="display:none" onchange="importJSON(event)">
@@ -601,7 +617,6 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
     </div>
     <div class="pie-wrap" id="pie-wrap">
       <svg id="pie-svg" viewBox="0 0 200 200"></svg>
-      <div class="pie-legend" id="pie-legend"></div>
     </div>
     <div class="right-panel-inner" id="right-panel-inner">
       <div class="empty-state fade-up">
@@ -700,6 +715,28 @@ input[type="color"] { width: 0; height: 0; opacity: 0; position: absolute; }
 
 <script>
 /* ======================================================
+   PARTY NAME TRANSLATIONS
+====================================================== */
+const PARTY_TRANSLATIONS = {
+  'FA': 'Frente Amplio',
+  'PN': 'Partido Nacional',
+  'PC': 'Partido Colorado',
+  'CA': 'Cabildo Abierto',
+  'PI': 'Partido Independiente',
+  'NE': 'Nuevo Espacio',
+  'UC': 'Union Civica',
+  'FrenteAmplio': 'Frente Amplio',
+  'PartidoNacional': 'Partido Nacional',
+  'PartidoColorado': 'Partido Colorado',
+  'CabildoAbierto': 'Cabildo Abierto',
+};
+
+function translateParty(name) {
+  if (!name) return name;
+  return PARTY_TRANSLATIONS[name] || name;
+}
+
+/* ======================================================
    STATE
 ====================================================== */
 const KNOWN_PARTIES = {
@@ -718,27 +755,15 @@ const DEPTO_ID = {
   'Rio Negro':'UYRN','Tacuarembo':'UYTA','Durazno':'UYDU','Flores':'UYFS',
   'Florida':'UYFD','Lavalleja':'UYLA'
 };
-// map normalizes dept names (SVG uses accents sometimes)
 const DEPTO_NORM = {
   'Paysandú':'Paysandu','Paysandu':'Paysandu',
-  'Artigas':'Artigas',
-  'Salto':'Salto',
-  'Rivera':'Rivera',
-  'Rocha':'Rocha',
-  'Treinta y Tres':'Treinta y Tres',
-  'Cerro Largo':'Cerro Largo',
-  'Maldonado':'Maldonado',
-  'Canelones':'Canelones',
-  'Montevideo':'Montevideo',
-  'San José':'San Jose','San Jose':'San Jose',
-  'Colonia':'Colonia',
-  'Soriano':'Soriano',
-  'Río Negro':'Rio Negro','Rio Negro':'Rio Negro',
+  'Artigas':'Artigas','Salto':'Salto','Rivera':'Rivera','Rocha':'Rocha',
+  'Treinta y Tres':'Treinta y Tres','Cerro Largo':'Cerro Largo',
+  'Maldonado':'Maldonado','Canelones':'Canelones','Montevideo':'Montevideo',
+  'San José':'San Jose','San Jose':'San Jose','Colonia':'Colonia',
+  'Soriano':'Soriano','Río Negro':'Rio Negro','Rio Negro':'Rio Negro',
   'Tacuarembó':'Tacuarembo','Tacuarembo':'Tacuarembo',
-  'Durazno':'Durazno',
-  'Flores':'Flores',
-  'Florida':'Florida',
-  'Lavalleja':'Lavalleja'
+  'Durazno':'Durazno','Flores':'Flores','Florida':'Florida','Lavalleja':'Lavalleja'
 };
 const DEPT_BY_POP = [
   'Flores','Treinta y Tres','Rio Negro','Lavalleja','Durazno',
@@ -753,19 +778,23 @@ const RAND_COLORS=['#e05c5c','#60b8e0','#005595','#e8a020','#7030a0','#27b84d','
 
 let candidates=[], deptData={}, deptInfo={};
 let selectedDept=null, modalEditId=null, showPie=false;
-let lockedSliders={}; // dept -> set of candidate ids
+let lockedSliders={};
 let mapScale=1,mapX=0,mapY=0,isDragging=false,dragStartX=0,dragStartY=0,dragStartMapX=0,dragStartMapY=0;
 let cropCtx=null,cropImgData=null,cropTarget=null;
 let cropSX=0,cropSY=0,cropEX=0,cropEY=0,isCropping=false;
 let pendingPhotoDataUrl='';
 let presAnimRunning=false;
 
+// Lock button SVG icons
+const LOCK_CLOSED_SVG = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`;
+const LOCK_OPEN_SVG   = `<svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>`;
+
 function uid(){return Math.random().toString(36).slice(2,9);}
 function rName(){return NAMES_F[~~(Math.random()*NAMES_F.length)]+' '+NAMES_L[~~(Math.random()*NAMES_L.length)];}
 function rColor(){return RAND_COLORS[~~(Math.random()*RAND_COLORS.length)];}
 function rParty(){return RAND_PARTIES[~~(Math.random()*RAND_PARTIES.length)];}
 function fmtN(n){return Math.round(n).toLocaleString('es-UY');}
-function lastName(name){const p=name.trim().split(' ');return p[p.length-1];}
+function fullName(name){return name.trim();}
 function getInitials(name){return name.trim().split(' ').filter(w=>w.length>1).slice(0,2).map(w=>w[0]).join('').toUpperCase();}
 function normDept(d){return DEPTO_NORM[d]||d;}
 
@@ -893,7 +922,7 @@ function renderLegend(){
   const legend=document.getElementById('map-legend');
   if(!candidates.length){legend.classList.remove('visible');return;}
   legend.classList.add('visible');
-  legend.innerHTML=candidates.map(c=>`<div class="legend-item"><div class="legend-dot" style="background:${c.color}"></div><span>${lastName(c.name)}</span></div>`).join('');
+  legend.innerHTML=candidates.map(c=>`<div class="legend-item"><div class="legend-dot" style="background:${c.color}"></div><span>${fullName(c.name)}</span></div>`).join('');
 }
 function setupMapInteraction(){
   const tooltip=document.getElementById('map-tooltip');
@@ -918,7 +947,7 @@ function setupMapInteraction(){
       if(winner){
         const pcts=deptData[dk]||{};
         [...candidates].sort((a,b)=>(pcts[b.id]||0)-(pcts[a.id]||0)).forEach(c=>{
-          html+=`<div class="tt-row"><span style="color:${c.color};font-weight:700;">${c.name.split(' ')[0]}</span><span>${(pcts[c.id]||0).toFixed(1)}%</span></div>`;
+          html+=`<div class="tt-row"><span style="color:${c.color};font-weight:700;">${fullName(c.name)}</span><span>${(pcts[c.id]||0).toFixed(1)}%</span></div>`;
         });
       }else{html+='<div style="color:rgba(255,255,255,0.4);font-size:0.75rem;">Sin datos</div>';}
       tooltip.innerHTML=html;tooltip.style.display='block';
@@ -947,8 +976,8 @@ function renderCandidates(){
           <span class="initials">${getInitials(c.name)}</span>
         </div>
         <div class="cand-body">
-          <div class="cand-name">${c.name}${isWinner?'<span class="badge-winner">Ganador</span>':''}</div>
-          ${c.vice?`<div class="cand-vice">Vice: ${c.vice}</div>`:''}
+          <div class="cand-name">${fullName(c.name)}${isWinner?'<span class="badge-winner">Ganador</span>':''}</div>
+          ${c.vice?`<div class="cand-vice">Vice: ${fullName(c.vice)}</div>`:''}
           <div class="cand-party" style="color:${c.color}">${c.party}</div>
           <div class="cand-stats">
             <div class="cand-pct" style="color:${c.color}">${t.pct.toFixed(1)}%</div>
@@ -986,11 +1015,11 @@ function renderDeptSliders(){
     const val=parseFloat((pcts[c.id]||0).toFixed(1));
     const isLocked=locks.has(c.id);
     return `
-    <div class="slider-item">
+    <div class="slider-item ${isLocked?'is-locked':''}">
       <div class="slider-header">
         <div class="slider-name-wrap">
-          <div class="lock-btn ${isLocked?'locked':''}" onclick="toggleLock('${c.id}','${dk}')" title="${isLocked?'Desbloquear':'Bloquear'}">${isLocked?'&#x1F512;':'&#x1F513;'}</div>
-          <span class="slider-name" style="color:${c.color}">${c.name.split(' ')[0]}<span style="color:var(--muted);font-weight:400;font-size:0.68rem;margin-left:4px;">${c.party}</span></span>
+          <span class="slider-name" style="color:${c.color}">${fullName(c.name)}<span style="color:var(--muted);font-weight:400;font-size:0.68rem;margin-left:4px;">${c.party}</span></span>
+          <div class="lock-btn ${isLocked?'locked':''}" onclick="toggleLock('${c.id}','${dk}')" title="${isLocked?'Desbloquear — el valor no variara':'Bloquear para fijar este valor'}">${isLocked?LOCK_CLOSED_SVG:LOCK_OPEN_SVG}</div>
         </div>
         <div class="slider-pct-wrap" style="color:${c.color}">
           <input class="slider-pct-input" id="spct-${c.id}" type="number" min="0" max="100" step="0.1" value="${val}" style="color:${c.color};"
@@ -1036,7 +1065,6 @@ function onSliderMove(candId,newVal,dk){
   const oldVal=pcts[candId]||0;
   const delta=newVal-oldVal;
   if(Math.abs(delta)<0.001)return;
-  // Distribute among non-locked, non-moving
   const others=candidates.filter(c=>c.id!==candId&&!locks.has(c.id));
   const othersTotal=others.reduce((s,c)=>s+(pcts[c.id]||0),0);
   if(othersTotal>0.001){
@@ -1075,7 +1103,7 @@ function syncSliderUI(dk){
 }
 
 /* ======================================================
-   PIE
+   PIE — no legend (shown elsewhere)
 ====================================================== */
 function togglePie(){
   showPie=!showPie;
@@ -1088,8 +1116,7 @@ function renderPie(){
   const totals=getTotals();
   const grand=Object.values(totals).reduce((s,t)=>s+t.votes,0);
   const svg=document.getElementById('pie-svg');
-  const legend=document.getElementById('pie-legend');
-  if(!svg||!legend)return;
+  if(!svg)return;
   const cx=100,cy=100,r=78;
   let startAngle=-Math.PI/2;let paths='';
   candidates.forEach(c=>{
@@ -1102,12 +1129,6 @@ function renderPie(){
   });
   svg.innerHTML=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--surface2)"/>${paths}<circle cx="${cx}" cy="${cy}" r="34" fill="var(--surface)"/>
     <text x="${cx}" y="${cy+5}" text-anchor="middle" font-size="11" fill="var(--muted)" font-family="Inter" font-weight="700">${fmtN(grand)}</text>`;
-  legend.innerHTML=candidates.map(c=>{
-    const t=totals[c.id]||{pct:0};
-    return `<div class="pie-legend-item"><div class="pie-legend-dot" style="background:${c.color}"></div>
-      <span class="pie-legend-name">${c.name.split(' ')[0]}</span>
-      <span class="pie-legend-pct" style="color:${c.color}">${t.pct.toFixed(1)}%</span></div>`;
-  }).join('');
 }
 
 /* ======================================================
@@ -1142,11 +1163,11 @@ function openEditModal(id){
   else{thumb.style.display='none';thumb.src='';}
   document.getElementById('modal-overlay').classList.add('open');
 }
-function closeModal(){
-  document.getElementById('modal-overlay').classList.remove('open');
-}
+function closeModal(){document.getElementById('modal-overlay').classList.remove('open');}
 function onPartyInput(val){
-  const match=Object.entries(KNOWN_PARTIES).find(([k])=>k.toLowerCase()===val.toLowerCase());
+  const translated=translateParty(val);
+  if(translated!==val){document.getElementById('m-party').value=translated;}
+  const match=Object.entries(KNOWN_PARTIES).find(([k])=>k.toLowerCase()===translated.toLowerCase()||k.toLowerCase()===val.toLowerCase());
   if(match){document.getElementById('m-color-input').value=match[1];document.getElementById('m-color-preview').style.background=match[1];}
 }
 function updateColorPreview(val){document.getElementById('m-color-preview').style.background=val;}
@@ -1158,7 +1179,7 @@ function onPhotoUrlInput(val){
 function saveModal(){
   const name=document.getElementById('m-name').value.trim()||rName();
   const vice=document.getElementById('m-vice').value.trim();
-  const party=document.getElementById('m-party').value.trim()||rParty();
+  const party=translateParty(document.getElementById('m-party').value.trim())||rParty();
   const color=document.getElementById('m-color-input').value;
   const urlPhoto=document.getElementById('m-photo-url').value.trim();
   const photo=pendingPhotoDataUrl||urlPhoto;
@@ -1260,6 +1281,166 @@ function exportJSON(){
   a.href=URL.createObjectURL(new Blob([JSON.stringify(output,null,2)],{type:'application/json'}));
   a.download=`eleccion_${output.anio}.json`;a.click();
 }
+
+/* ======================================================
+   EXPORT IMAGE
+====================================================== */
+async function exportImage(){
+  // Build an off-screen canvas with map + results
+  const totals = getTotals();
+  const sorted = [...candidates].sort((a,b)=>(totals[b.id]?.pct||0)-(totals[a.id]?.pct||0));
+  const isDark = document.body.getAttribute('data-theme')==='dark';
+
+  // Dimensions
+  const W = 1200, H = 700;
+  const MAP_W = 520, MAP_H = H;
+  const RESULTS_X = MAP_W + 20;
+  const RESULTS_W = W - RESULTS_X - 20;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  // Background
+  ctx.fillStyle = isDark ? '#121212' : '#f4f6fa';
+  ctx.fillRect(0,0,W,H);
+
+  // Title bar
+  ctx.fillStyle = isDark ? '#1e1e1e' : '#ffffff';
+  ctx.fillRect(0, 0, W, 52);
+  ctx.fillStyle = '#3b82f6';
+  ctx.font = 'bold 20px Inter, sans-serif';
+  ctx.fillText('EleccionesUY', 20, 33);
+  ctx.fillStyle = isDark ? '#a3a3a3' : '#64748b';
+  ctx.font = '13px Inter, sans-serif';
+  const grand = Object.values(totals).reduce((s,t)=>s+t.votes,0);
+  ctx.fillText(`Total votos: ${fmtN(grand)}`, 160, 33);
+
+  // Draw map SVG as image
+  const mapSvg = document.querySelector('#map-container svg');
+  if(mapSvg){
+    try{
+      const serializer = new XMLSerializer();
+      // Clone and style paths with current colors
+      const clone = mapSvg.cloneNode(true);
+      clone.querySelectorAll('path').forEach(p=>{
+        const id = p.id;
+        // Find which dept this is
+        const dk = Object.entries(DEPTO_ID).find(([,sid])=>sid===id)?.[0];
+        if(dk){
+          const winner = getDeptWinner(dk);
+          if(winner){
+            const cand = candidates.find(c=>c.id===winner.id);
+            if(cand){
+              p.style.fill = cand.color;
+              p.style.fillOpacity = winner.margin>15?1:winner.margin>7?0.78:winner.margin>2?0.6:0.42;
+            }
+          }else{
+            p.style.fill = isDark?'#2c2c2c':'#cbd5e1';
+          }
+        }
+        p.style.stroke = isDark?'#121212':'#f4f6fa';
+        p.style.strokeWidth = '1.5';
+      });
+      clone.querySelectorAll('#label_points').forEach(l=>l.style.display='none');
+      clone.setAttribute('width','480');
+      clone.setAttribute('height','580');
+      const svgStr = serializer.serializeToString(clone);
+      const svgBlob = new Blob([svgStr],{type:'image/svg+xml;charset=utf-8'});
+      const url = URL.createObjectURL(svgBlob);
+      await new Promise(resolve=>{
+        const img = new Image();
+        img.onload = ()=>{
+          ctx.drawImage(img, 10, 58, 480, 580);
+          URL.revokeObjectURL(url);
+          resolve();
+        };
+        img.onerror = resolve;
+        img.src = url;
+      });
+    }catch(e){console.warn('SVG draw failed',e);}
+  }
+
+  // Results panel
+  const ROW_H = 88;
+  const startY = 80;
+  const maxPct = sorted.length ? (totals[sorted[0].id]?.pct||0) : 1;
+
+  sorted.forEach((c,i)=>{
+    const t = totals[c.id]||{votes:0,pct:0};
+    const y = startY + i*ROW_H;
+    const isWinner = i===0;
+
+    // Candidate color stripe
+    ctx.fillStyle = c.color;
+    ctx.fillRect(RESULTS_X - 3, y + 4, 4, ROW_H - 12);
+
+    // Name
+    ctx.fillStyle = c.color;
+    ctx.font = `bold ${isWinner?'18':'14'}px Inter, sans-serif`;
+    ctx.fillText(fullName(c.name), RESULTS_X + 10, y + (isWinner?24:20));
+
+    // Party
+    ctx.fillStyle = isDark ? '#a3a3a3' : '#64748b';
+    ctx.font = '11px Inter, sans-serif';
+    ctx.fillText(c.party, RESULTS_X + 10, y + (isWinner?40:33));
+
+    // Pct
+    ctx.fillStyle = c.color;
+    ctx.font = `bold ${isWinner?'28':'20'}px Inter, sans-serif`;
+    const pctStr = t.pct.toFixed(1)+'%';
+    const pctW = ctx.measureText(pctStr).width;
+    ctx.fillText(pctStr, W - 24 - pctW, y + (isWinner?30:24));
+
+    // Votes
+    ctx.fillStyle = isDark ? '#a3a3a3' : '#64748b';
+    ctx.font = '11px Inter, sans-serif';
+    const votesStr = fmtN(t.votes)+' votos';
+    const vW = ctx.measureText(votesStr).width;
+    ctx.fillText(votesStr, W - 24 - vW, y + (isWinner?48:38));
+
+    // Bar
+    const barX = RESULTS_X + 10;
+    const barY = y + (isWinner?56:48);
+    const barW = RESULTS_W - 20;
+    const barH = isWinner?8:5;
+    ctx.fillStyle = isDark?'#2c2c2c':'#e2e8f0';
+    ctx.beginPath();ctx.roundRect(barX,barY,barW,barH,3);ctx.fill();
+    ctx.fillStyle = c.color;
+    const fillW = maxPct>0 ? (t.pct/maxPct)*barW : 0;
+    ctx.beginPath();ctx.roundRect(barX,barY,fillW,barH,3);ctx.fill();
+
+    // Winner badge
+    if(isWinner && t.pct>0){
+      ctx.fillStyle = '#16a34a';
+      ctx.beginPath();ctx.roundRect(RESULTS_X+10, y+68, 64, 16, 4);ctx.fill();
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 9px Inter, sans-serif';
+      ctx.fillText('GANADOR', RESULTS_X+17, y+80);
+    }
+
+    // Divider
+    if(i < sorted.length-1){
+      ctx.strokeStyle = isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();ctx.moveTo(RESULTS_X,y+ROW_H-2);ctx.lineTo(W-10,y+ROW_H-2);ctx.stroke();
+    }
+  });
+
+  // Footer
+  ctx.fillStyle = isDark?'rgba(255,255,255,0.1)':'rgba(0,0,0,0.1)';
+  ctx.fillRect(0, H-28, W, 1);
+  ctx.fillStyle = isDark?'#a3a3a3':'#64748b';
+  ctx.font = '11px Inter, sans-serif';
+  ctx.fillText('eleccionesuy.com', 20, H-10);
+
+  // Download
+  const a = document.createElement('a');
+  a.href = canvas.toDataURL('image/png');
+  a.download = `eleccion_${new Date().getFullYear()}.png`;
+  a.click();
+}
+
 function importJSON(e){
   const file=e.target.files[0];if(!file)return;
   const reader=new FileReader();
@@ -1269,7 +1450,8 @@ function importJSON(e){
 function loadFromEditorJSON(data){
   candidates=[];deptData={};
   (data.candidatos||[]).forEach(c=>{
-    candidates.push({id:uid(),name:c.nombre||c.name||'Sin nombre',vice:c.vice||'',party:c.partido||c.party||'',color:c.color||rColor(),photo:c.foto||c.photo||''});
+    const partyName = translateParty(c.partido||c.party||'');
+    candidates.push({id:uid(),name:c.nombre||c.name||'Sin nombre',vice:c.vice||'',party:partyName,color:c.color||KNOWN_PARTIES[c.partido]||KNOWN_PARTIES[partyName]||rColor(),photo:c.foto||c.photo||''});
   });
   if(!candidates.length){addCandidate(true);addCandidate(true);}
   const depts=data.departamentos||{};
@@ -1296,7 +1478,7 @@ function resetAll(){
 }
 
 /* ======================================================
-   LOAD HISTORICAL — supports the vueltas[] format
+   LOAD HISTORICAL
 ====================================================== */
 const HIST_YEARS=[1971,1984,1989,1994,1999,2004,2009,2014,2019,2024];
 function openHistoryModal(){
@@ -1315,27 +1497,19 @@ async function loadHistorical(year){
     alert(`No se pudo cargar ${year}.\n${err.message}`);
   }
 }
-
 function processHistoricalJSON(raw,year){
   candidates=[];deptData={};
-
-  // Supports format: { vueltas:[{ candidatos:[...], mapa:{...} }] }
-  // Also supports flat: { candidatos:[...], departamentos:{...} }
   let vuelta=null;
-  if(raw.vueltas&&raw.vueltas.length>0){
-    vuelta=raw.vueltas[0]; // use first round
-  }
-
+  if(raw.vueltas&&raw.vueltas.length>0){vuelta=raw.vueltas[0];}
   const rawCands=vuelta?(vuelta.candidatos||[]):(raw.candidatos||raw.resultados||[]);
   const mapaData=vuelta?(vuelta.mapa||{}):(raw.departamentos||raw.mapa||{});
-
-  // Group by partido, pick most voted per party, sum total votes
   const partyMap={};
   rawCands.forEach(c=>{
-    const party=c.partido||c.party||'Desconocido';
+    const rawParty = c.partido||c.party||'Desconocido';
+    const party = translateParty(rawParty);
     const votes=c.votos||c.votes||0;
     if(!partyMap[party]){
-      partyMap[party]={nombre:c.nombre||c.name||'',partido:party,color:c.color||KNOWN_PARTIES[party]||rColor(),foto:c.foto||c.photo||'',vice:c.vice||'',topVotes:votes,totalVotes:votes};
+      partyMap[party]={nombre:c.nombre||c.name||'',partido:party,color:c.color||KNOWN_PARTIES[rawParty]||KNOWN_PARTIES[party]||rColor(),foto:c.foto||c.photo||'',vice:c.vice||'',topVotes:votes,totalVotes:votes};
     }else{
       partyMap[party].totalVotes+=votes;
       if(votes>partyMap[party].topVotes){
@@ -1346,36 +1520,30 @@ function processHistoricalJSON(raw,year){
       }
     }
   });
-
   Object.values(partyMap).forEach(p=>{
-    candidates.push({id:uid(),name:p.nombre,vice:p.vice,party:p.partido,color:p.color||KNOWN_PARTIES[p.partido]||rColor(),photo:p.foto,_votes:p.totalVotes});
+    candidates.push({id:uid(),name:p.nombre,vice:p.vice,party:p.partido,color:p.color,photo:p.foto,_votes:p.totalVotes});
   });
   candidates.sort((a,b)=>(b._votes||0)-(a._votes||0));
 
-  // Build dept data from mapa
-  // mapa format: { "Montevideo": { "ganador": "PC", "votos": { "PC": 318588, "PN": 239080, ... } } }
+  // Build dept data — map keys may use raw party abbreviations
   Object.entries(mapaData).forEach(([dname,dval])=>{
     const dk=normDept(dname);
     deptData[dk]={};
     let votesByParty={};
     if(dval&&typeof dval==='object'){
-      if(dval.votos){
-        // nested format
-        votesByParty=dval.votos;
-      }else{
-        // flat: { "PC": 0.45, "PN": 0.33, ... } — could be pcts or votes
-        votesByParty=dval;
-      }
+      if(dval.votos){votesByParty=dval.votos;}
+      else{votesByParty=dval;}
     }
     const totalDeptVotes=Object.values(votesByParty).reduce((s,v)=>s+(typeof v==='number'?v:0),0);
     if(totalDeptVotes>0){
       candidates.forEach(c=>{
-        const partyVotes=votesByParty[c.party]||0;
+        // Try translated and raw party names
+        const rawAbbr = Object.entries(PARTY_TRANSLATIONS).find(([,full])=>full===c.party)?.[0];
+        const partyVotes = votesByParty[c.party]||votesByParty[rawAbbr||'']||0;
         deptData[dk][c.id]=(partyVotes/totalDeptVotes)*100;
       });
     }
   });
-
   rebalanceDepts();
   selectedDept=null;
   document.querySelectorAll('#uruguay-map #features path').forEach(p=>p.classList.remove('dept-active'));
@@ -1391,25 +1559,18 @@ function openSVModal(){
   const sorted=[...candidates].sort((a,b)=>(totals[b.id]?.pct||0)-(totals[a.id]?.pct||0));
   const finalists=sorted.slice(0,2);
   const thirds=sorted.slice(2);
-
   let html='<div style="display:flex;flex-direction:column;gap:14px;">';
   html+=`<div style="display:flex;gap:8px;margin-bottom:4px;">`;
-  finalists.forEach(c=>{html+=`<div style="flex:1;padding:9px;border-radius:9px;border:2px solid ${c.color};background:${c.color}15;text-align:center;font-size:0.83rem;font-weight:700;color:${c.color};">${c.name}<br><span style="font-size:0.7rem;font-weight:400;color:var(--muted);">${(totals[c.id]?.pct||0).toFixed(1)}%</span></div>`;});
+  finalists.forEach(c=>{html+=`<div style="flex:1;padding:9px;border-radius:9px;border:2px solid ${c.color};background:${c.color}15;text-align:center;font-size:0.83rem;font-weight:700;color:${c.color};">${fullName(c.name)}<br><span style="font-size:0.7rem;font-weight:400;color:var(--muted);">${(totals[c.id]?.pct||0).toFixed(1)}%</span></div>`;});
   html+=`</div>`;
-
   thirds.forEach(c=>{
     const pct=(totals[c.id]?.pct||0);
     html+=`<div class="sv-cand-block">
-      <div style="font-size:0.83rem;font-weight:700;margin-bottom:4px;">${c.name} <span style="color:var(--muted);font-weight:400;">(${pct.toFixed(1)}%)</span></div>
+      <div style="font-size:0.83rem;font-weight:700;margin-bottom:4px;">${fullName(c.name)} <span style="color:var(--muted);font-weight:400;">(${pct.toFixed(1)}%)</span></div>
       <div class="sv-rows">`;
-    // Sliders for each finalist + abstention
-    const initVals={};
-    const total=100;
-    finalists.forEach((f,i)=>{initVals[f.id]=i===0?50:50;});
-    initVals['abs']=0;
     finalists.forEach(f=>{
       html+=`<div class="sv-row">
-        <div class="sv-row-label" style="color:${f.color}">${f.name.split(' ')[0]}</div>
+        <div class="sv-row-label" style="color:${f.color}">${fullName(f.name)}</div>
         <input type="range" id="svs-${c.id}-${f.id}" min="0" max="100" step="1" value="50"
           style="flex:1;accent-color:${f.color};" oninput="onSVSlider('${c.id}','${f.id}','${thirds.map(x=>x.id).join(',')}','${finalists.map(x=>x.id).join(',')}')">
         <span class="sv-row-pct" id="svp-${c.id}-${f.id}" style="color:${f.color}">50%</span>
@@ -1425,35 +1586,29 @@ function openSVModal(){
   document.getElementById('sv-content').innerHTML=html;
   document.getElementById('sv-modal').classList.add('open');
 }
-
-function onSVSlider(candId, movedFinalistId, thirdsStr, finalistsStr){
+function onSVSlider(candId,movedFinalistId,thirdsStr,finalistsStr){
   const finalistIds=finalistsStr.split(',');
   const otherFinalistId=finalistIds.find(id=>id!==movedFinalistId);
   const movedVal=parseInt(document.getElementById(`svs-${candId}-${movedFinalistId}`).value);
-  // Auto-adjust the other finalist slider
-  const absEl=document.getElementById(`svabs-${candId}`);
-  // Keep moved, adjust other to fill to 100 (abstention catches remainder)
   const otherSld=document.getElementById(`svs-${candId}-${otherFinalistId}`);
   let remaining=100-movedVal;
   let otherVal=Math.min(parseInt(otherSld?otherSld.value:0),remaining);
   if(otherSld)otherSld.value=otherVal;
   const abs=Math.max(0,100-movedVal-otherVal);
-  // Update displays
   finalistIds.forEach(fid=>{
     const sld=document.getElementById(`svs-${candId}-${fid}`);
     const disp=document.getElementById(`svp-${candId}-${fid}`);
     if(disp&&sld)disp.textContent=parseInt(sld.value)+'%';
   });
+  const absEl=document.getElementById(`svabs-${candId}`);
   if(absEl)absEl.textContent=abs+'%';
 }
-
 function closeSVModal(){document.getElementById('sv-modal').classList.remove('open');}
 function applySV(){
   const totals=getTotals();
   const sorted=[...candidates].sort((a,b)=>(totals[b.id]?.pct||0)-(totals[a.id]?.pct||0));
   const finalists=sorted.slice(0,2);
   const thirds=sorted.slice(2);
-  // For each dept, redistribute
   Object.keys(deptData).forEach(dk=>{
     const pcts=deptData[dk];
     thirds.forEach(c=>{
@@ -1465,20 +1620,18 @@ function applySV(){
       });
       pcts[c.id]=0;
     });
-    // Renormalize
     const total=Object.values(pcts).reduce((s,v)=>s+v,0);
     if(total>0.1)candidates.forEach(c=>{pcts[c.id]=(pcts[c.id]||0)/total*100;});
   });
-  closeSVModal();
-  renderAll();
+  closeSVModal();renderAll();
 }
 
 /* ======================================================
-   PRESENTACION — async dept reveal, sorted positions
+   PRESENTACION — real-time vote counting (not by dept)
 ====================================================== */
 function startPres(){
   if(!candidates.length){alert('Agrega candidatos primero.');return;}
-  // Clone SVG
+  // Clone SVG for presentation
   const mapSvg=document.querySelector('#map-container svg');
   if(mapSvg){
     const clone=mapSvg.cloneNode(true);
@@ -1492,17 +1645,18 @@ function startPres(){
     document.getElementById('pres-map-svg-wrap').innerHTML='';
     document.getElementById('pres-map-svg-wrap').appendChild(clone);
   }
-  // Build rows
-  const totals=getTotals();
-  const sorted=[...candidates].sort((a,b)=>(totals[b.id]?.pct||0)-(totals[a.id]?.pct||0));
-  const ROW_HEIGHT=90; // px per row (will be computed after render)
+
+  const finalTotals=getTotals();
+  const sorted=[...candidates].sort((a,b)=>(finalTotals[b.id]?.pct||0)-(finalTotals[a.id]?.pct||0));
+  const ROW_H=100;
+
   document.getElementById('pres-cands-wrap').innerHTML=candidates.map(c=>{
     return `<div class="pres-cand-row" id="prow-${c.id}" style="top:0px;">
       <div class="pres-cand-top">
         <div class="pres-cand-left">
           ${c.photo?`<img class="pres-cand-photo visible" src="${c.photo}" alt="${c.name}" onerror="this.style.display='none'">`:''}
           <div class="pres-cand-name-block">
-            <div class="pres-cand-name" id="pname-${c.id}" style="color:${c.color}">${c.name}</div>
+            <div class="pres-cand-name" id="pname-${c.id}" style="color:${c.color}">${fullName(c.name)}</div>
             <div class="pres-cand-party">${c.party}</div>
           </div>
         </div>
@@ -1514,72 +1668,107 @@ function startPres(){
       <div class="pres-bar-track"><div class="pres-bar-fill" id="pbar-${c.id}" style="background:${c.color};"></div></div>
     </div>`;
   }).join('');
+
   document.getElementById('pres-overlay').classList.add('active');
   presAnimRunning=true;
-  // Initialize positions
-  setTimeout(()=>{initPresPositions(totals);},100);
-}
 
-function initPresPositions(finalTotals){
-  const rowH=100; // px each row
-  // position all rows initially in order (sorted by final totals)
-  const sorted=[...candidates].sort((a,b)=>(finalTotals[b.id]?.pct||0)-(finalTotals[a.id]?.pct||0));
-  sorted.forEach((c,i)=>{
-    const row=document.getElementById(`prow-${c.id}`);
-    if(row){row.style.top=(i*rowH)+'px';}
-  });
-  // Set wrap height
-  const wrap=document.getElementById('pres-cands-wrap');
-  if(wrap)wrap.style.height=(candidates.length*rowH+10)+'px';
-  // Reveal rows staggered
-  sorted.forEach((c,i)=>{
-    setTimeout(()=>{
+  setTimeout(()=>{
+    sorted.forEach((c,i)=>{
       const row=document.getElementById(`prow-${c.id}`);
-      if(row)row.classList.add('revealed');
-    },i*80);
-  });
-  setTimeout(()=>runPresAnimation(finalTotals,rowH),600);
+      if(row){row.style.top=(i*ROW_H)+'px';}
+    });
+    const wrap=document.getElementById('pres-cands-wrap');
+    if(wrap)wrap.style.height=(candidates.length*ROW_H+10)+'px';
+    sorted.forEach((c,i)=>{
+      setTimeout(()=>{
+        const row=document.getElementById(`prow-${c.id}`);
+        if(row)row.classList.add('revealed');
+      },i*80);
+    });
+    setTimeout(()=>runPresAnimation(finalTotals,ROW_H),700);
+  },100);
 }
 
-function runPresAnimation(finalTotals, rowH){
-  const TOTAL_DURATION=50000; // 50 seconds
-  // Assign each dept a duration proportional to its population
-  const depts=[...DEPT_BY_POP]; // smallest to biggest
-  const pops=depts.map(dk=>(deptInfo[dk]||{}).poblacion||50000);
-  const totalPop=pops.reduce((s,v)=>s+v,0);
-  // Each dept starts at same time but finishes proportionally
-  // Earliest: Flores at ~5s, Montevideo at ~45s
-  const MIN_END=5000, MAX_END=45000;
-  const deptEndTimes=depts.map((dk,i)=>{
-    const cumPop=pops.slice(0,i+1).reduce((s,v)=>s+v,0);
-    return MIN_END+(MAX_END-MIN_END)*(cumPop/totalPop);
+/* Real-time vote counting animation */
+function runPresAnimation(finalTotals, ROW_H){
+  const TOTAL_DURATION=45000; // 45 seconds
+
+  // Build a list of all "vote events" across all depts, each weighted by population
+  // We'll count votes in small increments, with speed proportional to population
+  // Collect dept info
+  const depts=[...DEPT_BY_POP]; // smallest first
+  const deptPopMap={};
+  depts.forEach(dk=>{deptPopMap[dk]=(deptInfo[dk]||{}).poblacion||50000;});
+  const totalPop=depts.reduce((s,dk)=>s+deptPopMap[dk],0);
+
+  // For each dept, compute final vote counts per candidate
+  const deptVotes={}; // dk -> {candId: totalVotes}
+  let grandTotal=0;
+  depts.forEach(dk=>{
+    deptVotes[dk]={};
+    const pcts=deptData[dk]||{};
+    const pop=deptPopMap[dk];
+    candidates.forEach(c=>{
+      const v=(pcts[c.id]||0)/100*pop;
+      deptVotes[dk][c.id]=v;
+      grandTotal+=v;
+    });
   });
-  const totalDepts=depts.length;
-  // Running counters per dept: how many "ticks" done
-  const running={};candidates.forEach(c=>{running[c.id]={votes:0,pct:0};});
+
+  // Running counters
+  const running={};
+  candidates.forEach(c=>{running[c.id]={votes:0,pct:0};});
+  
   const deptDone=new Set();
-  const startTime=performance.now();
+  let completedDepts=0;
+  const totalDepts=depts.length;
+
+  // Each dept's votes are spread out proportionally in time
+  // Smaller depts finish earlier (their votes add up faster)
+  // Dept end time = proportional to cumulative population order
+  let cumPop=0;
+  const deptEndTimes={};
+  const MIN_END=4000, MAX_END=43000;
+  depts.forEach(dk=>{
+    cumPop+=deptPopMap[dk];
+    deptEndTimes[dk]=MIN_END+(MAX_END-MIN_END)*(cumPop/totalPop);
+  });
+
+  // Track fractional progress per dept
+  const deptProgress={}; // dk -> counted votes so far (fraction 0..1)
+  depts.forEach(dk=>{deptProgress[dk]=0;});
+
   let lastSortedOrder=null;
+  const startTime=performance.now();
 
   function tick(now){
     if(!presAnimRunning)return;
     const elapsed=now-startTime;
-    let completedCount=0;
-    // For each dept, check if we should have counted it by now
-    depts.forEach((dk,i)=>{
+
+    // For each unfinished dept, compute progress
+    depts.forEach(dk=>{
       if(deptDone.has(dk))return;
-      const endTime=deptEndTimes[i];
-      // Progress for this dept: from its startTime to endTime
-      // All start at once; the more votes, the later they finish
-      const progress=Math.min(1,(elapsed/endTime));
+      const endTime=deptEndTimes[dk];
+      const progress=Math.min(1, elapsed/endTime);
+      const prevProgress=deptProgress[dk];
+      const delta=progress-prevProgress;
+      if(delta<=0)return;
+      deptProgress[dk]=progress;
+
+      // Add delta fraction of this dept's votes
+      candidates.forEach(c=>{
+        const dv=deptVotes[dk][c.id]||0;
+        running[c.id].votes+=dv*delta;
+      });
+
       if(progress>=1&&!deptDone.has(dk)){
         deptDone.add(dk);
-        completedCount++;
-        // Add full dept
-        const pop=(deptInfo[dk]||{}).poblacion||0;
-        const pcts=deptData[dk]||{};
-        candidates.forEach(c=>{running[c.id].votes+=(pcts[c.id]||0)/100*pop;});
-        // Color map
+        completedDepts++;
+        // Ensure exact final count for this dept
+        candidates.forEach(c=>{
+          const already=(deptProgress[dk]-delta)*deptVotes[dk][c.id];
+        });
+        // Color map dept
         const svgId=DEPTO_ID[dk];
         if(svgId){
           const path=document.querySelector(`#pres-map-svg-wrap path#${svgId}`);
@@ -1592,68 +1781,73 @@ function runPresAnimation(finalTotals, rowH){
         }
         // Flash dept name
         const dn=document.getElementById('pres-dept-name');
-        if(dn){dn.textContent=dk;setTimeout(()=>{if(dn.textContent===dk)dn.textContent='';},1200);}
+        if(dn){dn.textContent=dk;setTimeout(()=>{if(dn.textContent===dk)dn.textContent='';},1000);}
       }
     });
-    // Recompute running pcts
+
+    // Recompute pcts
     const grandR=Object.values(running).reduce((s,t)=>s+t.votes,0);
     if(grandR>0)candidates.forEach(c=>{running[c.id].pct=running[c.id].votes/grandR*100;});
     const runMax=Math.max(...candidates.map(c=>running[c.id].pct||0),0.001);
+
     // Update displays
     candidates.forEach(c=>{
       const t=running[c.id];
-      document.getElementById(`ppct-${c.id}`).textContent=t.pct.toFixed(1)+'%';
-      document.getElementById(`pvotes-${c.id}`).textContent=fmtN(Math.round(t.votes))+' votos';
+      const pctEl=document.getElementById(`ppct-${c.id}`);
+      const votesEl=document.getElementById(`pvotes-${c.id}`);
       const bar=document.getElementById(`pbar-${c.id}`);
+      if(pctEl)pctEl.textContent=t.pct.toFixed(1)+'%';
+      if(votesEl)votesEl.textContent=fmtN(Math.round(t.votes))+' votos';
       if(bar)bar.style.width=(t.pct/runMax*100)+'%';
     });
-    // Sort rows dynamically
+
+    // Sort rows
     const newOrder=[...candidates].sort((a,b)=>running[b.id].pct-running[a.id].pct);
     const orderKey=newOrder.map(c=>c.id).join(',');
     if(orderKey!==lastSortedOrder){
       lastSortedOrder=orderKey;
       newOrder.forEach((c,i)=>{
         const row=document.getElementById(`prow-${c.id}`);
-        if(row)row.style.top=(i*rowH)+'px';
+        if(row)row.style.top=(i*ROW_H)+'px';
       });
-      // Winner name size
       newOrder.forEach((c,i)=>{
         const el=document.getElementById(`pname-${c.id}`);
-        const pctEl=document.getElementById(`ppct-${c.id}`);
+        const pctEl2=document.getElementById(`ppct-${c.id}`);
         if(el)el.className='pres-cand-name'+(i===0?' winner-name':'');
-        if(pctEl)pctEl.className='pres-cand-pct'+(i===0?' winner-pct':'');
+        if(pctEl2)pctEl2.className='pres-cand-pct'+(i===0?' winner-pct':'');
       });
     }
-    // Progress
-    const done=deptDone.size;
-    document.getElementById('pres-progress-fill').style.width=(done/totalDepts*100)+'%';
-    document.getElementById('pres-progress-label').textContent=`${done} / ${totalDepts} departamentos`;
+
+    // Progress — based on completed depts
+    document.getElementById('pres-progress-fill').style.width=(completedDepts/totalDepts*100)+'%';
+    document.getElementById('pres-progress-label').textContent=`${completedDepts} / ${totalDepts} departamentos`;
+
     if(deptDone.size<totalDepts){
       requestAnimationFrame(tick);
     }else{
-      // Final
-      setTimeout(()=>finalizePres(finalTotals,rowH),400);
+      setTimeout(()=>finalizePres(finalTotals,ROW_H),400);
     }
   }
   requestAnimationFrame(tick);
 }
 
-function finalizePres(finalTotals,rowH){
+function finalizePres(finalTotals,ROW_H){
   const maxPct=Math.max(...candidates.map(c=>finalTotals[c.id]?.pct||0));
   const sorted=[...candidates].sort((a,b)=>(finalTotals[b.id]?.pct||0)-(finalTotals[a.id]?.pct||0));
   sorted.forEach((c,i)=>{
     const t=finalTotals[c.id]||{pct:0,votes:0};
-    document.getElementById(`ppct-${c.id}`).textContent=t.pct.toFixed(1)+'%';
-    document.getElementById(`pvotes-${c.id}`).textContent=fmtN(t.votes)+' votos';
-    const bar=document.getElementById(`pbar-${c.id}`);
-    if(bar)bar.style.width=(maxPct>0?t.pct/maxPct*100:0)+'%';
-    const row=document.getElementById(`prow-${c.id}`);
-    if(row)row.style.top=(i*rowH)+'px';
-    const el=document.getElementById(`pname-${c.id}`);
     const pctEl=document.getElementById(`ppct-${c.id}`);
+    const votesEl=document.getElementById(`pvotes-${c.id}`);
+    const bar=document.getElementById(`pbar-${c.id}`);
+    const row=document.getElementById(`prow-${c.id}`);
+    if(pctEl)pctEl.textContent=t.pct.toFixed(1)+'%';
+    if(votesEl)votesEl.textContent=fmtN(t.votes)+' votos';
+    if(bar)bar.style.width=(maxPct>0?t.pct/maxPct*100:0)+'%';
+    if(row){row.style.top=(i*ROW_H)+'px';if(i===0)row.classList.add('winner-row');}
+    const el=document.getElementById(`pname-${c.id}`);
+    const pctEl2=document.getElementById(`ppct-${c.id}`);
     if(el)el.className='pres-cand-name'+(i===0?' winner-name':'');
-    if(pctEl)pctEl.className='pres-cand-pct'+(i===0?' winner-pct':'');
-    // Winner badge
+    if(pctEl2)pctEl2.className='pres-cand-pct'+(i===0?' winner-pct':'');
     if(i===0&&t.pct>0){
       const nameEl=document.getElementById(`pname-${c.id}`);
       if(nameEl&&!nameEl.querySelector('.pres-winner-badge')){
@@ -1664,15 +1858,17 @@ function finalizePres(finalTotals,rowH){
     }
   });
   document.getElementById('pres-progress-fill').style.width='100%';
-  document.getElementById('pres-progress-label').textContent=`${candidates.length>0?19:0} / 19 departamentos`;
+  document.getElementById('pres-progress-label').textContent=`${totalDepts} / ${totalDepts} departamentos`;
   setTimeout(launchConfetti,300);
 }
+
+const totalDepts=19;
 
 function closePres(){
   presAnimRunning=false;
   document.getElementById('pres-overlay').classList.remove('active');
   stopConfetti();
-  // Re-render map so colors update properly
+  // Re-apply map colors correctly (fix: reattach interaction after pres)
   renderMap();
 }
 
@@ -1720,7 +1916,7 @@ function stopConfetti(){
 function renderAll(){renderCandidates();renderMap();renderRightPanel();}
 
 /* ======================================================
-   DARK MODE — sun icon white in dark mode via CSS filter
+   DARK MODE
 ====================================================== */
 function updateThemeIcon(){
   const isDark=document.body.getAttribute('data-theme')==='dark';
