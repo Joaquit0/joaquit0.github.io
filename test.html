@@ -530,8 +530,8 @@ function calcPosicion(answers) {
 function mostrarResultados() {
     const answers = preguntas.map((_,i) => parseInt(document.getElementById(`q${i}`).value));
     let scores = {FA:0,PN:0,PC:0,PI:0,CA:0};
-    preguntas.forEach((q,i) => partidosData.forEach(p => scores[p.id] += (1 - Math.abs(answers[i]-q.p[p.id])/4)));
-    const ranking = partidosData.map(p => ({...p, score:((scores[p.id]/preguntas.length)*100).toFixed(1)})).sort((a,b) => b.score-a.score);
+    preguntas.forEach((q,i) => partidosData.forEach(p => scores[p.id] += 1 - (Math.abs(answers[i]-q.p[p.id]) / 2)));
+    const ranking = partidosData.map(p => ({...p, score:(((scores[p.id]/preguntas.length) + 1) / 2 * 100).toFixed(1)})).sort((a,b) => b.score-a.score);
     const {x:ux, y:uy} = calcPosicion(answers);
 
     // Ranking
