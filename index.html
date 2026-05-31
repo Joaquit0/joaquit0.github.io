@@ -3,676 +3,632 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elecciones Uruguay</title>
+    <title>EleccionesUY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --azul-vibrante: #3b82f6;
-            --azul-claro-hover: #f0f7ff;
-            --azul-texto: #1a2a44;
-            --fondo: #f8fafc;
-            --borde-card: rgba(59, 130, 246, 0.15);
+            --blue: #5196E4;
+            --blue-dim: rgba(81, 150, 228, 0.15);
+            --blue-dark: #3a78c9;
+            --text: #454660;
+            --text-muted: #8a8ba8;
+            --bg: #f5f5f8;
             --card-bg: #ffffff;
-            --text-muted: #64748b;
-            --color-FA: #005595;
-            --color-PN: #60b8e0;
-            --color-PC: #c0392b;
-            --color-PI: #7030a0;
-            --color-CA: #e8a020;
+            --border: rgba(69, 70, 96, 0.1);
+            --nav-bg: rgba(255,255,255,0.85);
+            --nav-border: rgba(69,70,96,0.12);
+            --card-shadow: 0 2px 20px rgba(69,70,96,0.08);
         }
         [data-theme="dark"] {
-            --fondo: #121212;
-            --card-bg: #1e1e1e;
-            --azul-texto: #f1f5f9;
-            --azul-claro-hover: #2c2c2c;
-            --borde-card: rgba(255, 255, 255, 0.08);
-            --text-muted: #a3a3a3;
-        }
-        body { font-family: 'Inter', sans-serif; background-color: var(--fondo); color: var(--azul-texto); margin: 0; padding: 0; transition: background 0.3s; display: flex; flex-direction: column; min-height: 100vh; }
-        
-        header { background-color: var(--card-bg); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde-card); padding: 0.8rem 2rem; position: sticky; top: 0; z-index: 1000; }
-        .header-content { display: flex; justify-content: space-between; align-items: center; max-width: 900px; margin: 0 auto; width: 100%; }
-        .header-left { display: flex; gap: 15px; align-items: center; }
-        .header-right { display: flex; gap: 15px; align-items: center; }
-        .logo { font-weight: 700; font-size: 1.2rem; color: var(--azul-vibrante); cursor: pointer; text-decoration: none; }
-        
-        .lang-toggle { display: flex; background: var(--fondo); border: 1px solid var(--borde-card); border-radius: 8px; overflow: hidden; }
-        .lang-btn { background: transparent; border: none; padding: 6px 12px; font-weight: 600; color: var(--text-muted); cursor: pointer; transition: 0.2s; font-size: 0.85rem; }
-        .lang-btn.active { background: var(--azul-vibrante); color: white; }
-        
-        .btn-icon { background: transparent; border: none; padding: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        .btn-icon img { width: 22px; height: 22px; object-fit: contain; }
-
-        .container { margin: 40px auto; padding: 0 20px; transition: max-width 0.4s ease; flex: 1; }
-        .container-test { max-width: 800px; }
-        .container-results { max-width: 1300px; }
-
-        .page { display: none; animation: fadeIn 0.4s ease; }
-        .page.active { display: block; }
-        .page-home { display: none; animation: fadeIn 0.4s ease; flex: 1; }
-        .page-home.active { display: block; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .pregunta-card { background: var(--card-bg); border: 2px solid var(--borde-card); border-radius: 16px; padding: 24px; margin-bottom: 20px; transition: all 0.3s ease; position: relative; }
-        .categoria-tag { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; color: white; margin-bottom: 12px; display: inline-block; }
-        input[type=range] { width: 100%; height: 8px; background: #e2e8f0; border-radius: 10px; -webkit-appearance: none; margin: 25px 0; }
-        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 22px; width: 22px; border-radius: 50%; background: var(--azul-vibrante); border: 4px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; }
-        .btn-primario { width: 100%; padding: 20px; background: var(--azul-vibrante); color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: 600; cursor: pointer; margin-bottom: 50px; }
-        
-        .resultados-header-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 50px; align-items: stretch; }
-        @media (max-width: 950px) { .resultados-header-grid { grid-template-columns: 1fr; } }
-
-        .ranking-card { background: var(--card-bg); border-radius: 20px; padding: 20px; display: flex; align-items: center; gap: 20px; border: 1px solid var(--borde-card); margin-bottom: 15px; }
-        .partido-flag { width: 56px; height: 38px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.1); flex-shrink: 0; object-fit: cover; }
-        .ranking-info { flex-grow: 1; }
-        .barra-ext { background: #e2e8f0; height: 10px; border-radius: 10px; margin-top: 8px; width: 100%; overflow: hidden; }
-        .barra-int { height: 100%; border-radius: 10px; transition: width 1s ease; }
-
-        .brujula-container { background: var(--card-bg); border: 1px solid var(--borde-card); border-radius: 20px; padding: 24px; box-sizing: border-box; display: flex; flex-direction: column; }
-        .brujula-wrap { position: relative; display: grid; grid-template-columns: 24px 400px 24px; grid-template-rows: 24px 400px 24px; gap: 8px; align-items: center; justify-items: center; margin: 0 auto; flex: 1; }
-        .brujula-label { font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: var(--text-muted); text-transform: uppercase; text-align: center; line-height: 1.2; }
-        .brujula-label.vertical { writing-mode: vertical-lr; }
-        .brujula-label.vertical.left { transform: rotate(180deg); }
-        #compassCanvas { display: block; width: 100%; height: 100%; border-radius: 8px; }
-        .brujula-canvas-wrap { grid-column: 2; grid-row: 2; width: 400px; height: 400px; position: relative; }
-        .brujula-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; justify-content: center; margin-top: 18px; }
-        .brujula-legend span { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
-        .leg-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-
-        /* ── HERO ── */
-        .hero-container { display: flex; align-items: center; justify-content: space-between; max-width: 1000px; margin: 80px auto; padding: 0 20px; gap: 50px; }
-        .hero-text { flex: 1; text-align: left; }
-        .hero-img-box { flex: 0 0 45%; display: flex; justify-content: flex-end; }
-        .hero-img { width: 100%; max-width: 420px; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        .hero-title { font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 900; letter-spacing: -1.5px; margin: 0 0 20px; color: var(--azul-texto); line-height: 1.08; }
-        .hero-title span { color: var(--azul-vibrante); }
-        .hero-desc { font-size: 1.05rem; color: var(--text-muted); line-height: 1.75; margin: 0 0 40px 0; font-weight: 400; }
-        .hero-buttons { display: flex; gap: 16px; justify-content: flex-start; flex-wrap: wrap; }
-        .btn-hero { padding: 16px 28px; background: var(--azul-vibrante); color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; transition: opacity 0.2s, transform 0.15s; box-shadow: 0 4px 14px rgba(59,130,246,0.3); }
-        .btn-hero:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-hero:active { transform: translateY(0); }
-        .btn-hero.secondary { background: var(--card-bg); color: var(--azul-vibrante); border: 2px solid var(--azul-vibrante); box-shadow: none; }
-        .btn-hero.secondary:hover { background: var(--azul-claro-hover); }
-        .btn-hero.disabled { opacity: 0.45; cursor: not-allowed; background: var(--text-muted); box-shadow: none; }
-        .btn-hero.disabled:hover { transform: none; opacity: 0.45; }
-
-        @media (max-width: 800px) {
-            .hero-container { flex-direction: column-reverse; text-align: center; margin: 40px auto; gap: 30px; }
-            .hero-text { text-align: center; }
-            .hero-desc { margin: 0 auto 40px auto; }
-            .hero-buttons { justify-content: center; }
-            .hero-img-box { justify-content: center; width: 100%; }
+            --text: #e8e9f5;
+            --text-muted: #7a7b9a;
+            --bg: #0f0f18;
+            --card-bg: #1a1a28;
+            --border: rgba(255,255,255,0.08);
+            --nav-bg: rgba(15,15,24,0.85);
+            --nav-border: rgba(255,255,255,0.08);
+            --card-shadow: 0 2px 20px rgba(0,0,0,0.3);
+            --blue-dim: rgba(81, 150, 228, 0.12);
         }
 
-        .grid-comparativa { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 24px; margin-top: 30px; }
-        .grid-comparativa .pregunta-card { margin-bottom: 0; display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 20px; }
-        .comparativa-visual { position: relative; height: 8px; background: #e2e8f0; border-radius: 10px; margin: 30px 0 30px; display: flex; align-items: center; }
-        .punto-partido { position: absolute; width: 16px; height: 16px; border-radius: 50%; border: 2px solid white; cursor: pointer; transform: translate(-50%, -50%); top: 50%; z-index: 10; box-shadow: 0 2px 4px rgba(0,0,0,0.2); transition: all 0.2s ease; }
-        .punto-partido.coincide { top: -14px; }
-        .punto-partido:hover { z-index: 100; transform: translate(-50%, -50%) scale(1.3); }
-        .punto-usuario { position: absolute; width: 22px; height: 22px; border-radius: 50%; border: 3px solid #fff; background: var(--azul-vibrante); transform: translate(-50%, -50%); z-index: 25; top: 50%; box-shadow: 0 0 0 2px var(--azul-vibrante); }
-        .tooltip { visibility: hidden; position: absolute; bottom: 180%; left: 50%; transform: translateX(-50%); background: #1a1a1a; color: white; padding: 14px; border-radius: 10px; width: max-content; max-width: 300px; font-size: 0.8rem; z-index: 500; opacity: 0; transition: all 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.4); pointer-events: none; }
-        .punto-partido:hover .tooltip { visibility: visible; opacity: 1; bottom: 200%; }
-        .tooltip::after { content: ""; position: absolute; top: 100%; left: 50%; margin-left: -6px; border-width: 6px; border-style: solid; border-color: #1a1a1a transparent transparent transparent; }
-        .tooltip-header { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.15); }
-        .tooltip-body { font-style: italic; color: #cbd5e1; line-height: 1.4; display: block; font-weight: 400; }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .site-footer { padding: 20px 10px; text-align: center; margin-top: auto; }
-        .footer-pill { display: inline-flex; align-items: center; justify-content: center; gap: 15px; background: var(--card-bg); border: 1px solid var(--borde-card); border-radius: 50px; padding: 8px 24px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); flex-wrap: wrap; }
-        .footer-info { display: flex; flex-direction: column; align-items: flex-start; text-align: left; }
-        .countdown-title { color: var(--text-muted); font-size: 0.65rem; margin: 0 0 2px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
-        .countdown-timer { font-size: 1.05rem; font-weight: 800; color: var(--azul-vibrante); font-variant-numeric: tabular-nums; }
-        .footer-disclaimer { font-size: 0.7rem; color: var(--text-muted); max-width: 450px; line-height: 1.3; text-align: left; border-left: 1px solid var(--borde-card); padding-left: 15px; }
-        
-        @media (max-width: 650px) {
-            .footer-pill { flex-direction: column; border-radius: 20px; text-align: center; gap: 8px; padding: 15px; }
-            .footer-info { align-items: center; text-align: center; }
-            .footer-disclaimer { border-left: none; border-top: 1px solid var(--borde-card); padding-left: 0; padding-top: 10px; text-align: center; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* ── PILL NAVBAR ── */
+        .nav-wrap {
+            position: fixed;
+            top: 18px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            width: calc(100% - 40px);
+            max-width: 860px;
+        }
+        nav {
+            background: var(--nav-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--nav-border);
+            border-radius: 100px;
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 4px 24px rgba(69,70,96,0.1);
+        }
+        [data-theme="dark"] nav {
+            box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+        }
+        .nav-logo {
+            font-weight: 800;
+            font-size: 0.95rem;
+            color: var(--blue);
+            text-decoration: none;
+            padding: 6px 14px;
+            margin-right: 4px;
+            letter-spacing: -0.3px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2px;
+            flex: 1;
+            align-items: center;
+        }
+        .nav-link {
+            padding: 7px 16px;
+            border-radius: 100px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            transition: all 0.18s ease;
+            white-space: nowrap;
+            text-decoration: none;
+        }
+        .nav-link:hover { color: var(--text); background: var(--border); }
+        .nav-link.active {
+            background: var(--blue);
+            color: white;
+        }
+        .nav-link.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        .nav-link.disabled:hover { background: transparent; color: var(--text-muted); }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-left: auto;
+            padding-left: 6px;
+        }
+        .lang-pill {
+            display: flex;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            padding: 5px 10px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.2s;
+        }
+        .lang-btn.active { background: var(--blue); color: white; }
+        .theme-btn {
+            width: 34px; height: 34px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .theme-btn:hover { background: var(--border); }
+        .theme-btn svg { width: 16px; height: 16px; }
+        .theme-btn .icon-moon { display: block; }
+        .theme-btn .icon-sun { display: none; }
+        [data-theme="dark"] .theme-btn .icon-moon { display: none; }
+        [data-theme="dark"] .theme-btn .icon-sun { display: block; }
+
+        /* ── GALLERY STRIP ── */
+        .gallery-section {
+            margin-top: 0;
+            width: 100%;
+            height: 240px;
+            overflow: hidden;
+            position: relative;
+        }
+        .gallery-track {
+            display: flex;
+            gap: 8px;
+            height: 100%;
+            animation: galleryScroll 40s linear infinite;
+            width: max-content;
+        }
+        .gallery-track:hover { animation-play-state: paused; }
+        .gallery-img {
+            height: 100%;
+            width: 360px;
+            object-fit: cover;
+            border-radius: 0;
+            flex-shrink: 0;
+            filter: grayscale(100%) contrast(1.05);
+            transition: filter 0.4s ease;
+        }
+        .gallery-img:hover { filter: grayscale(40%) contrast(1.05); }
+        /* Gradient fade on sides */
+        .gallery-section::before,
+        .gallery-section::after {
+            content: '';
+            position: absolute;
+            top: 0; bottom: 0;
+            width: 120px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .gallery-section::before {
+            left: 0;
+            background: linear-gradient(to right, var(--bg), transparent);
+        }
+        .gallery-section::after {
+            right: 0;
+            background: linear-gradient(to left, var(--bg), transparent);
+        }
+        @keyframes galleryScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ── HERO TEXT ── */
+        .hero-text {
+            text-align: center;
+            padding: 52px 20px 40px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .hero-title {
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+        .hero-title span { color: var(--blue); }
+        .hero-desc {
+            font-size: 1rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-weight: 400;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        /* ── CARDS GRID ── */
+        .cards-section {
+            max-width: 1100px;
+            margin: 0 auto 60px;
+            padding: 0 24px;
+        }
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 900px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 560px) { .cards-grid { grid-template-columns: 1fr; } }
+
+        .card {
+            background: var(--blue);
+            border-radius: 20px;
+            padding: 28px 24px 24px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 180px; height: 180px;
+            background: rgba(255,255,255,0.07);
+            border-radius: 50%;
+        }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(81,150,228,0.3); }
+        .card.disabled {
+            background: #c8c9d6;
+            cursor: default;
+        }
+        [data-theme="dark"] .card.disabled { background: #2a2a3a; }
+        .card.disabled:hover { transform: none; box-shadow: none; }
+
+        .card-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: white;
+            line-height: 1.15;
+            letter-spacing: -0.5px;
+        }
+        .card.disabled .card-title { color: rgba(255,255,255,0.6); }
+        [data-theme="dark"] .card.disabled .card-title { color: rgba(232,233,245,0.35); }
+        .card-desc {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.6;
+            margin-top: 10px;
+            font-weight: 400;
+        }
+        .card.disabled .card-desc { display: none; }
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 28px;
+        }
+        .card-link {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.9);
+        }
+        .card-arrow {
+            width: 36px; height: 36px;
+            background: rgba(255,255,255,0.18);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .card-arrow svg { width: 16px; height: 16px; stroke: white; }
+        .card.disabled .card-link,
+        .card.disabled .card-arrow { opacity: 0.3; }
+
+        /* ── FOOTER ── */
+        .site-footer {
+            padding: 20px 24px;
+            text-align: center;
+            margin-top: auto;
+        }
+        .footer-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 18px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            padding: 10px 24px;
+            box-shadow: var(--card-shadow);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .countdown-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); display: block; margin-bottom: 2px; }
+        .countdown-timer { font-size: 1rem; font-weight: 800; color: var(--blue); font-variant-numeric: tabular-nums; }
+        .footer-sep { width: 1px; height: 32px; background: var(--border); flex-shrink: 0; }
+        .footer-disclaimer { font-size: 0.72rem; color: var(--text-muted); max-width: 420px; line-height: 1.4; text-align: left; }
+        @media (max-width: 600px) {
+            .footer-pill { border-radius: 20px; padding: 16px 20px; flex-direction: column; }
+            .footer-sep { width: 60px; height: 1px; }
+            .footer-disclaimer { text-align: center; }
+        }
+
+        /* ── PAGE TRANSITIONS ── */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.35s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Nav spacer */
+        .nav-spacer { height: 76px; }
+
+        /* Responsive nav */
+        @media (max-width: 640px) {
+            .nav-wrap { top: 12px; width: calc(100% - 24px); }
+            .nav-link { padding: 7px 12px; font-size: 0.8rem; }
+            .nav-logo { padding: 6px 10px; }
         }
     </style>
 </head>
 <body data-theme="light">
 <script>
     (function() {
-        const t = localStorage.getItem('uruvoto-theme');
+        const t = localStorage.getItem('eluy-theme');
         if (t) document.body.setAttribute('data-theme', t);
     })();
 </script>
 
-<header>
-    <div class="header-content">
-        <div class="header-left">
-            <div class="logo" onclick="irHome()">EleccionesUY</div>
+<!-- PILL NAVBAR -->
+<div class="nav-wrap">
+    <nav>
+        <span class="nav-logo" onclick="irHome()">EleccionesUY</span>
+        <div class="nav-links">
+            <button id="nav-inicio" class="nav-link active" onclick="irHome()">Inicio</button>
+            <a href="elecciones.html" class="nav-link" id="nav-elecciones">Elecciones</a>
+            <a href="test.html" class="nav-link" id="nav-test">Test</a>
+            <a href="editor.html" class="nav-link" id="nav-editor">Editor</a>
+            <button class="nav-link disabled" onclick="proximamente(this)" id="nav-galeria">Galería</button>
         </div>
-        <div class="header-right">
-            <div class="lang-toggle">
+        <div class="nav-right">
+            <div class="lang-pill">
                 <button id="btn-es" class="lang-btn active" onclick="setLang('es')">ES</button>
                 <button id="btn-en" class="lang-btn" onclick="setLang('en')">EN</button>
             </div>
-            <button class="btn-icon" onclick="toggleDarkMode()">
-                <img id="dark-img" src="https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/moon.svg" alt="Tema">
+            <button class="theme-btn" onclick="toggleDark()" aria-label="Toggle dark mode">
+                <!-- Moon icon (shown in light mode) -->
+                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#454660" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                </svg>
+                <!-- Sun icon (shown in dark mode, white) -->
+                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"/>
+                    <line x1="12" y1="1" x2="12" y2="3"/>
+                    <line x1="12" y1="21" x2="12" y2="23"/>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                    <line x1="1" y1="12" x2="3" y2="12"/>
+                    <line x1="21" y1="12" x2="23" y2="12"/>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+                </svg>
             </button>
         </div>
-    </div>
-</header>
-
-<div id="page-home" class="page-home active">
-    <div class="hero-container">
-        <div class="hero-text">
-            <h1 class="hero-title" id="home-title">Elecciones de <span>Uruguay</span></h1>
-            <p class="hero-desc" id="home-desc">Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o comparar tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.</p>
-            <div class="hero-buttons">
-                <button class="btn-hero" id="btn-nacionales" onclick="window.location.href='elecciones.html'">Elecciones Nacionales</button>
-                <button class="btn-hero" id="btn-test" onclick="irTest()">Test Ideológico</button>
-                <button class="btn-hero" id="btn-editor" onclick="window.location.href='editor.html'">Editor</button>
-                <button class="btn-hero disabled" id="btn-galeria" onclick="proximamente(this)">Galería</button>
-            </div>
-        </div>
-        <div class="hero-img-box">
-            <img src="img/hero.png" alt="Bandera de Uruguay" class="hero-img" onerror="this.style.backgroundColor='#e2e8f0'">
-        </div>
-    </div>
+    </nav>
 </div>
 
-<div id="main-container" class="container container-test" style="display:none;">
-    <div id="page-test" class="page">
-        <h1 id="main-title">Analiza tu afinidad</h1>
-        <p id="main-desc" style="color: var(--text-muted); margin-bottom: 40px; line-height: 1.6;"></p>
-        <p id="main-metodo" style="color: var(--text-muted); margin-top: -30px; margin-bottom: 40px; font-size: 0.85rem;"></p>
-        <div id="quiz-container"></div>
-        <button class="btn-primario" id="btn-results" onclick="mostrarResultados()">Ver Resultados Finales</button>
+<div class="nav-spacer"></div>
+
+<!-- HOME PAGE -->
+<div id="page-home" class="page active">
+
+    <!-- SCROLLING GALLERY -->
+    <div class="gallery-section">
+        <div class="gallery-track" id="galleryTrack">
+            <!-- Images loaded from /img/gallery/ — duplicated for seamless loop -->
+        </div>
     </div>
 
-    <div id="page-results" class="page">
-        <button onclick="reiniciarTest()" id="btn-restart" style="background: none; border: none; color: var(--azul-vibrante); cursor: pointer; font-weight: 700; margin-bottom: 25px;">← Volver al inicio</button>
+    <!-- HERO TEXT -->
+    <div class="hero-text">
+        <h1 class="hero-title" id="home-title">Elecciones de <span>Uruguay</span></h1>
+        <p class="hero-desc" id="home-desc">Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o compará tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.</p>
+    </div>
 
-        <div class="resultados-header-grid">
-            <div id="col-ranking">
-                <h1 id="res-title">Tu Afinidad Política</h1>
-                <div id="ranking-container"></div>
-            </div>
-
-            <div class="brujula-container">
-                <div class="brujula-wrap">
-                    <div style="grid-column:2; grid-row:1;"><span class="brujula-label" id="lbl-auto">AUTORITARIO</span></div>
-                    <div style="grid-column:1; grid-row:2; height:100%; display:flex; align-items:center; justify-content:center;"><span class="brujula-label vertical left" id="lbl-izq">IZQUIERDA</span></div>
-                    <div class="brujula-canvas-wrap">
-                        <canvas id="compassCanvas" role="img" aria-label="Brújula ideológica con partidos políticos y posición del usuario"></canvas>
-                    </div>
-                    <div style="grid-column:3; grid-row:2; height:100%; display:flex; align-items:center; justify-content:center;"><span class="brujula-label vertical" id="lbl-der">DERECHA</span></div>
-                    <div style="grid-column:2; grid-row:3;"><span class="brujula-label" id="lbl-lib">LIBERAL</span></div>
+    <!-- CARDS GRID -->
+    <div class="cards-section">
+        <div class="cards-grid">
+            <a href="elecciones.html" class="card" id="card-elecciones">
+                <div>
+                    <div class="card-title" id="card-title-1">Explorar<br>Elecciones</div>
+                    <div class="card-desc" id="card-desc-1">Explorá los resultados de todas las elecciones desde 1971 hasta 2024. Conocé a los parlamentarios electos, a los intendentes y mirá la evolución de voto de cada partido.</div>
                 </div>
-                <div class="brujula-legend" id="brujula-legend"></div>
+                <div class="card-footer">
+                    <span class="card-link" id="card-link-1">Explorar ↗</span>
+                    <div class="card-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                    </div>
+                </div>
+            </a>
+
+            <a href="test.html" class="card" id="card-test">
+                <div>
+                    <div class="card-title" id="card-title-2">Test<br>Ideológico</div>
+                    <div class="card-desc" id="card-desc-2">Explorá los resultados de todas las elecciones desde 1971 hasta 2024. Conocé a los parlamentarios electos, a los intendentes y mirá la evolución de voto de cada partido.</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-link" id="card-link-2">Hacer test ↗</span>
+                    <div class="card-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                    </div>
+                </div>
+            </a>
+
+            <a href="editor.html" class="card" id="card-editor">
+                <div>
+                    <div class="card-title" id="card-title-3">Editor<br>Electoral</div>
+                    <div class="card-desc" id="card-desc-3">Explorá los resultados de todas las elecciones desde 1971 hasta 2024. Conocé a los parlamentarios electos, a los intendentes y mirá la evolución de voto de cada partido.</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-link" id="card-link-3">Crear ↗</span>
+                    <div class="card-arrow">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M7 7h10v10"/></svg>
+                    </div>
+                </div>
+            </a>
+
+            <div class="card disabled" id="card-galeria" onclick="proximamente(this)">
+                <div>
+                    <div class="card-title" id="card-title-4">En<br>Proceso</div>
+                </div>
+                <div class="card-footer">
+                    <span class="card-link" id="card-link-4">Próximamente</span>
+                </div>
             </div>
         </div>
-
-        <hr style="margin: 60px 0; border: 0; border-top: 1px solid var(--borde-card);">
-
-        <div style="text-align: center;">
-            <h2 id="comp-title">Comparativa Detallada</h2>
-            <p id="comp-subtitle" style="color: var(--text-muted); margin-bottom: 30px;">Tus respuestas frente a los programas de gobierno.</p>
-        </div>
-
-        <div id="detalle-container" class="grid-comparativa"></div>
     </div>
 </div>
 
+<!-- FOOTER -->
 <footer class="site-footer">
     <div class="footer-pill">
-        <div class="footer-info">
-            <span class="countdown-title" id="txt-countdown-title">Elecciones Internas</span>
-            <span id="countdown" class="countdown-timer">--d --h --m --s</span>
+        <div>
+            <span class="countdown-label" id="txt-countdown-title">Próximas Elecciones</span>
+            <span class="countdown-timer" id="countdown">--d --h --m --s</span>
         </div>
-        <div class="footer-disclaimer" id="txt-disclaimer">Este es un proyecto elaborado por diversión y no está patrocinado ni llevado a cabo con intereses políticos de ningún partido u organización.</div>
+        <div class="footer-sep"></div>
+        <div class="footer-disclaimer" id="txt-disclaimer">
+            Proyecto elaborado por diversión, sin patrocinio ni intereses políticos de ningún partido u organización.
+        </div>
     </div>
 </footer>
 
 <script>
-/* ──────────────────────────────────────────────
-   DATOS Y POSTURAS
-────────────────────────────────────────────── */
-const coloresPartidos = { FA:"#005595", PN:"#60b8e0", PC:"#c0392b", PI:"#7030a0", CA:"#e8a020" };
-
-const catColores = {
-    "Economía":"#e11d48","Economy":"#e11d48","Educación":"#2563eb","Education":"#2563eb",
-    "Seguridad":"#059669","Security":"#059669","Drogas":"#7c3aed","Drugs":"#7c3aed",
-    "Derechos":"#db2777","Rights":"#db2777","Social":"#d97706","Salud":"#0891b2",
-    "Health":"#0891b2","Ambiente":"#16a34a","Environment":"#16a34a","Estado":"#475569",
-    "State":"#475569","Internacional":"#4f46e5","International":"#4f46e5"
-};
-
+/* ── i18n ── */
 const i18n = {
     es: {
-        title:"Analiza tu afinidad", desc:"Las posiciones de cada partido fueron elaboradas tomando como referencia sus programas de gobierno presentados ante la Corte Electoral en 2024. Por ello, pueden no reflejar de forma exhaustiva el posicionamiento ideológico de cada fuerza política.",
-        btnResults:"Ver Resultados Finales", btnRestart:"← Volver al inicio",
-        resTitle:"Tu Afinidad Política", compTitle:"Comparativa Detallada",
-        compSubtitle:"Pasa el cursor sobre los puntos para ver la justificación de cada partido.",
-        agree:"De acuerdo", disagree:"En desacuerdo", quote:"Postura oficial según el programa.",
-        brujulaTitle:"Brújula Ideológica", brujulaDesc:"Tu posición según tus respuestas vs. los partidos.",
-        lblAuto:"AUTORITARIO", lblLib:"LIBERAL", lblIzq:"IZQUIERDA", lblDer:"DERECHA",
-        lblTu:"Tú", metodoLink:"Ver metodología del eje ideológico",
-        homeTitle:"Elecciones de Uruguay",
-        homeDesc:"Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o comparar tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.",
-        btnNacionales:"Elecciones Nacionales",
-        btnTestHome:"Test Ideológico",
-        btnEditor:"🗺️ Editor",
-        btnGaleria:"Galería",
-        proximamente:"Próximamente",
-        countdownTitle:"Elecciones Internas",
-        disclaimer:"Este es un proyecto elaborado por diversión y no está patrocinado ni llevado a cabo con intereses políticos de ningún partido u organización."
+        homeTitle: "Elecciones de <span style=\"color:var(--blue)\">Uruguay</span>",
+        homeDesc: "Explorá las distintas elecciones que tomaron lugar durante la historia de Uruguay, o compará tus ideas con aquellas de los principales partidos políticos del país para saber con quién compartís más.",
+        navInicio: "Inicio", navElecciones: "Elecciones", navTest: "Test", navEditor: "Editor", navGaleria: "Galería",
+        cardTitle1: "Explorar<br>Elecciones", cardDesc1: "Explorá los resultados de todas las elecciones desde 1971 hasta 2024. Conocé a los parlamentarios electos, a los intendentes y mirá la evolución de voto de cada partido.", cardLink1: "Explorar ↗",
+        cardTitle2: "Test<br>Ideológico", cardDesc2: "Compará tus ideas con los programas de gobierno de los principales partidos políticos uruguayos y descubrí con quién tenés más afinidad.", cardLink2: "Hacer test ↗",
+        cardTitle3: "Editor<br>Electoral", cardDesc3: "Creá escenarios electorales hipotéticos, explorá cómo cambiarían los resultados con distintos porcentajes de voto.", cardLink3: "Crear ↗",
+        cardTitle4: "En<br>Proceso", cardLink4: "Próximamente",
+        countdownTitle: "Próximas Elecciones",
+        disclaimer: "Proyecto elaborado por diversión, sin patrocinio ni intereses políticos de ningún partido u organización.",
+        proximamente: "Próximamente"
     },
     en: {
-        title:"Analyze your affinity", desc:"Party positions were drawn from their government programs submitted to the Electoral Court in 2024. As such, they may not fully capture each party's complete ideological stance.",
-        btnResults:"View Final Results", btnRestart:"← Back to home",
-        resTitle:"Your Political Affinity", compTitle:"Detailed Comparison",
-        compSubtitle:"Hover over the points to see each party's justification.",
-        agree:"Agree", disagree:"Disagree", quote:"Official stance according to program.",
-        brujulaTitle:"Political Compass", brujulaDesc:"Your position based on your answers vs. parties.",
-        lblAuto:"AUTHORITARIAN", lblLib:"LIBERTARIAN", lblIzq:"LEFT", lblDer:"RIGHT",
-        lblTu:"You", metodoLink:"View ideological axis methodology",
-        homeTitle:"Elections of Uruguay",
-        homeDesc:"Explore the different elections that took place throughout Uruguay's history, or compare your ideas with those of the country's main political parties to find out who you align with most.",
-        btnNacionales:"National Elections",
-        btnTestHome:"Ideological Test",
-        btnEditor:"🗺️ Editor",
-        btnGaleria:"Gallery",
-        proximamente:"Coming soon",
-        countdownTitle:"Internal Elections",
-        disclaimer:"This is a project made for fun and is not sponsored or carried out with political interests of any party or organization."
+        homeTitle: "Elections of <span style=\"color:var(--blue)\">Uruguay</span>",
+        homeDesc: "Explore the different elections that took place throughout Uruguay's history, or compare your ideas with those of the country's main political parties to find out who you align with most.",
+        navInicio: "Home", navElecciones: "Elections", navTest: "Test", navEditor: "Editor", navGaleria: "Gallery",
+        cardTitle1: "Explore<br>Elections", cardDesc1: "Explore results from every election from 1971 to 2024. Learn about elected parliamentarians, mayors and track vote evolution per party.", cardLink1: "Explore ↗",
+        cardTitle2: "Ideological<br>Test", cardDesc2: "Compare your ideas with the government programs of Uruguay's main political parties and find out who you align with most.", cardLink2: "Take test ↗",
+        cardTitle3: "Electoral<br>Editor", cardDesc3: "Build hypothetical electoral scenarios, explore how results would shift with different vote percentages.", cardLink3: "Create ↗",
+        cardTitle4: "In<br>Progress", cardLink4: "Coming soon",
+        countdownTitle: "Next Elections",
+        disclaimer: "A project made for fun, with no sponsorship or political interests of any party or organization.",
+        proximamente: "Coming soon"
     }
 };
 
-const partidosData = [
-    { id:'FA', nombre:'Frente Amplio',         flag:'img/bandera-fa.png' },
-    { id:'PN', nombre:'Partido Nacional',      flag:'img/bandera-pn.png' },
-    { id:'PC', nombre:'Partido Colorado',      flag:'img/bandera-pc.png' },
-    { id:'PI', nombre:'Partido Independiente', flag:'img/bandera-pi.png' },
-    { id:'CA', nombre:'Cabildo Abierto',       flag:'img/bandera-ca.png' }
-];
-
-const posicionesPartidos = {
-    FA: { ex: -1.55, ey: -0.30 },
-    PN: { ex:  0.85, ey:  0.20 },
-    PC: { ex:  1.30, ey: -0.40 },
-    PI: { ex:  0.10, ey: -1.00 },
-    CA: { ex:  0.65, ey:  1.65 }
-};
-
-const preguntas = [
-    { cat:["Economía","Economy"], t:["El Estado debe fortalecer y expandir las empresas públicas como motor del desarrollo nacional.","The State must strengthen and expand public companies as a driver of national development."], p:{FA:5,PN:2,PC:2,PI:3,CA:3}, ex:-1.8, ey: 0.5,
-      just:{ FA:"«Las empresas públicas serán un pilar estratégico... son patrimonio uruguayo, forman parte de la identidad nacional».", PN:"Propone «impulsar la apertura de parte de capital de empresas subsidiarias del Estado al financiamiento en el mercado de capitales».", PC:"«Impulsaremos empresas públicas competitivas... generando las condiciones propicias para la participación privada».", PI:"No plantea expansión ni reducción. Se enfoca en mejorar su gobernanza mediante concursos abiertos.", CA:"Analiza la viabilidad de capitalización parcial mediante flotación de acciones, manteniendo el control estatal." }
-    },
-    { cat:["Economía","Economy"], t:["Uruguay debe bajar el gasto público y reducir el tamaño del Estado.","Uruguay must lower public spending and reduce the size of the State."], p:{FA:1,PN:4,PC:5,PI:3,CA:4}, ex: 1.8, ey:-0.3,
-      just:{ FA:"«El gasto público deberá responder a las crecientes necesidades sociales y recuperar lo perdido».", PN:"«No se aumentarán los impuestos... Reduciendo la cantidad de empleados públicos a razón de 1% anual».", PC:"«Entendemos razonable una reducción del gasto real no personal del orden del 10%».", PI:"Busca modernización y eficiencia, pero sin recortes explícitos.", CA:"«Reducción y mantenimiento del gasto público del gobierno hasta el 27% del PBI... reducción del 5% en todos los rubros»." }
-    },
-    { cat:["Economía","Economy"], t:["Los impuestos a las grandes fortunas y patrimonios deben aumentarse para reducir la desigualdad.","Taxes on large fortunes and wealth should be increased to reduce inequality."], p:{FA:5,PN:1,PC:2,PI:3,CA:2}, ex:-1.5, ey: 0.2,
-      just:{ FA:"«Con el objetivo de avanzar en la reducción de la desigualdad, estudiar las formas para incrementar el impuesto al patrimonio».", PN:"«No se aumentarán los impuestos». Compromiso explícito y sin excepciones.", PC:"Propone reducción de carga tributaria y del gasto, no nuevos impuestos.", PI:"Propone mayor progresividad para MiPYMES, pero no propone explícitamente aumentar impuestos a grandes fortunas.", CA:"Plantea revisar franjas del IRPF pero no propone nuevos impuestos patrimoniales." }
-    },
-    { cat:["Economía","Economy"], t:["Uruguay debe buscar acuerdos de libre comercio fuera del Mercosur sin esperar consenso regional.","Uruguay should seek free trade agreements outside Mercosur without waiting for regional consensus."], p:{FA:1,PN:5,PC:5,PI:5,CA:2}, ex: 1.6, ey:-0.4,
-      just:{ FA:"Prioriza la integración regional sobre acuerdos bilaterales. Tiene un «compromiso con la integración y construcción política regional».", PN:"«se deben perseguir las negociaciones bilaterales y plurilaterales, que no requieren de acuerdos con otros países».", PC:"«iniciaremos grupos de trabajo para negociar acuerdos de libre comercio con países tales como Ecuador, Panamá, Perú y Costa Rica».", PI:"«Mantener y profundizar la apertura de nuestra economía» y avanzar en acuerdos para abatir aranceles.", CA:"Propone un Mercosur «que abra definitivamente sus barreras internas». Énfasis en soberanía y fortalecer el bloque." }
-    },
-    { cat:["Economía","Economy"], t:["El fomento del emprendedurismo y las pequeñas empresas es clave para el desarrollo económico.","Fostering entrepreneurship and small businesses is key to economic development."], p:{FA:3,PN:4,PC:4,PI:5,CA:4}, ex: 0.8, ey:-0.2,
-      just:{ FA:"No se opone, pero su énfasis está en empresas públicas y el rol del Estado. Las MiPYMES no son el eje central de su programa.", PN:"Tiene propuestas específicas para MiPYMES: incentivos fiscales, formación dual, reducción de burocracia.", PC:"Apoyo con incentivos fiscales y reducción de la carga burocrática.", PI:"«Las MIPYMES representan un porcentaje significativo... la política debe apoyar a las que tengan potencial de crecimiento».", CA:"Tiene propuestas favorables y específicas de apoyo a las pequeñas y medianas empresas." }
-    },
-    { cat:["Educación","Education"],t:["La transformación educativa impulsada entre 2020 y 2025 fue positiva y debe profundizarse.","The educational transformation driven between 2020 and 2025 was positive and should be deepened."], p:{FA:1,PN:5,PC:5,PI:4,CA:3}, ex: 1.2, ey: 0.3,
-      just:{ FA:"Implica revertir la línea del gobierno anterior. «retomaremos el crecimiento de la inversión en educación pública estatal».", PN:"Destaca la Transformación Educativa y propone una «segunda etapa de la TE para continuar consolidando».", PC:"«nuestra educación ha experimentado importantes mejoras a partir de la Transformación Educativa».", PI:"«Para el próximo gobierno se propone consolidar, profundizar y completar el proceso de transformación iniciado».", CA:"Apoya la transformación y propone profundizarla, pero agrega su propia propuesta de una Universidad Pedagógica Nacional." }
-    },
-    { cat:["Educación","Education"],t:["La educación pública necesita más tiempo pedagógico y más centros de tiempo completo.","Public education needs more pedagogical time and more full-time centers."], p:{FA:4,PN:4,PC:4,PI:4,CA:3}, ex:-0.5, ey: 0.5,
-      just:{ FA:"Propone retomar la inversión del 6% del PIB en educación y apoyar la extensión del tiempo.", PN:"Propone la creación de 80 nuevos centros de tiempo completo.", PC:"Propone «universalización progresiva de la educación inicial y primaria de tiempo completo».", PI:"Propone «ampliación de los centros con extensión de tiempo pedagógico en todos los niveles».", CA:"No se opone, pero su programa educativo tiene mayor énfasis en valores, formación docente y orden disciplinario." }
-    },
-    { cat:["Educación","Education"],t:["La currícula escolar debería incorporar más valores y formación cívica tradicional.","School curricula should incorporate more values and traditional civic training."], p:{FA:2,PN:3,PC:3,PI:2,CA:5}, ex: 0.5, ey: 1.5,
-      just:{ FA:"No propone este enfoque tradicional. Propone educación inclusiva, perspectiva de género transversal e interseccionalidad.", PN:"Menciona educación emocional y formación ciudadana, pero sin la connotación conservadora.", PC:"Menciona formación ciudadana y valores, sin oposición a la perspectiva de género.", PI:"No propone este enfoque. Propone perspectiva de género en todas las políticas públicas.", CA:"Propone la «Eliminación de ideología de género» y establece la «Educación en valores» como capítulo específico." }
-    },
-    { cat:["Seguridad","Security"], t:["Uruguay debe declarar una emergencia nacional en seguridad pública.","Uruguay should declare a national emergency in public security."], p:{FA:1,PN:3,PC:3,PI:2,CA:5}, ex: 0.8, ey: 1.8,
-      just:{ FA:"Enfoque en causas estructurales del delito, no en medidas de emergencia. Propone «convivencia pacífica».", PN:"Plantea seguridad como prioridad, y propone «redoblar el esfuerzo en el abatimiento de los homicidios y del crimen organizado».", PC:"Plantea seguridad como prioridad pero sin llegar a la declaración de emergencia.", PI:"Propone una mirada integral que supere los «enfoques basados preponderantemente en aspectos punitivos».", CA:"«Se impone como punto de partida declarar el estado de emergencia nacional en seguridad pública y también en adicciones»." }
-    },
-    { cat:["Seguridad","Security"], t:["Combatir el crimen requiere tanto más policías y penas más severas como políticas sociales.","Fighting crime requires more police and more severe penalties as well as social policies."], p:{FA:3,PN:4,PC:4,PI:4,CA:3}, ex: 0.3, ey: 0.8,
-      just:{ FA:"Se inclina más hacia las políticas sociales para combatir las causas estructurales del delito.", PN:"Busca un equilibrio explícito entre prevención, represión y políticas sociales.", PC:"Busca un equilibrio entre represión firme y atención a las causas sociales.", PI:"Propone una mirada integral equilibrando los factores sociales y policiales.", CA:"Se inclina fuertemente hacia un enfoque más represivo y punitivo frente al delito." }
-    },
-    { cat:["Seguridad","Security"], t:["El sistema carcelario debe privilegiar la reinserción social sobre el castigo.","The prison system should prioritize social reintegration over punishment."], p:{FA:5,PN:3,PC:3,PI:4,CA:1}, ex:-1.0, ey:-1.5,
-      just:{ FA:"Prioriza la «profundización de las políticas de integración social», y propone pasarlo a un Ministerio de Justicia.", PN:"Combina el objetivo de reinserción con el orden carcelario, sin ponerla por encima de la seguridad.", PC:"Combina la búsqueda de reinserción social con un estricto orden carcelario.", PI:"Propone «Universalizarse a toda la población privada de libertad las oportunidades de estudio, trabajo, recreación».", CA:"Apunta al «trabajo obligatorio de todos los presos y la creación de una cárcel de máxima seguridad»." }
-    },
-    { cat:["Seguridad","Security"], t:["El trabajo en prisión debe ser obligatorio para todos los reclusos.","Prison work should be mandatory for all inmates."], p:{FA:1,PN:3,PC:2,PI:2,CA:5}, ex: 0.5, ey: 1.8,
-      just:{ FA:"Propone que «toda persona privada de libertad que quiera trabajar pueda hacerlo» (es un derecho voluntario).", PN:"Promueve el trabajo carcelario como herramienta clave de reinserción, pero sin exigir obligatoriedad total.", PC:"Promueve el trabajo carcelario como herramienta de rehabilitación sin estricta obligatoriedad.", PI:"Promueve el trabajo carcelario sin obligatoriedad, enfocado en oportunidades.", CA:"«Proponemos una Reestructura del Sistema Carcelario... estableciendo el trabajo de forma obligatoria»." }
-    },
-    { cat:["Drogas","Drugs"], t:["La regulación del cannabis debe fortalecerse y hacerse más accesible para los usuarios.","Cannabis regulation should be strengthened and made more accessible to users."], p:{FA:5,PN:2,PC:3,PI:5,CA:1}, ex:-1.2, ey:-1.8,
-      just:{ FA:"Propone fortalecerla «para garantizar el libre ejercicio de la ciudadanía... con el objetivo de reducir los impactos del tráfico ilícito».", PN:"Propone «realizar una fuerte campaña educativa y publicitaria para alertar sobre los riesgos» en lugar de flexibilizar.", PC:"Mantiene la política actual sin proponer ampliación ni restricción directa. Su foco principal es la prevención.", PI:"Propone eliminar el registro de compradores, habilitar la compra a turistas y eliminar el límite de cantidades.", CA:"Propone controles estrictos sobre clubes y autocultivadores. Es contrario al modelo vigente de regulación." }
-    },
-    { cat:["Drogas","Drugs"], t:["Uruguay debe avanzar hacia la regulación de otras sustancias, alejándose del prohibicionismo.","Uruguay should move towards the regulation of other substances, moving away from prohibitionism."], p:{FA:4,PN:2,PC:2,PI:4,CA:1}, ex:-1.0, ey:-1.8,
-      just:{ FA:"Promueve medidas alternativas a la privación de libertad para el microtráfico y proporcionalidad en las penas.", PN:"Su foco está en la prevención, el tratamiento y la represión del tráfico, no en promover nuevas regulaciones.", PC:"Foco centrado en prevención y tratamiento de adicciones. No plantea avanzar en nuevas regulaciones de mercado.", PI:"«Es necesario asumir con claridad que la meta es salir del prohibicionismo». Fomenta estudiar usos medicinales.", CA:"«Hay que terminar con el modelo de 'reducción de riesgos y daños' y pasar a uno de verdadera prevención»." }
-    },
-    { cat:["Drogas","Drugs"], t:["La prevención del consumo de drogas debe basarse en abstinencia y no en 'reducción de daños'.","Drug consumption prevention should be based on abstinence and not on 'harm reduction'."], p:{FA:1,PN:3,PC:2,PI:2,CA:5}, ex: 0.5, ey: 1.6,
-      just:{ FA:"Defiende firmemente el modelo de reducción de daños y las políticas de salud pública para usuarios.", PN:"Mantiene una posición intermedia centrada en la prevención educativa.", PC:"Posición centrada en la prevención educativa y el tratamiento integral de las adicciones.", PI:"Defiende explícitamente el enfoque de derechos humanos y el modelo de reducción de daños.", CA:"«Hay que terminar con el modelo de 'reducción de riesgos y daños' y pasar a uno de verdadera prevención»." }
-    },
-    { cat:["Derechos","Rights"], t:["Las políticas de igualdad de género deben ser transversales a todas las instituciones del Estado.","Gender equality policies should be transversal to all State institutions."], p:{FA:5,PN:3,PC:4,PI:5,CA:1}, ex:-1.5, ey:-1.0,
-      just:{ FA:"«La perspectiva de género, las interseccionalidades [...] están presentes en casi todos los temas» del programa.", PN:"Reconoce la igualdad de género como objetivo (especialmente laboral) pero no la impone como eje transversal.", PC:"Propone aplicar perspectiva de género en educación STEM, mercado laboral y políticas de seguridad.", PI:"«La perspectiva de género es una herramienta de análisis... tiene que ser transversal a todas las propuestas».", CA:"«Los intentos para imponer una perversa ideología de género buscan instalar el enfrentamiento...»." }
-    },
-    { cat:["Derechos","Rights"], t:["Las cuotas o medidas de paridad para mujeres en cargos políticos son necesarias y justas.","Quotas or parity measures for women in political positions are necessary and fair."], p:{FA:5,PN:2,PC:3,PI:4,CA:2}, ex:-1.3, ey:-0.5,
-      just:{ FA:"Propone explícitamente la «Participación paritaria para asegurar una mejor democracia».", PN:"Menciona la igualdad de género desde un enfoque de igualdad de oportunidades, no apoyando cuotas obligatorias.", PC:"Promueve la participación femenina mediante incentivos, pero sin una posición explícita sobre imponer cuotas.", PI:"Busca promover medidas afirmativas y estudiar la «reforma de las leyes electorales en este sentido».", CA:"Opuesto a las cuotas de representación. Defiende la familia tradicional y rechaza lo que denomina 'ideología de género'." }
-    },
-    { cat:["Derechos","Rights"], t:["La 'perspectiva de género' en la educación y el Estado hace más daño que bien.","The 'gender perspective' in education and the State does more harm than good."], p:{FA:1,PN:2,PC:2,PI:1,CA:5}, ex: 1.3, ey: 1.2,
-      just:{ FA:"Posición diametralmente opuesta: la perspectiva de género es un eje estructurador y necesario de su programa.", PN:"Incorpora la perspectiva de género en sus programas sin compartir en absoluto la postura de confrontación de CA.", PC:"Incorpora la perspectiva de género en sus políticas y programas gubernamentales.", PI:"La perspectiva de género es considerada una herramienta transversal y fundamental en su visión de Estado.", CA:"«Los intentos para imponer una perversa ideología de género buscan instalar el enfrentamiento... sexualización de niños»." }
-    },
-    { cat:["Social","Social"], t:["Las transferencias monetarias a familias pobres son el mejor instrumento para reducir la pobreza.","Cash transfers to poor families are the best instrument to reduce poverty."], p:{FA:4,PN:3,PC:3,PI:4,CA:3}, ex:-0.8, ey: 0.2,
-      just:{ FA:"Propone fortalecer las asignaciones familiares del Plan de Equidad como uno de los ejes de la política social.", PN:"Reconoce el rol de las transferencias (TMC) pero las combina activamente con políticas de empleo, educación y familia.", PC:"Reconoce la utilidad de las TMC, pero sin priorizarlas por encima de otros instrumentos de desarrollo social.", PI:"Propone «Fortalecer y mejorar las transferencias monetarias condicionadas... como columna vertebral del Mides».", CA:"Reconoce el uso de las TMC pero las combina con políticas fuertemente centradas en la familia y el salario maternal." }
-    },
-    { cat:["Social","Social"], t:["La familia tradicional debe ser el eje central de las políticas sociales del Estado.","The traditional family should be the central axis of the State's social policies."], p:{FA:2,PN:3,PC:3,PI:2,CA:5}, ex: 0.5, ey: 1.5,
-      just:{ FA:"Menciona los «cambios en los modelos de familia» como realidades a atender. Diseña políticas para todo tipo de familias.", PN:"Incluye a la familia en sus políticas pero sin el énfasis ideológico exclusivo en el modelo tradicional.", PC:"Incluye a la familia en sus políticas sociales sin un énfasis ideológico o conservador.", PI:"La corresponsabilidad y los nuevos arreglos son ejes de sus políticas; no define a la familia tradicional como el eje central.", CA:"«Se concibe a la familia como pilar...». Propone un 'salario maternal' para que las madres puedan quedarse en el hogar." }
-    },
-    { cat:["Social","Social"], t:["El sistema de cuidados debe expandirse con corresponsabilidad entre Estado, mercado y familias.","The care system should be expanded with co-responsibility between the State, market, and families."], p:{FA:5,PN:3,PC:3,PI:4,CA:2}, ex:-1.0, ey:-0.3,
-      just:{ FA:"Propone «Fortalecer el Sistema de Cuidados [...] fomentar la corresponsabilidad del Estado y empresas».", PN:"Apoyan la expansión y mantenimiento del sistema de cuidados, manteniendo una posición de continuidad.", PC:"Apoyan la expansión del sistema de cuidados en una línea de continuidad institucional.", PI:"Propone «una política de cuidados moderna y sostenible» con un enfoque universal y cofinanciado.", CA:"Prefiere el modelo familiar de cuidado. Propone el salario maternal y la responsabilidad de los hijos hacia padres mayores." }
-    },
-    { cat:["Social","Social"], t:["La pobreza infantil es el principal problema social del Uruguay y debe ser prioridad absoluta.","Child poverty is the main social problem in Uruguay and should be an absolute priority."], p:{FA:4,PN:3,PC:3,PI:5,CA:4}, ex:-0.5, ey: 0.5,
-      just:{ FA:"Prioriza el combate a la pobreza infantil desde una perspectiva estructural de reducción de la desigualdad.", PN:"La pobreza infantil se enmarca en políticas sociales más amplias, no figurando como una 'prioridad absoluta' excluyente.", PC:"Se atiende y enmarca dentro de las políticas sociales más amplias del partido.", PI:"«Bajar a cero el número de niños en situación de pobreza... Esto es una prioridad para nuestro partido».", CA:"Priorizan fuertemente la pobreza infantil, enfocándose en la familia y transferencias de recursos a madres." }
-    },
-    { cat:["Salud","Health"], t:["La cobertura del Seguro Nacional de Salud debe universalizarse para todas las personas.","National Health Insurance coverage should be universalized for all people."], p:{FA:5,PN:3,PC:4,PI:5,CA:3}, ex:-1.2, ey: 0.3,
-      just:{ FA:"Propone universalizar el acceso a la salud como un derecho humano esencial, ampliando la cobertura a grupos excluidos.", PN:"Busca mejoras de eficiencia y calidad en la gestión del sistema actual sin priorizar una universalización total forzada.", PC:"Apoya la universalización pero fomentando una mayor participación privada y competencia entre prestadores.", PI:"Promete «Universalizar la cobertura del Seguro Nacional de Salud... (alrededor de 900.000 personas actualmente excluidas)».", CA:"Busca mejoras de eficiencia y atención en el sistema de salud actual sin plantear la universalización como prioridad máxima." }
-    },
-    { cat:["Salud","Health"], t:["La atención de salud mental y adicciones necesita mucha más inversión pública.","Mental health and addiction care need much more public investment."], p:{FA:4,PN:3,PC:3,PI:3,CA:4}, ex:-0.7, ey: 0.1,
-      just:{ FA:"Coincide plenamente en destinar mayor inversión, basándose en un enfoque de garantía de derechos.", PN:"Reconoce el déficit, pero mantiene una posición de continuidad y mejora gradual de recursos.", PC:"Mantiene una posición de continuidad y mejora gradual en la inversión para salud mental.", PI:"Reconoce el déficit como parte integral de la mejora necesaria en el sistema de salud.", CA:"Enfatiza fuertemente la inversión en salud mental y adicciones, especialmente por su vínculo con la crisis de seguridad." }
-    },
-    { cat:["Estado","State"], t:["La reforma jubilatoria de 2023 fue correcta y debe profundizarse.","The 2023 pension reform was correct and should be deepened."], p:{FA:1,PN:5,PC:5,PI:4,CA:3}, ex: 1.4, ey: 0.3,
-      just:{ FA:"Considera el período como de «retrocesos y contramarchas». Plantea revisar la reforma hacia un sistema más solidario.", PN:"«La reforma... se destaca por haber otorgado más derechos a trabajadores y jubilados». La considera un logro fundamental.", PC:"«Consideramos que la reforma jubilatoria fue una iniciativa positiva, que otorga un horizonte de medio plazo al régimen».", PI:"Afirma que «La Reforma de la Seguridad Social brinda sostenibilidad y equidad a nuestro sistema previsional».", CA:"Apoya la sostenibilidad del sistema (foco en equidad), pero sin hacer una cita positiva explícita de la ley del 2023." }
-    },
-    { cat:["Ambiente","Environment"], t:["La transición ecológica debe ser una prioridad, incluso si implica cambios en el modelo agropecuario.","The ecological transition should be a priority, even if it implies changes in the agricultural model."], p:{FA:4,PN:2,PC:2,PI:3,CA:2}, ex:-1.2, ey:-0.5,
-      just:{ FA:"«proponemos un proceso de transición ecológica justa a todo nivel». Lo plantea como uno de sus ejes programáticos principales.", PN:"Prioriza el crecimiento agropecuario con «sistemas de producción sostenibles» pero sin plantear cambios estructurales al modelo.", PC:"Priorizan abiertamente el crecimiento productivo y económico del sector agropecuario.", PI:"Propone sostenibilidad ambiental como eje transversal, buscando «producción sostenible» sin sacrificar el crecimiento agro.", CA:"No prioriza en absoluto la transición ecológica frente al impulso de la producción nacional." }
-    },
-    { cat:["Estado","State"], t:["El Estado uruguayo debe ser más transparente, con publicación obligatoria de más declaraciones juradas.","The Uruguayan State should be more transparent, with mandatory publication of more sworn statements."], p:{FA:3,PN:3,PC:3,PI:5,CA:4}, ex:-0.3, ey:-0.7,
-      just:{ FA:"Apoya la transparencia institucional pero sin incluir propuestas concretas nuevas sobre publicación de declaraciones juradas.", PN:"Apoya la transparencia general en la gestión del Estado.", PC:"Apoya la transparencia general en las instituciones gubernamentales.", PI:"Propone «Ampliar la obligación de publicidad de las declaraciones juradas... alcanzando a legisladores y altos cargos».", CA:"Propone una «Ley Anti Corrupción y Mafias» y la figura del «informante financiero». Foco general en combatir corrupción." }
-    },
-    { cat:["Internacional","International"], t:["Uruguay debe fortalecer el Mercosur y la integración regional latinoamericana.","Uruguay should strengthen Mercosur and Latin American regional integration."], p:{FA:5,PN:2,PC:2,PI:3,CA:3}, ex:-1.3, ey: 0.2,
-      just:{ FA:"Sostiene un «irrestricto compromiso con la integración y construcción política regional» de vocación latinoamericanista.", PN:"Prioriza los acuerdos bilaterales (TLCs) y busca flexibilizar el bloque o avanzar en las negociaciones al margen de este.", PC:"Buscan flexibilizar el bloque regional y priorizan abiertamente las negociaciones de acuerdos bilaterales.", PI:"Propone un Mercosur «mucho más abierto, flexible y eficaz». Mantiene una posición más pragmática sobre la integración.", CA:"Propone fortalecer el Mercosur en infraestructura y libre circulación, pero con un fuerte énfasis en la soberanía nacional." }
-    }
-];
-
-/* ──────────────────────────────────────────────
-   ESTADO Y UTILS
-────────────────────────────────────────────── */
-let currentLang = 'es';
+let currentLang = localStorage.getItem('eluy-lang') || 'es';
 
 function setLang(lang) {
     currentLang = lang;
-    localStorage.setItem('uruvoto-lang', lang);
+    localStorage.setItem('eluy-lang', lang);
     document.getElementById('btn-es').classList.toggle('active', lang === 'es');
     document.getElementById('btn-en').classList.toggle('active', lang === 'en');
-    changeLanguage();
+    applyLang();
 }
 
-function updateThemeIcon() {
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
-    const darkImg = document.getElementById('dark-img');
-    darkImg.src = isDark 
-        ? "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/sun.svg"
-        : "https://raw.githubusercontent.com/lucide-icons/lucide/main/icons/moon.svg";
-}
-
-function changeLanguage() {
+function applyLang() {
     const t = i18n[currentLang];
-    document.getElementById('main-title').innerText   = t.title;
-    document.getElementById('main-desc').innerText    = t.desc;
-    document.getElementById('main-metodo').innerHTML  = `<a href="#metodologia" onclick="mostrarMetodologia(event)" style="color:var(--azul-vibrante); text-decoration:none; font-weight:500;">↗ ${t.metodoLink}</a>`;
-    document.getElementById('btn-results').innerText  = t.btnResults;
-    document.getElementById('btn-restart').innerText  = t.btnRestart;
-    document.getElementById('res-title').innerText    = t.resTitle;
-    document.getElementById('comp-title').innerText   = t.compTitle;
-    document.getElementById('comp-subtitle').innerText= t.compSubtitle;
-    document.getElementById('lbl-auto').innerText = t.lblAuto;
-    document.getElementById('lbl-lib').innerText  = t.lblLib;
-    document.getElementById('lbl-izq').innerText  = t.lblIzq;
-    document.getElementById('lbl-der').innerText  = t.lblDer;
-    document.getElementById('home-title').innerHTML = t.homeTitle.replace('Uruguay', '<span style="color:var(--azul-vibrante)">Uruguay</span>');
-    document.getElementById('home-desc').innerText   = t.homeDesc;
-    document.getElementById('btn-nacionales').innerText = t.btnNacionales;
-    document.getElementById('btn-test').innerText       = t.btnTestHome;
-    document.getElementById('btn-editor').innerText     = t.btnEditor;
-    document.getElementById('btn-galeria').innerText    = t.btnGaleria;
+    document.getElementById('home-title').innerHTML = t.homeTitle;
+    document.getElementById('home-desc').innerText  = t.homeDesc;
+    document.getElementById('nav-inicio').innerText     = t.navInicio;
+    document.getElementById('nav-elecciones').innerText = t.navElecciones;
+    document.getElementById('nav-test').innerText       = t.navTest;
+    document.getElementById('nav-editor').innerText     = t.navEditor;
+    document.getElementById('nav-galeria').innerText    = t.navGaleria;
+    document.getElementById('card-title-1').innerHTML = t.cardTitle1;
+    document.getElementById('card-desc-1').innerText  = t.cardDesc1;
+    document.getElementById('card-link-1').innerText  = t.cardLink1;
+    document.getElementById('card-title-2').innerHTML = t.cardTitle2;
+    document.getElementById('card-desc-2').innerText  = t.cardDesc2;
+    document.getElementById('card-link-2').innerText  = t.cardLink2;
+    document.getElementById('card-title-3').innerHTML = t.cardTitle3;
+    document.getElementById('card-desc-3').innerText  = t.cardDesc3;
+    document.getElementById('card-link-3').innerText  = t.cardLink3;
+    document.getElementById('card-title-4').innerHTML = t.cardTitle4;
+    document.getElementById('card-link-4').innerText  = t.cardLink4;
     document.getElementById('txt-countdown-title').innerText = t.countdownTitle;
     document.getElementById('txt-disclaimer').innerText = t.disclaimer;
-    renderQuiz();
 }
 
-function toggleDarkMode() {
-    const body = document.body;
-    const dark = body.getAttribute('data-theme') !== 'dark';
-    body.setAttribute('data-theme', dark ? 'dark' : 'light');
-    localStorage.setItem('uruvoto-theme', dark ? 'dark' : 'light');
-    updateThemeIcon();
-    if (_lastUserX !== null) drawCompass(_lastUserX, _lastUserY);
+/* ── DARK MODE ── */
+function toggleDark() {
+    const dark = document.body.getAttribute('data-theme') !== 'dark';
+    document.body.setAttribute('data-theme', dark ? 'dark' : 'light');
+    localStorage.setItem('eluy-theme', dark ? 'dark' : 'light');
 }
 
-/* ──────────────────────────────────────────────
-   CUENTA REGRESIVA (24 JUN 2029)
-────────────────────────────────────────────── */
+/* ── GALLERY ── */
+// Attempts to load images from /img/gallery/. Falls back to placeholder colored strips if none found.
+const galleryImages = [
+    '/img/gallery/foto1.jpg',
+    '/img/gallery/foto2.jpg',
+    '/img/gallery/foto3.jpg',
+    '/img/gallery/foto4.jpg',
+    '/img/gallery/foto5.jpg',
+    '/img/gallery/foto6.jpg',
+    '/img/gallery/foto7.jpg',
+    '/img/gallery/foto8.jpg',
+    '/img/gallery/foto9.jpg',
+    '/img/gallery/foto10.jpg',
+];
+
+// Also try common Uruguayan election image names
+const fallbackColors = ['#2a2a3a','#1a2a44','#16213e','#0f3460','#1b1b2f','#2d2d44','#1a1a2e','#252540'];
+
+function buildGallery() {
+    const track = document.getElementById('galleryTrack');
+    // We'll try to load images; if they 404 we show a colored strip instead
+    // Duplicate the set for seamless looping
+    const allImgs = [...galleryImages, ...galleryImages];
+    allImgs.forEach((src, i) => {
+        const img = document.createElement('img');
+        img.className = 'gallery-img';
+        img.alt = '';
+        img.loading = 'lazy';
+        img.onerror = function() {
+            // Replace with colored div on error
+            const div = document.createElement('div');
+            div.style.cssText = `height:100%;width:300px;flex-shrink:0;background:${fallbackColors[i % fallbackColors.length]};`;
+            track.replaceChild(div, img);
+        };
+        img.src = src;
+        track.appendChild(img);
+    });
+}
+
+buildGallery();
+
+/* ── COUNTDOWN (June 24, 2029) ── */
 function updateCountdown() {
-    const targetDate = new Date("June 24, 2029 08:00:00").getTime();
-    const now = new Date().getTime();
-    const distance = targetDate - now;
-    if (distance < 0) { document.getElementById("countdown").innerHTML = "¡Hoy son las elecciones!"; return; }
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    document.getElementById("countdown").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    const target = new Date('June 24, 2029 08:00:00').getTime();
+    const diff = target - Date.now();
+    if (diff < 0) { document.getElementById('countdown').textContent = '¡Hoy!'; return; }
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor((diff % 86400000) / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    document.getElementById('countdown').textContent = `${d}d ${h}h ${m}m ${s}s`;
 }
 setInterval(updateCountdown, 1000);
 updateCountdown();
 
-/* ──────────────────────────────────────────────
-   QUIZ RENDER
-────────────────────────────────────────────── */
-function renderQuiz() {
-    const container = document.getElementById('quiz-container');
-    container.innerHTML = '';
-    preguntas.forEach((q, i) => {
-        const cat  = currentLang === 'es' ? q.cat[0] : q.cat[1];
-        const text = currentLang === 'es' ? q.t[0] : q.t[1];
-        container.innerHTML += `
-            <div class="pregunta-card">
-                <span class="categoria-tag" style="background:${catColores[cat]}">${cat}</span>
-                <div style="font-weight:600; line-height:1.5; font-size:1.1rem;">${text}</div>
-                <input type="range" min="1" max="5" value="3" id="q${i}">
-                <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--text-muted); font-weight:500;">
-                    <span>${i18n[currentLang].disagree}</span><span>${i18n[currentLang].agree}</span>
-                </div>
-            </div>`;
-    });
-}
-
-/* ──────────────────────────────────────────────
-   BRÚJULA IDEOLÓGICA — CANVAS
-────────────────────────────────────────────── */
-let _lastUserX = null, _lastUserY = null;
-let _compassObs = null;
-
-function initCompass(userX, userY) {
-    _lastUserX = userX; _lastUserY = userY;
-    const wrap = document.querySelector('.brujula-canvas-wrap');
-    if (_compassObs) _compassObs.disconnect();
-    _compassObs = new ResizeObserver(() => drawCompass(_lastUserX, _lastUserY));
-    _compassObs.observe(wrap);
-    drawCompass(userX, userY);
-}
-
-function drawCompass(userX, userY) {
-    const canvas = document.getElementById('compassCanvas');
-    if (!canvas) return;
-    const wrap = canvas.parentElement;
-    const size = wrap.offsetWidth || 400;
-    canvas.width  = size; canvas.height = size;
-    const ctx = canvas.getContext('2d');
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
-    ctx.fillStyle = isDark ? '#1e1e1e' : '#f8fafc';
-    ctx.fillRect(0, 0, size, size);
-    const quads = [
-        { x:0,      y:0,      color: isDark?'rgba(30,80,160,0.15)':'rgba(59,130,246,0.09)'  },
-        { x:size/2, y:0,      color: isDark?'rgba(160,30,30,0.15)':'rgba(239,68,68,0.09)'   },
-        { x:0,      y:size/2, color: isDark?'rgba(20,120,80,0.15)':'rgba(34,197,94,0.09)'   },
-        { x:size/2, y:size/2, color: isDark?'rgba(160,100,0,0.15)':'rgba(251,146,60,0.09)'  }
-    ];
-    quads.forEach(q => { ctx.fillStyle = q.color; ctx.fillRect(q.x, q.y, size/2, size/2); });
-    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
-    ctx.lineWidth = 1;
-    for (let i=1; i<4; i++) {
-        ctx.beginPath(); ctx.moveTo(0, size*i/4); ctx.lineTo(size, size*i/4); ctx.stroke();
-        ctx.beginPath(); ctx.moveTo(size*i/4, 0); ctx.lineTo(size*i/4, size); ctx.stroke();
-    }
-    ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.15)';
-    ctx.lineWidth = 1.5; ctx.setLineDash([4, 4]);
-    ctx.beginPath(); ctx.moveTo(size/2, 0); ctx.lineTo(size/2, size); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(0, size/2); ctx.lineTo(size, size/2); ctx.stroke();
-    ctx.setLineDash([]);
-    const pad = 16;
-    function toPixelX(v, max=2) { return size/2 + (v/max) * (size/2 - pad); }
-    function toPixelY(v, max=2) { return size/2 - (v/max) * (size/2 - pad); }
-    function drawDot(px, py, color, radius, label, isUser) {
-        ctx.beginPath(); ctx.arc(px, py, radius + 4, 0, Math.PI*2);
-        ctx.fillStyle = color + (isDark ? '40' : '28'); ctx.fill();
-        ctx.beginPath(); ctx.arc(px, py, radius, 0, Math.PI*2);
-        ctx.fillStyle = color; ctx.fill();
-        if (isUser) { ctx.beginPath(); ctx.arc(px, py, radius, 0, Math.PI*2); ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke(); }
-        if (label && !isUser) { ctx.fillStyle = '#fff'; ctx.font = `600 ${Math.max(7, Math.round(radius * 0.75))}px Inter, sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(label, px, py + 0.5); }
-    }
-    partidosData.forEach(p => { const pos = posicionesPartidos[p.id]; drawDot(toPixelX(pos.ex), toPixelY(pos.ey), coloresPartidos[p.id], 10, p.id, false); });
-    if (userX !== null) {
-        drawDot(toPixelX(userX), toPixelY(userY), '#3b82f6', 11, '●', true);
-        const ux = toPixelX(userX), uy = toPixelY(userY);
-        const lblText = i18n[currentLang].lblTu;
-        ctx.fillStyle = isDark ? '#f1f5f9' : '#1a2a44';
-        ctx.font = `600 11px Inter, sans-serif`; ctx.textAlign = 'center';
-        const lblY = uy > size * 0.85 ? uy - 20 : uy + 22;
-        ctx.fillText(lblText, ux, lblY);
-    }
-}
-
-function calcularPosicionIdeologica(userAnswers) {
-    let sumX = 0, sumY = 0, wX = 0, wY = 0;
-    preguntas.forEach((q, i) => {
-        const normalized = (userAnswers[i] - 3) / 2;
-        sumX += normalized * q.ex; sumY += normalized * q.ey;
-        wX   += Math.abs(q.ex);   wY   += Math.abs(q.ey);
-    });
-    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
-    return { x: clamp((sumX/wX)*2,-2,2), y: clamp((sumY/wY)*2,-2,2) };
-}
-
-function mostrarResultados() {
-    const userAnswers = preguntas.map((_, i) => parseInt(document.getElementById(`q${i}`).value));
-    let scores = { FA:0, PN:0, PC:0, PI:0, CA:0 };
-    preguntas.forEach((q, i) => { partidosData.forEach(p => scores[p.id] += (1 - (Math.abs(userAnswers[i] - q.p[p.id]) / 4))); });
-    const ranking = partidosData.map(p => ({ ...p, score: ((scores[p.id] / preguntas.length) * 100).toFixed(1) })).sort((a, b) => b.score - a.score);
-    const { x: userX, y: userY } = calcularPosicionIdeologica(userAnswers);
-    document.getElementById('main-container').className = 'container container-results';
-    const rankCont = document.getElementById('ranking-container');
-    rankCont.innerHTML = '';
-    ranking.forEach(r => {
-        rankCont.innerHTML += `
-            <div class="ranking-card">
-                <img class="partido-flag" src="${r.flag}" alt="${r.nombre}" onerror="this.style.background='${coloresPartidos[r.id]}';this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'">
-                <div class="ranking-info">
-                    <div style="display:flex; justify-content:space-between; font-weight:700;"><span>${r.nombre}</span><span>${r.score}%</span></div>
-                    <div class="barra-ext"><div class="barra-int" style="width:${r.score}%; background:${coloresPartidos[r.id]}"></div></div>
-                </div>
-            </div>`;
-    });
-    const legend = document.getElementById('brujula-legend');
-    legend.innerHTML = '';
-    partidosData.forEach(p => { legend.innerHTML += `<span><span class="leg-dot" style="background:${coloresPartidos[p.id]}"></span>${p.nombre}</span>`; });
-    legend.innerHTML += `<span><span class="leg-dot" style="background:#3b82f6; outline:2px solid #3b82f6; outline-offset:1px;"></span>${i18n[currentLang].lblTu}</span>`;
-    const detCont = document.getElementById('detalle-container');
-    detCont.innerHTML = '';
-    preguntas.forEach((q, i) => {
-        const userVal = userAnswers[i];
-        const qText   = currentLang === 'es' ? q.t[0] : q.t[1];
-        const cat     = currentLang === 'es' ? q.cat[0] : q.cat[1];
-        let visual = `<div class="comparativa-visual"><div class="punto-usuario" style="left:${((userVal-1)/4)*100}%;"></div>`;
-        const posGrp = {1:[],2:[],3:[],4:[],5:[]};
-        partidosData.forEach(p => posGrp[q.p[p.id]].push(p));
-        for (let v=1; v<=5; v++) {
-            posGrp[v].forEach((p, idx) => {
-                const quoteText = q.just && q.just[p.id] ? q.just[p.id] : i18n[currentLang].quote;
-                visual += `<div class="punto-partido ${v===userVal?'coincide':''}" style="left:calc(${((v-1)/4)*100}% + ${idx*10}px); background:${coloresPartidos[p.id]};"><div class="tooltip"><span class="tooltip-header" style="color:${coloresPartidos[p.id]}">${p.nombre}</span><span class="tooltip-body">${quoteText}</span></div></div>`;
-            });
-        }
-        visual += '</div>';
-        detCont.innerHTML += `
-            <div class="pregunta-card">
-                <div>
-                    <span class="categoria-tag" style="background:${catColores[cat]}; font-size:0.6rem;">${cat}</span>
-                    <div style="font-weight:600; line-height:1.4; font-size:0.95rem;">${qText}</div>
-                </div>
-                <div style="margin-top:12px;">
-                    <div style="display:flex; justify-content:space-between; font-size:0.65rem; color:var(--text-muted); margin-bottom:8px;"><span>${i18n[currentLang].disagree}</span><span>${i18n[currentLang].agree}</span></div>
-                    ${visual}
-                </div>
-            </div>`;
-    });
-    document.getElementById('page-test').classList.remove('active');
-    document.getElementById('page-results').classList.add('active');
-    window.scrollTo(0, 0);
-    requestAnimationFrame(() => initCompass(userX, userY));
-}
-
-function mostrarMetodologia(e) {
-    e.preventDefault();
-    const isDark = document.body.getAttribute('data-theme') === 'dark';
-    const overlay = document.createElement('div');
-    overlay.id = 'metodo-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
-    const box = document.createElement('div');
-    box.style.cssText = `background:${isDark?'#1e1e1e':'#ffffff'};color:${isDark?'#f1f5f9':'#1a2a44'};border-radius:20px;padding:36px;max-width:600px;width:100%;max-height:80vh;overflow-y:auto;position:relative;`;
-    box.innerHTML = `
-        <button onclick="document.getElementById('metodo-overlay').remove()" style="position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.4rem;cursor:pointer;color:${isDark?'#f1f5f9':'#1a2a44'};">×</button>
-        <h2 style="margin:0 0 16px;font-size:1.2rem;">Metodología: Brújula Ideológica</h2>
-        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#a3a3a3':'#64748b'};">Cada pregunta del test tiene asignados dos pesos ideológicos:</p>
-        <ul style="line-height:1.8;font-size:0.9rem;color:${isDark?'#a3a3a3':'#64748b'};padding-left:20px;">
-            <li><strong style="color:${isDark?'#f1f5f9':'#1a2a44'}">Eje X (Izquierda / Derecha):</strong> valores negativos desplazan hacia la izquierda, positivos hacia la derecha.</li>
-            <li><strong style="color:${isDark?'#f1f5f9':'#1a2a44'}">Eje Y (Liberal / Autoritario):</strong> valores negativos desplazan hacia el liberalismo, positivos hacia el autoritarismo.</li>
-        </ul>
-        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#a3a3a3':'#64748b'};">La respuesta del usuario (escala 1–5) se normaliza al rango [−1, +1] según la fórmula <code style="background:${isDark?'#121212':'#f1f5f9'};padding:2px 6px;border-radius:4px;">(respuesta − 3) / 2</code>. Ese valor se multiplica por los pesos de cada pregunta y se acumula. El resultado final se pondera por la suma total de pesos absolutos y se clampea al rango [−2, +2], produciendo una coordenada en la brújula.</p>
-        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#a3a3a3':'#64748b'};">Las posiciones fijas de los partidos fueron calibradas manualmente a partir del análisis de sus programas de gobierno presentados ante la Corte Electoral en 2024.</p>
-        <p style="line-height:1.7;font-size:0.9rem;color:${isDark?'#a3a3a3':'#64748b'};">Esta herramienta tiene fines informativos y no pretende ser una representación exhaustiva ni definitiva del posicionamiento ideológico de ningún partido.</p>
-    `;
-    overlay.appendChild(box);
-    overlay.addEventListener('click', ev => { if(ev.target===overlay) overlay.remove(); });
-    document.body.appendChild(overlay);
-}
-
-/* ── INIT ── */
-const savedLang = localStorage.getItem('uruvoto-lang');
-if (savedLang) { setLang(savedLang); } else { setLang('es'); }
-updateThemeIcon();
-
+/* ── MISC ── */
 function irHome() {
     document.getElementById('page-home').classList.add('active');
-    document.getElementById('main-container').style.display = 'none';
-    window.scrollTo(0, 0);
-}
-
-function irTest() {
-    document.getElementById('page-home').classList.remove('active');
-    document.getElementById('main-container').style.display = 'block';
-    document.getElementById('main-container').className = 'container container-test';
-    document.getElementById('page-results').classList.remove('active');
-    document.getElementById('page-test').classList.add('active');
-    renderQuiz();
-    window.scrollTo(0, 0);
-}
-
-function reiniciarTest() {
-    _lastUserX = null; _lastUserY = null;
-    if (_compassObs) { _compassObs.disconnect(); _compassObs = null; }
-    irHome();
 }
 
 function proximamente(btn) {
     const t = i18n[currentLang];
-    const orig = btn.innerText;
-    btn.innerText = t.proximamente;
-    setTimeout(() => { btn.innerText = orig; }, 1800);
+    const orig = btn.querySelector('.card-link') ? btn.querySelector('.card-link').innerText : btn.innerText;
+    if (btn.querySelector('.card-link')) btn.querySelector('.card-link').innerText = t.proximamente;
+    else btn.innerText = t.proximamente;
+    setTimeout(() => {
+        if (btn.querySelector('.card-link')) btn.querySelector('.card-link').innerText = orig;
+        else btn.innerText = orig;
+    }, 1800);
 }
+
+/* ── INIT ── */
+setLang(currentLang);
 </script>
 </body>
 </html>
