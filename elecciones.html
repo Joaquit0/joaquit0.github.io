@@ -58,15 +58,24 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 .ctrl-label{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);}
 .ctrl-pills{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
 
-/* Dropdown */
+/* ── YEAR SELECT — styled as a pill button ── */
+.year-select-wrapper{position:relative;display:inline-flex;align-items:center;}
+.year-select-wrapper::after{
+    content:'';position:absolute;right:11px;top:50%;transform:translateY(-50%);
+    width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;
+    border-top:5px solid var(--text-muted);pointer-events:none;
+}
 .year-select{
     appearance:none;-webkit-appearance:none;
-    background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8ba8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
-    border:1.5px solid var(--border);border-radius:10px;
-    padding:7px 30px 7px 12px;font-family:inherit;font-size:.88rem;font-weight:700;
-    color:var(--text);cursor:pointer;min-width:90px;
+    background:var(--blue-dim);
+    border:1.5px solid var(--blue);border-radius:100px;
+    padding:6px 30px 6px 14px;font-family:inherit;font-size:.82rem;font-weight:700;
+    color:var(--blue);cursor:pointer;min-width:80px;
+    transition:all .18s;
 }
-.year-select:focus{outline:none;border-color:var(--blue);}
+.year-select:focus{outline:none;box-shadow:0 0 0 3px rgba(81,150,228,.2);}
+.year-select:hover{background:var(--blue);color:white;}
+.year-select:hover ~ *::after,.year-select-wrapper:hover::after{border-top-color:white;}
 
 /* Pills */
 .pill-btn{
@@ -105,8 +114,8 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     position:relative;
 }
 
-/* MAP CARD */
-.map-card{min-height:560px;}
+/* MAP CARD — slightly smaller */
+.map-card{min-height:460px;max-height:600px;}
 .map-card-toolbar{
     position:absolute;top:14px;left:14px;right:14px;
     display:flex;justify-content:space-between;align-items:flex-start;
@@ -131,10 +140,10 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 
 #map-container{
     flex:1;display:flex;align-items:center;justify-content:center;
-    overflow:hidden;padding:10px;min-height:0;
+    overflow:hidden;padding:8px;min-height:0;
 }
 #map-container svg{
-    width:100%;height:100%;max-width:none;
+    width:auto;height:100%;max-height:100%;max-width:100%;
     filter:drop-shadow(0 4px 16px rgba(0,0,0,.07));
     transform-origin:center;transition:transform .2s ease;
 }
@@ -142,78 +151,78 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
 #map-container path:hover{opacity:.82;}
 #map-container #label_points{display:none;}
 
-.map-legend{
-    padding:12px 20px 14px;display:flex;flex-wrap:wrap;gap:6px 14px;
-    border-top:1px solid var(--border);flex-shrink:0;
-}
-.map-legend-item{display:flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;color:var(--text-muted);}
-.map-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+/* No legend at the bottom of the map */
+.map-legend{display:none;}
 
 /* RESULTS CARD */
 .results-card{}
 .results-card-header{
-    padding:16px 20px 14px;border-bottom:1px solid var(--border);
+    padding:16px 24px 14px;border-bottom:1px solid var(--border);
     display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:8px;
 }
 .results-card-title{font-size:1rem;font-weight:800;letter-spacing:-.2px;}
-.results-card-body{flex:1;overflow-y:auto;padding:16px 20px;min-height:0;}
+.results-card-body{flex:1;overflow-y:auto;padding:20px 24px;min-height:0;}
+
+/* ── PANEL FADE TRANSITION ── */
+@keyframes panelFadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.panel-transition{animation:panelFadeIn .22s cubic-bezier(.22,.68,0,1.2) both;}
 
 /* ── CANDIDATE ROWS (1st round — horizontal) ── */
 .cand-list{display:flex;flex-direction:column;gap:0;}
 .cand-row{
-    display:flex;align-items:center;gap:14px;
-    padding:14px 0;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;gap:16px;
+    padding:16px 0;border-bottom:1px solid var(--border);
 }
 .cand-row:last-child{border-bottom:none;}
-.cand-accent{width:4px;height:68px;border-radius:4px;flex-shrink:0;}
+.cand-accent{width:4px;height:76px;border-radius:4px;flex-shrink:0;}
 .cand-avatar{
-    width:68px;height:68px;border-radius:50%;overflow:hidden;flex-shrink:0;
+    width:76px;height:76px;border-radius:50%;overflow:hidden;flex-shrink:0;
     background:var(--bg);border:2px solid var(--border);
 }
 .cand-avatar img,.cand-avatar>div{width:100%;height:100%;object-fit:cover;object-position:center top;}
 .cand-avatar>div{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;color:white;}
 .cand-info{flex:1;min-width:0;}
-.cand-name{font-weight:800;font-size:1.05rem;margin-bottom:2px;}
-.cand-party{font-size:.84rem;font-weight:700;margin-bottom:3px;}
-.cand-vice-lbl{font-size:.68rem;color:var(--text-muted);margin-bottom:1px;}
-.cand-vice-name{font-size:.8rem;font-weight:600;}
-.cand-right{text-align:right;flex-shrink:0;min-width:100px;}
-.cand-pct{font-size:2rem;font-weight:900;line-height:1;letter-spacing:-1.5px;}
-.cand-votes{font-size:.72rem;color:var(--text-muted);margin-top:3px;font-weight:600;}
+.cand-name{font-weight:800;font-size:1.1rem;margin-bottom:3px;}
+.cand-party{font-size:.88rem;font-weight:700;margin-bottom:4px;}
+.cand-vice-lbl{font-size:.7rem;color:var(--text-muted);margin-bottom:1px;}
+.cand-vice-name{font-size:.83rem;font-weight:600;}
+.cand-right{text-align:right;flex-shrink:0;min-width:108px;}
+.cand-pct{font-size:2.2rem;font-weight:900;line-height:1;letter-spacing:-1.5px;}
+.cand-votes{font-size:.74rem;color:var(--text-muted);margin-top:4px;font-weight:600;}
 .badge-winner{
     display:inline-block;background:#16a34a;color:white;font-size:.58rem;
     font-weight:800;padding:3px 7px;border-radius:100px;text-transform:uppercase;
     letter-spacing:.05em;vertical-align:middle;margin-left:6px;
 }
 
-/* ── RUNOFF: side-by-side vertical ── */
-.runoff-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+/* ── RUNOFF: side-by-side vertical — bigger ── */
+.runoff-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
 .runoff-card{
     background:var(--bg);border:2px solid var(--border);border-radius:16px;
-    padding:20px;display:flex;flex-direction:column;align-items:center;
-    text-align:center;gap:10px;transition:transform .15s;
+    padding:24px 20px;display:flex;flex-direction:column;align-items:center;
+    text-align:center;gap:12px;transition:transform .15s;
 }
 .runoff-card:hover{transform:translateY(-2px);}
 .runoff-card.winner{border-color:#16a34a;}
 .runoff-avatar{
-    width:90px;height:90px;border-radius:50%;overflow:hidden;
+    width:110px;height:110px;border-radius:50%;overflow:hidden;
     border:3px solid var(--border);flex-shrink:0;
 }
 .runoff-avatar img,.runoff-avatar>div{width:100%;height:100%;object-fit:cover;object-position:center top;}
-.runoff-avatar>div{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem;color:white;}
-.runoff-name{font-weight:800;font-size:1rem;line-height:1.2;}
-.runoff-party{font-size:.8rem;font-weight:700;margin-top:2px;}
-.runoff-vice{font-size:.72rem;color:var(--text-muted);margin-top:2px;}
-.runoff-pct{font-size:2.4rem;font-weight:900;line-height:1;letter-spacing:-2px;margin-top:4px;}
-.runoff-votes{font-size:.72rem;color:var(--text-muted);font-weight:600;}
+.runoff-avatar>div{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.8rem;color:white;}
+.runoff-name{font-weight:800;font-size:1.1rem;line-height:1.25;}
+.runoff-party{font-size:.86rem;font-weight:700;margin-top:2px;}
+.runoff-vice{font-size:.76rem;color:var(--text-muted);margin-top:2px;}
+.runoff-pct{font-size:2.8rem;font-weight:900;line-height:1;letter-spacing:-2px;margin-top:6px;}
+.runoff-votes{font-size:.76rem;color:var(--text-muted);font-weight:600;}
 
 /* minor */
 .cand-minor-list{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
-.cand-minor-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--border);}
+.cand-minor-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--bg);border-radius:10px;border:1px solid var(--border);}
 .cand-minor-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.cand-minor-name{flex:1;font-weight:700;font-size:.84rem;}
-.cand-minor-party{font-size:.73rem;color:var(--text-muted);}
-.cand-minor-pct{font-weight:800;font-size:.95rem;}
+.cand-minor-name{flex:1;font-weight:700;font-size:.86rem;}
+.cand-minor-party{font-size:.74rem;color:var(--text-muted);}
+.cand-minor-pct{font-weight:800;font-size:.98rem;}
 
 /* footer */
 .results-footer{display:flex;justify-content:space-between;padding-top:12px;margin-top:4px;border-top:1px solid var(--border);font-size:.73rem;color:var(--text-muted);font-weight:600;}
@@ -323,7 +332,9 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <!-- Elección dropdown -->
     <div class="ctrl-group">
         <div class="ctrl-label" id="lbl-eleccion">Elección</div>
-        <select class="year-select" id="year-select" onchange="selectYear(+this.value)"></select>
+        <div class="year-select-wrapper">
+            <select class="year-select" id="year-select" onchange="selectYear(+this.value)"></select>
+        </div>
     </div>
 
     <!-- Round / Plebiscite pills -->
@@ -338,7 +349,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(-
     <div class="ctrl-group">
         <div class="ctrl-label" id="lbl-nivel">Nivel</div>
         <div class="toggle-group">
-            <button class="toggle-btn active" id="toggle-nacional" onclick="switchElecType('nacional')" id="toggle-nacional">Nacional</button>
+            <button class="toggle-btn active" id="toggle-nacional" onclick="switchElecType('nacional')">Nacional</button>
             <button class="toggle-btn" id="toggle-departamental" onclick="switchElecType('departamental')">Departamental</button>
         </div>
     </div>
@@ -402,7 +413,7 @@ function avatarHTML(c,size,extraStyle=''){
     if(c&&c.foto) return `<div style="${s}border:2px solid var(--border);"><img src="${c.foto}" style="width:100%;height:100%;object-fit:cover;object-position:center top;" alt=""></div>`;
     const bg=c?col(c.partido):col('default');
     const i_=c?inits(c.nombre||c.partido):'?';
-    const fs=size>70?'1.3rem':size>48?'1rem':'.78rem';
+    const fs=size>90?'1.6rem':size>70?'1.3rem':size>48?'1rem':'.78rem';
     return `<div style="${s}background:${bg};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${fs};color:white;">${i_}</div>`;
 }
 
@@ -421,6 +432,7 @@ let selectedDeptDepto=null;
 let internaFilter='todos';
 let evoHidden=new Set();
 let _evoAllPoints=[],_evoXOf,_evoYOf;
+let _currentViewMode='presidencial'; // track for transition
 
 const YEARS_NAC=[1971,1984,1989,1994,1999,2004,2009,2014,2019,2024,2029];
 const YEARS_DEPT=[1984,1989,1994,1999,2000,2004,2005,2009,2010,2014,2015,2019,2020,2024,2025];
@@ -488,7 +500,12 @@ function renderResultsViewToggle(){
     title.textContent=titles[viewMode]||'';
 }
 
-function setViewMode(m){viewMode=m;renderResultsViewToggle();renderRightPanel();renderMapa();}
+function setViewMode(m){
+    viewMode=m;
+    renderResultsViewToggle();
+    renderRightPanel(true); // with transition
+    renderMapa();
+}
 
 function switchElecType(type){
     elecType=type;
@@ -535,7 +552,6 @@ function renderMapa(){
         return;
     }
     applyMapData(elec.vueltas[selectedVuelta]?.mapa||{});
-    renderMapLegend(elec);
 }
 
 function renderMapaDept(){
@@ -548,21 +564,6 @@ function renderMapaDept(){
         path.style.fill=col(pId);
         if(selectedDeptDepto===depto){path.style.stroke='white';path.style.strokeWidth='3';}
     });
-    renderMapLegendDept(ed);
-}
-
-function buildMapLegend(parties){
-    return [...parties].map(p=>`<div class="map-legend-item"><div class="map-legend-dot" style="background:${col(p)}"></div>${PNOMBRES[p]||p}</div>`).join('');
-}
-function renderMapLegend(elec){
-    const parties=new Set();
-    Object.values(elec.vueltas[selectedVuelta]?.mapa||{}).forEach(info=>{const pId=typeof info==='string'?info:info.ganador;if(pId)parties.add(pId);});
-    document.getElementById('map-legend').innerHTML=buildMapLegend(parties);
-}
-function renderMapLegendDept(ed){
-    const parties=new Set();
-    Object.values(ed.departamentos||{}).forEach(info=>{const g=info.ganador||info,pId=typeof g==='string'?g:g.partido;if(pId)parties.add(pId);});
-    document.getElementById('map-legend').innerHTML=buildMapLegend(parties);
 }
 
 function setupTooltips(){
@@ -577,10 +578,31 @@ function setupTooltips(){
                 if(ed?.departamentos?.[name]){const info=ed.departamentos[name],g=info.ganador||info,pId=typeof g==='string'?g:g.partido;html+=`<div style="color:${col(pId)};font-weight:700;margin-top:4px;">${PNOMBRES[pId]||pId}</div>`;if(g.nombre)html+=`<div style="font-size:.76rem;margin-top:2px;">${g.nombre}</div>`;}
             }else{
                 const elec=ELECCIONES.find(ev=>ev.anio===selectedAnio);
-                const mapa=selectedPleb!==null?(elec?.plebiscitos[selectedPleb]?.mapa||{}):(elec?.vueltas[selectedVuelta]?.mapa||{});
-                const info=mapa[name];html=`<strong>${name}</strong>`;
-                if(typeof info==='object'&&info?.votos){const tot=Object.values(info.votos).reduce((s,v)=>s+v,0);Object.entries(info.votos).sort((a,b)=>b[1]-a[1]).forEach(([p,v])=>html+=`<div class="tt-row"><span style="color:${col(p)};font-weight:700;">${PNOMBRES[p]||p}</span><span>${fmtV(v)} (${pctOf(v,tot)}%)</span></div>`);}
-                else{const pId=typeof info==='string'?info:info?.ganador;html+=pId?`<div style="color:${col(pId)};font-weight:700;margin-top:4px;">${PNOMBRES[pId]||pId}</div>`:`<div style="color:#94a3b8;">Sin datos</div>`;}
+                // For legislative view, show deputee counts per department if available
+                if(viewMode==='legislativo'){
+                    const mapa=elec?.vueltas[selectedVuelta]?.mapa||{};
+                    const info=mapa[name];
+                    html=`<strong>${name}</strong>`;
+                    const dipData=elec?.vueltas[0]?.diputados;
+                    if(dipData&&typeof Object.values(dipData)[0]==='object'&&dipData[name]){
+                        // per-dept deputee data exists
+                        const depts=dipData[name];
+                        const totDep=Object.values(depts).reduce((s,v)=>s+(typeof v==='number'?v:0),0);
+                        html+=`<div style="font-size:.72rem;color:#94a3b8;margin-bottom:3px;">${totDep} diputados</div>`;
+                        Object.entries(depts).sort((a,b)=>b[1]-a[1]).forEach(([p,n])=>{if(n>0)html+=`<div class="tt-row"><span style="color:${col(p)};font-weight:700;">${PNOMBRES[p]||p}</span><span>${n}</span></div>`;});
+                    } else if(typeof info==='object'&&info?.votos){
+                        const tot=Object.values(info.votos).reduce((s,v)=>s+v,0);
+                        Object.entries(info.votos).sort((a,b)=>b[1]-a[1]).forEach(([p,v])=>html+=`<div class="tt-row"><span style="color:${col(p)};font-weight:700;">${PNOMBRES[p]||p}</span><span>${fmtV(v)} (${pctOf(v,tot)}%)</span></div>`);
+                    } else {
+                        const pId=typeof info==='string'?info:info?.ganador;
+                        html+=pId?`<div style="color:${col(pId)};font-weight:700;margin-top:4px;">${PNOMBRES[pId]||pId}</div>`:`<div style="color:#94a3b8;">Sin datos</div>`;
+                    }
+                } else {
+                    const mapa=selectedPleb!==null?(elec?.plebiscitos[selectedPleb]?.mapa||{}):(elec?.vueltas[selectedVuelta]?.mapa||{});
+                    const info=mapa[name];html=`<strong>${name}</strong>`;
+                    if(typeof info==='object'&&info?.votos){const tot=Object.values(info.votos).reduce((s,v)=>s+v,0);Object.entries(info.votos).sort((a,b)=>b[1]-a[1]).forEach(([p,v])=>html+=`<div class="tt-row"><span style="color:${col(p)};font-weight:700;">${PNOMBRES[p]||p}</span><span>${fmtV(v)} (${pctOf(v,tot)}%)</span></div>`);}
+                    else{const pId=typeof info==='string'?info:info?.ganador;html+=pId?`<div style="color:${col(pId)};font-weight:700;margin-top:4px;">${PNOMBRES[pId]||pId}</div>`:`<div style="color:#94a3b8;">Sin datos</div>`;}
+                }
             }
             tt.style.display='block';tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-10)+'px';tt.innerHTML=html;
         });
@@ -592,19 +614,37 @@ function setupTooltips(){
 }
 
 /* ══════════════════════════════════════
-   RIGHT PANEL
+   RIGHT PANEL — with optional transition
 ══════════════════════════════════════ */
-function renderRightPanel(){
+function renderRightPanel(withTransition=false){
     renderResultsViewToggle();
     const el=document.getElementById('right-content');
-    el.className='fade-in';
-    if(elecType==='departamental'){renderDeptMode(el);return;}
-    const elec=ELECCIONES.find(e=>e.anio===selectedAnio);
-    if(!elec){el.innerHTML='<p style="color:var(--text-muted)">Sin datos.</p>';return;}
-    if(selectedPleb!==null){renderPleb(el,elec);return;}
-    if(viewMode==='legislativo'){renderLegislativo(el,elec);return;}
-    if(viewMode==='internas'){renderInternas(el,elec);return;}
-    renderPresidencial(el,elec);
+
+    const doRender=()=>{
+        el.className='';
+        if(elecType==='departamental'){renderDeptMode(el);return;}
+        const elec=ELECCIONES.find(e=>e.anio===selectedAnio);
+        if(!elec){el.innerHTML='<p style="color:var(--text-muted)">Sin datos.</p>';return;}
+        if(selectedPleb!==null){renderPleb(el,elec);return;}
+        if(viewMode==='legislativo'){renderLegislativo(el,elec);return;}
+        if(viewMode==='internas'){renderInternas(el,elec);return;}
+        renderPresidencial(el,elec);
+    };
+
+    if(withTransition){
+        el.style.opacity='0';
+        el.style.transform='translateY(6px)';
+        el.style.transition='opacity .18s ease, transform .18s ease';
+        setTimeout(()=>{
+            doRender();
+            el.style.opacity='1';
+            el.style.transform='translateY(0)';
+            setTimeout(()=>{el.style.transition='';},200);
+        },120);
+    } else {
+        el.className='fade-in';
+        doRender();
+    }
 }
 
 /* ── PRESIDENCIAL ── */
@@ -624,13 +664,13 @@ function renderPresidencial(el,elec){
     let html='';
 
     if(isRunoff&&big.length===2){
-        // Side-by-side vertical layout for runoffs
+        // Side-by-side vertical layout for runoffs — bigger
         html+='<div class="runoff-grid">';
         big.forEach(group=>{
             const leader=group[0],pId=leader.partido,pct=pctOf(leader.votos,total);
             html+=`
             <div class="runoff-card ${leader.ganador?'winner':''}">
-                ${avatarHTML(leader,90,'border:3px solid '+(leader.ganador?'#16a34a':'var(--border)')+';')}
+                ${avatarHTML(leader,110,'border:3px solid '+(leader.ganador?'#16a34a':'var(--border)')+';')}
                 <div class="runoff-name">${leader.nombre}${leader.ganador?'<br><span class="badge-winner" style="margin-left:0">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>
                 <div class="runoff-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div>
                 ${leader.vice?`<div class="runoff-vice">${leader.vice}</div>`:''}
@@ -647,7 +687,7 @@ function renderPresidencial(el,elec){
             html+=`
             <div class="cand-row">
                 <div class="cand-accent" style="background:${col(pId)}"></div>
-                ${avatarHTML(leader,68)}
+                ${avatarHTML(leader,76)}
                 <div class="cand-info">
                     <div class="cand-name">${leader.nombre}${leader.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>
                     <div class="cand-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div>
@@ -663,14 +703,14 @@ function renderPresidencial(el,elec){
                 html+=`
                 <div class="cand-row" style="padding-left:20px;opacity:.85;">
                     <div class="cand-accent" style="background:${col(pId)};opacity:.4;"></div>
-                    ${avatarHTML(c,52)}
+                    ${avatarHTML(c,60)}
                     <div class="cand-info">
-                        <div class="cand-name" style="font-size:.9rem;">${c.nombre}</div>
-                        <div class="cand-party" style="color:${col(pId)};font-size:.76rem;">${PNOMBRES[pId]||pId}</div>
-                        ${c.vice?`<div class="cand-vice-name" style="font-size:.72rem;">${c.vice}</div>`:''}
+                        <div class="cand-name" style="font-size:.95rem;">${c.nombre}</div>
+                        <div class="cand-party" style="color:${col(pId)};font-size:.8rem;">${PNOMBRES[pId]||pId}</div>
+                        ${c.vice?`<div class="cand-vice-name" style="font-size:.74rem;">${c.vice}</div>`:''}
                     </div>
                     <div class="cand-right">
-                        <div class="cand-pct" style="color:${col(pId)};font-size:1.4rem;">${cpct}%</div>
+                        <div class="cand-pct" style="color:${col(pId)};font-size:1.5rem;">${cpct}%</div>
                         <div class="cand-votes">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div>
                     </div>
                 </div>`;
@@ -714,14 +754,14 @@ function renderInternas(el,elec){
     if(internaFilter==='todos'){
         toShow.forEach(int=>{
             const pId=int.partido,tot=int.candidatos.reduce((s,c)=>s+c.votos,0),win=int.candidatos.find(c=>c.ganador)||int.candidatos[0],pct=pctOf(win.votos,tot);
-            html+=`<div class="cand-row"><div class="cand-accent" style="background:${col(pId)}"></div>${avatarHTML(win,68)}<div class="cand-info"><div class="cand-name">${win.nombre}<span class="badge-winner">${lang==='es'?'Ganador interna':'Primary winner'}</span></div>${win.vice?`<div class="cand-vice-name">${win.vice}</div>`:''}<div class="cand-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div><div class="cand-votes" style="margin-top:4px;">${fmtV(tot)} ${lang==='es'?'votos totales':'total votes'}</div></div><div class="cand-right"><div class="cand-pct" style="color:${col(pId)}">${pct}%</div><div class="cand-votes">${fmtV(win.votos)} ${lang==='es'?'votos':'votes'}</div></div></div>`;
+            html+=`<div class="cand-row"><div class="cand-accent" style="background:${col(pId)}"></div>${avatarHTML(win,76)}<div class="cand-info"><div class="cand-name">${win.nombre}<span class="badge-winner">${lang==='es'?'Ganador interna':'Primary winner'}</span></div>${win.vice?`<div class="cand-vice-name">${win.vice}</div>`:''}<div class="cand-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div><div class="cand-votes" style="margin-top:4px;">${fmtV(tot)} ${lang==='es'?'votos totales':'total votes'}</div></div><div class="cand-right"><div class="cand-pct" style="color:${col(pId)}">${pct}%</div><div class="cand-votes">${fmtV(win.votos)} ${lang==='es'?'votos':'votes'}</div></div></div>`;
         });
     }else{
         toShow.forEach(int=>{
             const pId=int.partido,tot=int.candidatos.reduce((s,c)=>s+c.votos,0);
             [...int.candidatos].sort((a,b)=>b.votos-a.votos).forEach(c=>{
                 const pct=parseFloat(pctOf(c.votos,tot));
-                html+=`<div class="cand-row"><div class="cand-accent" style="background:${col(pId)}"></div>${avatarHTML(c,68)}<div class="cand-info"><div class="cand-name">${c.nombre}${c.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>${c.vice?`<div class="cand-vice-name">${c.vice}</div>`:''}<div class="cand-votes" style="margin-top:3px;">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div></div><div class="cand-right"><div class="cand-pct" style="color:${col(pId)}">${pct.toFixed(1)}%</div></div></div>`;
+                html+=`<div class="cand-row"><div class="cand-accent" style="background:${col(pId)}"></div>${avatarHTML(c,76)}<div class="cand-info"><div class="cand-name">${c.nombre}${c.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>${c.vice?`<div class="cand-vice-name">${c.vice}</div>`:''}<div class="cand-votes" style="margin-top:3px;">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div></div><div class="cand-right"><div class="cand-pct" style="color:${col(pId)}">${pct.toFixed(1)}%</div></div></div>`;
             });
         });
     }
