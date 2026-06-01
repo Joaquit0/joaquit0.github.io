@@ -3,1184 +3,909 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elecciones Nacionales — EleccionesUY</title>
+    <title>Elecciones — EleccionesUY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --blue: #5196E4;
-            --blue-dim: rgba(81,150,228,0.12);
-            --text: #454660;
-            --text-muted: #8a8ba8;
-            --bg: #f5f5f8;
-            --card-bg: #ffffff;
-            --border: rgba(69,70,96,0.1);
-            --nav-bg: rgba(255,255,255,0.85);
-            --nav-border: rgba(69,70,96,0.12);
-            --shadow: 0 2px 20px rgba(69,70,96,0.08);
-        }
-        [data-theme="dark"] {
-            --text: #e8e9f5;
-            --text-muted: #7a7b9a;
-            --bg: #0f0f18;
-            --card-bg: #1a1a28;
-            --border: rgba(255,255,255,0.08);
-            --nav-bg: rgba(15,15,24,0.85);
-            --nav-border: rgba(255,255,255,0.08);
-            --shadow: 0 2px 20px rgba(0,0,0,0.3);
-        }
+/* ── RESET & BASE ── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;transition:background .3s,color .3s;}
+:root{
+    --blue:#5196E4;--blue-dim:rgba(81,150,228,.12);--blue-dark:#3a78c9;
+    --text:#454660;--text-muted:#8a8ba8;--bg:#f5f5f8;--card-bg:#ffffff;
+    --border:rgba(69,70,96,.1);--shadow:0 2px 20px rgba(69,70,96,.08);
+}
+[data-theme="dark"]{
+    --text:#e8e9f5;--text-muted:#7a7b9a;--bg:#0f0f18;
+    --card-bg:#1a1a28;--border:rgba(255,255,255,.08);--shadow:0 2px 20px rgba(0,0,0,.3);
+}
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; transition: background 0.3s, color 0.3s; }
+/* ── HEADER ── */
+.site-header{
+    background:var(--card-bg);border-bottom:1px solid var(--border);
+    padding:0 28px;height:56px;display:flex;align-items:center;
+    justify-content:space-between;position:sticky;top:0;z-index:200;
+}
+.header-logo{font-weight:800;font-size:1.1rem;color:var(--blue);text-decoration:none;letter-spacing:-.3px;}
+.header-nav{display:flex;align-items:center;gap:6px;}
+.header-nav a,.header-nav button{
+    padding:6px 14px;border-radius:8px;font-size:.85rem;font-weight:600;
+    color:var(--text-muted);text-decoration:none;border:none;background:transparent;
+    font-family:inherit;cursor:pointer;transition:all .18s;
+}
+.header-nav a:hover,.header-nav button:hover{background:var(--border);color:var(--text);}
+.header-nav a.active{color:var(--blue);background:var(--blue-dim);}
+.header-right{display:flex;align-items:center;gap:8px;}
+.lang-pair{display:flex;background:var(--bg);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.lang-pair button{background:transparent;border:none;padding:5px 10px;font-weight:700;font-size:.75rem;color:var(--text-muted);cursor:pointer;font-family:inherit;transition:.2s;}
+.lang-pair button.active{background:var(--blue);color:white;}
+.theme-btn{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;flex-shrink:0;}
+.theme-btn:hover{background:var(--border);}
+.theme-btn svg{width:15px;height:15px;}
+.theme-btn .icon-moon{display:block;}
+.theme-btn .icon-sun{display:none;}
+[data-theme="dark"] .theme-btn .icon-moon{display:none;}
+[data-theme="dark"] .theme-btn .icon-sun{display:block;}
 
-        /* ── PILL NAVBAR ── */
-        .nav-wrap { position: fixed; top: 18px; left: 50%; transform: translateX(-50%); z-index: 1000; width: calc(100% - 40px); max-width: 860px; }
-        nav { background: var(--nav-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--nav-border); border-radius: 100px; padding: 8px 12px; display: flex; align-items: center; gap: 4px; box-shadow: 0 4px 24px rgba(69,70,96,0.1); }
-        [data-theme="dark"] nav { box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
-        .nav-logo { font-weight: 800; font-size: 0.95rem; color: var(--blue); text-decoration: none; padding: 6px 14px; margin-right: 4px; letter-spacing: -0.3px; white-space: nowrap; }
-        .nav-links { display: flex; gap: 2px; flex: 1; align-items: center; }
-        .nav-link { padding: 7px 16px; border-radius: 100px; font-size: 0.875rem; font-weight: 600; color: var(--text-muted); cursor: pointer; border: none; background: transparent; font-family: inherit; transition: all 0.18s ease; white-space: nowrap; text-decoration: none; display: inline-block; }
-        .nav-link:hover { color: var(--text); background: var(--border); }
-        .nav-link.active { background: var(--blue); color: white; }
-        .nav-link.disabled { opacity: 0.4; cursor: not-allowed; }
-        .nav-link.disabled:hover { background: transparent; color: var(--text-muted); }
-        .nav-right { display: flex; align-items: center; gap: 6px; margin-left: auto; padding-left: 6px; }
-        .lang-pill { display: flex; background: var(--bg); border: 1px solid var(--border); border-radius: 100px; overflow: hidden; }
-        .lang-btn { background: transparent; border: none; padding: 5px 10px; font-weight: 700; font-size: 0.75rem; color: var(--text-muted); cursor: pointer; font-family: inherit; transition: 0.2s; }
-        .lang-btn.active { background: var(--blue); color: white; }
-        .theme-btn { width: 34px; height: 34px; border-radius: 100px; border: 1px solid var(--border); background: var(--bg); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
-        .theme-btn:hover { background: var(--border); }
-        .theme-btn svg { width: 16px; height: 16px; }
-        .theme-btn .icon-moon { display: block; }
-        .theme-btn .icon-sun { display: none; }
-        [data-theme="dark"] .theme-btn .icon-moon { display: none; }
-        [data-theme="dark"] .theme-btn .icon-sun { display: block; }
-        .nav-spacer { height: 76px; }
+/* ── CONTROLS ROW ── */
+.controls-row{
+    background:var(--card-bg);border-bottom:1px solid var(--border);
+    padding:10px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+    position:sticky;top:56px;z-index:100;
+}
+.ctrl-group{display:flex;flex-direction:column;gap:4px;}
+.ctrl-label{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);}
+.ctrl-pills{display:flex;align-items:center;gap:4px;flex-wrap:wrap;}
 
-        /* ── CONTROLS ROW ── */
-        .controls-row {
-            background: var(--card-bg);
-            border-bottom: 1px solid var(--border);
-            padding: 14px 28px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .ctrl-group { display: flex; flex-direction: column; gap: 5px; }
-        .ctrl-label { font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
-        .ctrl-pills { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
-        .ctrl-sep { width: 1px; height: 36px; background: var(--border); flex-shrink: 0; margin: 0 4px; }
+/* Dropdown */
+.year-select{
+    appearance:none;-webkit-appearance:none;
+    background:var(--bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a8ba8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+    border:1.5px solid var(--border);border-radius:10px;
+    padding:7px 30px 7px 12px;font-family:inherit;font-size:.88rem;font-weight:700;
+    color:var(--text);cursor:pointer;min-width:90px;
+}
+.year-select:focus{outline:none;border-color:var(--blue);}
 
-        .pill-btn {
-            padding: 7px 14px; border-radius: 100px; border: 1.5px solid var(--border);
-            background: transparent; color: var(--text-muted); font-family: inherit;
-            font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.18s;
-            white-space: nowrap;
-        }
-        .pill-btn:hover { border-color: var(--blue); color: var(--blue); }
-        .pill-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
-        .pill-btn.pleb.active { background: #7c3aed; border-color: #7c3aed; }
+/* Pills */
+.pill-btn{
+    padding:6px 13px;border-radius:100px;border:1.5px solid var(--border);
+    background:transparent;color:var(--text-muted);font-family:inherit;
+    font-size:.82rem;font-weight:700;cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.pill-btn:hover{border-color:var(--blue);color:var(--blue);}
+.pill-btn.active{background:var(--blue);color:white;border-color:var(--blue);}
+.pill-btn.pleb.active{background:#7c3aed;border-color:#7c3aed;}
 
-        .toggle-group { display: flex; background: var(--bg); border: 1.5px solid var(--border); border-radius: 100px; overflow: hidden; }
-        .toggle-btn { padding: 7px 16px; border: none; background: transparent; font-family: inherit; font-size: 0.82rem; font-weight: 700; color: var(--text-muted); cursor: pointer; transition: all 0.18s; white-space: nowrap; }
-        .toggle-btn.active { background: var(--blue); color: white; }
+/* Toggle */
+.toggle-group{display:flex;background:var(--bg);border:1.5px solid var(--border);border-radius:100px;overflow:hidden;}
+.toggle-btn{padding:6px 15px;border:none;background:transparent;font-family:inherit;font-size:.82rem;font-weight:700;color:var(--text-muted);cursor:pointer;transition:all .18s;white-space:nowrap;}
+.toggle-btn.active{background:var(--blue);color:white;}
 
-        .map-mode-pill {
-            margin-left: auto;
-            padding: 7px 14px; border-radius: 100px; border: 1.5px solid var(--border);
-            background: transparent; color: var(--text-muted); font-family: inherit;
-            font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.18s;
-        }
-        .map-mode-pill:hover { border-color: var(--blue); color: var(--blue); }
-        .map-mode-pill.active { background: var(--blue-dim); color: var(--blue); border-color: var(--blue); }
+.ctrl-sep{width:1px;height:32px;background:var(--border);flex-shrink:0;margin:0 4px;}
+.ctrl-spacer{flex:1;}
 
-        /* ── MAIN TWO-PANEL ── */
-        .main-layout { display: flex; align-items: flex-start; min-height: calc(100vh - 130px); }
+/* ── PAGE BODY ── */
+.page-body{display:flex;flex-direction:column;}
 
-        .map-panel {
-            position: sticky; top: 57px;
-            width: 48%; flex-shrink: 0;
-            height: calc(100vh - 57px);
-            padding: 24px;
-            display: flex; flex-direction: column;
-            background: var(--bg);
-            overflow: hidden;
-        }
-        .map-card {
-            background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px;
-            flex: 1; display: flex; flex-direction: column; overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        .map-card-header { padding: 16px 20px 0; }
-        .map-card-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 2px; }
-        .map-card-sub { font-size: 0.75rem; color: var(--text-muted); }
-        #map-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 12px; }
-        #map-container svg { width: 100%; max-width: 460px; height: auto; filter: drop-shadow(0 4px 16px rgba(0,0,0,0.07)); }
-        #map-container path { stroke: var(--card-bg); stroke-width: 1.5; transition: fill 0.4s ease, fill-opacity 0.4s; cursor: pointer; }
-        #map-container path:hover { opacity: 0.82; }
-        #map-container #label_points { display: none; }
+/* Two-panel */
+.main-panels{
+    display:grid;grid-template-columns:1fr 1fr;
+    gap:20px;padding:20px 28px;
+    align-items:stretch;
+    min-height:calc(100vh - 56px - 52px);
+}
+@media(max-width:900px){.main-panels{grid-template-columns:1fr;}}
 
-        .map-legend { padding: 12px 20px 16px; display: flex; flex-wrap: wrap; gap: 8px 16px; border-top: 1px solid var(--border); }
-        .map-legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
-        .map-legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
-        .map-legend-note { width: 100%; font-size: 0.65rem; color: var(--text-muted); }
+/* ── CARD WINDOW ── */
+.panel-card{
+    background:var(--card-bg);border:1px solid var(--border);border-radius:20px;
+    box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden;
+    position:relative;
+}
 
-        /* RIGHT PANEL */
-        .right-panel {
-            width: 52%; min-width: 0;
-            border-left: 1px solid var(--border);
-            padding: 24px;
-            background: var(--card-bg);
-            min-height: calc(100vh - 57px);
-        }
-        .right-panel-title { font-size: 1.1rem; font-weight: 800; margin-bottom: 20px; letter-spacing: -0.3px; }
+/* MAP CARD */
+.map-card{min-height:560px;}
+.map-card-toolbar{
+    position:absolute;top:14px;left:14px;right:14px;
+    display:flex;justify-content:space-between;align-items:flex-start;
+    z-index:10;pointer-events:none;
+}
+.map-zoom-btns{display:flex;flex-direction:column;gap:4px;pointer-events:all;}
+.map-zoom-btn{
+    width:32px;height:32px;border-radius:8px;border:1px solid var(--border);
+    background:var(--card-bg);color:var(--text);font-size:1.1rem;font-weight:700;
+    cursor:pointer;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(0,0,0,.08);transition:.15s;font-family:inherit;line-height:1;
+}
+.map-zoom-btn:hover{border-color:var(--blue);color:var(--blue);}
+.map-margin-btn{
+    pointer-events:all;padding:6px 12px;border-radius:100px;border:1.5px solid var(--border);
+    background:var(--card-bg);color:var(--text-muted);font-family:inherit;
+    font-size:.78rem;font-weight:700;cursor:pointer;transition:all .18s;
+    box-shadow:0 2px 8px rgba(0,0,0,.06);white-space:nowrap;
+}
+.map-margin-btn:hover{border-color:var(--blue);color:var(--blue);}
+.map-margin-btn.active{background:var(--blue-dim);color:var(--blue);border-color:var(--blue);}
 
-        /* ── CANDIDATE ROWS (mockup style) ── */
-        .cand-list { display: flex; flex-direction: column; gap: 0; }
-        .cand-row {
-            display: flex; align-items: center; gap: 16px;
-            padding: 16px 0; border-bottom: 1px solid var(--border);
-        }
-        .cand-row:last-child { border-bottom: none; }
-        .cand-accent { width: 4px; height: 72px; border-radius: 4px; flex-shrink: 0; }
-        .cand-avatar {
-            width: 64px; height: 64px; border-radius: 50%; overflow: hidden;
-            flex-shrink: 0; background: var(--bg);
-            border: 2px solid var(--border);
-        }
-        .cand-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
-        .cand-avatar-initials {
-            width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 1.2rem; color: white;
-        }
-        .cand-info { flex: 1; min-width: 0; }
-        .cand-name { font-weight: 800; font-size: 1rem; margin-bottom: 2px; }
-        .cand-party { font-size: 0.82rem; font-weight: 700; margin-bottom: 3px; }
-        .cand-vice-label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 1px; }
-        .cand-vice-name { font-size: 0.78rem; font-weight: 600; }
-        .cand-right { text-align: right; flex-shrink: 0; min-width: 90px; }
-        .cand-pct { font-size: 1.8rem; font-weight: 900; line-height: 1; letter-spacing: -1px; }
-        .cand-votes { font-size: 0.72rem; color: var(--text-muted); margin-top: 3px; font-weight: 600; }
-        .badge-winner { display: inline-block; background: #16a34a; color: white; font-size: 0.6rem; font-weight: 800; padding: 3px 7px; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.05em; vertical-align: middle; margin-left: 6px; }
+#map-container{
+    flex:1;display:flex;align-items:center;justify-content:center;
+    overflow:hidden;padding:10px;min-height:0;
+}
+#map-container svg{
+    width:100%;height:100%;max-width:none;
+    filter:drop-shadow(0 4px 16px rgba(0,0,0,.07));
+    transform-origin:center;transition:transform .2s ease;
+}
+#map-container path{stroke:var(--card-bg);stroke-width:1.5;transition:fill .4s,fill-opacity .4s;cursor:pointer;}
+#map-container path:hover{opacity:.82;}
+#map-container #label_points{display:none;}
 
-        /* Minor candidates */
-        .cand-minor-list { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
-        .cand-minor-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; background: var(--bg); border-radius: 10px; border: 1px solid var(--border); }
-        .cand-minor-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-        .cand-minor-name { flex: 1; font-weight: 700; font-size: 0.85rem; }
-        .cand-minor-party { font-size: 0.75rem; color: var(--text-muted); }
-        .cand-minor-pct { font-weight: 800; font-size: 0.95rem; }
+.map-legend{
+    padding:12px 20px 14px;display:flex;flex-wrap:wrap;gap:6px 14px;
+    border-top:1px solid var(--border);flex-shrink:0;
+}
+.map-legend-item{display:flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;color:var(--text-muted);}
+.map-legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
 
-        /* Footer stats row */
-        .results-footer { display: flex; justify-content: space-between; padding-top: 14px; margin-top: 4px; border-top: 1px solid var(--border); font-size: 0.75rem; color: var(--text-muted); font-weight: 600; }
+/* RESULTS CARD */
+.results-card{}
+.results-card-header{
+    padding:16px 20px 14px;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;justify-content:space-between;flex-shrink:0;flex-wrap:wrap;gap:8px;
+}
+.results-card-title{font-size:1rem;font-weight:800;letter-spacing:-.2px;}
+.results-card-body{flex:1;overflow-y:auto;padding:16px 20px;min-height:0;}
 
-        /* ── PLEBISCITO ── */
-        .pleb-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 20px; padding: 14px 18px; background: var(--bg); border-radius: 12px; border: 1px solid var(--border); }
-        .pleb-option { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-radius: 14px; border: 1.5px solid var(--border); margin-bottom: 10px; }
-        .pleb-option.winner { border-color: #16a34a; border-width: 2px; }
-        .pleb-option-name { font-weight: 700; font-size: 1rem; }
-        .pleb-option-votes { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
-        .pleb-option-pct { font-size: 1.6rem; font-weight: 900; }
+/* ── CANDIDATE ROWS (1st round — horizontal) ── */
+.cand-list{display:flex;flex-direction:column;gap:0;}
+.cand-row{
+    display:flex;align-items:center;gap:14px;
+    padding:14px 0;border-bottom:1px solid var(--border);
+}
+.cand-row:last-child{border-bottom:none;}
+.cand-accent{width:4px;height:68px;border-radius:4px;flex-shrink:0;}
+.cand-avatar{
+    width:68px;height:68px;border-radius:50%;overflow:hidden;flex-shrink:0;
+    background:var(--bg);border:2px solid var(--border);
+}
+.cand-avatar img,.cand-avatar>div{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.cand-avatar>div{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.2rem;color:white;}
+.cand-info{flex:1;min-width:0;}
+.cand-name{font-weight:800;font-size:1.05rem;margin-bottom:2px;}
+.cand-party{font-size:.84rem;font-weight:700;margin-bottom:3px;}
+.cand-vice-lbl{font-size:.68rem;color:var(--text-muted);margin-bottom:1px;}
+.cand-vice-name{font-size:.8rem;font-weight:600;}
+.cand-right{text-align:right;flex-shrink:0;min-width:100px;}
+.cand-pct{font-size:2rem;font-weight:900;line-height:1;letter-spacing:-1.5px;}
+.cand-votes{font-size:.72rem;color:var(--text-muted);margin-top:3px;font-weight:600;}
+.badge-winner{
+    display:inline-block;background:#16a34a;color:white;font-size:.58rem;
+    font-weight:800;padding:3px 7px;border-radius:100px;text-transform:uppercase;
+    letter-spacing:.05em;vertical-align:middle;margin-left:6px;
+}
 
-        /* ── INTERNAS ── */
-        .interna-filter { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
-        .interna-filter-btn { padding: 6px 14px; border-radius: 100px; border: 1.5px solid var(--border); background: transparent; color: var(--text-muted); font-family: inherit; font-size: 0.8rem; font-weight: 700; cursor: pointer; transition: all 0.18s; }
-        .interna-filter-btn:hover { border-color: var(--blue); color: var(--blue); }
-        .interna-filter-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+/* ── RUNOFF: side-by-side vertical ── */
+.runoff-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.runoff-card{
+    background:var(--bg);border:2px solid var(--border);border-radius:16px;
+    padding:20px;display:flex;flex-direction:column;align-items:center;
+    text-align:center;gap:10px;transition:transform .15s;
+}
+.runoff-card:hover{transform:translateY(-2px);}
+.runoff-card.winner{border-color:#16a34a;}
+.runoff-avatar{
+    width:90px;height:90px;border-radius:50%;overflow:hidden;
+    border:3px solid var(--border);flex-shrink:0;
+}
+.runoff-avatar img,.runoff-avatar>div{width:100%;height:100%;object-fit:cover;object-position:center top;}
+.runoff-avatar>div{display:flex;align-items:center;justify-content:center;font-weight:800;font-size:1.6rem;color:white;}
+.runoff-name{font-weight:800;font-size:1rem;line-height:1.2;}
+.runoff-party{font-size:.8rem;font-weight:700;margin-top:2px;}
+.runoff-vice{font-size:.72rem;color:var(--text-muted);margin-top:2px;}
+.runoff-pct{font-size:2.4rem;font-weight:900;line-height:1;letter-spacing:-2px;margin-top:4px;}
+.runoff-votes{font-size:.72rem;color:var(--text-muted);font-weight:600;}
 
-        /* ── DEPARTAMENTALES GRID ── */
-        .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-        .dept-card { border-radius: 14px; border: 2px solid; padding: 14px; cursor: pointer; transition: transform 0.15s; display: flex; align-items: center; gap: 10px; background: var(--bg); }
-        .dept-card:hover { transform: translateY(-2px); }
-        .dept-card.selected { box-shadow: 0 0 0 3px var(--blue); }
-        .dept-badge { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.7rem; color: white; flex-shrink: 0; }
-        .dept-name { font-weight: 800; font-size: 0.88rem; }
-        .dept-winner-party { font-size: 0.7rem; font-weight: 700; }
-        .dept-detalle { margin-top: 20px; padding: 20px; background: var(--bg); border-radius: 16px; border: 1.5px solid var(--blue); }
-        .dept-detalle-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 16px; padding-left: 10px; border-left: 4px solid var(--blue); }
-        .dept-summary { margin-top: 20px; padding: 20px; background: var(--bg); border-radius: 16px; border: 1px solid var(--border); }
-        .dept-summary-title { font-size: 0.95rem; font-weight: 800; margin-bottom: 16px; padding-left: 10px; border-left: 4px solid var(--blue); }
-        .dept-summary-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); gap: 12px; }
-        .dept-summary-row:last-child { border-bottom: none; }
-        .dept-summary-party { font-weight: 700; font-size: 0.88rem; }
-        .dept-summary-right { text-align: right; }
-        .dept-summary-pct { font-weight: 800; font-size: 1rem; }
-        .dept-summary-votes { font-size: 0.72rem; color: var(--text-muted); }
+/* minor */
+.cand-minor-list{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.cand-minor-row{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--bg);border-radius:10px;border:1px solid var(--border);}
+.cand-minor-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cand-minor-name{flex:1;font-weight:700;font-size:.84rem;}
+.cand-minor-party{font-size:.73rem;color:var(--text-muted);}
+.cand-minor-pct{font-weight:800;font-size:.95rem;}
 
-        /* ── LEGISLATIVO / PARLIAMENT ── */
-        .legislativo-wrap { display: flex; flex-direction: column; gap: 60px; padding-top: 8px; }
-        .parliament-section { text-align: center; }
-        .parliament-title { display: inline-block; font-size: 1rem; font-weight: 800; padding: 8px 18px; background: var(--bg); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 32px; }
-        .parliament-container { position: relative; width: 100%; max-width: 460px; margin: 0 auto; aspect-ratio: 2/1; }
-        .parliament-dot { position: absolute; border-radius: 50%; cursor: pointer; transition: transform 0.2s; }
-        .parliament-dot:hover { transform: scale(1.4); z-index: 50; }
-        .parl-tooltip { visibility: hidden; position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%); background: #1a1a2e; color: white; padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; z-index: 100; opacity: 0; transition: opacity 0.15s; box-shadow: 0 4px 12px rgba(0,0,0,0.4); pointer-events: none; text-align: center; line-height: 1.4; }
-        .parl-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; margin-left: -5px; border-width: 5px; border-style: solid; border-color: #1a1a2e transparent transparent transparent; }
-        .parliament-dot:hover .parl-tooltip { visibility: visible; opacity: 1; }
-        .parliament-legend { display: flex; flex-wrap: wrap; gap: 10px 20px; justify-content: center; margin-top: 48px; }
-        .p-leg-item { display: flex; align-items: center; gap: 7px; font-size: 0.88rem; font-weight: 700; }
-        .p-leg-dot { width: 14px; height: 14px; border-radius: 50%; }
+/* footer */
+.results-footer{display:flex;justify-content:space-between;padding-top:12px;margin-top:4px;border-top:1px solid var(--border);font-size:.73rem;color:var(--text-muted);font-weight:600;}
 
-        /* ── EVOLUTION CHART (full width below) ── */
-        .evo-section {
-            background: var(--card-bg); border-top: 1px solid var(--border);
-            padding: 36px 40px 44px;
-        }
-        .evo-title { font-size: 1rem; font-weight: 800; padding-left: 12px; border-left: 4px solid var(--blue); margin-bottom: 24px; }
-        .evo-chart-wrap { position: relative; width: 100%; user-select: none; }
-        .evo-chart-wrap svg { width: 100%; height: auto; display: block; overflow: visible; }
-        .evo-legend { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 16px; }
-        .evo-legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.78rem; font-weight: 600; cursor: pointer; opacity: 1; transition: opacity 0.2s; }
-        .evo-legend-item.hidden { opacity: 0.3; }
-        .evo-legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+/* pleb */
+.pleb-desc{font-size:.84rem;color:var(--text-muted);line-height:1.6;margin-bottom:16px;padding:12px 16px;background:var(--bg);border-radius:12px;border:1px solid var(--border);}
+.pleb-option{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-radius:14px;border:1.5px solid var(--border);margin-bottom:8px;}
+.pleb-option.winner{border-color:#16a34a;border-width:2px;}
+.pleb-option-name{font-weight:700;font-size:.95rem;}
+.pleb-option-votes{font-size:.73rem;color:var(--text-muted);margin-top:2px;}
+.pleb-option-pct{font-size:1.6rem;font-weight:900;}
 
-        /* ── MAP TOOLTIP ── */
-        #map-tooltip {
-            position: fixed; background: #1a1a2e; color: white; padding: 10px 14px; border-radius: 10px;
-            font-size: 0.82rem; pointer-events: none; z-index: 9999; display: none; min-width: 150px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-        }
-        #map-tooltip strong { display: block; font-size: 0.92rem; margin-bottom: 5px; border-bottom: 1px solid rgba(255,255,255,0.18); padding-bottom: 4px; }
-        .tt-row { display: flex; justify-content: space-between; gap: 16px; font-size: 0.8rem; margin-top: 3px; }
+/* internas */
+.interna-filter{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;}
+.int-filter-btn{padding:5px 12px;border-radius:100px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);font-family:inherit;font-size:.78rem;font-weight:700;cursor:pointer;transition:all .18s;}
+.int-filter-btn:hover{border-color:var(--blue);color:var(--blue);}
+.int-filter-btn.active{background:var(--blue);color:white;border-color:var(--blue);}
 
-        /* EVO tooltip */
-        #evo-tooltip {
-            position: fixed; background: #1a1a2e; color: white; padding: 10px 14px; border-radius: 10px;
-            font-size: 0.82rem; pointer-events: none; z-index: 9999; display: none; min-width: 150px; max-width: 200px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.3); opacity: 0; transition: opacity 0.18s;
-        }
+/* dept */
+.dept-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;}
+.dept-card{border-radius:14px;border:2px solid;padding:12px;cursor:pointer;transition:transform .15s;display:flex;align-items:center;gap:10px;background:var(--bg);}
+.dept-card:hover{transform:translateY(-2px);}
+.dept-card.selected{box-shadow:0 0 0 3px var(--blue);}
+.dept-badge{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.68rem;color:white;flex-shrink:0;}
+.dept-name{font-weight:800;font-size:.86rem;}
+.dept-winner-party{font-size:.68rem;font-weight:700;}
+.dept-detalle{padding:16px;background:var(--bg);border-radius:14px;border:1.5px solid var(--blue);margin-top:14px;}
+.dept-detalle-title{font-size:.92rem;font-weight:800;margin-bottom:14px;padding-left:10px;border-left:4px solid var(--blue);}
+.dept-summary{padding:16px;background:var(--bg);border-radius:14px;border:1px solid var(--border);margin-top:14px;}
+.dept-summary-title{font-size:.92rem;font-weight:800;margin-bottom:12px;padding-left:10px;border-left:4px solid var(--blue);}
+.dept-summary-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);gap:10px;}
+.dept-summary-row:last-child{border-bottom:none;}
+.dept-summary-party{font-weight:700;font-size:.86rem;}
+.dept-summary-right{text-align:right;}
+.dept-summary-pct{font-weight:800;font-size:.98rem;}
+.dept-summary-votes{font-size:.7rem;color:var(--text-muted);}
 
-        /* error banner */
-        #error-banner { display: none; background: #e05c5c; color: white; padding: 10px; text-align: center; position: fixed; top: 0; left: 0; width: 100%; z-index: 9999; font-size: 0.88rem; font-weight: 600; }
+/* parliament */
+.legislativo-wrap{display:flex;flex-direction:column;gap:50px;padding-top:6px;}
+.parliament-section{text-align:center;}
+.parliament-title{display:inline-block;font-size:.95rem;font-weight:800;padding:7px 16px;background:var(--bg);border:1px solid var(--border);border-radius:10px;margin-bottom:28px;}
+.parliament-container{position:relative;width:100%;max-width:440px;margin:0 auto;aspect-ratio:2/1;}
+.parliament-dot{position:absolute;border-radius:50%;cursor:pointer;transition:transform .2s;}
+.parliament-dot:hover{transform:scale(1.4);z-index:50;}
+.parl-tip{visibility:hidden;position:absolute;bottom:calc(100% + 10px);left:50%;transform:translateX(-50%);background:#1a1a2e;color:white;padding:7px 11px;border-radius:8px;font-size:.78rem;font-weight:600;white-space:nowrap;z-index:100;opacity:0;transition:opacity .15s;box-shadow:0 4px 12px rgba(0,0,0,.4);pointer-events:none;text-align:center;line-height:1.4;}
+.parl-tip::after{content:'';position:absolute;top:100%;left:50%;margin-left:-5px;border-width:5px;border-style:solid;border-color:#1a1a2e transparent transparent transparent;}
+.parliament-dot:hover .parl-tip{visibility:visible;opacity:1;}
+.parliament-legend{display:flex;flex-wrap:wrap;gap:8px 18px;justify-content:center;margin-top:42px;}
+.p-leg-item{display:flex;align-items:center;gap:6px;font-size:.85rem;font-weight:700;}
+.p-leg-dot{width:13px;height:13px;border-radius:50%;}
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-        .fade-in { animation: fadeIn 0.28s ease; }
+/* ── EVOLUTION CARD ── */
+.evo-card{
+    margin:0 28px 28px;background:var(--card-bg);border:1px solid var(--border);
+    border-radius:20px;box-shadow:var(--shadow);padding:28px 32px 24px;
+}
+.evo-card-title{font-size:.95rem;font-weight:800;padding-left:12px;border-left:4px solid var(--blue);margin-bottom:20px;}
+.evo-chart-wrap{position:relative;width:100%;user-select:none;}
+.evo-chart-wrap svg{width:100%;height:auto;display:block;overflow:visible;}
+.evo-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:14px;}
+.evo-legend-item{display:flex;align-items:center;gap:5px;font-size:.76rem;font-weight:600;cursor:pointer;opacity:1;transition:opacity .2s;}
+.evo-legend-item.hidden{opacity:.3;}
+.evo-legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 
-        @media (max-width: 960px) {
-            .main-layout { flex-direction: column; }
-            .map-panel { width: 100%; position: static; height: auto; }
-            .right-panel { width: 100%; border-left: none; border-top: 1px solid var(--border); }
-            .evo-section { padding: 24px 20px 32px; }
-        }
-        @media (max-width: 640px) {
-            .nav-wrap { top: 12px; width: calc(100% - 24px); }
-            .nav-link { padding: 7px 10px; font-size: 0.78rem; }
-            .controls-row { padding: 12px 16px; gap: 12px; }
-        }
+/* tooltips */
+#map-tooltip{position:fixed;background:#1a1a2e;color:white;padding:10px 14px;border-radius:10px;font-size:.8rem;pointer-events:none;z-index:9999;display:none;min-width:148px;box-shadow:0 8px 24px rgba(0,0,0,.3);}
+#map-tooltip strong{display:block;font-size:.9rem;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,.18);padding-bottom:4px;}
+.tt-row{display:flex;justify-content:space-between;gap:14px;font-size:.78rem;margin-top:3px;}
+#evo-tooltip{position:fixed;background:#1a1a2e;color:white;padding:10px 14px;border-radius:10px;font-size:.8rem;pointer-events:none;z-index:9999;display:none;min-width:148px;max-width:196px;box-shadow:0 8px 24px rgba(0,0,0,.3);opacity:0;transition:opacity .18s;}
+#error-banner{display:none;background:#e05c5c;color:white;padding:10px;text-align:center;position:fixed;top:0;left:0;width:100%;z-index:9999;font-size:.86rem;font-weight:600;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeIn .25s ease;}
     </style>
 </head>
 <body data-theme="light">
-<script>(function(){ const t=localStorage.getItem('eluy-theme'); if(t) document.body.setAttribute('data-theme',t); })();</script>
-
+<script>(function(){const t=localStorage.getItem('eluy-theme');if(t)document.body.setAttribute('data-theme',t);})();</script>
 <div id="error-banner"></div>
 <div id="map-tooltip"></div>
 <div id="evo-tooltip"></div>
 
-<!-- PILL NAVBAR -->
-<div class="nav-wrap">
-    <nav>
-        <a class="nav-logo" href="index.html">EleccionesUY</a>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link" id="nav-inicio">Inicio</a>
-            <a href="elecciones.html" class="nav-link active" id="nav-elecciones">Elecciones</a>
-            <a href="test.html" class="nav-link" id="nav-test">Test</a>
-            <a href="editor.html" class="nav-link" id="nav-editor">Editor</a>
-            <button class="nav-link disabled" id="nav-galeria">Galería</button>
+<!-- ── HEADER ── -->
+<header class="site-header">
+    <div style="display:flex;align-items:center;gap:20px;">
+        <a class="header-logo" href="index.html">EleccionesUY</a>
+        <nav class="header-nav">
+            <a href="index.html" id="nav-inicio">Inicio</a>
+            <a href="elecciones.html" id="nav-elecciones" class="active">Elecciones</a>
+            <a href="test.html" id="nav-test">Test</a>
+            <a href="editor.html" id="nav-editor">Editor</a>
+        </nav>
+    </div>
+    <div class="header-right">
+        <div class="lang-pair">
+            <button id="btn-es" class="active" onclick="setLang('es')">ES</button>
+            <button id="btn-en" onclick="setLang('en')">EN</button>
         </div>
-        <div class="nav-right">
-            <div class="lang-pill">
-                <button id="btn-es" class="lang-btn active" onclick="setLang('es')">ES</button>
-                <button id="btn-en" class="lang-btn" onclick="setLang('en')">EN</button>
-            </div>
-            <button class="theme-btn" onclick="toggleDark()" aria-label="Toggle dark mode">
-                <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#454660" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-                <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-            </button>
-        </div>
-    </nav>
-</div>
+        <button class="theme-btn" onclick="toggleDark()">
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="#454660" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+    </div>
+</header>
 
-<div class="nav-spacer"></div>
-
-<!-- CONTROLS ROW -->
-<div class="controls-row" id="controls-row">
-    <!-- Year pills -->
+<!-- ── CONTROLS ROW ── -->
+<div class="controls-row">
+    <!-- Elección dropdown -->
     <div class="ctrl-group">
         <div class="ctrl-label" id="lbl-eleccion">Elección</div>
-        <div class="ctrl-pills" id="year-pills"></div>
+        <select class="year-select" id="year-select" onchange="selectYear(+this.value)"></select>
     </div>
 
-    <div class="ctrl-sep"></div>
-
-    <!-- Nacional / Departamental -->
-    <div class="ctrl-group">
-        <div class="ctrl-label" id="lbl-nivel">Nivel</div>
-        <div class="toggle-group">
-            <button class="toggle-btn active" id="toggle-nacional" onclick="switchElecType('nacional')">Nacional</button>
-            <button class="toggle-btn" id="toggle-departamental" onclick="switchElecType('departamental')">Departamental</button>
-        </div>
-    </div>
-
-    <div class="ctrl-sep" id="sep-round" style="display:none;"></div>
-
-    <!-- Round / Plebiscite pills (national only) -->
+    <!-- Round / Plebiscite pills -->
     <div class="ctrl-group" id="group-vueltas" style="display:none;">
         <div class="ctrl-label" id="lbl-vuelta">Vuelta</div>
         <div class="ctrl-pills" id="vuelta-pills"></div>
     </div>
 
-    <div class="ctrl-sep"></div>
+    <div class="ctrl-spacer"></div>
 
-    <!-- Results view: Presidencial / Legislativo (national only) / Intendentes (dept only) -->
-    <div class="ctrl-group" id="group-view">
-        <div class="ctrl-label" id="lbl-ver">Ver resultados de</div>
-        <div class="toggle-group" id="view-toggle"></div>
-    </div>
-
-    <!-- Map mode -->
-    <button class="map-mode-pill" id="btn-map-mode" onclick="toggleMapMode()">Margen de victoria</button>
-</div>
-
-<!-- MAIN LAYOUT -->
-<div class="main-layout">
-    <!-- MAP -->
-    <div class="map-panel">
-        <div class="map-card">
-            <div class="map-card-header">
-                <div class="map-card-title" id="map-card-title">Resultados departamentales</div>
-                <div class="map-card-sub" id="map-card-sub">Seleccioná un departamento para ver el detalle</div>
-            </div>
-            <div id="map-container"><p style="color:var(--text-muted);font-weight:600;padding:40px;text-align:center;">Cargando mapa...</p></div>
-            <div class="map-legend" id="map-legend"></div>
+    <!-- Nacional / Departamental — far right -->
+    <div class="ctrl-group">
+        <div class="ctrl-label" id="lbl-nivel">Nivel</div>
+        <div class="toggle-group">
+            <button class="toggle-btn active" id="toggle-nacional" onclick="switchElecType('nacional')" id="toggle-nacional">Nacional</button>
+            <button class="toggle-btn" id="toggle-departamental" onclick="switchElecType('departamental')">Departamental</button>
         </div>
     </div>
-
-    <!-- RIGHT PANEL -->
-    <div class="right-panel" id="right-panel">
-        <div id="right-content" class="fade-in"></div>
-    </div>
 </div>
 
-<!-- EVOLUTION CHART (full width) -->
-<div class="evo-section" id="evo-section" style="display:none;">
-    <div class="evo-title" id="evo-title">Evolución de votos por partido</div>
+<!-- ── MAIN PANELS ── -->
+<div class="page-body">
+<div class="main-panels">
+
+    <!-- MAP CARD -->
+    <div class="panel-card map-card" id="map-card">
+        <!-- Toolbar inside the map card -->
+        <div class="map-card-toolbar">
+            <div class="map-zoom-btns">
+                <button class="map-zoom-btn" onclick="mapZoom(1.25)" title="Zoom in">+</button>
+                <button class="map-zoom-btn" onclick="mapZoom(0.8)" title="Zoom out">−</button>
+                <button class="map-zoom-btn" onclick="mapReset()" title="Reset" style="font-size:.7rem;font-weight:800;">↺</button>
+            </div>
+            <button class="map-margin-btn" id="btn-map-mode" onclick="toggleMapMode()">Margen de victoria</button>
+        </div>
+        <div id="map-container" style="flex:1;"><p style="color:var(--text-muted);padding:60px;text-align:center;font-weight:600;">Cargando mapa...</p></div>
+        <div class="map-legend" id="map-legend"></div>
+    </div>
+
+    <!-- RESULTS CARD -->
+    <div class="panel-card results-card">
+        <div class="results-card-header">
+            <div class="results-card-title" id="results-card-title">Resultados presidenciales</div>
+            <div id="results-view-toggle"></div>
+        </div>
+        <div class="results-card-body" id="right-content"></div>
+    </div>
+
+</div><!-- end main-panels -->
+
+<!-- EVOLUTION CARD -->
+<div class="evo-card" id="evo-card" style="display:none;">
+    <div class="evo-card-title" id="evo-title">Evolución de votos por partido</div>
     <div class="evo-chart-wrap" id="evo-chart-wrap"></div>
     <div class="evo-legend" id="evo-legend"></div>
 </div>
 
+</div><!-- end page-body -->
+
 <script>
-/* ════════════════════════════
-   CONSTANTS & COLORS
-════════════════════════════ */
-const COLORES = {
-    'PC':'#e05c5c','PN':'#60b8e0','FA':'#005595','NE':'#1341d6','PI':'#7030a0',
-    'CA':'#e8a020','UP':'#e67e22','UC':'#16a085','PGP':'#4f79bd','default':'#94a3b8',
-    'PERI':'#27b84d','PG':'#62d17a','AP':'#f03e3e','PVEE':'#4eb551',
-    'IS':'#263deb','CR':'#2641bd','PDC':'#e65768'
-};
-const PARTIDO_NOMBRES = {
-    FA:'Frente Amplio',PN:'Partido Nacional',PC:'Partido Colorado',CA:'Cabildo Abierto',
-    PI:'Partido Independiente',NE:'Nuevo Espacio',UP:'Unión Popular',UC:'Unión Cívica',
-    PGP:'Por el Gob. del Pueblo',IS:'Identidad Soberana',CR:'Coalición Republicana'
-};
-const DEPTO_ID = {
-    'Paysandú':'UYPA','Artigas':'UYAR','Salto':'UYSA','Rivera':'UYRV','Rocha':'UYRO',
-    'Treinta y Tres':'UYTT','Cerro Largo':'UYCL','Maldonado':'UYMA','Canelones':'UYCA',
-    'Montevideo':'UYMO','San José':'UYSJ','Colonia':'UYCO','Soriano':'UYSO',
-    'Río Negro':'UYRN','Tacuarembó':'UYTA','Durazno':'UYDU','Flores':'UYFS',
-    'Florida':'UYFD','Lavalleja':'UYLA'
-};
+/* ══════════════════════════════════════
+   DATA CONSTANTS
+══════════════════════════════════════ */
+const COLORES={PC:'#e05c5c',PN:'#60b8e0',FA:'#005595',NE:'#1341d6',PI:'#7030a0',CA:'#e8a020',UP:'#e67e22',UC:'#16a085',PGP:'#4f79bd',default:'#94a3b8',PERI:'#27b84d',PG:'#62d17a',AP:'#f03e3e',PVEE:'#4eb551',IS:'#263deb',CR:'#2641bd',PDC:'#e65768'};
+const PNOMBRES={FA:'Frente Amplio',PN:'Partido Nacional',PC:'Partido Colorado',CA:'Cabildo Abierto',PI:'Partido Independiente',NE:'Nuevo Espacio',UP:'Unión Popular',UC:'Unión Cívica',PGP:'Por el Gob. del Pueblo',IS:'Identidad Soberana',CR:'Coalición Republicana'};
+const DEPTO_ID={Paysandú:'UYPA',Artigas:'UYAR',Salto:'UYSA',Rivera:'UYRV',Rocha:'UYRO','Treinta y Tres':'UYTT','Cerro Largo':'UYCL',Maldonado:'UYMA',Canelones:'UYCA',Montevideo:'UYMO','San José':'UYSJ',Colonia:'UYCO',Soriano:'UYSO','Río Negro':'UYRN',Tacuarembó:'UYTA',Durazno:'UYDU',Flores:'UYFS',Florida:'UYFD',Lavalleja:'UYLA'};
 
-function col(p) { return COLORES[p] || COLORES['default']; }
-function fmtV(n) { return n ? n.toLocaleString('es-UY') : '0'; }
-function pctOf(v,t) { return t>0 ? ((v/t)*100).toFixed(1) : '0.0'; }
-function txt(o) { return (o&&o[lang]) ? o[lang] : (o&&o.es) ? o.es : (typeof o==='string' ? o : ''); }
-function initials(nombre) {
-    return (nombre||'').split(' ').filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join('').toUpperCase();
-}
-function avatarHTML(c, size=64) {
-    const s = `width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;`;
-    if (c && c.foto) return `<div style="${s}border:2px solid var(--border);"><img src="${c.foto}" style="width:100%;height:100%;object-fit:cover;object-position:center top;" alt=""></div>`;
-    const bg = c ? col(c.partido) : col('default');
-    const in_ = c ? initials(c.nombre||c.partido) : '?';
-    return `<div style="${s}background:${bg};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${size>48?'1.2':'0.85'}rem;color:white;">${in_}</div>`;
+function col(p){return COLORES[p]||COLORES.default;}
+function fmtV(n){return n?n.toLocaleString('es-UY'):'0';}
+function pctOf(v,t){return t>0?((v/t)*100).toFixed(1):'0.0';}
+function txt(o){return(o&&o[lang])?o[lang]:(o&&o.es)?o.es:(typeof o==='string'?o:'');}
+function inits(n){return(n||'').split(' ').filter(w=>w.length>2).slice(0,2).map(w=>w[0]).join('').toUpperCase();}
+
+function avatarHTML(c,size,extraStyle=''){
+    const s=`width:${size}px;height:${size}px;border-radius:50%;overflow:hidden;flex-shrink:0;${extraStyle}`;
+    if(c&&c.foto) return `<div style="${s}border:2px solid var(--border);"><img src="${c.foto}" style="width:100%;height:100%;object-fit:cover;object-position:center top;" alt=""></div>`;
+    const bg=c?col(c.partido):col('default');
+    const i_=c?inits(c.nombre||c.partido):'?';
+    const fs=size>70?'1.3rem':size>48?'1rem':'.78rem';
+    return `<div style="${s}background:${bg};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:${fs};color:white;">${i_}</div>`;
 }
 
-/* ════════════════════════════
+/* ══════════════════════════════════════
    STATE
-════════════════════════════ */
-let ELECCIONES = [], ELECCIONES_DEPT = [];
-let lang = localStorage.getItem('eluy-lang') || 'es';
-let elecType = 'nacional';
-let selectedAnio = null, selectedDeptAnio = null;
-let selectedVuelta = 0, selectedPleb = null;
-let viewMode = 'presidencial'; // 'presidencial' | 'legislativo' | 'intendentes'
-let mapMode = 'normal';
-let selectedDeptDepto = null;
-let internaFilter = 'todos';
-let evoHidden = new Set();
-let _evoAllPoints = [], _evoXOf, _evoYOf;
+══════════════════════════════════════ */
+let ELECCIONES=[],ELECCIONES_DEPT=[];
+let lang=localStorage.getItem('eluy-lang')||'es';
+let elecType='nacional';
+let selectedAnio=null,selectedDeptAnio=null;
+let selectedVuelta=0,selectedPleb=null;
+let viewMode='presidencial';
+let mapMode='normal';
+let mapScale=1;
+let selectedDeptDepto=null;
+let internaFilter='todos';
+let evoHidden=new Set();
+let _evoAllPoints=[],_evoXOf,_evoYOf;
 
-const YEARS_NAC  = [1971,1984,1989,1994,1999,2004,2009,2014,2019,2024,2029];
-const YEARS_DEPT = [1984,1989,1994,1999,2000,2004,2005,2009,2010,2014,2015,2019,2020,2024,2025];
+const YEARS_NAC=[1971,1984,1989,1994,1999,2004,2009,2014,2019,2024,2029];
+const YEARS_DEPT=[1984,1989,1994,1999,2000,2004,2005,2009,2010,2014,2015,2019,2020,2024,2025];
 
-/* ════════════════════════════
+/* ══════════════════════════════════════
    LANG / THEME
-════════════════════════════ */
-function setLang(l) {
-    lang = l; localStorage.setItem('eluy-lang', l);
-    document.getElementById('btn-es').classList.toggle('active', l==='es');
-    document.getElementById('btn-en').classList.toggle('active', l==='en');
-    renderAll();
-}
-function toggleDark() {
-    const dark = document.body.getAttribute('data-theme') !== 'dark';
-    document.body.setAttribute('data-theme', dark ? 'dark' : 'light');
-    localStorage.setItem('eluy-theme', dark ? 'dark' : 'light');
-    if (ELECCIONES.length > 0) renderMapa();
-}
+══════════════════════════════════════ */
+function setLang(l){lang=l;localStorage.setItem('eluy-lang',l);document.getElementById('btn-es').classList.toggle('active',l==='es');document.getElementById('btn-en').classList.toggle('active',l==='en');renderAll();}
+function toggleDark(){const dark=document.body.getAttribute('data-theme')!=='dark';document.body.setAttribute('data-theme',dark?'dark':'light');localStorage.setItem('eluy-theme',dark?'dark':'light');if(ELECCIONES.length)renderMapa();}
 
-/* ════════════════════════════
+/* ══════════════════════════════════════
+   MAP ZOOM
+══════════════════════════════════════ */
+function mapZoom(factor){mapScale=Math.min(Math.max(mapScale*factor,.5),4);applyMapScale();}
+function mapReset(){mapScale=1;applyMapScale();}
+function applyMapScale(){const svg=document.querySelector('#map-container svg');if(svg)svg.style.transform=`scale(${mapScale})`;}
+
+/* ══════════════════════════════════════
    CONTROLS
-════════════════════════════ */
-function renderYearPills() {
-    const src = elecType === 'departamental' ? ELECCIONES_DEPT : ELECCIONES;
-    const cur = elecType === 'departamental' ? selectedDeptAnio : selectedAnio;
-    const el = document.getElementById('year-pills');
-    el.innerHTML = src.map(e =>
-        `<button class="pill-btn ${e.anio===cur?'active':''}" onclick="selectYear(${e.anio})">${e.anio}</button>`
-    ).join('');
+══════════════════════════════════════ */
+function renderYearDropdown(){
+    const sel=document.getElementById('year-select');
+    const src=elecType==='departamental'?ELECCIONES_DEPT:ELECCIONES;
+    const cur=elecType==='departamental'?selectedDeptAnio:selectedAnio;
+    sel.innerHTML=src.map(e=>`<option value="${e.anio}"${e.anio===cur?' selected':''}>${e.anio}</option>`).join('');
 }
 
-function selectYear(anio) {
-    if (elecType === 'departamental') {
-        selectedDeptAnio = anio; selectedDeptDepto = null;
-    } else {
-        selectedAnio = anio; selectedVuelta = 0; selectedPleb = null; internaFilter = 'todos';
-    }
+function selectYear(anio){
+    if(elecType==='departamental'){selectedDeptAnio=anio;selectedDeptDepto=null;}
+    else{selectedAnio=anio;selectedVuelta=0;selectedPleb=null;internaFilter='todos';}
     renderAll();
 }
 
-function renderVueltaPills() {
-    const grp = document.getElementById('group-vueltas');
-    const sep = document.getElementById('sep-round');
-    if (elecType !== 'nacional') { grp.style.display='none'; sep.style.display='none'; return; }
-    const elec = ELECCIONES.find(e=>e.anio===selectedAnio);
-    if (!elec) { grp.style.display='none'; sep.style.display='none'; return; }
-    const pills = document.getElementById('vuelta-pills');
-    let html = '';
-    elec.vueltas.forEach((v,i) => {
-        html += `<button class="pill-btn ${selectedPleb===null&&selectedVuelta===i?'active':''}" onclick="selectVuelta(${i})">${txt(v.nombre)}</button>`;
-    });
-    (elec.plebiscitos||[]).forEach((p,i) => {
-        html += `<button class="pill-btn pleb ${selectedPleb===i?'active':''}" onclick="selectPleb(${i})">${txt(p.nombre)}</button>`;
-    });
-    pills.innerHTML = html;
-    const hasRounds = elec.vueltas.length > 1 || (elec.plebiscitos||[]).length > 0;
-    grp.style.display = hasRounds ? '' : 'none';
-    sep.style.display = hasRounds ? '' : 'none';
+function renderVueltaPills(){
+    const grp=document.getElementById('group-vueltas');
+    if(elecType!=='nacional'){grp.style.display='none';return;}
+    const elec=ELECCIONES.find(e=>e.anio===selectedAnio);
+    if(!elec){grp.style.display='none';return;}
+    const hasRounds=elec.vueltas.length>1||(elec.plebiscitos||[]).length>0;
+    grp.style.display=hasRounds?'':'none';
+    if(!hasRounds)return;
+    let html='';
+    elec.vueltas.forEach((v,i)=>html+=`<button class="pill-btn ${selectedPleb===null&&selectedVuelta===i?'active':''}" onclick="selectVuelta(${i})">${txt(v.nombre)}</button>`);
+    (elec.plebiscitos||[]).forEach((p,i)=>html+=`<button class="pill-btn pleb ${selectedPleb===i?'active':''}" onclick="selectPleb(${i})">${txt(p.nombre)}</button>`);
+    document.getElementById('vuelta-pills').innerHTML=html;
 }
 
-function selectVuelta(i) { selectedVuelta=i; selectedPleb=null; renderAll(); }
-function selectPleb(i) { selectedPleb=i; renderAll(); }
+function selectVuelta(i){selectedVuelta=i;selectedPleb=null;renderAll();}
+function selectPleb(i){selectedPleb=i;renderAll();}
 
-function renderViewToggle() {
-    const el = document.getElementById('view-toggle');
-    if (elecType === 'departamental') {
-        el.innerHTML = `<button class="toggle-btn active">Intendentes</button>`;
-        viewMode = 'intendentes';
-        return;
-    }
-    const elec = ELECCIONES.find(e=>e.anio===selectedAnio);
-    const hasInternas = elec && elec.anio >= 1999 && elec.internas && elec.internas.length > 0;
-    let html = '';
-    if (selectedPleb !== null) {
-        html = `<button class="toggle-btn active">Plebiscito</button>`;
-    } else {
-        html += `<button class="toggle-btn ${viewMode==='presidencial'?'active':''}" onclick="setViewMode('presidencial')">${lang==='es'?'Presidencial':'Presidential'}</button>`;
-        if (hasInternas) html += `<button class="toggle-btn ${viewMode==='internas'?'active':''}" onclick="setViewMode('internas')">${lang==='es'?'Internas':'Primaries'}</button>`;
-        html += `<button class="toggle-btn ${viewMode==='legislativo'?'active':''}" onclick="setViewMode('legislativo')">${lang==='es'?'Legislativo':'Legislature'}</button>`;
-    }
-    el.innerHTML = html;
+function renderResultsViewToggle(){
+    const el=document.getElementById('results-view-toggle');
+    const title=document.getElementById('results-card-title');
+    if(elecType==='departamental'){el.innerHTML='';title.textContent=lang==='es'?'Intendentes electos':'Elected mayors';return;}
+    const elec=ELECCIONES.find(e=>e.anio===selectedAnio);
+    const hasInternas=elec&&elec.anio>=1999&&elec.internas&&elec.internas.length>0;
+    if(selectedPleb!==null){el.innerHTML='';title.textContent=lang==='es'?'Resultados del plebiscito':'Referendum results';return;}
+    let html='<div class="toggle-group">';
+    html+=`<button class="toggle-btn ${viewMode==='presidencial'?'active':''}" onclick="setViewMode('presidencial')">${lang==='es'?'Presidencial':'Presidential'}</button>`;
+    if(hasInternas)html+=`<button class="toggle-btn ${viewMode==='internas'?'active':''}" onclick="setViewMode('internas')">${lang==='es'?'Internas':'Primaries'}</button>`;
+    html+=`<button class="toggle-btn ${viewMode==='legislativo'?'active':''}" onclick="setViewMode('legislativo')">${lang==='es'?'Legislativo':'Legislature'}</button>`;
+    html+='</div>';
+    el.innerHTML=html;
+    const titles={presidencial:lang==='es'?'Resultados presidenciales':'Presidential results',internas:lang==='es'?'Elecciones internas':'Primary elections',legislativo:lang==='es'?'Composición del parlamento':'Parliament composition'};
+    title.textContent=titles[viewMode]||'';
 }
 
-function setViewMode(m) {
-    viewMode = m;
-    renderViewToggle();
-    renderRightPanel();
-    renderMapa();
-}
+function setViewMode(m){viewMode=m;renderResultsViewToggle();renderRightPanel();renderMapa();}
 
-function switchElecType(type) {
-    elecType = type;
-    document.getElementById('toggle-nacional').classList.toggle('active', type==='nacional');
-    document.getElementById('toggle-departamental').classList.toggle('active', type==='departamental');
-    if (type === 'nacional') {
-        viewMode = 'presidencial';
-        document.getElementById('evo-section').style.display = '';
-    } else {
-        viewMode = 'intendentes';
-        selectedDeptDepto = null;
-        document.getElementById('evo-section').style.display = 'none';
-    }
+function switchElecType(type){
+    elecType=type;
+    document.getElementById('toggle-nacional').classList.toggle('active',type==='nacional');
+    document.getElementById('toggle-departamental').classList.toggle('active',type==='departamental');
+    if(type==='nacional'){viewMode='presidencial';document.getElementById('evo-card').style.display='';}
+    else{viewMode='intendentes';selectedDeptDepto=null;document.getElementById('evo-card').style.display='none';}
     renderAll();
 }
 
-function toggleMapMode() {
-    mapMode = mapMode==='normal' ? 'margin' : 'normal';
-    const btn = document.getElementById('btn-map-mode');
-    btn.classList.toggle('active', mapMode==='margin');
-    btn.textContent = mapMode==='normal' ? (lang==='es'?'Margen de victoria':'Victory margin') : (lang==='es'?'Ver mapa normal':'Normal map');
+function toggleMapMode(){
+    mapMode=mapMode==='normal'?'margin':'normal';
+    const btn=document.getElementById('btn-map-mode');
+    btn.classList.toggle('active',mapMode==='margin');
+    btn.textContent=mapMode==='normal'?(lang==='es'?'Margen de victoria':'Victory margin'):(lang==='es'?'Ver mapa normal':'Normal map');
     renderMapa();
 }
 
-/* ════════════════════════════
+/* ══════════════════════════════════════
    MAP
-════════════════════════════ */
-function applyMapData(data) {
-    document.querySelectorAll('#uruguay-map #features path').forEach(p => {
-        p.style.fill = col('default'); p.style.fillOpacity = 1;
-    });
-    Object.entries(data).forEach(([depto, info]) => {
-        const svgId = DEPTO_ID[depto]; if (!svgId) return;
-        const pId = typeof info==='string' ? info : info.ganador;
-        const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
-        if (!path) return;
-        path.style.fill = col(pId);
-        if (mapMode==='margin' && typeof info==='object' && info.votos) {
-            const vals = Object.values(info.votos).sort((a,b)=>b-a);
-            if (vals.length >= 2) {
-                const tot = vals.reduce((s,v)=>s+v,0);
-                const mg = ((vals[0]-vals[1])/tot)*100;
-                path.style.fillOpacity = mg>10?1:mg>=5?0.8:mg>1?0.6:0.35;
-            }
+══════════════════════════════════════ */
+function applyMapData(data){
+    document.querySelectorAll('#uruguay-map #features path').forEach(p=>{p.style.fill=col('default');p.style.fillOpacity=1;});
+    Object.entries(data).forEach(([depto,info])=>{
+        const svgId=DEPTO_ID[depto];if(!svgId)return;
+        const pId=typeof info==='string'?info:info.ganador;
+        const path=document.querySelector(`#uruguay-map #features path#${svgId}`);
+        if(!path)return;
+        path.style.fill=col(pId);
+        if(mapMode==='margin'&&typeof info==='object'&&info.votos){
+            const vals=Object.values(info.votos).sort((a,b)=>b-a);
+            if(vals.length>=2){const tot=vals.reduce((s,v)=>s+v,0),mg=((vals[0]-vals[1])/tot)*100;path.style.fillOpacity=mg>10?1:mg>=5?.8:mg>1?.6:.35;}
         }
     });
 }
 
-function renderMapa() {
-    if (elecType==='departamental') { renderMapaDept(); return; }
-    const elec = ELECCIONES.find(e=>e.anio===selectedAnio); if (!elec) return;
-    if (selectedPleb !== null) { applyMapData(elec.plebiscitos[selectedPleb].mapa||{}); return; }
-    if (viewMode==='internas' && elec.internas) {
-        if (internaFilter==='todos') applyMapData(elec.vueltas[0]?.mapa||{});
-        else { const int=elec.internas.find(i=>i.partido===internaFilter); if(int?.mapa) applyMapData(int.mapa); }
+function renderMapa(){
+    if(elecType==='departamental'){renderMapaDept();return;}
+    const elec=ELECCIONES.find(e=>e.anio===selectedAnio);if(!elec)return;
+    if(selectedPleb!==null){applyMapData(elec.plebiscitos[selectedPleb].mapa||{});return;}
+    if(viewMode==='internas'&&elec.internas){
+        if(internaFilter==='todos')applyMapData(elec.vueltas[0]?.mapa||{});
+        else{const int=elec.internas.find(i=>i.partido===internaFilter);if(int?.mapa)applyMapData(int.mapa);}
         return;
     }
     applyMapData(elec.vueltas[selectedVuelta]?.mapa||{});
     renderMapLegend(elec);
 }
 
-function renderMapaDept() {
-    const ed = ELECCIONES_DEPT.find(e=>e.anio===selectedDeptAnio); if (!ed) return;
-    document.querySelectorAll('#uruguay-map #features path').forEach(p => {
-        p.style.fill = col('default'); p.style.fillOpacity = 1;
-        p.style.stroke = 'var(--card-bg)'; p.style.strokeWidth = '1.5';
-    });
-    Object.entries(ed.departamentos||{}).forEach(([depto,info]) => {
-        const svgId = DEPTO_ID[depto]; if (!svgId) return;
-        const ganador = info.ganador||info;
-        const pId = typeof ganador==='string' ? ganador : ganador.partido;
-        const path = document.querySelector(`#uruguay-map #features path#${svgId}`);
-        if (!path) return;
-        path.style.fill = col(pId);
-        if (selectedDeptDepto===depto) { path.style.stroke='white'; path.style.strokeWidth='3'; }
+function renderMapaDept(){
+    const ed=ELECCIONES_DEPT.find(e=>e.anio===selectedDeptAnio);if(!ed)return;
+    document.querySelectorAll('#uruguay-map #features path').forEach(p=>{p.style.fill=col('default');p.style.fillOpacity=1;p.style.stroke='var(--card-bg)';p.style.strokeWidth='1.5';});
+    Object.entries(ed.departamentos||{}).forEach(([depto,info])=>{
+        const svgId=DEPTO_ID[depto];if(!svgId)return;
+        const g=info.ganador||info,pId=typeof g==='string'?g:g.partido;
+        const path=document.querySelector(`#uruguay-map #features path#${svgId}`);if(!path)return;
+        path.style.fill=col(pId);
+        if(selectedDeptDepto===depto){path.style.stroke='white';path.style.strokeWidth='3';}
     });
     renderMapLegendDept(ed);
 }
 
-function renderMapLegend(elec) {
-    const parties = new Set();
-    const mapa = elec.vueltas[selectedVuelta]?.mapa||{};
-    Object.values(mapa).forEach(info => {
-        const pId = typeof info==='string' ? info : info.ganador;
-        if (pId) parties.add(pId);
-    });
-    const el = document.getElementById('map-legend');
-    el.innerHTML = [...parties].map(p =>
-        `<div class="map-legend-item"><div class="map-legend-dot" style="background:${col(p)}"></div>${PARTIDO_NOMBRES[p]||p}</div>`
-    ).join('') + `<div class="map-legend-note">${lang==='es'?'Los colores representan el partido más votado en cada departamento.':'Colors represent the most voted party in each department.'}</div>`;
+function buildMapLegend(parties){
+    return [...parties].map(p=>`<div class="map-legend-item"><div class="map-legend-dot" style="background:${col(p)}"></div>${PNOMBRES[p]||p}</div>`).join('');
+}
+function renderMapLegend(elec){
+    const parties=new Set();
+    Object.values(elec.vueltas[selectedVuelta]?.mapa||{}).forEach(info=>{const pId=typeof info==='string'?info:info.ganador;if(pId)parties.add(pId);});
+    document.getElementById('map-legend').innerHTML=buildMapLegend(parties);
+}
+function renderMapLegendDept(ed){
+    const parties=new Set();
+    Object.values(ed.departamentos||{}).forEach(info=>{const g=info.ganador||info,pId=typeof g==='string'?g:g.partido;if(pId)parties.add(pId);});
+    document.getElementById('map-legend').innerHTML=buildMapLegend(parties);
 }
 
-function renderMapLegendDept(ed) {
-    const parties = new Set();
-    Object.values(ed.departamentos||{}).forEach(info => {
-        const g = info.ganador||info;
-        const pId = typeof g==='string' ? g : g.partido;
-        if (pId) parties.add(pId);
-    });
-    const el = document.getElementById('map-legend');
-    el.innerHTML = [...parties].map(p =>
-        `<div class="map-legend-item"><div class="map-legend-dot" style="background:${col(p)}"></div>${PARTIDO_NOMBRES[p]||p}</div>`
-    ).join('');
-}
-
-function setupTooltips() {
-    const tt = document.getElementById('map-tooltip');
-    document.querySelectorAll('#uruguay-map #features path').forEach(path => {
-        path.addEventListener('mousemove', e => {
-            const name = path.getAttribute('name');
-            let html = '';
-            if (elecType==='departamental') {
-                const ed = ELECCIONES_DEPT.find(ev=>ev.anio===selectedDeptAnio);
-                html = `<strong>${name}</strong>`;
-                if (ed?.departamentos?.[name]) {
-                    const info = ed.departamentos[name];
-                    const g = info.ganador||info;
-                    const pId = typeof g==='string' ? g : g.partido;
-                    html += `<div style="color:${col(pId)};font-weight:700;margin-top:4px;">${PARTIDO_NOMBRES[pId]||pId}</div>`;
-                    if (g.nombre) html += `<div style="font-size:0.78rem;margin-top:2px;">${g.nombre}</div>`;
-                }
-            } else {
-                const elec = ELECCIONES.find(ev=>ev.anio===selectedAnio);
-                const mapa = selectedPleb!==null ? (elec?.plebiscitos[selectedPleb]?.mapa||{}) : (elec?.vueltas[selectedVuelta]?.mapa||{});
-                const info = mapa[name];
-                html = `<strong>${name}</strong>`;
-                if (typeof info==='object' && info?.votos) {
-                    const tot = Object.values(info.votos).reduce((s,v)=>s+v,0);
-                    Object.entries(info.votos).sort((a,b)=>b[1]-a[1]).forEach(([p,v]) => {
-                        html += `<div class="tt-row"><span style="color:${col(p)};font-weight:700;">${PARTIDO_NOMBRES[p]||p}</span><span>${fmtV(v)} (${pctOf(v,tot)}%)</span></div>`;
-                    });
-                } else {
-                    const pId = typeof info==='string' ? info : info?.ganador;
-                    html += pId ? `<div style="color:${col(pId)};font-weight:700;margin-top:4px;">${PARTIDO_NOMBRES[pId]||pId}</div>` : `<div style="color:#94a3b8;">Sin datos</div>`;
-                }
+function setupTooltips(){
+    const tt=document.getElementById('map-tooltip');
+    document.querySelectorAll('#uruguay-map #features path').forEach(path=>{
+        path.addEventListener('mousemove',e=>{
+            const name=path.getAttribute('name');
+            let html='';
+            if(elecType==='departamental'){
+                const ed=ELECCIONES_DEPT.find(ev=>ev.anio===selectedDeptAnio);
+                html=`<strong>${name}</strong>`;
+                if(ed?.departamentos?.[name]){const info=ed.departamentos[name],g=info.ganador||info,pId=typeof g==='string'?g:g.partido;html+=`<div style="color:${col(pId)};font-weight:700;margin-top:4px;">${PNOMBRES[pId]||pId}</div>`;if(g.nombre)html+=`<div style="font-size:.76rem;margin-top:2px;">${g.nombre}</div>`;}
+            }else{
+                const elec=ELECCIONES.find(ev=>ev.anio===selectedAnio);
+                const mapa=selectedPleb!==null?(elec?.plebiscitos[selectedPleb]?.mapa||{}):(elec?.vueltas[selectedVuelta]?.mapa||{});
+                const info=mapa[name];html=`<strong>${name}</strong>`;
+                if(typeof info==='object'&&info?.votos){const tot=Object.values(info.votos).reduce((s,v)=>s+v,0);Object.entries(info.votos).sort((a,b)=>b[1]-a[1]).forEach(([p,v])=>html+=`<div class="tt-row"><span style="color:${col(p)};font-weight:700;">${PNOMBRES[p]||p}</span><span>${fmtV(v)} (${pctOf(v,tot)}%)</span></div>`);}
+                else{const pId=typeof info==='string'?info:info?.ganador;html+=pId?`<div style="color:${col(pId)};font-weight:700;margin-top:4px;">${PNOMBRES[pId]||pId}</div>`:`<div style="color:#94a3b8;">Sin datos</div>`;}
             }
-            tt.style.display='block';
-            tt.style.left=(e.clientX+14)+'px';
-            tt.style.top=(e.clientY-10)+'px';
-            tt.innerHTML=html;
+            tt.style.display='block';tt.style.left=(e.clientX+14)+'px';tt.style.top=(e.clientY-10)+'px';tt.innerHTML=html;
         });
-        path.addEventListener('mouseleave', () => tt.style.display='none');
-        path.addEventListener('click', () => {
-            if (elecType==='departamental') {
-                const name = path.getAttribute('name');
-                selectedDeptDepto = selectedDeptDepto===name ? null : name;
-                renderRightPanel();
-                renderMapaDept();
-            }
+        path.addEventListener('mouseleave',()=>tt.style.display='none');
+        path.addEventListener('click',()=>{
+            if(elecType==='departamental'){const name=path.getAttribute('name');selectedDeptDepto=selectedDeptDepto===name?null:name;renderRightPanel();renderMapaDept();}
         });
     });
 }
 
-/* ════════════════════════════
+/* ══════════════════════════════════════
    RIGHT PANEL
-════════════════════════════ */
-function renderRightPanel() {
-    const el = document.getElementById('right-content');
-    el.className = 'fade-in';
-
-    if (elecType==='departamental') { renderDeptMode(el); return; }
-
-    const elec = ELECCIONES.find(e=>e.anio===selectedAnio);
-    if (!elec) { el.innerHTML='<p style="color:var(--text-muted)">Sin datos.</p>'; return; }
-
-    if (selectedPleb !== null) { renderPleb(el, elec); return; }
-    if (viewMode==='legislativo') { renderLegislativo(el, elec); return; }
-    if (viewMode==='internas') { renderInternas(el, elec); return; }
-    renderPresidencial(el, elec);
+══════════════════════════════════════ */
+function renderRightPanel(){
+    renderResultsViewToggle();
+    const el=document.getElementById('right-content');
+    el.className='fade-in';
+    if(elecType==='departamental'){renderDeptMode(el);return;}
+    const elec=ELECCIONES.find(e=>e.anio===selectedAnio);
+    if(!elec){el.innerHTML='<p style="color:var(--text-muted)">Sin datos.</p>';return;}
+    if(selectedPleb!==null){renderPleb(el,elec);return;}
+    if(viewMode==='legislativo'){renderLegislativo(el,elec);return;}
+    if(viewMode==='internas'){renderInternas(el,elec);return;}
+    renderPresidencial(el,elec);
 }
 
 /* ── PRESIDENCIAL ── */
-function renderPresidencial(el, elec) {
-    const vuelta = elec.vueltas[selectedVuelta]; if (!vuelta) return;
-    const cands = [...vuelta.candidatos].sort((a,b)=>b.votos-a.votos);
-    const total = cands.reduce((s,c)=>s+c.votos,0);
+function renderPresidencial(el,elec){
+    const vuelta=elec.vueltas[selectedVuelta];if(!vuelta)return;
+    const cands=[...vuelta.candidatos].sort((a,b)=>b.votos-a.votos);
+    const total=cands.reduce((s,c)=>s+c.votos,0);
+    const isRunoff=selectedVuelta>0||(vuelta.nombre&&(txt(vuelta.nombre).toLowerCase().includes('segunda')||txt(vuelta.nombre).toLowerCase().includes('second')||txt(vuelta.nombre).toLowerCase().includes('ballottage')));
 
     // Group by party
-    const groups = {};
-    cands.forEach(c => { (groups[c.partido]||(groups[c.partido]=[])).push(c); });
-    const sorted = Object.values(groups).sort((a,b) => {
-        const ta=a.reduce((s,c)=>s+c.votos,0), tb=b.reduce((s,c)=>s+c.votos,0);
-        return tb-ta;
-    });
+    const groups={};
+    cands.forEach(c=>{(groups[c.partido]||(groups[c.partido]=[])).push(c);});
+    const sorted=Object.values(groups).sort((a,b)=>b.reduce((s,c)=>s+c.votos,0)-a.reduce((s,c)=>s+c.votos,0));
+    const big=[],small=[];
+    sorted.forEach(g=>parseFloat(pctOf(g[0].votos,total))>=1?big.push(g):g.forEach(c=>small.push(c)));
 
-    const big = [], small = [];
-    sorted.forEach(g => parseFloat(pctOf(g[0].votos,total))>=1 ? big.push(g) : g.forEach(c=>small.push(c)));
+    let html='';
 
-    const titleText = lang==='es' ? 'Resultados presidenciales' : 'Presidential results';
-    let html = `<div class="right-panel-title">${titleText}</div><div class="cand-list">`;
-
-    big.forEach(group => {
-        const leader = group[0];
-        const pct = pctOf(leader.votos, total);
-        const pId = leader.partido;
-        html += `
-        <div class="cand-row">
-            <div class="cand-accent" style="background:${col(pId)}"></div>
-            ${avatarHTML(leader,64)}
-            <div class="cand-info">
-                <div class="cand-name">${leader.nombre}${leader.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>
-                <div class="cand-party" style="color:${col(pId)}">${PARTIDO_NOMBRES[pId]||pId}</div>
-                ${leader.vice?`<div class="cand-vice-label">${lang==='es'?'Candidato a la vicepresidencia':'Vice-presidential candidate'}</div><div class="cand-vice-name">${leader.vice}</div>`:''}
-            </div>
-            <div class="cand-right">
-                <div class="cand-pct" style="color:${col(pId)}">${pct}%</div>
-                <div class="cand-votes">${fmtV(leader.votos)} ${lang==='es'?'votos':'votes'}</div>
-            </div>
-        </div>`;
-        // Sub-candidates within same party
-        group.slice(1).forEach(c => {
-            const cpct = pctOf(c.votos,total);
-            html += `
-            <div class="cand-row" style="padding-left:24px;opacity:0.85;">
-                <div class="cand-accent" style="background:${col(pId)};opacity:0.4;"></div>
-                ${avatarHTML(c,48)}
-                <div class="cand-info">
-                    <div class="cand-name" style="font-size:0.9rem;">${c.nombre}</div>
-                    <div class="cand-party" style="color:${col(pId)};font-size:0.75rem;">${PARTIDO_NOMBRES[pId]||pId}</div>
-                    ${c.vice?`<div class="cand-vice-name" style="font-size:0.72rem;">${c.vice}</div>`:''}
-                </div>
-                <div class="cand-right">
-                    <div class="cand-pct" style="color:${col(pId)};font-size:1.3rem;">${cpct}%</div>
-                    <div class="cand-votes">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div>
-                </div>
+    if(isRunoff&&big.length===2){
+        // Side-by-side vertical layout for runoffs
+        html+='<div class="runoff-grid">';
+        big.forEach(group=>{
+            const leader=group[0],pId=leader.partido,pct=pctOf(leader.votos,total);
+            html+=`
+            <div class="runoff-card ${leader.ganador?'winner':''}">
+                ${avatarHTML(leader,90,'border:3px solid '+(leader.ganador?'#16a34a':'var(--border)')+';')}
+                <div class="runoff-name">${leader.nombre}${leader.ganador?'<br><span class="badge-winner" style="margin-left:0">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>
+                <div class="runoff-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div>
+                ${leader.vice?`<div class="runoff-vice">${leader.vice}</div>`:''}
+                <div class="runoff-pct" style="color:${col(pId)}">${pct}%</div>
+                <div class="runoff-votes">${fmtV(leader.votos)} ${lang==='es'?'votos':'votes'}</div>
             </div>`;
         });
-    });
-
-    html += '</div>';
-
-    // Small candidates
-    if (small.length > 0) {
-        html += '<div class="cand-minor-list" style="margin-top:12px;">';
-        small.forEach(c => {
-            const pct = pctOf(c.votos,total);
-            html += `
-            <div class="cand-minor-row">
-                <div class="cand-minor-dot" style="background:${col(c.partido)}"></div>
-                <div style="flex:1;">
-                    <div class="cand-minor-name">${c.nombre}</div>
-                    <div class="cand-minor-party">${PARTIDO_NOMBRES[c.partido]||c.partido} · ${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div>
-                </div>
-                <div class="cand-minor-pct" style="color:${col(c.partido)}">${pct}%</div>
-            </div>`;
-        });
-        html += '</div>';
-    }
-
-    // Footer stats
-    const partInfo = vuelta.participacion ? `${lang==='es'?'Participación':'Turnout'}: ${vuelta.participacion}%` : '';
-    const blanco = vuelta.votos_blanco ? `${lang==='es'?'Votos en blanco':'Blank votes'}: ${pctOf(vuelta.votos_blanco,total+vuelta.votos_blanco)}%` : '';
-    if (partInfo || blanco) {
-        html += `<div class="results-footer"><span>${partInfo}</span><span>${blanco}</span></div>`;
-    }
-
-    el.innerHTML = html;
-}
-
-/* ── PLEBISCITO ── */
-function renderPleb(el, elec) {
-    const pleb = elec.plebiscitos[selectedPleb];
-    const total = pleb.opciones.reduce((s,o)=>s+o.votos,0);
-    const maxV = Math.max(...pleb.opciones.map(o=>o.votos));
-    const titleText = lang==='es' ? 'Resultados del plebiscito' : 'Referendum results';
-    let html = `<div class="right-panel-title">${titleText}</div>`;
-    html += `<div class="pleb-desc">${txt(pleb.descripcion)}</div>`;
-    pleb.opciones.forEach(op => {
-        const pct = pctOf(op.votos,total);
-        const isWin = op.votos===maxV;
-        html += `
-        <div class="pleb-option ${isWin?'winner':''}">
-            <div>
-                <div class="pleb-option-name">${txt(op.nombre)}</div>
-                <div class="pleb-option-votes">${fmtV(op.votos)} ${lang==='es'?'votos':'votes'}</div>
-            </div>
-            <div class="pleb-option-pct" style="color:${op.color||'var(--blue)'}">${pct}%</div>
-        </div>`;
-    });
-    el.innerHTML = html;
-}
-
-/* ── INTERNAS ── */
-function renderInternas(el, elec) {
-    if (!elec.internas||elec.internas.length===0) {
-        el.innerHTML='<p style="color:var(--text-muted)">Sin datos de internas.</p>'; return;
-    }
-    const titleText = lang==='es' ? 'Elecciones internas' : 'Primary elections';
-    let html = `<div class="right-panel-title">${titleText}</div>`;
-    html += `<div class="interna-filter">`;
-    html += `<button class="interna-filter-btn ${internaFilter==='todos'?'active':''}" onclick="setInternaFilter('todos')">${lang==='es'?'Todos':'All'}</button>`;
-    elec.internas.forEach(int => {
-        const pId=int.partido, active=internaFilter===pId;
-        html += `<button class="interna-filter-btn ${active?'active':''}" style="${active?`background:${col(pId)};border-color:${col(pId)};`:`border-color:${col(pId)};color:${col(pId)};`}" onclick="setInternaFilter('${pId}')">${PARTIDO_NOMBRES[pId]||pId}</button>`;
-    });
-    html += '</div>';
-
-    const toShow = internaFilter==='todos' ? elec.internas : elec.internas.filter(i=>i.partido===internaFilter);
-
-    if (internaFilter==='todos') {
-        html += '<div class="cand-list">';
-        toShow.forEach(int => {
-            const pId=int.partido;
-            const tot=int.candidatos.reduce((s,c)=>s+c.votos,0);
-            const win=int.candidatos.find(c=>c.ganador)||int.candidatos[0];
-            const pct=pctOf(win.votos,tot);
-            html += `
+        html+='</div>';
+    } else {
+        // Normal horizontal rows for 1st round
+        html+='<div class="cand-list">';
+        big.forEach(group=>{
+            const leader=group[0],pId=leader.partido,pct=pctOf(leader.votos,total);
+            html+=`
             <div class="cand-row">
                 <div class="cand-accent" style="background:${col(pId)}"></div>
-                ${avatarHTML(win,64)}
+                ${avatarHTML(leader,68)}
                 <div class="cand-info">
-                    <div class="cand-name">${win.nombre}<span class="badge-winner">${lang==='es'?'Ganador interna':'Primary winner'}</span></div>
-                    ${win.vice?`<div class="cand-vice-name">${win.vice}</div>`:''}
-                    <div class="cand-party" style="color:${col(pId)}">${PARTIDO_NOMBRES[pId]||pId}</div>
-                    <div class="cand-votes" style="margin-top:4px;">${fmtV(tot)} ${lang==='es'?'votos totales en la interna':'total primary votes'}</div>
+                    <div class="cand-name">${leader.nombre}${leader.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>
+                    <div class="cand-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div>
+                    ${leader.vice?`<div class="cand-vice-lbl">${lang==='es'?'Candidato a la vicepresidencia':'Vice-presidential candidate'}</div><div class="cand-vice-name">${leader.vice}</div>`:''}
                 </div>
                 <div class="cand-right">
                     <div class="cand-pct" style="color:${col(pId)}">${pct}%</div>
-                    <div class="cand-votes">${fmtV(win.votos)} ${lang==='es'?'votos':'votes'}</div>
+                    <div class="cand-votes">${fmtV(leader.votos)} ${lang==='es'?'votos':'votes'}</div>
                 </div>
             </div>`;
-        });
-        html += '</div>';
-    } else {
-        toShow.forEach(int => {
-            const pId=int.partido;
-            const tot=int.candidatos.reduce((s,c)=>s+c.votos,0);
-            [...int.candidatos].sort((a,b)=>b.votos-a.votos).forEach(c => {
-                const pct=parseFloat(pctOf(c.votos,tot));
-                html += `
-                <div class="cand-row">
-                    <div class="cand-accent" style="background:${col(pId)}"></div>
-                    ${avatarHTML(c,64)}
+            group.slice(1).forEach(c=>{
+                const cpct=pctOf(c.votos,total);
+                html+=`
+                <div class="cand-row" style="padding-left:20px;opacity:.85;">
+                    <div class="cand-accent" style="background:${col(pId)};opacity:.4;"></div>
+                    ${avatarHTML(c,52)}
                     <div class="cand-info">
-                        <div class="cand-name">${c.nombre}${c.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>
-                        ${c.vice?`<div class="cand-vice-name">${c.vice}</div>`:''}
-                        <div class="cand-votes" style="margin-top:4px;">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div>
+                        <div class="cand-name" style="font-size:.9rem;">${c.nombre}</div>
+                        <div class="cand-party" style="color:${col(pId)};font-size:.76rem;">${PNOMBRES[pId]||pId}</div>
+                        ${c.vice?`<div class="cand-vice-name" style="font-size:.72rem;">${c.vice}</div>`:''}
                     </div>
                     <div class="cand-right">
-                        <div class="cand-pct" style="color:${col(pId)}">${pct.toFixed(1)}%</div>
+                        <div class="cand-pct" style="color:${col(pId)};font-size:1.4rem;">${cpct}%</div>
+                        <div class="cand-votes">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div>
                     </div>
                 </div>`;
             });
         });
+        html+='</div>';
     }
-    el.innerHTML = html;
+
+    if(small.length>0){
+        html+='<div class="cand-minor-list">';
+        small.forEach(c=>{const pct=pctOf(c.votos,total);html+=`<div class="cand-minor-row"><div class="cand-minor-dot" style="background:${col(c.partido)}"></div><div style="flex:1;"><div class="cand-minor-name">${c.nombre}</div><div class="cand-minor-party">${PNOMBRES[c.partido]||c.partido} · ${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div></div><div class="cand-minor-pct" style="color:${col(c.partido)}">${pct}%</div></div>`;});
+        html+='</div>';
+    }
+
+    const partInfo=vuelta.participacion?`${lang==='es'?'Participación':'Turnout'}: ${vuelta.participacion}%`:'';
+    const blanco=vuelta.votos_blanco?`${lang==='es'?'Votos en blanco':'Blank votes'}: ${pctOf(vuelta.votos_blanco,total+(vuelta.votos_blanco||0))}%`:'';
+    if(partInfo||blanco)html+=`<div class="results-footer"><span>${partInfo}</span><span>${blanco}</span></div>`;
+
+    el.innerHTML=html;
 }
 
-function setInternaFilter(p) { internaFilter=p; renderRightPanel(); renderMapa(); }
+/* ── PLEBISCITO ── */
+function renderPleb(el,elec){
+    const pleb=elec.plebiscitos[selectedPleb];
+    const total=pleb.opciones.reduce((s,o)=>s+o.votos,0);
+    const maxV=Math.max(...pleb.opciones.map(o=>o.votos));
+    let html=`<div class="pleb-desc">${txt(pleb.descripcion)}</div>`;
+    pleb.opciones.forEach(op=>{const pct=pctOf(op.votos,total);html+=`<div class="pleb-option ${op.votos===maxV?'winner':''}"><div><div class="pleb-option-name">${txt(op.nombre)}</div><div class="pleb-option-votes">${fmtV(op.votos)} ${lang==='es'?'votos':'votes'}</div></div><div class="pleb-option-pct" style="color:${op.color||'var(--blue)'}">${pct}%</div></div>`;});
+    el.innerHTML=html;
+}
+
+/* ── INTERNAS ── */
+function renderInternas(el,elec){
+    if(!elec.internas||!elec.internas.length){el.innerHTML='<p style="color:var(--text-muted)">Sin datos de internas.</p>';return;}
+    let html='<div class="interna-filter">';
+    html+=`<button class="int-filter-btn ${internaFilter==='todos'?'active':''}" onclick="setInternaFilter('todos')">${lang==='es'?'Todos':'All'}</button>`;
+    elec.internas.forEach(int=>{const pId=int.partido,a=internaFilter===pId;html+=`<button class="int-filter-btn ${a?'active':''}" style="${a?`background:${col(pId)};border-color:${col(pId)};`:`border-color:${col(pId)};color:${col(pId)};`}" onclick="setInternaFilter('${pId}')">${PNOMBRES[pId]||pId}</button>`;});
+    html+='</div>';
+    const toShow=internaFilter==='todos'?elec.internas:elec.internas.filter(i=>i.partido===internaFilter);
+    html+='<div class="cand-list">';
+    if(internaFilter==='todos'){
+        toShow.forEach(int=>{
+            const pId=int.partido,tot=int.candidatos.reduce((s,c)=>s+c.votos,0),win=int.candidatos.find(c=>c.ganador)||int.candidatos[0],pct=pctOf(win.votos,tot);
+            html+=`<div class="cand-row"><div class="cand-accent" style="background:${col(pId)}"></div>${avatarHTML(win,68)}<div class="cand-info"><div class="cand-name">${win.nombre}<span class="badge-winner">${lang==='es'?'Ganador interna':'Primary winner'}</span></div>${win.vice?`<div class="cand-vice-name">${win.vice}</div>`:''}<div class="cand-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div><div class="cand-votes" style="margin-top:4px;">${fmtV(tot)} ${lang==='es'?'votos totales':'total votes'}</div></div><div class="cand-right"><div class="cand-pct" style="color:${col(pId)}">${pct}%</div><div class="cand-votes">${fmtV(win.votos)} ${lang==='es'?'votos':'votes'}</div></div></div>`;
+        });
+    }else{
+        toShow.forEach(int=>{
+            const pId=int.partido,tot=int.candidatos.reduce((s,c)=>s+c.votos,0);
+            [...int.candidatos].sort((a,b)=>b.votos-a.votos).forEach(c=>{
+                const pct=parseFloat(pctOf(c.votos,tot));
+                html+=`<div class="cand-row"><div class="cand-accent" style="background:${col(pId)}"></div>${avatarHTML(c,68)}<div class="cand-info"><div class="cand-name">${c.nombre}${c.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>${c.vice?`<div class="cand-vice-name">${c.vice}</div>`:''}<div class="cand-votes" style="margin-top:3px;">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div></div><div class="cand-right"><div class="cand-pct" style="color:${col(pId)}">${pct.toFixed(1)}%</div></div></div>`;
+            });
+        });
+    }
+    html+='</div>';
+    el.innerHTML=html;
+}
+function setInternaFilter(p){internaFilter=p;renderRightPanel();renderMapa();}
 
 /* ── LEGISLATIVO ── */
-function distributeMock(cands, seats) {
+function distMock(cands,seats){
     const tot=cands.reduce((s,c)=>s+c.votos,0);
     let arr=cands.map(c=>({partido:c.partido,seats:Math.floor((c.votos/tot)*seats),rem:((c.votos/tot)*seats)%1}));
-    let assigned=arr.reduce((s,c)=>s+c.seats,0);
-    arr.sort((a,b)=>b.rem-a.rem);
-    for(let i=0;i<seats-assigned;i++) if(arr[i]) arr[i].seats++;
-    const res={};
-    arr.forEach(a=>{if(a.seats>0)res[a.partido]=a.seats;});
-    return res;
+    let asgn=arr.reduce((s,c)=>s+c.seats,0);arr.sort((a,b)=>b.rem-a.rem);
+    for(let i=0;i<seats-asgn;i++)if(arr[i])arr[i].seats++;
+    const r={};arr.forEach(a=>{if(a.seats>0)r[a.partido]=a.seats;});return r;
 }
-
-function renderParliament(dots, containerId, seats) {
-    const c=document.getElementById(containerId); if(!c) return;
-    c.innerHTML='';
-    const w=c.offsetWidth||460, h=w/2, cx=w/2, cy=h;
-    let rows = seats===30 ? [6,10,14] : seats===99 ? [11,16,20,24,28] : [seats];
-    const dotSize=seats<=30?28:11, pad=dotSize/2;
-    const maxR=(w/2)-pad, minR=maxR*0.4, thick=rows.length>1?(maxR-minR)/(rows.length-1):0;
-    let positions=[];
-    rows.forEach((n,ri)=>{
-        const r=minR+thick*ri;
-        for(let i=0;i<n;i++){
-            const ang=n===1?Math.PI/2:Math.PI-(i/(n-1))*Math.PI;
-            positions.push({ang,x:cx+r*Math.cos(ang),y:cy-r*Math.sin(ang)});
-        }
-    });
-    positions.sort((a,b)=>b.ang-a.ang);
-    const order=['UP','FA','PGP','NE','PI','PN','PC','CA','UC'];
-    dots.sort((a,b)=>order.indexOf(a.partido)-order.indexOf(b.partido));
-    dots.forEach((d,i)=>{
-        if(i>=positions.length) return;
-        const pos=positions[i];
-        const div=document.createElement('div');
-        div.className='parliament-dot';
-        div.style.cssText=`width:${dotSize}px;height:${dotSize}px;left:${pos.x-dotSize/2}px;top:${pos.y-dotSize/2}px;background:${col(d.partido)};`;
-        div.innerHTML=`<div class="parl-tooltip">${d.tip}</div>`;
-        c.appendChild(div);
-    });
+function renderParliament(dots,cId,seats){
+    const c=document.getElementById(cId);if(!c)return;c.innerHTML='';
+    const w=c.offsetWidth||440,h=w/2,cx=w/2,cy=h;
+    const rows=seats===30?[6,10,14]:seats===99?[11,16,20,24,28]:[seats];
+    const dotSize=seats<=30?26:10,pad=dotSize/2,maxR=(w/2)-pad,minR=maxR*.4,thick=rows.length>1?(maxR-minR)/(rows.length-1):0;
+    let pos=[];
+    rows.forEach((n,ri)=>{const r=minR+thick*ri;for(let i=0;i<n;i++){const ang=n===1?Math.PI/2:Math.PI-(i/(n-1))*Math.PI;pos.push({ang,x:cx+r*Math.cos(ang),y:cy-r*Math.sin(ang)});}});
+    pos.sort((a,b)=>b.ang-a.ang);
+    const ord=['UP','FA','PGP','NE','PI','PN','PC','CA','UC'];
+    dots.sort((a,b)=>ord.indexOf(a.partido)-ord.indexOf(b.partido));
+    dots.forEach((d,i)=>{if(i>=pos.length)return;const p=pos[i];const div=document.createElement('div');div.className='parliament-dot';div.style.cssText=`width:${dotSize}px;height:${dotSize}px;left:${p.x-dotSize/2}px;top:${p.y-dotSize/2}px;background:${col(d.partido)};`;div.innerHTML=`<div class="parl-tip">${d.tip}</div>`;c.appendChild(div);});
 }
-
-function renderLegislativo(el, elec) {
-    const titleText = lang==='es' ? 'Composición del parlamento' : 'Parliament composition';
-    el.innerHTML = `<div class="right-panel-title">${titleText}</div><div class="legislativo-wrap">
-        <div class="parliament-section">
-            <div class="parliament-title">${lang==='es'?'Cámara de Senadores':'Senate'}</div>
-            <div class="parliament-container" id="parl-sen" style="max-width:460px;width:100%;aspect-ratio:2/1;position:relative;margin:0 auto;"></div>
-            <div class="parliament-legend" id="leg-sen"></div>
-        </div>
-        <div class="parliament-section">
-            <div class="parliament-title">${lang==='es'?'Cámara de Representantes':'House of Representatives'}</div>
-            <div class="parliament-container" id="parl-dip" style="max-width:460px;width:100%;aspect-ratio:2/1;position:relative;margin:0 auto;"></div>
-            <div class="parliament-legend" id="leg-dip"></div>
-        </div>
+function renderLegislativo(el,elec){
+    el.innerHTML=`<div class="legislativo-wrap">
+        <div class="parliament-section"><div class="parliament-title">${lang==='es'?'Cámara de Senadores':'Senate'}</div><div class="parliament-container" id="parl-sen" style="max-width:440px;width:100%;aspect-ratio:2/1;position:relative;margin:0 auto;"></div><div class="parliament-legend" id="leg-sen"></div></div>
+        <div class="parliament-section"><div class="parliament-title">${lang==='es'?'Cámara de Representantes':'House of Representatives'}</div><div class="parliament-container" id="parl-dip" style="max-width:440px;width:100%;aspect-ratio:2/1;position:relative;margin:0 auto;"></div><div class="parliament-legend" id="leg-dip"></div></div>
     </div>`;
-
-    setTimeout(() => {
-        const senData = elec.vueltas[0].senado || distributeMock(elec.vueltas[0].candidatos,30);
-        let dotsSen=[]; let legSen={};
-        Object.entries(senData).forEach(([p,n])=>{
-            legSen[p]=n;
-            for(let i=0;i<n;i++) dotsSen.push({partido:p,tip:`<div style="color:${col(p)}">${PARTIDO_NOMBRES[p]||p}</div><div>Senador · ${n} bancas</div>`});
-        });
-
-        const dipRaw = elec.vueltas[0].diputados;
-        let dotsDip=[]; let legDip={};
-        if (dipRaw && typeof Object.values(dipRaw)[0]==='number') {
-            Object.entries(dipRaw).forEach(([p,n])=>{ legDip[p]=n; for(let i=0;i<n;i++) dotsDip.push({partido:p,tip:`<div style="color:${col(p)}">${PARTIDO_NOMBRES[p]||p}</div><div>Diputado · ${n} bancas</div>`}); });
-        } else if (dipRaw) {
-            Object.entries(dipRaw).forEach(([dept,parts])=>Object.entries(parts).forEach(([p,n])=>{ legDip[p]=(legDip[p]||0)+n; for(let i=0;i<n;i++) dotsDip.push({partido:p,tip:`<div style="color:${col(p)}">${PARTIDO_NOMBRES[p]||p}</div><div>Rep. por ${dept}</div>`}); }));
-        } else {
-            const n=distributeMock(elec.vueltas[0].candidatos,99);
-            Object.entries(n).forEach(([p,c])=>{ legDip[p]=c; for(let i=0;i<c;i++) dotsDip.push({partido:p,tip:`<div style="color:${col(p)}">${PARTIDO_NOMBRES[p]||p}</div>`}); });
-        }
-
-        renderParliament(dotsSen,'parl-sen',30);
-        renderParliament(dotsDip,'parl-dip',99);
-        document.getElementById('leg-sen').innerHTML = Object.entries(legSen).sort((a,b)=>b[1]-a[1]).map(([p,n])=>`<div class="p-leg-item"><div class="p-leg-dot" style="background:${col(p)}"></div>${PARTIDO_NOMBRES[p]||p}: ${n}</div>`).join('');
-        document.getElementById('leg-dip').innerHTML = Object.entries(legDip).sort((a,b)=>b[1]-a[1]).map(([p,n])=>`<div class="p-leg-item"><div class="p-leg-dot" style="background:${col(p)}"></div>${PARTIDO_NOMBRES[p]||p}: ${n}</div>`).join('');
-    },50);
+    setTimeout(()=>{
+        const senData=elec.vueltas[0].senado||distMock(elec.vueltas[0].candidatos,30);
+        let dS=[],lS={};
+        Object.entries(senData).forEach(([p,n])=>{lS[p]=n;for(let i=0;i<n;i++)dS.push({partido:p,tip:`<div style="color:${col(p)}">${PNOMBRES[p]||p}</div><div>${n} bancas</div>`});});
+        const dipRaw=elec.vueltas[0].diputados;
+        let dD=[],lD={};
+        if(dipRaw&&typeof Object.values(dipRaw)[0]==='number'){Object.entries(dipRaw).forEach(([p,n])=>{lD[p]=n;for(let i=0;i<n;i++)dD.push({partido:p,tip:`<div style="color:${col(p)}">${PNOMBRES[p]||p}</div><div>${n} bancas</div>`});});}
+        else if(dipRaw){Object.entries(dipRaw).forEach(([dept,parts])=>Object.entries(parts).forEach(([p,n])=>{lD[p]=(lD[p]||0)+n;for(let i=0;i<n;i++)dD.push({partido:p,tip:`<div style="color:${col(p)}">${PNOMBRES[p]||p}</div><div>Rep. por ${dept}</div>`});}));}
+        else{const n=distMock(elec.vueltas[0].candidatos,99);Object.entries(n).forEach(([p,c])=>{lD[p]=c;for(let i=0;i<c;i++)dD.push({partido:p,tip:`<div style="color:${col(p)}">${PNOMBRES[p]||p}</div>`});});}
+        renderParliament(dS,'parl-sen',30);renderParliament(dD,'parl-dip',99);
+        document.getElementById('leg-sen').innerHTML=Object.entries(lS).sort((a,b)=>b[1]-a[1]).map(([p,n])=>`<div class="p-leg-item"><div class="p-leg-dot" style="background:${col(p)}"></div>${PNOMBRES[p]||p}: ${n}</div>`).join('');
+        document.getElementById('leg-dip').innerHTML=Object.entries(lD).sort((a,b)=>b[1]-a[1]).map(([p,n])=>`<div class="p-leg-item"><div class="p-leg-dot" style="background:${col(p)}"></div>${PNOMBRES[p]||p}: ${n}</div>`).join('');
+    },60);
 }
 
-/* ── DEPARTAMENTAL MODE ── */
-function renderDeptMode(el) {
-    const ed = ELECCIONES_DEPT.find(e=>e.anio===selectedDeptAnio);
-    const titleText = lang==='es' ? 'Intendentes electos' : 'Elected mayors';
-    if (!ed) { el.innerHTML=`<div class="right-panel-title">${titleText}</div><p style="color:var(--text-muted)">Sin datos para este año.</p>`; return; }
-
-    let html = `<div class="right-panel-title">${titleText}</div>`;
-
-    if (selectedDeptDepto && ed.departamentos?.[selectedDeptDepto]) {
-        html += renderDeptDetalle(selectedDeptDepto, ed.departamentos[selectedDeptDepto]);
-    } else {
-        // Grid of departments
-        html += '<div class="dept-grid">';
-        Object.keys(DEPTO_ID).forEach(depto => {
-            const info = ed.departamentos?.[depto]; if (!info) return;
-            const g = info.ganador||info;
-            const pId = typeof g==='string' ? g : g.partido;
-            const winName = g.nombre||'';
-            html += `
-            <div class="dept-card ${selectedDeptDepto===depto?'selected':''}" style="border-color:${col(pId)}" onclick="selectDepto('${depto}')">
-                <div class="dept-badge" style="background:${col(pId)}">${pId}</div>
-                <div>
-                    <div class="dept-name">${depto}</div>
-                    <div class="dept-winner-party" style="color:${col(pId)}">${PARTIDO_NOMBRES[pId]||pId}</div>
-                    ${winName?`<div style="font-size:0.72rem;color:var(--text-muted)">${winName}</div>`:''}
-                </div>
-            </div>`;
-        });
-        html += '</div>';
-        // Party summary
-        const partyVotos={};let totGen=0;
-        Object.values(ed.departamentos||{}).forEach(info=>(info.candidatos||[]).forEach(c=>{
-            partyVotos[c.partido]=(partyVotos[c.partido]||0)+(c.votos||0); totGen+=c.votos||0;
-        }));
-        if (totGen>0) {
-            html += `<div class="dept-summary"><div class="dept-summary-title">${lang==='es'?'Resultados nacionales por partido':'National results by party'}</div>`;
-            Object.entries(partyVotos).sort((a,b)=>b[1]-a[1]).forEach(([pId,votos])=>{
-                const pct=pctOf(votos,totGen);
-                html+=`<div class="dept-summary-row">
-                    <div class="dept-summary-party" style="color:${col(pId)}">${PARTIDO_NOMBRES[pId]||pId}</div>
-                    <div class="dept-summary-right">
-                        <div class="dept-summary-pct" style="color:${col(pId)}">${pct}%</div>
-                        <div class="dept-summary-votes">${fmtV(votos)} ${lang==='es'?'votos':'votes'}</div>
-                    </div>
-                </div>`;
-            });
-            html += '</div>';
-        }
-    }
-    el.innerHTML = html;
-}
-
-function renderDeptDetalle(depto, info) {
-    const cands = (info.candidatos||[]).sort((a,b)=>b.votos-a.votos);
-    const total = cands.reduce((s,c)=>s+(c.votos||0),0);
-    let html = `<button onclick="selectedDeptDepto=null;renderRightPanel();renderMapaDept();" style="background:none;border:none;color:var(--blue);font-weight:700;cursor:pointer;font-family:inherit;font-size:0.88rem;margin-bottom:16px;padding:0;">← ${lang==='es'?'Volver':'Back'}</button>`;
-    html += `<div class="dept-detalle"><div class="dept-detalle-title">${lang==='es'?'Candidatos en':'Candidates in'} ${depto}</div><div class="cand-list">`;
-    cands.forEach(c=>{
-        const pct=pctOf(c.votos,total);
-        html+=`
-        <div class="cand-row">
-            <div class="cand-accent" style="background:${col(c.partido)}"></div>
-            ${avatarHTML(c,60)}
-            <div class="cand-info">
-                <div class="cand-name">${c.nombre}${c.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div>
-                <div class="cand-party" style="color:${col(c.partido)}">${PARTIDO_NOMBRES[c.partido]||c.partido}</div>
-                <div class="cand-votes" style="margin-top:3px;">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div>
-            </div>
-            <div class="cand-right">
-                <div class="cand-pct" style="color:${col(c.partido)}">${pct}%</div>
-            </div>
-        </div>`;
+/* ── DEPT MODE ── */
+function renderDeptMode(el){
+    const ed=ELECCIONES_DEPT.find(e=>e.anio===selectedDeptAnio);
+    if(!ed){el.innerHTML='<p style="color:var(--text-muted)">Sin datos.</p>';return;}
+    if(selectedDeptDepto&&ed.departamentos?.[selectedDeptDepto]){el.innerHTML=renderDeptDetalle(selectedDeptDepto,ed.departamentos[selectedDeptDepto]);return;}
+    let html='<div class="dept-grid">';
+    Object.keys(DEPTO_ID).forEach(depto=>{
+        const info=ed.departamentos?.[depto];if(!info)return;
+        const g=info.ganador||info,pId=typeof g==='string'?g:g.partido,winName=g.nombre||'';
+        html+=`<div class="dept-card ${selectedDeptDepto===depto?'selected':''}" style="border-color:${col(pId)}" onclick="selectDepto('${depto}')"><div class="dept-badge" style="background:${col(pId)}">${pId}</div><div><div class="dept-name">${depto}</div><div class="dept-winner-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div>${winName?`<div style="font-size:.68rem;color:var(--text-muted)">${winName}</div>`:''}</div></div>`;
     });
-    html += '</div></div>';
+    html+='</div>';
+    const pv={};let totG=0;
+    Object.values(ed.departamentos||{}).forEach(info=>(info.candidatos||[]).forEach(c=>{pv[c.partido]=(pv[c.partido]||0)+(c.votos||0);totG+=c.votos||0;}));
+    if(totG>0){
+        html+=`<div class="dept-summary"><div class="dept-summary-title">${lang==='es'?'Resultados nacionales por partido':'National results by party'}</div>`;
+        Object.entries(pv).sort((a,b)=>b[1]-a[1]).forEach(([pId,votos])=>html+=`<div class="dept-summary-row"><div class="dept-summary-party" style="color:${col(pId)}">${PNOMBRES[pId]||pId}</div><div class="dept-summary-right"><div class="dept-summary-pct" style="color:${col(pId)}">${pctOf(votos,totG)}%</div><div class="dept-summary-votes">${fmtV(votos)} votos</div></div></div>`);
+        html+='</div>';
+    }
+    el.innerHTML=html;
+}
+function renderDeptDetalle(depto,info){
+    const cands=(info.candidatos||[]).sort((a,b)=>b.votos-a.votos),total=cands.reduce((s,c)=>s+(c.votos||0),0);
+    let html=`<button onclick="selectedDeptDepto=null;renderRightPanel();renderMapaDept();" style="background:none;border:none;color:var(--blue);font-weight:700;cursor:pointer;font-family:inherit;font-size:.86rem;margin-bottom:14px;padding:0;">← ${lang==='es'?'Volver':'Back'}</button>`;
+    html+=`<div class="dept-detalle"><div class="dept-detalle-title">${lang==='es'?'Candidatos en':'Candidates in'} ${depto}</div><div class="cand-list">`;
+    cands.forEach(c=>{const pct=pctOf(c.votos,total);html+=`<div class="cand-row"><div class="cand-accent" style="background:${col(c.partido)}"></div>${avatarHTML(c,60)}<div class="cand-info"><div class="cand-name">${c.nombre}${c.ganador?'<span class="badge-winner">'+(lang==='es'?'Ganador':'Winner')+'</span>':''}</div><div class="cand-party" style="color:${col(c.partido)}">${PNOMBRES[c.partido]||c.partido}</div><div class="cand-votes" style="margin-top:3px;">${fmtV(c.votos)} ${lang==='es'?'votos':'votes'}</div></div><div class="cand-right"><div class="cand-pct" style="color:${col(c.partido)}">${pct}%</div></div></div>`;});
+    html+='</div></div>';
     return html;
 }
+function selectDepto(d){selectedDeptDepto=selectedDeptDepto===d?null:d;renderRightPanel();renderMapaDept();}
 
-function selectDepto(d) {
-    selectedDeptDepto = selectedDeptDepto===d ? null : d;
-    renderRightPanel(); renderMapaDept();
-}
-
-/* ════════════════════════════
+/* ══════════════════════════════════════
    EVOLUTION CHART
-════════════════════════════ */
-function renderEvolucion() {
-    const wrap=document.getElementById('evo-chart-wrap');
-    const legEl=document.getElementById('evo-legend');
-    if (!wrap||ELECCIONES.length===0) return;
+══════════════════════════════════════ */
+function renderEvolucion(){
+    const wrap=document.getElementById('evo-chart-wrap'),legEl=document.getElementById('evo-legend');
+    if(!wrap||!ELECCIONES.length)return;
     const elections=[...ELECCIONES].sort((a,b)=>a.anio-b.anio);
-    const partyData={};
+    const pd={};
     elections.forEach(elec=>{
-        const v=elec.vueltas[0]; if(!v) return;
-        const tot=v.candidatos.reduce((s,c)=>s+c.votos,0); if(!tot) return;
+        const v=elec.vueltas[0];if(!v)return;
+        const tot=v.candidatos.reduce((s,c)=>s+c.votos,0);if(!tot)return;
         const pv={},pc={};
-        v.candidatos.forEach(c=>{
-            if(!pv[c.partido]){pv[c.partido]=0;pc[c.partido]=c;}
-            pv[c.partido]+=c.votos;
-            if(c.votos>pc[c.partido].votos) pc[c.partido]=c;
-        });
-        Object.entries(pv).forEach(([pId,votos])=>{
-            if(!partyData[pId]) partyData[pId]=[];
-            partyData[pId].push({anio:elec.anio,pct:parseFloat(((votos/tot)*100).toFixed(1)),votos,candidato:pc[pId]});
-        });
+        v.candidatos.forEach(c=>{if(!pv[c.partido]){pv[c.partido]=0;pc[c.partido]=c;}pv[c.partido]+=c.votos;if(c.votos>pc[c.partido].votos)pc[c.partido]=c;});
+        Object.entries(pv).forEach(([pId,votos])=>{if(!pd[pId])pd[pId]=[];pd[pId].push({anio:elec.anio,pct:parseFloat(((votos/tot)*100).toFixed(1)),votos,candidato:pc[pId]});});
     });
-    const relevant=Object.entries(partyData).filter(([,pts])=>pts.some(p=>p.pct>=1)).sort((a,b)=>Math.max(...b[1].map(p=>p.pct))-Math.max(...a[1].map(p=>p.pct)));
+    const relevant=Object.entries(pd).filter(([,pts])=>pts.some(p=>p.pct>=1)).sort((a,b)=>Math.max(...b[1].map(p=>p.pct))-Math.max(...a[1].map(p=>p.pct)));
     const years=[...new Set(elections.map(e=>e.anio))];
-    const W=900,H=280,pL=44,pR=44,pT=16,pB=34;
-    const cW=W-pL-pR,cH=H-pT-pB;
-    const MAX=80;
+    const W=900,H=260,pL=44,pR=44,pT=14,pB=32,cW=W-pL-pR,cH=H-pT-pB,MAX=80;
     const xOf=a=>pL+((a-years[0])/(years[years.length-1]-years[0]||1))*cW;
     const yOf=p=>pT+cH-(Math.min(p,MAX)/MAX)*cH;
-    _evoXOf=xOf; _evoYOf=yOf;
-    _evoAllPoints=[];
-    relevant.forEach(([pId,pts])=>{ if(evoHidden.has(pId)) return; pts.forEach(p=>_evoAllPoints.push({x:+xOf(p.anio).toFixed(1),y:+yOf(p.pct).toFixed(1),pId,pct:p.pct,votos:p.votos,candidato:p.candidato,anio:p.anio})); });
+    _evoXOf=xOf;_evoYOf=yOf;_evoAllPoints=[];
+    relevant.forEach(([pId,pts])=>{if(evoHidden.has(pId))return;pts.forEach(p=>_evoAllPoints.push({x:+xOf(p.anio).toFixed(1),y:+yOf(p.pct).toFixed(1),pId,pct:p.pct,votos:p.votos,candidato:p.candidato,anio:p.anio}));});
     let svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
-    [0,20,40,60,80].filter(t=>t<=MAX).forEach(t=>{
-        const y=yOf(t);
-        svg+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="var(--border)" stroke-width="1"/>`;
-        svg+=`<text x="${pL-6}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--text-muted)" font-family="Plus Jakarta Sans">${t}%</text>`;
-    });
-    years.forEach(yr=>{
-        const x=xOf(yr);
-        svg+=`<line x1="${x}" y1="${pT}" x2="${x}" y2="${pT+cH}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/>`;
-        svg+=`<text x="${x}" y="${H-4}" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Plus Jakarta Sans">${yr}</text>`;
-    });
-    relevant.forEach(([pId,pts])=>{
-        if(evoHidden.has(pId)) return;
-        const sorted=[...pts].sort((a,b)=>a.anio-b.anio);
-        const d=sorted.map((p,i)=>`${i===0?'M':'L'}${xOf(p.anio).toFixed(1)},${yOf(p.pct).toFixed(1)}`).join(' ');
-        svg+=`<path d="${d}" stroke="${col(pId)}" stroke-width="1.8" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity="0.85"/>`;
-    });
-    relevant.forEach(([pId,pts])=>{
-        if(evoHidden.has(pId)) return;
-        pts.forEach(p=>{
-            const x=+xOf(p.anio).toFixed(1),y=+yOf(p.pct).toFixed(1);
-            const idx=_evoAllPoints.findIndex(pt=>pt.pId===pId&&pt.anio===p.anio);
-            svg+=`<circle id="evd-${pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}" cx="${x}" cy="${y}" r="3.5" fill="${col(pId)}" stroke="var(--card-bg)" stroke-width="1.5" pointer-events="none"/>`;
-            svg+=`<circle cx="${x}" cy="${y}" r="10" fill="transparent" style="cursor:pointer" onmouseenter="evoEnter(event,${idx})" onmouseleave="evoLeave(${idx})"/>`;
-        });
-    });
+    [0,20,40,60,80].filter(t=>t<=MAX).forEach(t=>{const y=yOf(t);svg+=`<line x1="${pL}" y1="${y}" x2="${W-pR}" y2="${y}" stroke="var(--border)" stroke-width="1"/><text x="${pL-6}" y="${y+4}" text-anchor="end" font-size="10" fill="var(--text-muted)" font-family="Plus Jakarta Sans">${t}%</text>`;});
+    years.forEach(yr=>{const x=xOf(yr);svg+=`<line x1="${x}" y1="${pT}" x2="${x}" y2="${pT+cH}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3"/><text x="${x}" y="${H-2}" text-anchor="middle" font-size="10" fill="var(--text-muted)" font-family="Plus Jakarta Sans">${yr}</text>`;});
+    relevant.forEach(([pId,pts])=>{if(evoHidden.has(pId))return;const d=[...pts].sort((a,b)=>a.anio-b.anio).map((p,i)=>`${i===0?'M':'L'}${xOf(p.anio).toFixed(1)},${yOf(p.pct).toFixed(1)}`).join(' ');svg+=`<path d="${d}" stroke="${col(pId)}" stroke-width="1.8" fill="none" stroke-linejoin="round" stroke-linecap="round" opacity=".85"/>`;});
+    relevant.forEach(([pId,pts])=>{if(evoHidden.has(pId))return;pts.forEach(p=>{const x=+xOf(p.anio).toFixed(1),y=+yOf(p.pct).toFixed(1),idx=_evoAllPoints.findIndex(pt=>pt.pId===pId&&pt.anio===p.anio);svg+=`<circle id="evd-${pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}" cx="${x}" cy="${y}" r="3.5" fill="${col(pId)}" stroke="var(--card-bg)" stroke-width="1.5" pointer-events="none"/>`;svg+=`<circle cx="${x}" cy="${y}" r="10" fill="transparent" style="cursor:pointer" onmouseenter="evoEnter(event,${idx})" onmouseleave="evoLeave(${idx})"/>`;});});
     svg+='</svg>';
     wrap.innerHTML=svg;
-    legEl.innerHTML=relevant.map(([pId])=>`<div class="evo-legend-item ${evoHidden.has(pId)?'hidden':''}" onclick="evoToggle('${pId}')"><div class="evo-legend-dot" style="background:${col(pId)}"></div>${PARTIDO_NOMBRES[pId]||pId}</div>`).join('');
+    legEl.innerHTML=relevant.map(([pId])=>`<div class="evo-legend-item ${evoHidden.has(pId)?'hidden':''}" onclick="evoToggle('${pId}')"><div class="evo-legend-dot" style="background:${col(pId)}"></div>${PNOMBRES[pId]||pId}</div>`).join('');
 }
-
-function evoEnter(e,idx) {
-    const pt=_evoAllPoints[idx]; if(!pt) return;
+function evoEnter(e,idx){
+    const pt=_evoAllPoints[idx];if(!pt)return;
     const nearby=_evoAllPoints.filter(p=>p.anio===pt.anio&&Math.abs(p.pct-pt.pct)<=1.2).sort((a,b)=>b.pct-a.pct);
-    nearby.forEach(p=>{ const d=document.getElementById(`evd-${p.pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}`); if(d){d.setAttribute('r','5.5');d.setAttribute('stroke-width','2');} });
+    nearby.forEach(p=>{const d=document.getElementById(`evd-${p.pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}`);if(d){d.setAttribute('r','5.5');d.setAttribute('stroke-width','2');}});
     const tt=document.getElementById('evo-tooltip');
     let inner='';
     if(nearby.length===1){
         const d=nearby[0];
-        if(d.candidato?.foto) inner+=`<img src="${d.candidato.foto}" style="width:42px;height:42px;border-radius:50%;object-fit:cover;object-position:center top;margin-bottom:6px;display:block;">`;
-        else { const bg=col(d.pId),in_=initials(d.candidato?.nombre||d.pId); inner+=`<div style="width:42px;height:42px;border-radius:50%;background:${bg};display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:0.9rem;margin-bottom:6px;">${in_}</div>`; }
-        inner+=`<div style="font-weight:700;font-size:0.88rem;">${d.candidato?.nombre||d.pId}</div>`;
-        inner+=`<div style="color:${col(d.pId)};font-weight:700;font-size:0.75rem;">${PARTIDO_NOMBRES[d.pId]||d.pId}</div>`;
-        inner+=`<div style="font-size:0.88rem;font-weight:800;margin-top:4px;">${d.pct}%</div>`;
-        inner+=`<div style="font-size:0.7rem;color:#94a3b8;">${fmtV(d.votos)} votos · ${d.anio}</div>`;
-    } else {
-        inner=`<div style="font-size:0.72rem;color:#94a3b8;margin-bottom:7px;font-weight:600;">${pt.anio}</div>`;
-        nearby.forEach(d=>{
-            inner+=`<div style="display:flex;align-items:center;gap:7px;margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,0.08);">`;
-            inner+=`<div style="width:9px;height:9px;border-radius:50%;background:${col(d.pId)};flex-shrink:0;"></div>`;
-            inner+=`<div style="flex:1;"><div style="font-weight:700;font-size:0.8rem;">${PARTIDO_NOMBRES[d.pId]||d.pId}</div>${d.candidato?.nombre?`<div style="font-size:0.7rem;color:#94a3b8;">${d.candidato.nombre}</div>`:''}</div>`;
-            inner+=`<div style="font-weight:800;color:${col(d.pId)};font-size:0.88rem;">${d.pct}%</div></div>`;
-        });
+        if(d.candidato?.foto)inner+=`<img src="${d.candidato.foto}" style="width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:center top;margin-bottom:5px;display:block;">`;
+        else{inner+=`<div style="width:40px;height:40px;border-radius:50%;background:${col(d.pId)};display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:.85rem;margin-bottom:5px;">${inits(d.candidato?.nombre||d.pId)}</div>`;}
+        inner+=`<div style="font-weight:700;font-size:.86rem;">${d.candidato?.nombre||d.pId}</div>`;
+        inner+=`<div style="color:${col(d.pId)};font-weight:700;font-size:.74rem;">${PNOMBRES[d.pId]||d.pId}</div>`;
+        inner+=`<div style="font-size:.86rem;font-weight:800;margin-top:4px;">${d.pct}%</div>`;
+        inner+=`<div style="font-size:.7rem;color:#94a3b8;">${fmtV(d.votos)} votos · ${d.anio}</div>`;
+    }else{
+        inner=`<div style="font-size:.7rem;color:#94a3b8;margin-bottom:6px;font-weight:600;">${pt.anio}</div>`;
+        nearby.forEach(d=>{inner+=`<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;padding-bottom:5px;border-bottom:1px solid rgba(255,255,255,.08);"><div style="width:8px;height:8px;border-radius:50%;background:${col(d.pId)};flex-shrink:0;"></div><div style="flex:1;"><div style="font-weight:700;font-size:.78rem;">${PNOMBRES[d.pId]||d.pId}</div>${d.candidato?.nombre?`<div style="font-size:.68rem;color:#94a3b8;">${d.candidato.nombre}</div>`:''}</div><div style="font-weight:800;color:${col(d.pId)};font-size:.86rem;">${d.pct}%</div></div>`;});
     }
-    const tw=190,th=tt.scrollHeight||110;
+    const tw=186,th=tt.scrollHeight||100;
     let left=e.clientX+14,top=e.clientY-10;
-    if(left+tw>window.innerWidth-10) left=e.clientX-tw-14;
-    if(top+th>window.innerHeight-10) top=window.innerHeight-th-10;
+    if(left+tw>window.innerWidth-10)left=e.clientX-tw-14;
+    if(top+th>window.innerHeight-10)top=window.innerHeight-th-10;
     tt.style.cssText=`left:${left}px;top:${top}px;display:block;opacity:1;`;
     tt.innerHTML=inner;
 }
-function evoLeave(idx) {
-    const pt=_evoAllPoints[idx]; if(!pt) return;
-    _evoAllPoints.filter(p=>p.anio===pt.anio&&Math.abs(p.pct-pt.pct)<=1.2).forEach(p=>{ const d=document.getElementById(`evd-${p.pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}`); if(d){d.setAttribute('r','3.5');d.setAttribute('stroke-width','1.5');} });
-    const tt=document.getElementById('evo-tooltip');
-    tt.style.opacity='0';
-    setTimeout(()=>{ if(tt.style.opacity==='0') tt.style.display='none'; },180);
+function evoLeave(idx){
+    const pt=_evoAllPoints[idx];if(!pt)return;
+    _evoAllPoints.filter(p=>p.anio===pt.anio&&Math.abs(p.pct-pt.pct)<=1.2).forEach(p=>{const d=document.getElementById(`evd-${p.pId.replace(/[^a-zA-Z0-9]/g,'-')}-${p.anio}`);if(d){d.setAttribute('r','3.5');d.setAttribute('stroke-width','1.5');}});
+    const tt=document.getElementById('evo-tooltip');tt.style.opacity='0';
+    setTimeout(()=>{if(tt.style.opacity==='0')tt.style.display='none';},180);
 }
-function evoToggle(pId) { evoHidden.has(pId)?evoHidden.delete(pId):evoHidden.add(pId); renderEvolucion(); }
+function evoToggle(pId){evoHidden.has(pId)?evoHidden.delete(pId):evoHidden.add(pId);renderEvolucion();}
 
-/* ════════════════════════════
+/* ══════════════════════════════════════
    RENDER ALL
-════════════════════════════ */
-function renderAll() {
-    renderYearPills();
+══════════════════════════════════════ */
+function renderAll(){
+    renderYearDropdown();
     renderVueltaPills();
-    renderViewToggle();
     renderRightPanel();
     renderMapa();
-    if (elecType==='nacional') renderEvolucion();
+    if(elecType==='nacional')renderEvolucion();
 }
+window.addEventListener('resize',()=>{if(viewMode==='legislativo')renderRightPanel();});
 
-window.addEventListener('resize', ()=>{ if(viewMode==='legislativo') renderRightPanel(); });
-
-/* ════════════════════════════
+/* ══════════════════════════════════════
    INIT
-════════════════════════════ */
-async function initApp() {
-    try {
-        const svgRes = await fetch('mapa.svg');
-        if (!svgRes.ok) throw new Error('mapa.svg not found');
-        document.getElementById('map-container').innerHTML = await svgRes.text();
+══════════════════════════════════════ */
+async function initApp(){
+    try{
+        const svgRes=await fetch('mapa.svg');
+        if(!svgRes.ok)throw new Error('mapa.svg not found');
+        document.getElementById('map-container').innerHTML=await svgRes.text();
 
-        const [nacResults, deptResults] = await Promise.all([
+        const[nacR,deptR]=await Promise.all([
             Promise.all(YEARS_NAC.map(y=>fetch(`data/${y}.json`).then(r=>r.ok?r.json():null).catch(()=>null))),
             Promise.all(YEARS_DEPT.map(y=>fetch(`data/dept/${y}.json`).then(r=>r.ok?r.json():null).catch(()=>null)))
         ]);
-
-        ELECCIONES = nacResults.filter(Boolean).flat().sort((a,b)=>a.anio-b.anio);
-        ELECCIONES_DEPT = deptResults.filter(Boolean).flat().sort((a,b)=>a.anio-b.anio);
-
-        if (!ELECCIONES.length) throw new Error('No election data found in data/');
-
-        selectedAnio = ELECCIONES[ELECCIONES.length-1].anio;
-        if (ELECCIONES_DEPT.length) selectedDeptAnio = ELECCIONES_DEPT[ELECCIONES_DEPT.length-1].anio;
-
-        document.getElementById('evo-section').style.display = '';
+        ELECCIONES=nacR.filter(Boolean).flat().sort((a,b)=>a.anio-b.anio);
+        ELECCIONES_DEPT=deptR.filter(Boolean).flat().sort((a,b)=>a.anio-b.anio);
+        if(!ELECCIONES.length)throw new Error('No election data in data/');
+        selectedAnio=ELECCIONES[ELECCIONES.length-1].anio;
+        if(ELECCIONES_DEPT.length)selectedDeptAnio=ELECCIONES_DEPT[ELECCIONES_DEPT.length-1].anio;
+        document.getElementById('evo-card').style.display='';
         renderAll();
         setupTooltips();
-
-    } catch(err) {
+    }catch(err){
         console.error(err);
         const b=document.getElementById('error-banner');
         b.style.display='block';
         b.innerHTML='⚠️ Error cargando <strong>data/</strong> o <strong>mapa.svg</strong>. Corré el sitio desde un servidor local.';
-        document.getElementById('map-container').innerHTML='<p style="color:var(--text-muted);padding:40px;text-align:center;">Esperando recursos...</p>';
+        document.getElementById('map-container').innerHTML='<p style="color:var(--text-muted);padding:60px;text-align:center;font-weight:600;">Esperando recursos externos...</p>';
     }
 }
-
 initApp();
 </script>
 </body>
